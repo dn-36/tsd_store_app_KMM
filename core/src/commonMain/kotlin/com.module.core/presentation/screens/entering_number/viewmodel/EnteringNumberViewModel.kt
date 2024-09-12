@@ -2,7 +2,7 @@ package org.tsdstore.project.feature.authorization.presentation.screens.entering
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.example.project.core.NavigatorView
+import com.module.core.core.NavigatorView
 import org.tsdstore.project.feature.authorization.presentation.screens.check_sms.CheckSMSScreen
 
 class EnteringNumberViewModel:ViewModel(){

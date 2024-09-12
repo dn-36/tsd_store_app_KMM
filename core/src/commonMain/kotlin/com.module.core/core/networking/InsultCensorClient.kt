@@ -1,16 +1,12 @@
-package org.example.project.core.networking
+package com.module.core.core.networking
 
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
-import networking.CensoredText
 import util.NetworkError
 import util.Result
 

@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import io.ktor.client.engine.okhttp.OkHttp
-import org.example.project.core.networking.InsultCensorClient
-import org.example.project.core.networking.createHttpClient
+import com.module.core.core.networking.InsultCensorClient
+import com.module.core.core.networking.createHttpClient
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

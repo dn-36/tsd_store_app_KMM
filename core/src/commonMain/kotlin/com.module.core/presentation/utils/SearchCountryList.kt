@@ -1,7 +1,7 @@
 package org.tsdstore.project.feature.authorization.presentation.utils
 
 import org.tsdstore.project.feature.authorization.presentation.ConstData
-import org.example.project.authorization.presentation.screens.entering_number.model.CountryData
+import com.module.core.presentation.screens.entering_number.model.CountryData
 
 fun searchCountry(key: String): MutableList<CountryData> {
     val tempList = mutableListOf<CountryData>()

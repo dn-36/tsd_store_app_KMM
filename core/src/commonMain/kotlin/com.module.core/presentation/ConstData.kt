@@ -1,5 +1,5 @@
 package org.tsdstore.project.feature.authorization.presentation
-import org.example.project.authorization.presentation.screens.entering_number.model.CountryData
+import com.module.core.presentation.screens.entering_number.model.CountryData
 
 
 object ConstData {
@@ -188,7 +188,7 @@ object ConstData {
         CountryData("re", "+262", "Réunion"),
         CountryData("ro", "+40", "Romania"),
         CountryData("rs", "+381", "Serbia"),
-        CountryData("ru", "+7", "Russian Federation"),
+        CountryData("com", "+7", "Russian Federation"),
         CountryData("rw", "+250", "Rwanda"),
         CountryData("sa", "+966", "Saudi Arabia"),
         CountryData("sb", "+677", "Solomon Islands"),
@@ -478,7 +478,7 @@ object ConstData {
     const val JAMAICA_HINT = "(876) 123-4567"
     const val IRAQ_HINT = "0777 123 4567"
     const val SLOVENIA_HINT = "070 123 456"
-    val DEFAULT_LANG_VODE = "ru"
+    val DEFAULT_LANG_VODE = "com"
     val DEFAULT_PHONE = "+7"
 
 }

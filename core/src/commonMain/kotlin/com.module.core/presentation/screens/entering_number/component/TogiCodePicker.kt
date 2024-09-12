@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import org.example.project.authorization.presentation.screens.entering_number.model.CountryData
+import com.module.core.presentation.screens.entering_number.model.CountryData
 import org.tsdstore.project.feature.authorization.presentation.ConstData
 import org.tsdstore.project.feature.authorization.presentation.utils.searchCountry
 import org.tsdstore.project.value.StringRes
@@ -71,12 +71,12 @@ fun TogiCodeDialog(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (showFlag) {
-                Image(
+               /* Image(
                     modifier = modifier.width(34.dp),
                     painter = painterResource(
                         resource = countryData.flagDrawableResource
                     ), contentDescription = null
-                )
+                )*/
             }
             if (showCountryCode) {
                 Text(

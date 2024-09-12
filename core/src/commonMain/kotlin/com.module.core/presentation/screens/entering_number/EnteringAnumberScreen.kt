@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import org.example.project.core.NavigatorView
+import com.module.core.core.NavigatorView
 import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.component.TogiCountryCodePicker
 import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.viewmodel.EnteringNumberEvent
 import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.viewmodel.EnteringNumberViewModel

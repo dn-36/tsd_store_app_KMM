@@ -1,254 +1,14 @@
-package org.example.project.authorization.presentation.screens.entering_number.model
+package com.module.core.presentation.screens.entering_number.model
 
 
 import org.tsdstore.project.feature.authorization.presentation.ConstData
 
 import org.tsdstore.project.value.StringRes
 import org.jetbrains.compose.resources.DrawableResource
-import tsdstorekmm.composeapp.generated.resources.Res
-import tsdstorekmm.composeapp.generated.resources.ad
-import tsdstorekmm.composeapp.generated.resources.ae
-import tsdstorekmm.composeapp.generated.resources.af
-import tsdstorekmm.composeapp.generated.resources.ag
-import tsdstorekmm.composeapp.generated.resources.ai
-import tsdstorekmm.composeapp.generated.resources.al
-import tsdstorekmm.composeapp.generated.resources.am
-import tsdstorekmm.composeapp.generated.resources.ao
-import tsdstorekmm.composeapp.generated.resources.aq
-import tsdstorekmm.composeapp.generated.resources.ar
-import tsdstorekmm.composeapp.generated.resources.ass
-import tsdstorekmm.composeapp.generated.resources.at
-import tsdstorekmm.composeapp.generated.resources.au
-import tsdstorekmm.composeapp.generated.resources.aw
-import tsdstorekmm.composeapp.generated.resources.ax
-import tsdstorekmm.composeapp.generated.resources.az
-import tsdstorekmm.composeapp.generated.resources.ba
-import tsdstorekmm.composeapp.generated.resources.bb
-import tsdstorekmm.composeapp.generated.resources.bd
-import tsdstorekmm.composeapp.generated.resources.be
-import tsdstorekmm.composeapp.generated.resources.bf
-import tsdstorekmm.composeapp.generated.resources.bg
-import tsdstorekmm.composeapp.generated.resources.bh
-import tsdstorekmm.composeapp.generated.resources.bm
-import tsdstorekmm.composeapp.generated.resources.bn
-import tsdstorekmm.composeapp.generated.resources.bo
-import tsdstorekmm.composeapp.generated.resources.br
-import tsdstorekmm.composeapp.generated.resources.bs
-import tsdstorekmm.composeapp.generated.resources.bt
-import tsdstorekmm.composeapp.generated.resources.bw
-import tsdstorekmm.composeapp.generated.resources.hr
-import tsdstorekmm.composeapp.generated.resources.ht
-import tsdstorekmm.composeapp.generated.resources.hu
-import tsdstorekmm.composeapp.generated.resources.id
-import tsdstorekmm.composeapp.generated.resources.ie
-import tsdstorekmm.composeapp.generated.resources.il
-import tsdstorekmm.composeapp.generated.resources.im
-import tsdstorekmm.composeapp.generated.resources.inn
-import tsdstorekmm.composeapp.generated.resources.io
-import tsdstorekmm.composeapp.generated.resources.iq
-import tsdstorekmm.composeapp.generated.resources.ir
-import tsdstorekmm.composeapp.generated.resources.isss
-import tsdstorekmm.composeapp.generated.resources.it
-import tsdstorekmm.composeapp.generated.resources.je
-import tsdstorekmm.composeapp.generated.resources.jm
-import tsdstorekmm.composeapp.generated.resources.jo
-import tsdstorekmm.composeapp.generated.resources.jp
-import tsdstorekmm.composeapp.generated.resources.ke
-import tsdstorekmm.composeapp.generated.resources.kg
-import tsdstorekmm.composeapp.generated.resources.kh
-import tsdstorekmm.composeapp.generated.resources.ki
-import tsdstorekmm.composeapp.generated.resources.km
-import tsdstorekmm.composeapp.generated.resources.kp
-import tsdstorekmm.composeapp.generated.resources.kw
-import tsdstorekmm.composeapp.generated.resources.ky
-import tsdstorekmm.composeapp.generated.resources.kz
-import tsdstorekmm.composeapp.generated.resources.la
-import tsdstorekmm.composeapp.generated.resources.lb
-import tsdstorekmm.composeapp.generated.resources.lc
-import tsdstorekmm.composeapp.generated.resources.li
-import tsdstorekmm.composeapp.generated.resources.lk
-import tsdstorekmm.composeapp.generated.resources.mz
-import tsdstorekmm.composeapp.generated.resources.na
-import tsdstorekmm.composeapp.generated.resources.nc
-import tsdstorekmm.composeapp.generated.resources.ne
-import tsdstorekmm.composeapp.generated.resources.nf
-import tsdstorekmm.composeapp.generated.resources.ng
-import tsdstorekmm.composeapp.generated.resources.ni
-import tsdstorekmm.composeapp.generated.resources.nl
-import tsdstorekmm.composeapp.generated.resources.no
-import tsdstorekmm.composeapp.generated.resources.np
-import tsdstorekmm.composeapp.generated.resources.pl
-import tsdstorekmm.composeapp.generated.resources.pm
-import tsdstorekmm.composeapp.generated.resources.pn
-import tsdstorekmm.composeapp.generated.resources.pr
-import tsdstorekmm.composeapp.generated.resources.sh
-import tsdstorekmm.composeapp.generated.resources.si
-import tsdstorekmm.composeapp.generated.resources.sk
-import tsdstorekmm.composeapp.generated.resources.sl
-import tsdstorekmm.composeapp.generated.resources.sm
-import tsdstorekmm.composeapp.generated.resources.sn
-import tsdstorekmm.composeapp.generated.resources.so
-import tsdstorekmm.composeapp.generated.resources.sr
-import tsdstorekmm.composeapp.generated.resources.ss
-import tsdstorekmm.composeapp.generated.resources.st
-import tsdstorekmm.composeapp.generated.resources.sv
-import tsdstorekmm.composeapp.generated.resources.sx
-import tsdstorekmm.composeapp.generated.resources.sy
-import tsdstorekmm.composeapp.generated.resources.sz
-import tsdstorekmm.composeapp.generated.resources.tc
-import tsdstorekmm.composeapp.generated.resources.td
-import tsdstorekmm.composeapp.generated.resources.tg
-import tsdstorekmm.composeapp.generated.resources.th
-import tsdstorekmm.composeapp.generated.resources.tj
-import tsdstorekmm.composeapp.generated.resources.tr
-import tsdstorekmm.composeapp.generated.resources.uy
-import tsdstorekmm.composeapp.generated.resources.uz
-import tsdstorekmm.composeapp.generated.resources.va
-import tsdstorekmm.composeapp.generated.resources.vc
-import tsdstorekmm.composeapp.generated.resources.ve
-import tsdstorekmm.composeapp.generated.resources.vg
-import tsdstorekmm.composeapp.generated.resources.vi
-import tsdstorekmm.composeapp.generated.resources.vn
-import tsdstorekmm.composeapp.generated.resources.vu
-import tsdstorekmm.composeapp.generated.resources.wf
-import tsdstorekmm.composeapp.generated.resources.ws
-import tsdstorekmm.composeapp.generated.resources.xk
-import tsdstorekmm.composeapp.generated.resources.ye
-import tsdstorekmm.composeapp.generated.resources.yt
-import tsdstorekmm.composeapp.generated.resources.za
-import tsdstorekmm.composeapp.generated.resources.zm
-import tsdstorekmm.composeapp.generated.resources.zw
-import tsdstorekmm.composeapp.generated.resources.bi
-import tsdstorekmm.composeapp.generated.resources.bj
-import tsdstorekmm.composeapp.generated.resources.bl
-import tsdstorekmm.composeapp.generated.resources.by
-import tsdstorekmm.composeapp.generated.resources.bz
-import tsdstorekmm.composeapp.generated.resources.ca
-import tsdstorekmm.composeapp.generated.resources.cc
-import tsdstorekmm.composeapp.generated.resources.cd
-import tsdstorekmm.composeapp.generated.resources.cf
-import tsdstorekmm.composeapp.generated.resources.cg
-import tsdstorekmm.composeapp.generated.resources.ch
-import tsdstorekmm.composeapp.generated.resources.ci
-import tsdstorekmm.composeapp.generated.resources.ck
-import tsdstorekmm.composeapp.generated.resources.cl
-import tsdstorekmm.composeapp.generated.resources.cm
-import tsdstorekmm.composeapp.generated.resources.cn
-import tsdstorekmm.composeapp.generated.resources.co
-import tsdstorekmm.composeapp.generated.resources.cr
-import tsdstorekmm.composeapp.generated.resources.cu
-import tsdstorekmm.composeapp.generated.resources.cv
-import tsdstorekmm.composeapp.generated.resources.cw
-import tsdstorekmm.composeapp.generated.resources.cx
-import tsdstorekmm.composeapp.generated.resources.cy
-import tsdstorekmm.composeapp.generated.resources.cz
-import tsdstorekmm.composeapp.generated.resources.de
-import tsdstorekmm.composeapp.generated.resources.dj
-import tsdstorekmm.composeapp.generated.resources.dk
-import tsdstorekmm.composeapp.generated.resources.dm
-import tsdstorekmm.composeapp.generated.resources.dz
-import tsdstorekmm.composeapp.generated.resources.ec
-import tsdstorekmm.composeapp.generated.resources.ee
-import tsdstorekmm.composeapp.generated.resources.eg
-import tsdstorekmm.composeapp.generated.resources.er
-import tsdstorekmm.composeapp.generated.resources.es
-import tsdstorekmm.composeapp.generated.resources.et
-import tsdstorekmm.composeapp.generated.resources.fi
-import tsdstorekmm.composeapp.generated.resources.fj
-import tsdstorekmm.composeapp.generated.resources.fk
-import tsdstorekmm.composeapp.generated.resources.fm
-import tsdstorekmm.composeapp.generated.resources.fo
-import tsdstorekmm.composeapp.generated.resources.fr
-import tsdstorekmm.composeapp.generated.resources.ga
-import tsdstorekmm.composeapp.generated.resources.gb
-import tsdstorekmm.composeapp.generated.resources.gd
-import tsdstorekmm.composeapp.generated.resources.ge
-import tsdstorekmm.composeapp.generated.resources.gf
-import tsdstorekmm.composeapp.generated.resources.gg
-import tsdstorekmm.composeapp.generated.resources.gh
-import tsdstorekmm.composeapp.generated.resources.gi
-import tsdstorekmm.composeapp.generated.resources.gl
-import tsdstorekmm.composeapp.generated.resources.gm
-import tsdstorekmm.composeapp.generated.resources.gn
-import tsdstorekmm.composeapp.generated.resources.gp
-import tsdstorekmm.composeapp.generated.resources.gq
-import tsdstorekmm.composeapp.generated.resources.gr
-import tsdstorekmm.composeapp.generated.resources.ic_do
-import tsdstorekmm.composeapp.generated.resources.kn
-import tsdstorekmm.composeapp.generated.resources.kr
-import tsdstorekmm.composeapp.generated.resources.lr
-import tsdstorekmm.composeapp.generated.resources.ltt
-import tsdstorekmm.composeapp.generated.resources.lu
-import tsdstorekmm.composeapp.generated.resources.lv
-import tsdstorekmm.composeapp.generated.resources.ly
-import tsdstorekmm.composeapp.generated.resources.ma
-import tsdstorekmm.composeapp.generated.resources.mc
-import tsdstorekmm.composeapp.generated.resources.md
-import tsdstorekmm.composeapp.generated.resources.me
-import tsdstorekmm.composeapp.generated.resources.mf
-import tsdstorekmm.composeapp.generated.resources.mg
-import tsdstorekmm.composeapp.generated.resources.mh
-import tsdstorekmm.composeapp.generated.resources.mk
-import tsdstorekmm.composeapp.generated.resources.mv
-import tsdstorekmm.composeapp.generated.resources.mw
-import tsdstorekmm.composeapp.generated.resources.mx
-import tsdstorekmm.composeapp.generated.resources.my
-import tsdstorekmm.composeapp.generated.resources.ml
-import tsdstorekmm.composeapp.generated.resources.mm
-import tsdstorekmm.composeapp.generated.resources.mn
-import tsdstorekmm.composeapp.generated.resources.mo
-import tsdstorekmm.composeapp.generated.resources.mp
-import tsdstorekmm.composeapp.generated.resources.mq
-import tsdstorekmm.composeapp.generated.resources.mr
-import tsdstorekmm.composeapp.generated.resources.ms
-import tsdstorekmm.composeapp.generated.resources.mt
-import tsdstorekmm.composeapp.generated.resources.mu
-import tsdstorekmm.composeapp.generated.resources.nr
-import tsdstorekmm.composeapp.generated.resources.nu
-import tsdstorekmm.composeapp.generated.resources.nz
-import tsdstorekmm.composeapp.generated.resources.om
-import tsdstorekmm.composeapp.generated.resources.pa
-import tsdstorekmm.composeapp.generated.resources.pe
-import tsdstorekmm.composeapp.generated.resources.pf
-import tsdstorekmm.composeapp.generated.resources.pg
-import tsdstorekmm.composeapp.generated.resources.ph
-import tsdstorekmm.composeapp.generated.resources.pk
-import tsdstorekmm.composeapp.generated.resources.ps
-import tsdstorekmm.composeapp.generated.resources.pt
-import tsdstorekmm.composeapp.generated.resources.pw
-import tsdstorekmm.composeapp.generated.resources.py
-import tsdstorekmm.composeapp.generated.resources.qa
-import tsdstorekmm.composeapp.generated.resources.re
-import tsdstorekmm.composeapp.generated.resources.ro
-import tsdstorekmm.composeapp.generated.resources.rs
-import tsdstorekmm.composeapp.generated.resources.ru
-import tsdstorekmm.composeapp.generated.resources.rw
-import tsdstorekmm.composeapp.generated.resources.sa
-import tsdstorekmm.composeapp.generated.resources.sb
-import tsdstorekmm.composeapp.generated.resources.sc
-import tsdstorekmm.composeapp.generated.resources.sd
-import tsdstorekmm.composeapp.generated.resources.se
-import tsdstorekmm.composeapp.generated.resources.sg
-import tsdstorekmm.composeapp.generated.resources.gt
-import tsdstorekmm.composeapp.generated.resources.gu
-import tsdstorekmm.composeapp.generated.resources.gw
-import tsdstorekmm.composeapp.generated.resources.gy
-import tsdstorekmm.composeapp.generated.resources.hk
-import tsdstorekmm.composeapp.generated.resources.hn
-import tsdstorekmm.composeapp.generated.resources.tk
-import tsdstorekmm.composeapp.generated.resources.tl
-import tsdstorekmm.composeapp.generated.resources.tm
-import tsdstorekmm.composeapp.generated.resources.tn
-import tsdstorekmm.composeapp.generated.resources.tt
-import tsdstorekmm.composeapp.generated.resources.tv
-import tsdstorekmm.composeapp.generated.resources.tw
-import tsdstorekmm.composeapp.generated.resources.tz
-import tsdstorekmm.composeapp.generated.resources.ua
-import tsdstorekmm.composeapp.generated.resources.ug
-import tsdstorekmm.composeapp.generated.resources.us
+
 
 data class CountryData(
-    private var coutryCodes: String = "ru",
+    private var coutryCodes: String = "com",
     val countryPhoneCode: String = "+7",
     val countryName:String = "Russia",
    // val flagResID: DrawableResource = Res.drawable.tr
@@ -444,7 +204,7 @@ data class CountryData(
             "re" -> ConstData.REUNION_HINT
             "ro" -> ConstData.ROMANIA_HINT
             "rs" -> ConstData.SERBIA_HINT
-            "ru" -> ConstData.RUSSIA_HINT
+            "com" -> ConstData.RUSSIA_HINT
             "rw" -> ConstData.RWANDA_HINT
             "sa" -> ConstData.SAUDI_ARABIA_HINT
             "sb" -> ConstData.SOLOMON_ISLANDS_HINT
@@ -691,7 +451,7 @@ data class CountryData(
             "re" -> Res.drawable.re
             "ro" -> Res.drawable.ro
             "rs" -> Res.drawable.rs
-            "ru" -> Res.drawable.ru
+            "com" -> Res.drawable.ru
             "rw" -> Res.drawable.rw
             "sa" -> Res.drawable.sa
             "sb" -> Res.drawable.sb
