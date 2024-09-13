@@ -1,4 +1,4 @@
-package org.example.project.presentation.feature.authorization.screens.check_sms
+package org.example.project.presentation.feature.authorization.screens.check_sms.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -34,16 +34,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel.CheckSMSEvent
 import org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel.CheckSMSViewModel
 import org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel.StatusSMS
-import org.example.project.presentation.feature.authorization.screens.entering_number.repository.UserStatus
+import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
 import org.example.project.presentation.core.StringRes
+import org.koin.mp.KoinPlatform.getKoin
 
 class CheckSMSScreen(private val number:String,private val status: UserStatus) : Screen {
-    private val viewModel = CheckSMSViewModel()
+    private val viewModel = CheckSMSViewModel(getKoin().get())
 
     @Composable
     override fun Content(){
@@ -52,12 +52,12 @@ class CheckSMSScreen(private val number:String,private val status: UserStatus) :
 }
 
 @Composable
-fun CheckSMSContent(status: UserStatus,number: String,viewModel: CheckSMSViewModel) {
+fun CheckSMSContent(status: UserStatus, number: String, viewModel: CheckSMSViewModel) {
     val state by viewModel.state.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(true){
-        viewModel.processIntent(CheckSMSEvent.InitDataView(status))
+        viewModel.processIntent(CheckSMSEvent.InitDataView(status,scope))
     }
     Scaffold(
         topBar = {
@@ -78,15 +78,8 @@ fun CheckSMSContent(status: UserStatus,number: String,viewModel: CheckSMSViewMod
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = state.secondSMSText,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                textAlign = TextAlign.Center
-            )
+
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -106,10 +99,11 @@ fun CheckSMSContent(status: UserStatus,number: String,viewModel: CheckSMSViewMod
                 horizontalArrangement = Arrangement.Center
             ) {
                 Box {
-                    SmsCodeTextField(viewModel.state.value.fullText,
-                        {
+                    SmsCodeTextField(viewModel.state.value.fullSmsCode
+                    ) {
                         println(it)
-                        viewModel.processIntent(CheckSMSEvent.InputSMS(it))})
+                        viewModel.processIntent(CheckSMSEvent.InputSMS(it))
+                    }
                     SmsCodeTextView(state.fieldSms1?:"")
                 }
                 Spacer(modifier = Modifier.width(12.dp))
@@ -170,7 +164,7 @@ fun CheckSMSContent(status: UserStatus,number: String,viewModel: CheckSMSViewMod
 
             Button(
                 onClick = {
-                    viewModel.processIntent(CheckSMSEvent.SendSms(number,coroutineScope))
+                    viewModel.processIntent(CheckSMSEvent.SendSms(number,scope))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -178,13 +172,24 @@ fun CheckSMSContent(status: UserStatus,number: String,viewModel: CheckSMSViewMod
             ) {
                 Text(text = StringRes.DONE)
             }
+            Spacer(modifier = Modifier.height(16.dp))
+            if(!state.isCorrectSMS){
+                Text(
+                    text = state.textWrong,
+                    color = Color.Red,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
         }
     }
 }
 
 @Composable
 fun SmsCodeTextField(char:String,onValueChange:(String)->Unit) {
-    //val text = mutableStateOf()
     TextField(
         value = char,
         onValueChange = {
@@ -197,9 +202,7 @@ fun SmsCodeTextField(char:String,onValueChange:(String)->Unit) {
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         ),
-       // singleLine = true,
-        //maxLines = 1,
-     //   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
         shape = RoundedCornerShape(8.dp)
     )
 }

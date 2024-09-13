@@ -1,12 +1,10 @@
-package org.example.project.presentation.feature.authorization.screens.entering_number.domain
+package org.example.project.presentation.feature.authorization.core
 
 import kotlinx.coroutines.CoroutineScope
 import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
 
 interface AuthorizationClientAPI {
-    companion object{
-         var userStatus: UserStatus = UserStatus.NEW
-    }
+    var userStatus: UserStatus
     suspend fun sendNumber(
                    number:String,
                    scope:CoroutineScope,

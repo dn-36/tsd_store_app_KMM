@@ -35,6 +35,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation ("io.insert-koin:koin-android:3.5.3")
 
         }
         commonMain.dependencies {
@@ -51,6 +52,8 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
             implementation (libs.koin.core.v312)
+            implementation(libs.multiplatform.settings)
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)

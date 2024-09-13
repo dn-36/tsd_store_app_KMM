@@ -1,34 +1,55 @@
 package org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import org.example.project.presentation.core.NavigatorView
 import org.example.project.presentation.core.StringRes
+import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
+import org.example.project.presentation.feature.authorization.screens.check_sms.doman.CheckCodeSmsUseCase
+import org.example.project.presentation.feature.qr_code_main.QRCodeMenu
 
-class CheckSMSViewModel:ViewModel(){
+class CheckSMSViewModel(val checkCodeSmsUseCase: CheckCodeSmsUseCase):ViewModel(){
 
     var state = MutableStateFlow(CheckSMSState())
         private set
-   private var  number:String = ""
     fun processIntent(intent: CheckSMSEvent){
         when(intent){
          is CheckSMSEvent.InputName -> {
            state.value = state.value.copy(name = intent.name)
          }
          is CheckSMSEvent.InitDataView -> {
+
+             intent.scope.launch {
+                 var secondTimer = 60
+                 repeat(61){
+                     delay(1000)
+                     --secondTimer
+                     if(secondTimer != 0){
+                         state.value = state.value.copy(secondSMSText =
+                         StringRes.SMS_WAIT_MESSAGE(
+                             secondTimer
+                         )
+                         )
+                     }else{
+                         state.value = state.value.copy(secondSMSText =
+                         "если SMS не пришло, то попробуйте повторно отправить SMS"
+                         )
+                     }
+                 }
+             }
+
            state.value = state.value.copy(
                userStatus = intent.status
            )
          }
          is CheckSMSEvent.InputSMS -> {
 
-            state.value = state.value.copy(fullText = intent.number)
-            println(number)
+            state.value = state.value.copy(fullSmsCode = intent.number)
 
-            val text =  state.value.fullText
-             when(state.value.fullText.length){
+            val text =  state.value.fullSmsCode
+             when(state.value.fullSmsCode.length){
                  0-> state.value = state.value.copy(
                      fieldSms1 = "",fieldSms2 = "",
                      fieldSms3 = "",fieldSms4 = ""
@@ -52,26 +73,45 @@ class CheckSMSViewModel:ViewModel(){
              }
          }
          is CheckSMSEvent.SendSms -> {
-             intent.coroutineScope.cancel()
-             intent.coroutineScope.launch {
-                 var secondTimer = 60
+             println("//////////////////////////// test ////////////////////////////////\n\n")
+             println("sms =  ${state.value.fullSmsCode}\n " +
+                     "token = 19222\n" +
+                      "number = ${intent.number}\n" +
+                       "name = ${state.value.name}\n")
+             println("\n\n//////////////////////////// test ////////////////////////////////")
+             when{
+                 ( state.value.name.isBlank() && state.value.userStatus == UserStatus.NEW) -> {
+                     state.value =
+                         state.value.copy(textWrong =
+                         "Заполните поля имя",isCorrectSMS = false)
+                     return
 
-                 repeat(61){
-                     delay(1000)
-                     --secondTimer
-                     if(secondTimer!=0){
-                         state.value = state.value.copy(secondSMSText =
-                         StringRes.SMS_WAIT_MESSAGE(
-                             secondTimer
+                 }
+                 state.value.fullSmsCode.isBlank() -> {
+                     state.value =
+                         state.value.copy(
+                             textWrong =
+                             "Заполните поля SMS", isCorrectSMS = false
                          )
-                         )
-                     }else{
-                         state.value = state.value.copy(secondSMSText =
-                             "если SMS не пришло, то попробуйте повторно отправить SMS"
-                         )
-                     }
+                     return
+                 }
+                 else ->{
+                     state.value.copy(isCorrectSMS = false)
                  }
              }
+             //intent.coroutineScope.cancel()
+             intent.coroutineScope.launch {
+                 checkCodeSmsUseCase.excecute(
+                     state.value.fullSmsCode,
+                     "192221",
+                     intent.number,
+                     state.value.name,
+                     actionOnSuccess = {NavigatorView.navigator.push(QRCodeMenu())},
+                     {state.value = state.value.copy(statusSMS = StatusSMS.INCORRECT_SMS)}
+                 )
+
+             }
+
          }
         }
     }

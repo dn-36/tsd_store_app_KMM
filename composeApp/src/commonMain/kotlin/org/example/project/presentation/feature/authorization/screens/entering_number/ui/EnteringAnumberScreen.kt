@@ -1,4 +1,4 @@
-package org.example.project.presentation.feature.authorization.screens.entering_number
+package org.example.project.presentation.feature.authorization.screens.entering_number.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.module.core.AuthorizationClient
 import org.example.project.presentation.feature.authorization.screens.entering_number.component.LoadingComponent
 import org.example.project.presentation.core.NavigatorView
 import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.component.TogiCountryCodePicker

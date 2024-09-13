@@ -1,4 +1,4 @@
-package com.module.core
+package networking
 
 import util.Result
 import io.ktor.client.HttpClient

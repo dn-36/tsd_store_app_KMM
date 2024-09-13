@@ -1,7 +1,7 @@
 package org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel
 
 import kotlinx.coroutines.CoroutineScope
-import org.example.project.presentation.feature.authorization.screens.entering_number.repository.UserStatus
+import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
 
 
 sealed class CheckSMSEvent {
@@ -10,6 +10,6 @@ sealed class CheckSMSEvent {
       val number:String,
       val coroutineScope: CoroutineScope): CheckSMSEvent()
     data class InputName(val name: String):CheckSMSEvent()
-    data class InitDataView(val status:UserStatus):CheckSMSEvent()
+    data class InitDataView(val status: UserStatus, val scope: CoroutineScope):CheckSMSEvent()
 
 }

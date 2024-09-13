@@ -30,6 +30,8 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
             implementation(libs.koin.core)
+            implementation(libs.multiplatform.settings)
+
         }
     }
 }

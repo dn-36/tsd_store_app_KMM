@@ -1,4 +1,4 @@
-package org.example.project.presentation.feature.authorization.utils
+package org.example.project.presentation.feature.authorization.screens.entering_number.utils
 
 
 

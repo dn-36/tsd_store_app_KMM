@@ -1,16 +1,17 @@
-package org.example.project.presentation.feature.authorization.screens.entering_number.repository
+package org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client
 
-import com.module.core.AuthorizationClient
+import networking.AuthorizationClient
 import util.onError
 import util.onSuccess
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.example.project.presentation.feature.authorization.screens.entering_number.domain.AuthorizationClientAPI
+import org.example.project.presentation.feature.authorization.screens.entering_number.domain.AuthorizationClientAPI.Companion.userStatus
 
 class AuthorizationClientIMPL(
 private val authorizationClient: AuthorizationClient
 ): AuthorizationClientAPI {
-    override var userStatus: UserStatus = UserStatus.NEW
+
 
 
     override suspend fun sendNumber(
@@ -53,9 +54,12 @@ private val authorizationClient: AuthorizationClient
         actionOnSuccess:()->Unit,
         actionOnError:()->Unit
     ) {
-      when(userStatus){
-          UserStatus.NEW ->{}
+
+
+
+        when(userStatus){
           UserStatus.REGISTERED ->{
+             //
               authorizationClient.loginVerifyCode(number,code,token).onSuccess {
               actionOnSuccess()
           }
@@ -64,12 +68,11 @@ private val authorizationClient: AuthorizationClient
               }
           }
           UserStatus.NEW ->{
-              authorizationClient.registerVerifyCode(number,code,name,token)
 
-              authorizationClient.loginVerifyCode(number,code,token).onSuccess {
+              authorizationClient.registerVerifyCode(number,code,name,token).onSuccess {
                   actionOnSuccess()
               }
-              authorizationClient.loginVerifyCode(number,code,token).onError {
+              authorizationClient.registerVerifyCode(number,code,name,token).onError {
                   actionOnError()
               }
 

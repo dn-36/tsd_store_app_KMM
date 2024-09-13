@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.example.project.presentation.feature.authorization.screens.entering_number.domain.SendNumberUseCase
 import org.example.project.presentation.core.NavigatorView
-import org.example.project.presentation.feature.authorization.screens.check_sms.CheckSMSScreen
-import org.example.project.presentation.feature.authorization.screens.entering_number.repository.UserStatus
+import org.example.project.presentation.feature.authorization.screens.check_sms.ui.CheckSMSScreen
+import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
 import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.viewmodel.EnteringNumberEvent
 
 class EnteringNumberViewModel(
@@ -33,11 +33,15 @@ class EnteringNumberViewModel(
                      sendNumber.excecute(
                          intent.number,
                          intent.scope,
-                         {  state.value = state.value.copy(isCorrectNumberStatus = true)
-                             NavigatorView.navigator.push(CheckSMSScreen(intent.number,
+                         {  state.value = state.value.copy(
+                             isCorrectNumberStatus = true,
+                             isLoadingScreen = false
+                         )
+                             NavigatorView.navigator.push(
+                                 CheckSMSScreen(intent.number,
                                  if(it) UserStatus.REGISTERED else UserStatus.NEW
-
-                             ))},
+                             )
+                             )},
                          {}
                          )
                  }

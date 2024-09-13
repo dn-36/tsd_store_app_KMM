@@ -17,7 +17,7 @@ object StringRes {
     const val SMS_CODE = "Введите SMS код"
     const val INCORRECT_SMS_CODE = "Не коректный код из СМС"
     const val INCORRECT_NUMBER = "Номер введен некорректно"
-    fun SMS_WAIT_MESSAGE(second:Int) =  "Отправить код с помощью SMS через ${second} сек"
+    fun SMS_WAIT_MESSAGE(second:Int) =  "Отправить код с помощью SMS, через ${second} сек"
     const val NAME = "Имя"
     const val E_NAME = "Название"
     const val E_DATE = "Дата"
