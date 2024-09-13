@@ -50,6 +50,7 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
+            implementation (libs.koin.core.v312)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)

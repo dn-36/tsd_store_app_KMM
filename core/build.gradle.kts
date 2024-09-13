@@ -29,6 +29,7 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
+            implementation(libs.koin.core)
         }
     }
 }
@@ -42,6 +43,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    dependencies { /*debugImplementation(libs.compose.ui.tooling)*/ }
+    dependencies {  }
 }
 
