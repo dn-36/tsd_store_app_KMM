@@ -22,7 +22,7 @@ import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.module.core.presentation.screens.entering_number.model.CountryData
+import org.example.project.presentation.feature.authorization.screens.entering_number.model.CountryData
 
 
 //private var fullNumberState: String by mutableStateOf("")

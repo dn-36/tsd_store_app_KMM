@@ -1,12 +1,13 @@
-package org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client
+package org.example.project.presentation.feature.authorization.datasource.authorization_client
 
 import networking.AuthorizationClient
 import util.onError
 import util.onSuccess
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.example.project.presentation.feature.authorization.screens.entering_number.domain.AuthorizationClientAPI
-import org.example.project.presentation.feature.authorization.screens.entering_number.domain.AuthorizationClientAPI.Companion.userStatus
+import org.example.project.presentation.feature.authorization.core.AuthorizationClientAPI
+import org.example.project.presentation.feature.authorization.core.AuthorizationClientAPI.Companion.userStatus
+import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
 
 class AuthorizationClientIMPL(
 private val authorizationClient: AuthorizationClient

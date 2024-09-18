@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.module.core.presentation.screens.entering_number.model.CountryData
+import org.example.project.presentation.feature.authorization.screens.entering_number.model.CountryData
 import org.example.project.presentation.core.ConstData
 import org.example.project.presentation.feature.authorization.screens.entering_number.utils.searchCountry
 import org.example.project.presentation.core.StringRes

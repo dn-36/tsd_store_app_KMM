@@ -17,7 +17,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-
+            implementation("com.russhwolf:multiplatform-settings:1.0.0")
+            implementation("com.russhwolf:multiplatform-settings-no-arg:1.0.0")
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -45,6 +46,5 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    dependencies {  }
 }
 

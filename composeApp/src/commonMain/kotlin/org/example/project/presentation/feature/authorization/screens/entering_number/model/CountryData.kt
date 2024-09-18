@@ -1,4 +1,4 @@
-package com.module.core.presentation.screens.entering_number.model
+package org.example.project.presentation.feature.authorization.screens.entering_number.model
 
 
 import org.example.project.presentation.core.ConstData

@@ -35,7 +35,8 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
-            implementation ("io.insert-koin:koin-android:3.5.3")
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
 
         }
         commonMain.dependencies {
@@ -51,8 +52,8 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
-            implementation (libs.koin.core.v312)
             implementation(libs.multiplatform.settings)
+            api(libs.koin.core)
 
         }
         nativeMain.dependencies {
@@ -96,5 +97,12 @@ android {
     dependencies {
         debugImplementation(compose.uiTooling)
     }
+}
+dependencies {
+    implementation(project(":core"))
+    implementation(project(":common:printer-barcode"))
+
+
+
 }
 

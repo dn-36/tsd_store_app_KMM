@@ -1,8 +1,10 @@
-/*import com.russhwolf.settings.Settings
+package shared_prefs
+
+import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
 
-class UserSettings(private val settings: Settings) {
+class SharedPreferences(private val settings: Settings) {
 
     companion object {
         private const val USERNAME_KEY = "username"
@@ -15,4 +17,4 @@ class UserSettings(private val settings: Settings) {
     fun getUsername(): String? {
         return settings[USERNAME_KEY]
     }
-}*/
+}

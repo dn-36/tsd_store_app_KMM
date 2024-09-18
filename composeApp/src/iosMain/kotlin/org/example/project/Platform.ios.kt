@@ -2,11 +2,11 @@ package org.example.project
 
 import io.ktor.client.engine.darwin.Darwin
 import networking.createHttpClient
-import org.example.project.presentation.feature.authorization.core.SharedPrefsApi
-import org.example.project.presentation.feature.authorization.datasource.sharaedprefs.SharedPrefsIImpl
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
+import shared_prefs.CreateContextPlatform
+import shared_prefs.SharedPreferences
 
 
 actual val platformModule: Module
@@ -14,13 +14,12 @@ actual val platformModule: Module
         factory {
             createHttpClient(Darwin.create())
         }
-    }
-actual val sharedPrefsImpl: SharedPrefsApi
-    get() = object : SharedPrefsApi{
-        override fun saveUserNumber(username: String) {
-
+        factory {
+            SharedPreferences(get())
         }
-
-        override fun getUserNumber() = "+79963799050"
-
+        factory {
+           CreateContextPlatform().get()
+        }
     }
+
+

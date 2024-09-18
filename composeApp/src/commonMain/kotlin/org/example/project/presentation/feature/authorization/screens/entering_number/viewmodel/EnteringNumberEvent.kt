@@ -1,6 +1,6 @@
 package org.tsdstore.project.feature.authorization.presentation.screens.entering_number.viewmodel
 
-import com.module.core.presentation.screens.entering_number.model.CountryData
+import org.example.project.presentation.feature.authorization.screens.entering_number.model.CountryData
 import kotlinx.coroutines.CoroutineScope
 
 sealed class EnteringNumberEvent {

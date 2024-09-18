@@ -1,5 +1,5 @@
 package org.example.project.presentation.core
-import com.module.core.presentation.screens.entering_number.model.CountryData
+import org.example.project.presentation.feature.authorization.screens.entering_number.model.CountryData
 
 
 object ConstData {

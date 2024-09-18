@@ -30,3 +30,8 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":core")
+include(":common")
+
+include(":common:printer-barcode")
+
+//include(":wwwccc")
