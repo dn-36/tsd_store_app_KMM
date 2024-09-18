@@ -4,33 +4,57 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import org.example.project.presentation.core.Navigator
-import org.example.project.presentation.dima_screens.viewmodel.DimaState
-import org.example.project.presentation.dima_screens.viewmodel.intents.ChoosingItemIntent
-import org.example.project.presentation.dima_screens.viewmodel.intents.ChoosingPrinterIntent
-import org.example.project.presentation.dima_screens.viewmodel.intents.ListItemIntent
-import org.example.project.presentation.feature.authorization.screens.entering_number.ui.EnteringAnumberScreen
-import org.example.project.presentation.feature.qr_code_main.screens.product_list.ui.SearchScreen
-import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.ui.QRCodeMenu
+import org.example.project.presentation.core.NavigatorComponent
+import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.viewmodel.intents.ChoosingItemIntent
+import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.viewmodel.intents.ChoosingPrinterIntent
+import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.viewmodel.intents.ListItemIntent
+import org.example.project.presentation.feature.qr_code_main.screens.product_search.ui.ProductSearchScreen
+import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.domain.ConectUSBUseCase
+import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.domain.PrintOnVkpUseCase
 import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.viewmodel.intents.ListPrinterIntent
 import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.viewmodel.intents.OpenSettingsIntent
 
-class QRcodeMenuViewModel:ViewModel() {
+class QRcodeMenuViewModel(
+    private val conectUSBUseCase: ConectUSBUseCase,
+    private val printerVkpUseCase: PrintOnVkpUseCase
+):ViewModel() {
     companion object{
         var dimaState by mutableStateOf(DimaState())
     }
-    fun processIntent(intents: QRcodeMenuIntents){
-        when(intents){
-            is QRcodeMenuIntents.OpenListItem -> {ListItemIntent.execute()}
-            is QRcodeMenuIntents.OpenListPrinter -> {
+    private var isSetedScreen = false
+
+    fun processIntent(intent: QRcodeMenuIntent){
+
+
+
+        when(intent){
+            is QRcodeMenuIntent.SetScreen -> {
+                if(isSetedScreen) return
+                isSetedScreen = true
+                NavigatorComponent.navigator = intent.navigator
+                conectUSBUseCase.execute()
+            }
+            is QRcodeMenuIntent.OpenListItem -> {
+                ListItemIntent.execute()}
+            is QRcodeMenuIntent.OpenListPrinter -> {
                 ListPrinterIntent.execute()}
-            is QRcodeMenuIntents.OpenSettings -> {
+            is QRcodeMenuIntent.OpenSettings -> {
                 OpenSettingsIntent.execute()}
-            is QRcodeMenuIntents.ChoosingItem -> {ChoosingItemIntent.execute(intents.index)}
-            is QRcodeMenuIntents.ChoosingPrinter -> {
-                ChoosingPrinterIntent.execute(intents.index)}
-            is QRcodeMenuIntents.OpenProductSearch -> {
-                Navigator.navigator.push(EnteringAnumberScreen)
+            is QRcodeMenuIntent.ChoosingItem -> {
+                ChoosingItemIntent.execute(intent.index)}
+            is QRcodeMenuIntent.ChoosingPrinter -> {
+                ChoosingPrinterIntent.execute(intent.index)}
+            is QRcodeMenuIntent.OpenProductSearch -> {
+                NavigatorComponent.navigator!!.push(ProductSearchScreen)
+            }
+            is QRcodeMenuIntent.PrintQRcode -> {
+                printerVkpUseCase.execute(
+                    "QR code",
+                    "Описание",
+                    heightQRCodeMM = 20,
+                    fontSize = 12F
+
+                )
             }
 
         }

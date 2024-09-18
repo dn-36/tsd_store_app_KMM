@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.example.project.presentation.feature.authorization.screens.entering_number.domain.SendNumberUseCase
-import org.example.project.presentation.core.Navigator
+import org.example.project.presentation.core.NavigatorComponent
 import org.example.project.presentation.feature.authorization.screens.check_sms.ui.CheckSMSScreen
 import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
 
@@ -38,7 +38,7 @@ class EnteringNumberViewModel(
                              isCorrectNumberStatus = true,
                              isLoadingScreen = false
                          )
-                             Navigator.navigator.push(
+                             NavigatorComponent.navigator!!.push(
                                  CheckSMSScreen(intent.number,
                                  if(it) UserStatus.REGISTERED else UserStatus.NEW
                              )

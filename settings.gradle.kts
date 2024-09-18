@@ -32,6 +32,7 @@ include(":composeApp")
 include(":core")
 include(":common")
 
-include(":common:printer-barcode")
+include(":common:printer-barcode-vkp")
+include(":common:printer-barcode-tsc")
 
 //include(":wwwccc")

@@ -24,7 +24,7 @@ private val authorizationClient: AuthorizationClient
 
          authorizationClient.registerCreateCode(number).onSuccess {
              userStatus = UserStatus.NEW
-             println("////////////////////////////ANSWER NEW////////////////////\n" +
+             println("/////////////////ANSWER NEW////////////////////\n" +
                      "\n" +
                      "${number}")
              println(it)

@@ -23,7 +23,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.example.project.presentation.feature.authorization.screens.entering_number.component.LoadingComponent
-import org.example.project.presentation.core.Navigator
+import org.example.project.presentation.core.NavigatorComponent
 import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.component.TogiCountryCodePicker
 import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.viewmodel.EnteringNumberEvent
 import org.example.project.presentation.feature.authorization.screens.entering_number.viewmodel.EnteringNumberViewModel
@@ -37,7 +37,7 @@ object EnteringAnumberScreen : Screen {
 
 @Composable
 override fun Content() {
-    Navigator.navigator = LocalNavigator.currentOrThrow
+    NavigatorComponent.navigator = LocalNavigator.currentOrThrow
        val state by viewModel.state.collectAsState()
        val scope  = rememberCoroutineScope()
 

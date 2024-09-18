@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import org.example.project.presentation.core.Navigator
+import org.example.project.presentation.core.NavigatorComponent
 import org.example.project.presentation.core.StringRes
 import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
 import org.example.project.presentation.feature.authorization.screens.check_sms.domain.CheckCodeSmsUseCase
-import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.ui.QRCodeMenu
+import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.ui.QRCodeMenuScreen
 
 class CheckSMSViewModel(val checkCodeSmsUseCase: CheckCodeSmsUseCase):ViewModel(){
 
@@ -106,7 +106,7 @@ class CheckSMSViewModel(val checkCodeSmsUseCase: CheckCodeSmsUseCase):ViewModel(
                      "192221",
                      intent.number,
                      state.value.name,
-                     actionOnSuccess = {Navigator.navigator.push(QRCodeMenu)},
+                     actionOnSuccess = {NavigatorComponent.navigator!!.push(QRCodeMenuScreen)},
                      {state.value = state.value.copy(statusSMS = StatusSMS.INCORRECT_SMS)}
                  )
 

@@ -9,16 +9,21 @@ class AppViewModel(
     private val checkAuthorizationStatus: CheckAuthorizationStatusUseCase
 ) : ViewModel(){
 
-    var state  = MutableStateFlow(AppState())
+    val state  = MutableStateFlow(AppState())
 
-    fun proccesIntent(event: AppEvent){
-        when(event){
-            is AppEvent.InitScreenEvent -> {
-                if( checkAuthorizationStatus.excecute() ==
-                    AuthorizationStatus.WAS_AUTHORIZATION){
-                    state.value = state.value.copy(true)
-                }else{
-                    state.value = state.value.copy(false)
+    fun proccesIntent(intent: AppIntent){
+        when(intent){
+            is AppIntent.SetScreenIntent -> {
+                when(checkAuthorizationStatus.excecute()){
+                AuthorizationStatus.LOADING -> {
+                state.value = state.value.copy(AuthorizationStatus.LOADING)
+                }
+                AuthorizationStatus.WAS_NO_AUTHORIZATION ->{
+                    state.value = state.value.copy(AuthorizationStatus.WAS_NO_AUTHORIZATION)
+                }
+                AuthorizationStatus.WAS_AUTHORIZATION -> {
+                    state.value = state.value.copy(AuthorizationStatus.WAS_AUTHORIZATION)
+                }
                 }
             }
         }

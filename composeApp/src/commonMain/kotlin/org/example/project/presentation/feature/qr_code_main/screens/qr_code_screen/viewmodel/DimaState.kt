@@ -1,4 +1,4 @@
-package org.example.project.presentation.dima_screens.viewmodel
+package org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.viewmodel
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
