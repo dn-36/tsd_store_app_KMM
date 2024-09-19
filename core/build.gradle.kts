@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 compose.resources {
@@ -16,6 +17,7 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
+        androidMain.dependencies {  implementation("io.ktor:ktor-client-okhttp:2.3.12") }
         commonMain.dependencies {
             implementation("com.russhwolf:multiplatform-settings:1.0.0")
             implementation("com.russhwolf:multiplatform-settings-no-arg:1.0.0")
@@ -32,8 +34,15 @@ kotlin {
             implementation(libs.bundles.ktor)
             implementation(libs.koin.core)
             implementation(libs.multiplatform.settings)
-
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.ktor.client.json)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.kotlinx.serialization.json)
         }
+        iosMain.dependencies{
+            implementation("io.ktor:ktor-client-ios:2.3.12")
+        }
+
     }
 }
 
