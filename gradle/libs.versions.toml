@@ -8,6 +8,7 @@ koinCoreVersion = "3.1.2"
 kotlinxSerializationJson = "1.7.2"
 ktorClientJson = "2.3.12"
 multiplatformSettings = "1.0.0"
+skiaShared = "0.92.0"
 voyager = "1.1.0-alpha03"
 androidx-activityCompose = "1.9.1"
 androidx-appcompat = "1.7.0"
@@ -59,6 +60,7 @@ multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", vers
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinComposeMultiplatform" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinComposeMultiplatform" }
+skia-shared = { module = "org.jetbrains.skia:skia-shared", version.ref = "skiaShared" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

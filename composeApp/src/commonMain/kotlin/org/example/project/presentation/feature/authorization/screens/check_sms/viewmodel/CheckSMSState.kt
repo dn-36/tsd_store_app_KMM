@@ -1,6 +1,6 @@
 package org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel
 
-import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
+import org.example.project.presentation.feature.authorization.datasource.authorization_client.UserStatus
 
 data class CheckSMSState(
     val fullSmsCode:String = "",

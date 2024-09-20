@@ -38,7 +38,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel.CheckSMSEvent
 import org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel.CheckSMSViewModel
 import org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel.StatusSMS
-import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
+import org.example.project.presentation.feature.authorization.datasource.authorization_client.UserStatus
 import org.example.project.presentation.core.StringRes
 import org.koin.mp.KoinPlatform.getKoin
 

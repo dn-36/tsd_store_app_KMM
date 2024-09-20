@@ -1,7 +1,7 @@
 package org.example.project
 
 import io.ktor.client.engine.darwin.Darwin
-import networking.createHttpClient
+import authorization_network.createHttpClient
 import org.koin.core.module.Module
 import org.koin.dsl.module
 

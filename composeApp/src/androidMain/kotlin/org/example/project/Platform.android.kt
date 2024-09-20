@@ -1,11 +1,15 @@
 package org.example.project
 
+import android.graphics.Bitmap
 import com.project.printer_barcode.VKPPrinter
 import io.ktor.client.engine.okhttp.OkHttp
-import networking.createHttpClient
-import org.example.project.presentation.core.app.domain.SharedPrefsApi
-import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.Infrastructure.InfrastructurePrinterVkpImpl
-import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.domain.InfrastructurePrinterVkpAPI
+import authorization_network.createHttpClient
+import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.Infrastructure.PrinterVkpImpl
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.InfrastructurePrinterVkpAPI
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.ConectUSBUseCase
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.GetQRcodeBitmapUseCase
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.PrintOnVkpUseCase
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuViewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import shared_prefs.CreateContextPlatform
@@ -23,9 +27,12 @@ actual val platformModule: Module = module {
             CreateContextPlatform(get()).get()
         }
     factory {
-        InfrastructurePrinterVkpImpl(get(),get()) as InfrastructurePrinterVkpAPI
+        PrinterVkpImpl(get(),get()) as InfrastructurePrinterVkpAPI
     }
     factory { VKPPrinter() }
-
+    factory { QRcodeMenuViewModel(get(),get(),get())  }
+    factory { GetQRcodeBitmapUseCase(get())  }
+    factory { ConectUSBUseCase(get())  }
+    factory { PrintOnVkpUseCase(get())  }
     }
 

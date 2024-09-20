@@ -2,6 +2,7 @@ package com.project.printer_barcode
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.widget.Toast
 import it.custom.printer.api.android.CustomAndroidAPI
@@ -60,7 +61,7 @@ class VKPPrinter() {
                     0
                 )
 
-                val textBitmap = textToBitmap(label!!, 80, fontSize, true)
+                val textBitmap = textToBitmap(label!!,  fontSize, true)
 
                 prnDevice!!.printImage(
                     textBitmap,
@@ -79,5 +80,22 @@ class VKPPrinter() {
                 Toast.makeText(context,"Error print image: ${e.message}",Toast.LENGTH_SHORT)
             }
         }
+    }
+
+    fun generateBarcode(content: String, heightMm: Int): Bitmap? {
+      return  VKPUtils.generateBarcode(content, heightMm)
+    }
+    fun textToBitmap(
+    text: String,
+   // _width: Int,
+    fontSize: Float,
+    isBold: Boolean
+    ):Bitmap{
+        return VKPUtils.textToBitmap(
+            text,
+            160,
+            fontSize,
+            isBold
+        )
     }
 }

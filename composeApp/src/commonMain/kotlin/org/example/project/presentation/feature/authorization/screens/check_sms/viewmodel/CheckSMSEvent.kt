@@ -1,7 +1,7 @@
 package org.example.project.presentation.feature.authorization.screens.check_sms.viewmodel
 
 import kotlinx.coroutines.CoroutineScope
-import org.example.project.presentation.feature.authorization.core.repository_impl.authorization_client.UserStatus
+import org.example.project.presentation.feature.authorization.datasource.authorization_client.UserStatus
 
 
 sealed class CheckSMSEvent {
