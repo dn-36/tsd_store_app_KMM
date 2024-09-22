@@ -1,4 +1,4 @@
-package org.example.project.presentation.feature.qr_code_menu.screens.product_search.viewmodel
+package org.example.project.presentation.feature.qr_code.screens.product_search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +23,7 @@ class ProductSearchViewModel(
                     intent.scope.launch {
                         _state.value =
                             _state.value.copy(
-                                items = repository.getProduct()
+                                items = repository.getProduct()//.map { it.title?:"" }
 
                             )
                     }
@@ -33,9 +33,13 @@ class ProductSearchViewModel(
                 _state.update { it.copy(searchText = intent.text) }
             }
             is ProductSearchIntent.SelectProduct -> {
-                _state.update { it.copy(selectedItem = intent.item) }
-                QRCodeMenuScreen.product = intent.item
-                NavigatorComponent.navigator!!.push(QRCodeMenuScreen())
+                _state.update { it.copy(selectedItem = intent.item.title?:"") }
+                val screen = QRCodeMenuScreen()
+                println("//////////////000/////////////////")
+                screen.product = intent.item
+                println(screen.product)
+                println("//////////////000/////////////////")
+                NavigatorComponent.navigator!!.push(screen)
             }
         }
     }

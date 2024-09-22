@@ -38,15 +38,16 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
-import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuViewModel
+import org.example.project.presentation.core.models.ProductPresentationModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import tsdstorekmm.composeapp.generated.resources.Res
 import tsdstorekmm.composeapp.generated.resources.search
 import tsdstorekmm.composeapp.generated.resources.settings
+/*
+actual class QRCodeMenuScreen : Screen {
 
-actual class QRCodeMenuScreen (val productTitle: String) : Screen {
+    val productTitle: String = "product TSDstore"
 
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -206,5 +207,20 @@ actual class QRCodeMenuScreen (val productTitle: String) : Screen {
             }
         }
     }
+
+    actual var product: String
+        get() = TODO("Not yet implemented")
+        set(value) {}
 }
 
+*/
+actual class QRCodeMenuScreen : Screen {
+    //}
+    actual var product: ProductPresentationModel
+        get() = TODO("Not yet implemented")
+        set(value) {}
+     @Composable
+    override fun Content() {
+
+    }
+}

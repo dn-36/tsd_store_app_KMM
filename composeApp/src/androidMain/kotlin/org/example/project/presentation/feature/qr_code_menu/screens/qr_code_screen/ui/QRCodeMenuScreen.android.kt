@@ -47,6 +47,7 @@ import androidx.lifecycle.ViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.example.project.presentation.core.models.ProductPresentationModel
 import org.example.project.presentation.feature.qr_code_menu.screens.product_search.ui.ProductSearchScreen
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.GetQRcodeBitmapUseCase
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
@@ -61,10 +62,10 @@ import tsdstorekmm.composeapp.generated.resources.search
 import tsdstorekmm.composeapp.generated.resources.settings
 
 actual class QRCodeMenuScreen : Screen {
-    actual companion object{
-      actual  val productTitle: String = "Выбирите продукт"
 
-    }
+      actual var product = ProductPresentationModel()
+
+
 
     val viewModel =
         QRcodeMenuViewModel(getKoin().get(),getKoin().get(),getKoin().get())
@@ -86,7 +87,8 @@ actual class QRCodeMenuScreen : Screen {
 
         viewModel.processIntent(
             QRcodeMenuIntent.SetScreen(
-                titleProduct =  productTitle,
+                titleProduct =  product.title,
+                dataQRcode = product.qrCodeData?:"",
                 LocalNavigator.currentOrThrow
             ))
 
@@ -228,11 +230,11 @@ actual class QRCodeMenuScreen : Screen {
 
                 Spacer(modifier = Modifier.height(10.dp))
             }
-            val setScreen = QRcodeMenuIntent.SetScreen(
+           /* val setScreen = QRcodeMenuIntent.SetScreen(
                 product,
-                LocalNavigator.currentOrThrow)
+                LocalNavigator.currentOrThrow)*/
             Button(
-                onClick = { viewModel.processIntent(setScreen) },
+                onClick = {},// viewModel.processIntent(setScreen) },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .padding(bottom = 16.dp)
@@ -244,8 +246,5 @@ actual class QRCodeMenuScreen : Screen {
         }
     }
 
-    actual companion object {
-        actual var product: String = "Выбирите продукт"
-    }
 }
 

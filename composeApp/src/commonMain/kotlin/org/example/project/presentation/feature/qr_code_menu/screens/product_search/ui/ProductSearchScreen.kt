@@ -23,10 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import org.example.project.presentation.feature.qr_code_menu.screens.product_search.viewmodel.ProductSearchIntent
-import org.example.project.presentation.feature.qr_code_menu.screens.product_search.viewmodel.ProductSearchViewModel
-
-
+import org.example.project.presentation.feature.qr_code.screens.product_search.viewmodel.ProductSearchIntent
+import org.example.project.presentation.feature.qr_code.screens.product_search.viewmodel.ProductSearchViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import tsdstorekmm.composeapp.generated.resources.Res
@@ -81,13 +79,13 @@ object ProductSearchScreen : Screen {
                             .padding(vertical = 4.dp)
                             .clickable {
                                 viewModel.proccesIntent(
-                                    ProductSearchIntent.SelectProduct(state.items[index])
+                                    ProductSearchIntent.SelectProduct(state.items.get(index))
                                 )
                             },
                         elevation = 4.dp
                     ) {
                         Text(
-                            text = state.items[index],
+                            text = state.items[index].title,
                             modifier = Modifier.padding(16.dp)
                         )
                     }

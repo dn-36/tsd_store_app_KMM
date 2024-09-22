@@ -34,7 +34,7 @@ class QRcodeMenuViewModel(
                 isSetedScreen = true
                val qrCodeBiteMap =  getQRcodeBitmapUseCase
                     .execute(
-                        intent.titleProduct,
+                        intent.dataQRcode,
                         state.value.heightQRcode
                     )
                 state.value = state.value.copy(imgBitmap = qrCodeBiteMap)
