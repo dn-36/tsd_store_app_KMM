@@ -30,7 +30,7 @@ class VKPPrinter() {
     fun print(
         label: String?,
         barcode: String,
-        heightQRCodeMM:Int,
+        heightQRCodeMM:Float,
         fontSize:Float,
         context:Context
     ) {
@@ -84,7 +84,7 @@ class VKPPrinter() {
         }
     }
 
-    fun generateBarcode(content: String, heightMm: Int): Bitmap? {
+    fun generateBarcode(content: String, heightMm: Float): Bitmap? {
       return  VKPUtils.generateBarcode(content, heightMm)
     }
     fun textToBitmap(

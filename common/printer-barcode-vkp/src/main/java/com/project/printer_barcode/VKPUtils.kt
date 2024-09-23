@@ -119,7 +119,7 @@ object VKPUtils {
         return Bitmap.createScaledBitmap(originalBitmap, widthPx, heightPx, false)
     }
 
-    fun generateBarcode(content: String, heightMm: Int): Bitmap? {
+    fun generateBarcode(content: String, heightMm: Float): Bitmap? {
         return try {
             val pixelsPerMm = 3.779528
             val widthPx = (75 * pixelsPerMm).toInt()

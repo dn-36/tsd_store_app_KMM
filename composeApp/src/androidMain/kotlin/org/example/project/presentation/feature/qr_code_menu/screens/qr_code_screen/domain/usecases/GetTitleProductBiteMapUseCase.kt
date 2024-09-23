@@ -6,6 +6,6 @@ import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_scr
 class GetTitleProductBiteMapUseCase(
     private val printerVkpAPI: InfrastructurePrinterVkpAPI
 ) {
-    fun execute(content:String,fontSize:Int):Bitmap =
+    fun execute(content:String,fontSize:Float):Bitmap =
         printerVkpAPI.getTitleProduct(content,fontSize)
 }

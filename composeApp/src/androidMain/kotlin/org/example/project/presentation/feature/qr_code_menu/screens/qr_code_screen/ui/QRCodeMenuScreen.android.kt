@@ -1,5 +1,6 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -36,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -65,7 +67,7 @@ actual class QRCodeMenuScreen : Screen {
     @Composable
      override fun Content() {
 
-        var productTsdStore by remember { mutableStateOf("product") }
+        //var productTsdStore by remember { mutableStateOf("product") }
 
         var selectedPrinter by remember { mutableStateOf("VKP принтер") }
         var printersExpanded by remember { mutableStateOf(false) }
@@ -81,7 +83,8 @@ actual class QRCodeMenuScreen : Screen {
             QRcodeMenuIntent.SetScreen(
                 product,
                 LocalNavigator.currentOrThrow
-            ))
+            )
+        )
 
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
@@ -92,9 +95,9 @@ actual class QRCodeMenuScreen : Screen {
             ) {
                 Column {
                     OutlinedTextField(
-                        value = productTsdStore,
+                        value = product.title,
                         onValueChange = {
-                           /* viewModel.state = viewModel.state.copy(
+                            /* viewModel.state = viewModel.state.copy(
                                 titleProduct = it
                             )*/
                         },
@@ -136,28 +139,32 @@ actual class QRCodeMenuScreen : Screen {
                     verticalArrangement = Arrangement.Center
                 ) {
                     // Изображение штрих-кода
-                    if(state.imgBitmap != null) {
+                    if (state.imgBitmap != null) {
 
                         Image(
                             bitmap = state.imgBitmap!!.asImageBitmap(),
-                            modifier = Modifier.width(300.dp).height(
-                                (product.heightQRcode*5).dp
-                            ),
-                            contentDescription =  "qrCode"
+                            modifier = Modifier
+                                .width(300.dp)
+                                .height(
+                                    (product.heightQRcode * 3.5).dp
+                                ),
+                            contentDescription = "qrCode"
                         )
-
+                        Spacer(modifier = Modifier.height(32.dp))
                         Image(
                             bitmap = state.titleProductQRcodeBiteMap!!.asImageBitmap(),
-                            modifier = Modifier.width(300.dp).wrapContentHeight(),
-                            contentDescription =  "qrCode"
+                            modifier = Modifier
+                                .width(350.dp)
+                                .wrapContentHeight(),
+                            contentDescription = "qrCode"
                         )
-                    }else{
+                    } else {
                         Image(
                             painter = painterResource(Res.drawable.barcode),
                             "qrCode"
                         )
                         Text(
-                            text = "product" ,
+                            text = "product",
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.h6,
@@ -168,7 +175,7 @@ actual class QRCodeMenuScreen : Screen {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     // Описание продукта
-                /*    Text(
+                    /*    Text(
                         text = state.titleProduct ,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
@@ -189,7 +196,9 @@ actual class QRCodeMenuScreen : Screen {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Box(
-                            modifier = Modifier.padding(15.dp).height(50.dp)
+                            modifier = Modifier
+                                .padding(15.dp)
+                                .height(50.dp)
                                 .fillMaxWidth(0.7F)
                         ) {
                             Card(
@@ -198,7 +207,7 @@ actual class QRCodeMenuScreen : Screen {
                                 modifier = Modifier.fillMaxSize(),
                             ) {}
                             Text(
-                                text =  selectedPrinter,
+                                text = selectedPrinter,
                                 modifier = Modifier.align(Alignment.Center)
                             )
                         }
@@ -208,8 +217,7 @@ actual class QRCodeMenuScreen : Screen {
                                 .padding(start = 8.dp)
                                 .height(48.dp)
                                 .width(48.dp)
-                                .clickable { viewModel.processIntent(QRcodeMenuIntent.OpenSettingsSizeQRCode) }
-                                ,
+                                .clickable { viewModel.processIntent(QRcodeMenuIntent.OpenSettingsSizeQRCode) },
                             painter = painterResource(Res.drawable.settings),
                             contentDescription = "Настройки"
                         )
@@ -240,13 +248,8 @@ actual class QRCodeMenuScreen : Screen {
                 Spacer(modifier = Modifier.height(10.dp))
             }
 
-            if(state.isOpenedSettings){
-                QRcodeSizeComponent.Content()
-            }
-
-
             Button(
-                onClick = {},// viewModel.processIntent(setScreen) },
+                onClick = { viewModel.processIntent(QRcodeMenuIntent.PrintQRcode) },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .padding(bottom = 16.dp)
@@ -255,8 +258,40 @@ actual class QRCodeMenuScreen : Screen {
             ) {
                 Text(text = "Печать")
             }
+
+            if (state.isOpenedSettings) {
+                if (state.imgBitmap != null) {
+                    QRcodeSizeComponent.Content(
+                        state.imgBitmap!!,
+                        state.titleProductQRcodeBiteMap!!,
+                        state.heightQRcode,
+                        state.fontSize,
+                        {
+                            viewModel.processIntent(
+                                QRcodeMenuIntent.ChangeFontSize(
+                                    it,
+                                    product.title
+                                )
+                            )
+                        },
+                        {
+                            viewModel.processIntent(
+                                QRcodeMenuIntent.ChangeHeightQrCode(
+                                    it,
+                                    product.qrCodeData ?: ""
+                                )
+                            )
+                        },
+                        { viewModel.processIntent(QRcodeMenuIntent.CloseSettings) },
+                        { viewModel.processIntent(QRcodeMenuIntent.SavedSettings) },
+                    )
+                } else {
+                    Toast.makeText(LocalContext.current, "Выбирите продукт", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            }
         }
     }
 
-}
 

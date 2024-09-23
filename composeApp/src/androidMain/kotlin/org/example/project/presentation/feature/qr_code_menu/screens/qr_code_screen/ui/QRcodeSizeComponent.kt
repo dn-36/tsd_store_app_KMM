@@ -1,7 +1,9 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.ui
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,29 +30,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
 import org.jetbrains.compose.resources.painterResource
 import tsdstorekmm.composeapp.generated.resources.Res
 import tsdstorekmm.composeapp.generated.resources.st
 
 object QRcodeSizeComponent {
     @Composable
-    fun Content() {
+    fun Content(
+        qrCode:Bitmap,
+        title:Bitmap,
+        heightQrCode: Float,
+        fontSize:Float,
+        actionChangeFontSize:(Float)->Unit,
+        actionChangeHeightQRcode:(Float)->Unit,
+        actionSavedSettings:()->Unit,
+        actionCloseSettings:()->Unit,
+    ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier.fillMaxHeight().fillMaxWidth().alpha(0.6f)
+                    .clickable { actionCloseSettings() }
                     .background(Color.Black)
             )
             Box(
                 modifier = Modifier.clip(RoundedCornerShape(30.dp))
-                    .fillMaxHeight(0.5f).fillMaxWidth()
+                    .fillMaxHeight(0.75f).fillMaxWidth()
                     .align(Alignment.BottomCenter).background(Color.White)
             ) {
-                var fontSize by remember { mutableStateOf(16f) }
-                var imageSize by remember { mutableStateOf(20f) }
+             //   var fontSize by remember { mutableStateOf(16f) }
+             //   var imageSize by remember { mutableStateOf(20f) }
 
                 Column(
                     modifier = Modifier
@@ -58,39 +73,49 @@ object QRcodeSizeComponent {
                     horizontalAlignment = CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = "Изменяемый текст",
-                        fontSize = fontSize.sp,  // Применяемый размер шрифта
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    Slider(
-                        value = fontSize,
-                        onValueChange = { newSize -> fontSize = newSize },
-                        valueRange = 12f..40f,  // Диапазон изменения шрифта
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
                     Image(
-                        painter = painterResource(Res.drawable.st),
+                        bitmap = qrCode.asImageBitmap(),
                         contentDescription = null,
-                        modifier = Modifier.height(imageSize.dp).width(150.dp)
+                        modifier = Modifier.height((heightQrCode*3.5F).dp).width(150.dp)
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
 
                     Slider(
-                        value = imageSize,
-                        onValueChange = { newSize -> imageSize = newSize },
-                        valueRange = 12f..40f,  // Диапазон изменения шрифта
+                        value = heightQrCode.toFloat(),
+                        onValueChange = {actionChangeHeightQRcode(it) },
+                        valueRange = 10f..50f,  // Диапазон изменения шрифта
                         modifier = Modifier.fillMaxWidth()
                     )
+//
+                    Image(
+                        bitmap = title.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier.height(100.dp).width(250.dp)
+                    )
+
+
+                    Slider(
+                        value = fontSize.toFloat(),
+                        onValueChange = { actionChangeFontSize(it) },
+                        valueRange = 5f..10f,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(32.dp))
+                    Button(
+                        onClick = { actionSavedSettings() },
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(bottom = 16.dp)
+                    ) {
+                        Text(text = "Сохранить")
+                    }
                 }
+
             }
             Box(
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.1f)
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.03f)
                     .background(Color.White).align(BottomCenter)
             )
 

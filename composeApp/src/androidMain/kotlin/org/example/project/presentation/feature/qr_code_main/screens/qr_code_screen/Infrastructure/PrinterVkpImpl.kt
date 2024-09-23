@@ -13,7 +13,7 @@ class PrinterVkpImpl(
 
     override fun printOnVKP(description: String?,
                             textBarcode: String,
-                            heightQRCodeMM:Int,
+                            heightQRCodeMM:Float,
                             fontSize:Float){
     printer.print(
         description,
@@ -28,13 +28,13 @@ class PrinterVkpImpl(
 
     }
 
-    override fun <T> getQRCode(content: String, heightMm: Int): T {
+    override fun <T> getQRCode(content: String, heightMm: Float): T {
         return printer.generateBarcode(
             content,heightMm
         ) as T
     }
 
-    override fun <T> getTitleProduct(content: String, fontSize: Int): T {
+    override fun <T> getTitleProduct(content: String, fontSize: Float): T {
         return printer.textToBitmap(
             content,fontSize.toFloat(),true
         ) as T

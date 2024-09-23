@@ -6,7 +6,7 @@ import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_scr
 class GetQRcodeBitmapUseCase(
     private val printerVkpAPI: InfrastructurePrinterVkpAPI
 ) {
-    fun execute(content:String,heightMM:Int):Bitmap = printerVkpAPI.getQRCode(
+    fun execute(content:String,heightMM:Float):Bitmap = printerVkpAPI.getQRCode(
         content,heightMM
     )
 

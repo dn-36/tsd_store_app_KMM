@@ -6,7 +6,7 @@ import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_scr
 class PrintOnVkpUseCase(private val repository: InfrastructurePrinterVkpAPI) {
     fun execute(textBarcode: String,
                 description: String?,
-                heightQRCodeMM:Int,
+                heightQRCodeMM:Float,
                 fontSize:Float){
         repository.printOnVKP(
         description,

@@ -2,7 +2,7 @@ package org.example.project.presentation.core.models
 
 data class ProductPresentationModel(
     val title:String =  "product TSD store",
-    val qrCodeData:String? = null,
-    val heightQRcode:Int = 30,
-    val fontSize:Int = 12
+    val qrCodeData:String? = "product_TSD_store",
+    val heightQRcode:Float = 30F,
+    val fontSize:Float= 5F
 )

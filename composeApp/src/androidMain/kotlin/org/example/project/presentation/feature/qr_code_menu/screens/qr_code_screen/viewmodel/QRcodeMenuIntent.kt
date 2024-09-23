@@ -11,5 +11,10 @@ sealed class QRcodeMenuIntent {
     object OpenProductSearch: QRcodeMenuIntent()
     object PrintQRcode: QRcodeMenuIntent()
      object OpenSettingsSizeQRCode: QRcodeMenuIntent()
+     data class ChangeFontSize(val fontSize:Float,val title:String): QRcodeMenuIntent()
+     data class ChangeHeightQrCode(val heightQRcode:Float,val dataQRcode:String): QRcodeMenuIntent()
+     object SavedSettings:QRcodeMenuIntent()
+    object CloseSettings:QRcodeMenuIntent()
+
 
 }
