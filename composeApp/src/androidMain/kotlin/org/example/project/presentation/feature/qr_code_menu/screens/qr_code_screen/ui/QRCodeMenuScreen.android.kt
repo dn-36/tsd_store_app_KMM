@@ -45,6 +45,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.example.project.presentation.core.models.ProductPresentationModel
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.CategoryPrinter
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -69,12 +70,12 @@ actual class QRCodeMenuScreen : Screen {
 
         //var productTsdStore by remember { mutableStateOf("product") }
 
-        var selectedPrinter by remember { mutableStateOf("VKP принтер") }
+        //var selectedPrinter by remember { mutableStateOf("VKP принтер") }
         var printersExpanded by remember { mutableStateOf(false) }
         val printers = listOf(
-            "TSC принтер",
-            "VKP принтер",
-            "Zebra принтер"
+            CategoryPrinter.VKP,
+            CategoryPrinter.TSC,
+            CategoryPrinter.ZEBRA
         )
 
         val state by viewModel.state.collectAsState()
@@ -82,7 +83,9 @@ actual class QRCodeMenuScreen : Screen {
         viewModel.processIntent(
             QRcodeMenuIntent.SetScreen(
                 product,
-                LocalNavigator.currentOrThrow
+                LocalNavigator.currentOrThrow,
+                LocalContext.current
+
             )
         )
 
@@ -207,7 +210,7 @@ actual class QRCodeMenuScreen : Screen {
                                 modifier = Modifier.fillMaxSize(),
                             ) {}
                             Text(
-                                text = selectedPrinter,
+                                text = state.categoryPrinter.toString,
                                 modifier = Modifier.align(Alignment.Center)
                             )
                         }
@@ -232,13 +235,14 @@ actual class QRCodeMenuScreen : Screen {
                         printers.forEach { printer ->
                             DropdownMenuItem(
                                 onClick = {
-                                    selectedPrinter = printer
-                                    printersExpanded = false
+                                    viewModel.processIntent(QRcodeMenuIntent.СhoicePrinter(printer))
+                                   // printersExpanded = false
                                 }
+
                             ) {
                                 Text(
                                     modifier = Modifier,
-                                    text = printer
+                                    text = printer.toString
                                 )
                             }
                         }

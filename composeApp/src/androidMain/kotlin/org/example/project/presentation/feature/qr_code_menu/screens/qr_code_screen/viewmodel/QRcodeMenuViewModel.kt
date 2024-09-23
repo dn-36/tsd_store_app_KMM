@@ -1,7 +1,11 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel
 
+import android.bluetooth.BluetoothDevice
+import android.health.connect.datatypes.Device
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.project.printer_barcode.TSCprinter
+import com.project.printer_barcode.VKPUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.example.project.presentation.core.NavigatorComponent
@@ -28,9 +32,15 @@ class QRcodeMenuViewModel(
 
         when (intent) {
             is QRcodeMenuIntent.SetScreen -> {
-                Log.d("test___00-", "sdokncoidsnocisdnocdsniocsd")
                 if (isSetedScreen) return
                 isSetedScreen = true
+                var device:BluetoothDevice? = null
+                TSCprinter.getPairedDevices(intent.context).map {
+                    if(it.name == "RF-BHS") device =  it
+                   // RF-BHS
+                }
+//Log.d("11111_111",device)
+                TSCprinter.init(device!!)
                 val qrCodeBiteMap = getQRcodeBitmapUseCase
                     .execute(
                         intent.product.qrCodeData ?: "",
@@ -54,13 +64,26 @@ class QRcodeMenuViewModel(
             }
 
             is QRcodeMenuIntent.PrintQRcode -> {
-                printerVkpUseCase.execute(
-                    intent.product.qrCodeData?:"",//"QR code",
-                    intent.product.title,//"Описание",
-                    heightQRCodeMM = intent.product.heightQRcode,
-                    fontSize = intent.product.fontSize
+                when(state.value.categoryPrinter){
+                    CategoryPrinter.VKP -> {
+                        printerVkpUseCase.execute(
+                            intent.product.qrCodeData?:"",//"QR code",
+                            intent.product.title,//"Описание",
+                            heightQRCodeMM = intent.product.heightQRcode,
+                            fontSize = intent.product.fontSize
+                        )
+                    }
+                    CategoryPrinter.TSC -> {
+                        TSCprinter.printer(
+                            VKPUtils.textToBitmap("product tsd store",160,7F,true)!!,
+                            VKPUtils.textToBitmap("product tsd store",50,7F,true)!!,
+                        )
+                    }
+                    CategoryPrinter.ZEBRA ->{
 
-                )
+                    }
+                }
+
             }
 
             is QRcodeMenuIntent.OpenSettingsSizeQRCode -> {
@@ -94,11 +117,19 @@ class QRcodeMenuViewModel(
                     it.copy(isOpenedSettings = false)
                 }
             }
-            is QRcodeMenuIntent.CloseSettings ->{
+            is QRcodeMenuIntent.CloseSettings -> {
                 state.update {
                     it.copy(isOpenedSettings = false)
                 }
             }
+            is QRcodeMenuIntent.СhoicePrinter -> {
+             state.update {
+                 it.copy(
+                     categoryPrinter = intent.category
+                 )
+             }
+                }
+            }
             }
         }
-    }
+

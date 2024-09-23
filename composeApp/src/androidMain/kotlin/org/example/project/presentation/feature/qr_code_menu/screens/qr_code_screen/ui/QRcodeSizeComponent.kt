@@ -3,7 +3,6 @@ package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_sc
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,11 +19,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -33,19 +28,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
-import com.project.printer_barcode.TSCprinter
-import com.project.printer_barcode.VKPUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.example.project.MainActivity
-import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
-import org.jetbrains.compose.resources.painterResource
-import tsdstorekmm.composeapp.generated.resources.Res
-import tsdstorekmm.composeapp.generated.resources.st
 
 object QRcodeSizeComponent {
     @Composable
@@ -163,17 +147,7 @@ object QRcodeSizeComponent {
 
                         Button(
                             onClick = {
-                                actionSavedSettings()
-                               // scope.launch(Dispatchers.){
-                                    TSCprinter.printer(
-                                        VKPUtils.textToBitmap("sdijduif",160,20F,true)!!,
-                                        VKPUtils.textToBitmap("1sdijduif1",160,20F,true)!!,
-                                       // MainActivity . device!!.address
-                                    )
-
-                                        //}
-
-                                      },
+                                actionSavedSettings() },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(50.dp))
                                 .height(40.dp)

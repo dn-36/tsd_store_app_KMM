@@ -14,12 +14,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import com.project.printer_barcode.TSCprinter
-import com.project.printer_barcode.VKPUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.example.project.presentation.core.ConstData
-import product_network.ProductApiClient
 import org.example.project.presentation.core.app.ui.App
 import org.example.project.presentation.core.initKoin
 import org.koin.android.ext.koin.androidContext
@@ -48,16 +42,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-      //  askPermissionsBluetooth()
-        getPairedDevices(this).map { if(it.name == "RF-BHS") device =  it }
-      val devicae = connectToDevice(device!!,this)
-        TSCprinter.init(device!!.address)
+       askPermissionsBluetooth()
+     //   getPairedDevices(this).map { if(it.name == "RF-BHS") device =  it }
 
-        if(devicae!!.isConnected ){
-            Log.d("TESVV",true.toString())
+      /*val devicae = connectToDevice(device!!,this)
+        TSCprinter.init(device!!)*/
 
 
-            }
         //Log.d("2323s",device!!.)
         initKoin {
             androidContext(this@MainActivity.applicationContext)
@@ -88,28 +79,7 @@ class MainActivity : ComponentActivity() {
 
 }
 
-fun getPairedDevices(context: Context): List<BluetoothDevice> {
-    val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-    val deviceList = mutableListOf<BluetoothDevice>()
 
-    if (bluetoothAdapter == null) {
-        // Bluetooth не поддерживается
-        return deviceList
-    }
-
-    // Проверка разрешений для Android 12+
-    if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_CONNECT)
-        != PackageManager.PERMISSION_GRANTED) {
-        // Разрешение не получено
-        return deviceList
-    }
-
-    // Возвращаем список спаренных устройств
-    val pairedDevices: Set<BluetoothDevice> = bluetoothAdapter.bondedDevices
-    deviceList.addAll(pairedDevices)
-
-    return deviceList
-}
 
 fun connectToDevice(device: BluetoothDevice,context: Context): BluetoothSocket? {
     // UUID — это уникальный идентификатор для подключения, его можно задать самостоятельно или использовать стандартные профили
