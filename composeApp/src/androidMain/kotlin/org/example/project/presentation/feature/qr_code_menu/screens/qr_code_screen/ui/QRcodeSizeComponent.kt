@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
@@ -36,6 +37,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.project.printer_barcode.TSCprinter
+import com.project.printer_barcode.VKPUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.example.project.MainActivity
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
 import org.jetbrains.compose.resources.painterResource
 import tsdstorekmm.composeapp.generated.resources.Res
@@ -53,19 +59,22 @@ object QRcodeSizeComponent {
         actionSavedSettings:()->Unit,
         actionCloseSettings:()->Unit,
     ) {
+
+        val scope = rememberCoroutineScope()
+
         Box(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth()
                     .alpha(0.6f)
-                    .clickable { actionCloseSettings() }
+                  //  .clickable { actionCloseSettings() }
                     .background(Color.Black)
             )
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(30.dp))
-                    .fillMaxHeight(0.75f)
+                    .fillMaxHeight(0.85f)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .background(Color.White)
@@ -83,6 +92,7 @@ object QRcodeSizeComponent {
 
                     Text("Настройки печати:", color = Color.Black, fontSize = 20.sp)
 
+                    Spacer(modifier = Modifier.height(30.dp))
                     Image(
                         bitmap = qrCode.asImageBitmap(),
                         contentDescription = null,
@@ -98,7 +108,7 @@ object QRcodeSizeComponent {
                         bitmap = title.asImageBitmap(),
                         contentDescription = null,
                         modifier = Modifier
-                            .height(100.dp)
+                            .height(130.dp)
                             .width(250.dp)
                     )
 
@@ -112,7 +122,7 @@ object QRcodeSizeComponent {
                         Spacer(modifier = Modifier.height(10.dp))
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("${(heightQrCode * 3.5F).toInt()}", color = Color.Black, fontSize = 20.sp)
+                            Text("${(heightQrCode).toInt()}", color = Color.Black, fontSize = 20.sp)
                             Spacer(modifier = Modifier.width(10.dp))
                             Slider(
                                 value = heightQrCode.toFloat(),
@@ -143,33 +153,35 @@ object QRcodeSizeComponent {
                             Slider(
                                 value = fontSize.toFloat(),
                                 onValueChange = { actionChangeFontSize(it) },
-                                valueRange = 5f..10f,
+                                valueRange = 5f..15f,
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
                     }
 
                     Spacer(modifier = Modifier.height(22.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+
                         Button(
-                            onClick = { actionSavedSettings() },
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(50.dp))
-                                .height(40.dp)
-                                .fillMaxWidth(0.5f)
-                        ) {
-                            Text(text = "Сохранить")
-                        }
-                        Button(
-                            onClick = { actionSavedSettings() },
+                            onClick = {
+                                actionSavedSettings()
+                               // scope.launch(Dispatchers.){
+                                    TSCprinter.printer(
+                                        VKPUtils.textToBitmap("sdijduif",160,20F,true)!!,
+                                        VKPUtils.textToBitmap("1sdijduif1",160,20F,true)!!,
+                                       // MainActivity . device!!.address
+                                    )
+
+                                        //}
+
+                                      },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(50.dp))
                                 .height(40.dp)
                                 .fillMaxWidth(0.95f)
                         ) {
-                            Text(text = "Отменить")
+                            Text(text = "Сохранить")
                         }
-                    }
+
                 }
 
             }

@@ -9,7 +9,7 @@ sealed class QRcodeMenuIntent {
         val product:ProductPresentationModel,
         val navigator: Navigator): QRcodeMenuIntent()
     object OpenProductSearch: QRcodeMenuIntent()
-    object PrintQRcode: QRcodeMenuIntent()
+    data class PrintQRcode(val product: ProductPresentationModel): QRcodeMenuIntent()
      object OpenSettingsSizeQRCode: QRcodeMenuIntent()
      data class ChangeFontSize(val fontSize:Float,val title:String): QRcodeMenuIntent()
      data class ChangeHeightQrCode(val heightQRcode:Float,val dataQRcode:String): QRcodeMenuIntent()

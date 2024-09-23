@@ -55,10 +55,10 @@ class QRcodeMenuViewModel(
 
             is QRcodeMenuIntent.PrintQRcode -> {
                 printerVkpUseCase.execute(
-                    "QR code",
-                    "Описание",
-                    heightQRCodeMM = 20F,
-                    fontSize = 12F
+                    intent.product.qrCodeData?:"",//"QR code",
+                    intent.product.title,//"Описание",
+                    heightQRCodeMM = intent.product.heightQRcode,
+                    fontSize = intent.product.fontSize
 
                 )
             }
@@ -71,16 +71,7 @@ class QRcodeMenuViewModel(
 
             is QRcodeMenuIntent.ChangeFontSize -> {
                 state.update {
-                    it.copy(fontSize = intent.fontSize /*when(intent.fontSize){
-                        1F ->  3.2F
-                        2F ->  3.6F
-                        3F ->  4.3F
-                        4F ->  5.1F
-                        5F ->  5.8F
-                        6F ->  7.1F
-                        7F ->  8.5F
-                        else -> 5.1F
-                    }*/,
+                    it.copy(fontSize = intent.fontSize ,
                     titleProductQRcodeBiteMap = getTitleProductUseCase.execute(
                         intent.title,
                         intent.fontSize

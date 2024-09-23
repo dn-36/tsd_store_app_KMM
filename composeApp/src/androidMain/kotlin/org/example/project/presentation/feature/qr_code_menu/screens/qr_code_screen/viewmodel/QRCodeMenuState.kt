@@ -9,6 +9,6 @@ data class QRCodeMenuState(
     val titleProductQRcodeBiteMap: Bitmap? = null,
     val imgBitmap: Bitmap? = null,
     val heightQRcode:Float = 20F,
-    val fontSize:Float = 5F,
+    val fontSize:Float = 10F,
     val isOpenedSettings:Boolean = false
 )

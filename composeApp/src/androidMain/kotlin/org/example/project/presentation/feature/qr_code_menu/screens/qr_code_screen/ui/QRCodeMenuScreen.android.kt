@@ -146,11 +146,11 @@ actual class QRCodeMenuScreen : Screen {
                             modifier = Modifier
                                 .width(300.dp)
                                 .height(
-                                    (product.heightQRcode * 3.5).dp
+                                    (product.heightQRcode * 5).dp
                                 ),
                             contentDescription = "qrCode"
                         )
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(22.dp))
                         Image(
                             bitmap = state.titleProductQRcodeBiteMap!!.asImageBitmap(),
                             modifier = Modifier
@@ -249,7 +249,17 @@ actual class QRCodeMenuScreen : Screen {
             }
 
             Button(
-                onClick = { viewModel.processIntent(QRcodeMenuIntent.PrintQRcode) },
+                onClick = { viewModel.processIntent(
+                    QRcodeMenuIntent.PrintQRcode(
+                        ProductPresentationModel(
+                            product.title,
+                            product.qrCodeData,
+                            state.heightQRcode,
+                            state.fontSize
+                        )
+
+                    )
+                ) },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .padding(bottom = 16.dp)

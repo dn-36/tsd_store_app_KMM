@@ -110,6 +110,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":common:printer-barcode-vkp"))
+    implementation(project(":common:printer-barcode-tsc"))
 
 
 }
