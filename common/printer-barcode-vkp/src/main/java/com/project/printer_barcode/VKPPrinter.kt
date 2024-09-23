@@ -61,7 +61,9 @@ class VKPPrinter() {
                     0
                 )
 
-                val textBitmap = textToBitmap(label!!,  fontSize, true)
+                val textBitmap = textToBitmap(
+                    label!!,  fontSize, true
+                )
 
                 prnDevice!!.printImage(
                     textBitmap,

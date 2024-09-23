@@ -1,8 +1,8 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.ui
 
-import android.widget.ImageView
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
@@ -36,20 +35,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.ImageBitmapConfig
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.example.project.presentation.core.models.ProductPresentationModel
-import org.example.project.presentation.feature.qr_code_menu.screens.product_search.ui.ProductSearchScreen
-import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.GetQRcodeBitmapUseCase
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -57,7 +50,6 @@ import org.koin.mp.KoinPlatform.getKoin
 
 import tsdstorekmm.composeapp.generated.resources.Res
 import tsdstorekmm.composeapp.generated.resources.barcode
-import tsdstorekmm.composeapp.generated.resources.compose_multiplatform
 import tsdstorekmm.composeapp.generated.resources.search
 import tsdstorekmm.composeapp.generated.resources.settings
 
@@ -68,12 +60,12 @@ actual class QRCodeMenuScreen : Screen {
 
 
     val viewModel =
-        QRcodeMenuViewModel(getKoin().get(),getKoin().get(),getKoin().get())
+        QRcodeMenuViewModel(getKoin().get(),getKoin().get(),getKoin().get(),getKoin().get())
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
      override fun Content() {
 
-
+        var productTsdStore by remember { mutableStateOf("product") }
 
         var selectedPrinter by remember { mutableStateOf("VKP принтер") }
         var printersExpanded by remember { mutableStateOf(false) }
@@ -87,8 +79,7 @@ actual class QRCodeMenuScreen : Screen {
 
         viewModel.processIntent(
             QRcodeMenuIntent.SetScreen(
-                titleProduct =  product.title,
-                dataQRcode = product.qrCodeData?:"",
+                product,
                 LocalNavigator.currentOrThrow
             ))
 
@@ -101,7 +92,7 @@ actual class QRCodeMenuScreen : Screen {
             ) {
                 Column {
                     OutlinedTextField(
-                        value = state.titleProduct,
+                        value = productTsdStore,
                         onValueChange = {
                            /* viewModel.state = viewModel.state.copy(
                                 titleProduct = it
@@ -149,7 +140,15 @@ actual class QRCodeMenuScreen : Screen {
 
                         Image(
                             bitmap = state.imgBitmap!!.asImageBitmap(),
-                            modifier = Modifier.width(300.dp).height(300.dp),
+                            modifier = Modifier.width(300.dp).height(
+                                (product.heightQRcode*5).dp
+                            ),
+                            contentDescription =  "qrCode"
+                        )
+
+                        Image(
+                            bitmap = state.titleProductQRcodeBiteMap!!.asImageBitmap(),
+                            modifier = Modifier.width(300.dp).wrapContentHeight(),
                             contentDescription =  "qrCode"
                         )
                     }else{
@@ -157,18 +156,27 @@ actual class QRCodeMenuScreen : Screen {
                             painter = painterResource(Res.drawable.barcode),
                             "qrCode"
                         )
+                        Text(
+                            text = "product" ,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     // Описание продукта
-                    Text(
+                /*    Text(
                         text = state.titleProduct ,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.h6,
                         modifier = Modifier.fillMaxWidth()
-                    )
+                    )*/
+
+
                 }
 
 
@@ -199,8 +207,9 @@ actual class QRCodeMenuScreen : Screen {
                             modifier = Modifier
                                 .padding(start = 8.dp)
                                 .height(48.dp)
-                                .width(48.dp),
-
+                                .width(48.dp)
+                                .clickable { viewModel.processIntent(QRcodeMenuIntent.OpenSettingsSizeQRCode) }
+                                ,
                             painter = painterResource(Res.drawable.settings),
                             contentDescription = "Настройки"
                         )
@@ -230,9 +239,12 @@ actual class QRCodeMenuScreen : Screen {
 
                 Spacer(modifier = Modifier.height(10.dp))
             }
-           /* val setScreen = QRcodeMenuIntent.SetScreen(
-                product,
-                LocalNavigator.currentOrThrow)*/
+
+            if(state.isOpenedSettings){
+                QRcodeSizeComponent.Content()
+            }
+
+
             Button(
                 onClick = {},// viewModel.processIntent(setScreen) },
                 modifier = Modifier

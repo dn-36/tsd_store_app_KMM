@@ -1,6 +1,6 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases
 
-import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.InfrastructurePrinterVkpAPI
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.InfrastructurePrinterVkpAPI
 
 
 class PrintOnVkpUseCase(private val repository: InfrastructurePrinterVkpAPI) {

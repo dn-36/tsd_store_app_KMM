@@ -1,22 +1,21 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.example.project.presentation.core.NavigatorComponent
 import org.example.project.presentation.feature.qr_code_menu.screens.product_search.ui.ProductSearchScreen
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.ConectUSBUseCase
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.GetQRcodeBitmapUseCase
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.GetTitleProductBiteMapUseCase
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.PrintOnVkpUseCase
 
 class QRcodeMenuViewModel(
     private val conectUSBUseCase: ConectUSBUseCase,
     private val printerVkpUseCase: PrintOnVkpUseCase,
-    private val getQRcodeBitmapUseCase: GetQRcodeBitmapUseCase
-  //  private val getQRcodeUSBUseCase: GetProductUseCase
+    private val getQRcodeBitmapUseCase: GetQRcodeBitmapUseCase,
+    private val getTitleProductUseCase: GetTitleProductBiteMapUseCase
+    //private val getTitleProductUseCase: GetTitleProductUseCase
 ):ViewModel() {
 
         val state  = MutableStateFlow(QRCodeMenuState())
@@ -34,11 +33,17 @@ class QRcodeMenuViewModel(
                 isSetedScreen = true
                val qrCodeBiteMap =  getQRcodeBitmapUseCase
                     .execute(
-                        intent.dataQRcode,
+                        intent.product.qrCodeData?:"",
                         state.value.heightQRcode
                     )
                 state.value = state.value.copy(imgBitmap = qrCodeBiteMap)
-                state.value = state.value.copy(titleProduct = intent.titleProduct)
+
+                state.value = state.value.copy(
+                    titleProductQRcodeBiteMap = getTitleProductUseCase.execute(
+                       intent.product.title,
+                        intent.product.fontSize
+                    )
+                )
                 NavigatorComponent.navigator = intent.navigator
                 conectUSBUseCase.execute()
 
@@ -57,6 +62,11 @@ class QRcodeMenuViewModel(
                 )
             }
 
+            is QRcodeMenuIntent.OpenSettingsSizeQRCode -> {
+                state.value = state.value.copy(
+                isOpenedSettings = true
+                )
+            }
         }
     }
 }
