@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,14 +55,20 @@ object QRcodeSizeComponent {
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Box(
-                modifier = Modifier.fillMaxHeight().fillMaxWidth().alpha(0.6f)
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .alpha(0.6f)
                     .clickable { actionCloseSettings() }
                     .background(Color.Black)
             )
             Box(
-                modifier = Modifier.clip(RoundedCornerShape(30.dp))
-                    .fillMaxHeight(0.75f).fillMaxWidth()
-                    .align(Alignment.BottomCenter).background(Color.White)
+                modifier = Modifier
+                    .clip(RoundedCornerShape(30.dp))
+                    .fillMaxHeight(0.75f)
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .background(Color.White)
             ) {
              //   var fontSize by remember { mutableStateOf(16f) }
              //   var imageSize by remember { mutableStateOf(20f) }
@@ -73,50 +80,105 @@ object QRcodeSizeComponent {
                     horizontalAlignment = CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
+
+                    Text("Настройки печати:", color = Color.Black, fontSize = 20.sp)
+
                     Image(
                         bitmap = qrCode.asImageBitmap(),
                         contentDescription = null,
-                        modifier = Modifier.height((heightQrCode*3.5F).dp).width(150.dp)
+                        modifier = Modifier
+                            .height((heightQrCode * 3.5F).dp)
+                            .width(150.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                    //Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
-                    Slider(
-                        value = heightQrCode.toFloat(),
-                        onValueChange = {actionChangeHeightQRcode(it) },
-                        valueRange = 10f..50f,  // Диапазон изменения шрифта
-                        modifier = Modifier.fillMaxWidth()
-                    )
-//
                     Image(
                         bitmap = title.asImageBitmap(),
                         contentDescription = null,
-                        modifier = Modifier.height(100.dp).width(250.dp)
-                    )
-
-
-                    Slider(
-                        value = fontSize.toFloat(),
-                        onValueChange = { actionChangeFontSize(it) },
-                        valueRange = 5f..10f,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(32.dp))
-                    Button(
-                        onClick = { actionSavedSettings() },
                         modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .padding(bottom = 16.dp)
-                    ) {
-                        Text(text = "Сохранить")
+                            .height(100.dp)
+                            .width(250.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(25.dp))
+
+
+                    Column {
+
+                        Text("Bысота QR code", color = Color.Black, fontSize = 20.sp)
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("${(heightQrCode * 3.5F).toInt()}", color = Color.Black, fontSize = 20.sp)
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Slider(
+                                value = heightQrCode.toFloat(),
+                                onValueChange = { actionChangeHeightQRcode(it) },
+                                valueRange = 10f..50f,  // Диапазон изменения шрифта
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                        }
+
+                    }
+//
+                   /* Image(
+                        bitmap = title.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier.height(100.dp).width(250.dp)
+                    )*/
+                    Column {
+
+                        Text("Размер шрифта", color = Color.Black, fontSize = 20.sp)
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("${fontSize.toInt()}", color = Color.Black, fontSize = 20.sp)
+                            Spacer(modifier = Modifier.width(10.dp))
+
+                            Slider(
+                                value = fontSize.toFloat(),
+                                onValueChange = { actionChangeFontSize(it) },
+                                valueRange = 5f..10f,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(22.dp))
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Button(
+                            onClick = { actionSavedSettings() },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50.dp))
+                                .height(40.dp)
+                                .fillMaxWidth(0.5f)
+                        ) {
+                            Text(text = "Сохранить")
+                        }
+                        Button(
+                            onClick = { actionSavedSettings() },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50.dp))
+                                .height(40.dp)
+                                .fillMaxWidth(0.95f)
+                        ) {
+                            Text(text = "Отменить")
+                        }
                     }
                 }
 
             }
             Box(
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.03f)
-                    .background(Color.White).align(BottomCenter)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.03f)
+                    .background(Color.White)
+                    .align(BottomCenter)
             )
 
         }
