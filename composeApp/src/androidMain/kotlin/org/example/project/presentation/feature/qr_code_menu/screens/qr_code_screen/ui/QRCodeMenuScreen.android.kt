@@ -63,7 +63,9 @@ actual class QRCodeMenuScreen : Screen {
 
 
     val viewModel =
-        QRcodeMenuViewModel(getKoin().get(),getKoin().get(),getKoin().get(),getKoin().get())
+        QRcodeMenuViewModel(getKoin().get(),getKoin().get(),getKoin().get(),getKoin().get(), getKoin().get(),
+            getKoin().get(), getKoin().get()
+        )
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
      override fun Content() {
@@ -100,9 +102,7 @@ actual class QRCodeMenuScreen : Screen {
                     OutlinedTextField(
                         value = product.title,
                         onValueChange = {
-                            /* viewModel.state = viewModel.state.copy(
-                                titleProduct = it
-                            )*/
+
                         },
                         label = { Text("Штрих-код") },
                         trailingIcon = {
@@ -141,9 +141,8 @@ actual class QRCodeMenuScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    // Изображение штрих-кода
-                    if (state.imgBitmap != null) {
 
+                    if (state.imgBitmap != null) {
                         Image(
                             bitmap = state.imgBitmap!!.asImageBitmap(),
                             modifier = Modifier
@@ -176,16 +175,6 @@ actual class QRCodeMenuScreen : Screen {
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
-
-                    // Описание продукта
-                    /*    Text(
-                        text = state.titleProduct ,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.h6,
-                        modifier = Modifier.fillMaxWidth()
-                    )*/
-
 
                 }
 
@@ -220,7 +209,7 @@ actual class QRCodeMenuScreen : Screen {
                                 .padding(start = 8.dp)
                                 .height(48.dp)
                                 .width(48.dp)
-                                .clickable { viewModel.processIntent(QRcodeMenuIntent.OpenSettingsSizeQRCode) },
+                                .clickable { viewModel.processIntent(QRcodeMenuIntent.OpenSettingsPrinter) },
                             painter = painterResource(Res.drawable.settings),
                             contentDescription = "Настройки"
                         )
@@ -233,12 +222,11 @@ actual class QRCodeMenuScreen : Screen {
                         onDismissRequest = { printersExpanded = false }
                     ) {
                         printers.forEach { printer ->
-                            DropdownMenuItem(
+                            DropdownMenuItem (
                                 onClick = {
                                     viewModel.processIntent(QRcodeMenuIntent.СhoicePrinter(printer))
-                                   // printersExpanded = false
+                                    printersExpanded = false
                                 }
-
                             ) {
                                 Text(
                                     modifier = Modifier,
@@ -273,7 +261,7 @@ actual class QRCodeMenuScreen : Screen {
                 Text(text = "Печать")
             }
 
-            if (state.isOpenedSettings) {
+            if (state.isOpenedSettingsVKP) {
                 if (state.imgBitmap != null) {
                     QRcodeSizeComponent.Content(
                         state.imgBitmap!!,
@@ -296,14 +284,17 @@ actual class QRCodeMenuScreen : Screen {
                                 )
                             )
                         },
-                        { viewModel.processIntent(QRcodeMenuIntent.CloseSettings) },
+                        { viewModel.processIntent(QRcodeMenuIntent.CloseSettingsVKP) },
                         { viewModel.processIntent(QRcodeMenuIntent.SavedSettings) },
                     )
                 } else {
                     Toast.makeText(LocalContext.current, "Выбирите продукт", Toast.LENGTH_SHORT).show()
                 }
             }
-
+            if(state.isOpenedSettingsTSC){
+                ListBluetoothDevicesComponent(state.bluetoothDeviceList,
+                    {viewModel.processIntent(QRcodeMenuIntent.CloseSettingsTsc(it))})
+            }
             }
         }
     }

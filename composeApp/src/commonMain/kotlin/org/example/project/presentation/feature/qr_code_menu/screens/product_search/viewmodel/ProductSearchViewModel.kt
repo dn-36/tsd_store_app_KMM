@@ -15,6 +15,7 @@ class ProductSearchViewModel(
     private val _state = MutableStateFlow(ProductSearchState())
     val state: StateFlow<ProductSearchState> = _state
     private var isSetedScreen:Boolean = false
+
     fun proccesIntent(intent: ProductSearchIntent) {
         when (intent) {
             is ProductSearchIntent.SetScreen -> {
@@ -35,10 +36,10 @@ class ProductSearchViewModel(
             is ProductSearchIntent.SelectProduct -> {
                 _state.update { it.copy(selectedItem = intent.item.title?:"") }
                 val screen = QRCodeMenuScreen()
-                println("//////////////000/////////////////")
+
                 screen.product = intent.item
                 println(screen.product)
-                println("//////////////000/////////////////")
+
                 NavigatorComponent.navigator!!.push(screen)
             }
         }

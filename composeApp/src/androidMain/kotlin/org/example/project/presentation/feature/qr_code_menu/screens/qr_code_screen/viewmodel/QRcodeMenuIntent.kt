@@ -13,12 +13,14 @@ sealed class QRcodeMenuIntent {
     ): QRcodeMenuIntent()
     object OpenProductSearch: QRcodeMenuIntent()
     data class PrintQRcode(val product: ProductPresentationModel): QRcodeMenuIntent()
-     object OpenSettingsSizeQRCode: QRcodeMenuIntent()
+     object OpenSettingsPrinter: QRcodeMenuIntent()
      data class ChangeFontSize(val fontSize:Float,val title:String): QRcodeMenuIntent()
      data class ChangeHeightQrCode(val heightQRcode:Float,val dataQRcode:String): QRcodeMenuIntent()
      object SavedSettings:QRcodeMenuIntent()
-     object CloseSettings:QRcodeMenuIntent()
-     data class СhoicePrinter(val category:CategoryPrinter):QRcodeMenuIntent()
+    data class CloseSettingsTsc (val device: String):QRcodeMenuIntent()
+     object CloseSettingsVKP:QRcodeMenuIntent()
+
+    data class СhoicePrinter(val category:CategoryPrinter):QRcodeMenuIntent()
 
 
 }

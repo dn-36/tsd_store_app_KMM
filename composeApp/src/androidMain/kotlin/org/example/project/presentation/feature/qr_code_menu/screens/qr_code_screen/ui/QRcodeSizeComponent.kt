@@ -44,8 +44,6 @@ object QRcodeSizeComponent {
         actionCloseSettings:()->Unit,
     ) {
 
-        val scope = rememberCoroutineScope()
-
         Box(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier

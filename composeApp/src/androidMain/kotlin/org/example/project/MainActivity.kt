@@ -3,63 +3,118 @@ package org.example.project
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothSocket
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.project.printer_barcode.TSCprinter
 import org.example.project.presentation.core.app.ui.App
 import org.example.project.presentation.core.initKoin
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.ui.ListBluetoothDevicesComponent
 import org.koin.android.ext.koin.androidContext
-import java.io.IOException
-import java.util.UUID
 
 
 class MainActivity : ComponentActivity() {
 
-    private val askPermissionsBle =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-            val granted = result.entries.firstOrNull {
-                !it.value
-            } == null
-            if (granted) {
-                Log.d("test_11100", "secuesfull")
 
-            } else {
-                Log.d("test_11100", "not blaetus")
-                //  showError("Для подключения по Bluetooth необхордимы разрешения")
-            }
-        }
-    companion object {
-        var device: BluetoothDevice? = null
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       askPermissionsBluetooth()
-     //   getPairedDevices(this).map { if(it.name == "RF-BHS") device =  it }
-
-      /*val devicae = connectToDevice(device!!,this)
-        TSCprinter.init(device!!)*/
-
-
-        //Log.d("2323s",device!!.)
         initKoin {
             androidContext(this@MainActivity.applicationContext)
         }
+
+
+// Не забудьте вызвать cleanup, когда завершите работу
+
+
         setContent {
             App.content()
         }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        TSCprinter(this).cleanup()
     }
 
 
-    private fun askPermissionsBluetooth() {
+    class BluetoothSearcher(private val context: Context) {
+
+        private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+        private val foundDevices = mutableListOf<String>()
+        private var _actionSecuesfull:()->Unit = {}
+        private var _actionAddDevice:(String)->Unit = {}
+        // BroadcastReceiver для поиска устройств
+        private val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                when (intent.action) {
+                    BluetoothDevice.ACTION_FOUND -> {
+
+                        val device: BluetoothDevice? =
+                            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                        device?.let {
+                            val deviceName =
+                                it.name ?: it.address // Если имя недоступно, используем адрес
+                            foundDevices.add(deviceName)
+                            _actionSecuesfull
+                            Log.d("Получаем устройство", deviceName)
+
+
+                        }
+                    }
+
+                }
+            }
+        }
+
+        // Функция для поиска Bluetooth-устройств
+        fun searchForDevices(actionAddDevice:(String)->Unit,actionSecuesfull:()->Unit): List<String> {
+            _actionAddDevice = actionAddDevice
+            // Проверка разрешений
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Здесь вам нужно запросить разрешение на доступ к местоположению, если его нет
+                return emptyList()
+            }
+
+            foundDevices.clear()
+
+            // Регистрируем BroadcastReceiver
+            val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+            context.registerReceiver(receiver, filter)
+
+            // Запускаем поиск устройств
+            bluetoothAdapter?.startDiscovery()
+
+            actionSecuesfull()
+            return foundDevices
+        }
+
+        // Не забудьте отменить регистрацию ресивера, когда он больше не нужен
+        fun cleanup() {
+            context.unregisterReceiver(receiver)
+            bluetoothAdapter?.cancelDiscovery()
+        }
+    }
+
+    fun askPermissionsBluetooth(actionSecuesfull: () -> Unit, actionFail: () -> Unit) {
         val perms = mutableListOf<String>()
         perms.add(Manifest.permission.BLUETOOTH)
 
@@ -74,40 +129,32 @@ class MainActivity : ComponentActivity() {
             perms.add(Manifest.permission.BLUETOOTH_SCAN)
             perms.add(Manifest.permission.BLUETOOTH_CONNECT)
         }
-        askPermissionsBle.launch(perms.toTypedArray())
+        askPermissionsBle(actionSecuesfull, actionFail).launch(perms.toTypedArray())
     }
+    private fun askPermissionsBle(actionSecuesfull: () -> Unit, actionFail:()->Unit) =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            val granted = result.entries.firstOrNull {
+                !it.value
+            } == null
+
+            if (granted) {
+                actionSecuesfull()
+            } else {
+                actionFail()
+                Toast.makeText(
+                    this,
+                    "для использования функционала нужно получить от вас разрешения",
+                    Toast.LENGTH_SHORT
+                )
+            }
+
+        }
 
 }
 
 
-
-fun connectToDevice(device: BluetoothDevice,context: Context): BluetoothSocket? {
-    // UUID — это уникальный идентификатор для подключения, его можно задать самостоятельно или использовать стандартные профили
-    val uuid: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-    var bluetoothSocket: BluetoothSocket? = null
-
-    try {
-        // Создаем BluetoothSocket для соединения
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.BLUETOOTH_CONNECT
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-
-            return null
-        }
-        bluetoothSocket = device.createRfcommSocketToServiceRecord(uuid)
-        bluetoothSocket?.connect() // Попытка подключения
-        Log.d("ble_успешно","_____________________")
-    } catch (e: IOException) {
-        Log.d("ble_yt_успешно","_____________________")
-
-        e.printStackTrace()
-        try {
-            bluetoothSocket?.close() // Закрываем сокет при ошибке
-        } catch (closeException: IOException) {
-            closeException.printStackTrace()
-        }
-    }
-    return bluetoothSocket
+@Preview
+@Composable
+fun PreviewComponent(){
+   ListBluetoothDevicesComponent(listOf("Divice 1", "Device 2", "Device 3"),{})
 }
