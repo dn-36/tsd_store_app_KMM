@@ -11,8 +11,11 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.tscdll.TSCActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.UUID
 
@@ -58,7 +61,10 @@ import java.util.UUID
                      }
                  }
                  BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
-                     // Завершен процесс поиска
+
+                     Log.d("LLLL__LLLL", "ACTION_DISCOVERY_FINISHED")
+
+                     //// Завершен процесс поиска
                      //unregisterReceiver(this)
 
                  }
@@ -72,8 +78,8 @@ import java.util.UUID
          val heightQRcode = 25
          val densty = 4
 
-         val widthTicket = 70
-         val heightTicket = 50
+         val widthTicket = 60
+         val heightTicket = 60
          val cefWidthQrCode = 2
          val countChars = ("barcode").chars().count().toInt()
 
@@ -84,16 +90,16 @@ import java.util.UUID
              )
              //TscDll.downloadttf("ARIAL.TTF")
 
-             tscDll.sendcommand("SIZE 70 mm, 50 mm\r\n")
+             tscDll.sendcommand("SIZE 60 mm, 60 mm\r\n")
              tscDll.sendcommand("GAP 3 mm, 0 mm\r\n")
              tscDll.sendcommand("CODEPAGE UTF-8\r\n")
              tscDll.downloadttf("ARIAL.TTF")
-             tscDll.setup(70, 50, 4, 3, 0, 1, 0)
+             tscDll.setup(widthTicket, heightTicket, 4, 3, 0, 1, 0)
              tscDll.clearbuffer()
 
              // tscDll.sen
 
-             tscDll.barcode(
+           /*  tscDll.barcode(
                  (((widthTicket / 2) - (cefWidthQrCode * countChars * 0.9F)) * densty * 2).toInt(),
                  (heightTicket / 2 - heightQRcode / 1.5F).toInt() * densty * 2,
                  "128",
@@ -103,8 +109,10 @@ import java.util.UUID
                  cefWidthQrCode,
                  cefWidthQrCode,
                  "tsd store"
-             )
-             //  tscDll.sendbitmap(40,0,title,)
+             )*/
+             tscDll.sendbitmap(0,400,barCode,)
+           //  tscDll.send
+             //tscDll.sendbitmap(40,0,title,)
              tscDll.printlabel(1, 1)
              // tscDll.printlabel(1, 1)
              //val status = tscDll.printerstatus()
@@ -123,7 +131,6 @@ import java.util.UUID
      // Функция для поиска Bluetooth-устройств
      fun searchForDevices(
          actionAddDevice: (String) -> Unit,
-         actionSecuesfull: () -> Unit
      ): List<BluetoothDevice> {
          _actionAddDevice = actionAddDevice
          // Проверка разрешений
@@ -151,13 +158,26 @@ import java.util.UUID
      }
 
 
-     fun cleanup() {
-         context.unregisterReceiver(receiver)
-         bluetoothAdapter?.cancelDiscovery()
+     fun stopBluetoothDiscovery() {
+        /* context.unregisterReceiver(receiver)
+         bluetoothAdapter?.cancelDiscovery()*/
+        // val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+
+         if (bluetoothAdapter?.isDiscovering == true) {
+             bluetoothAdapter.cancelDiscovery()
+             Log.d("LLLL__LLLL","Bluetooth discovery stopped.")
+         } else {
+             Log.d("LLLL__LLLL","Bluetooth discovery was not active.")
+         }
      }
 
 
-     fun connectToDevice(device: String, context: Context): BluetoothSocket? {
+      suspend fun connectToDevice(
+          device: String,
+          context: Context,
+          actionSuccessfully: () -> Unit,
+          actionError: () -> Unit,
+          ): BluetoothSocket? {
          val uuid: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
          var bluetoothSocket: BluetoothSocket? = null
 
@@ -168,7 +188,11 @@ import java.util.UUID
                      Manifest.permission.BLUETOOTH_CONNECT
                  ) != PackageManager.PERMISSION_GRANTED
              ) {
-
+                 withContext(Dispatchers.Main) {
+                     Toast.makeText(context,
+                         "Нет нужных разрешений что бы использовать этот функционал!",
+                         Toast.LENGTH_SHORT).show()
+                 }
                  return null
              }
              Log.d("111qqq",deviceList.map { it.name }.toString())
@@ -177,15 +201,26 @@ import java.util.UUID
                      _device = it
                  }
              }
+             if(_device != null) {
+                 bluetoothSocket = _device!!.createRfcommSocketToServiceRecord(uuid)
+                 bluetoothSocket?.connect()
+                 withContext(Dispatchers.Main){
+                     Toast.makeText(context,"успешное подключение ${_device!!.name}!",Toast.LENGTH_SHORT).show()
+                 }
+             }else{
+                 withContext(Dispatchers.Main) {
+                     Toast.makeText(context, "Не получилось подключиться!", Toast.LENGTH_SHORT).show()
+                 }
+             }
 
-             bluetoothSocket = _device!!.createRfcommSocketToServiceRecord(uuid)
-             bluetoothSocket?.connect()
 
          } catch (e: IOException) {
-
+             withContext(Dispatchers.Main) {
+                 Toast.makeText(context, "Не получилось подключиться!", Toast.LENGTH_SHORT).show()
+             }
              e.printStackTrace()
              try {
-                 bluetoothSocket?.close() // Закрываем сокет при ошибке
+                 bluetoothSocket?.close()
              } catch (closeException: IOException) {
                  closeException.printStackTrace()
              }
@@ -196,5 +231,4 @@ import java.util.UUID
 
 
 
-data class S(val a: String, val b: Int)
 

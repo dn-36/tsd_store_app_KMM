@@ -1,15 +1,17 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`infrastructure-api`
 
 
-interface InfrastructurePrinterTscAPI <Bitmap> {
+interface InfrastructurePrinterTscAPI {
     fun listBluetoothDevice( actionAddDevice: (String) -> Unit,
                              actionSecuesfull: () -> Unit):List<String>
 
 
-    fun connectToDevice(device: String)
+  suspend  fun connectToDevice(device: String,
+                               actionSuccessfully: () -> Unit,
+                               actionError: () -> Unit,)
 
-    fun print(barCode: Bitmap, title: Bitmap,)
+    fun <Bitmap>print(barCode: Bitmap, title: Bitmap,)
 
-    fun cleanup()
+    fun stopBluetoothDiscovery()
 
 }

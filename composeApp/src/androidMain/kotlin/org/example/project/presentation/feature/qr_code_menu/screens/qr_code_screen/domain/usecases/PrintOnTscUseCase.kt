@@ -2,7 +2,7 @@ package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_sc
 
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`infrastructure-api`.InfrastructurePrinterTscAPI
 
-class  PrintOnTscUseCase<Bitmap>(private val infrastructurePrinterTscAPI: InfrastructurePrinterTscAPI<Bitmap>) {
+class  PrintOnTscUseCase<Bitmap>(private val infrastructurePrinterTscAPI: InfrastructurePrinterTscAPI) {
 
     fun execute(barcode:Bitmap,title:Bitmap){
         infrastructurePrinterTscAPI.print(barcode,title)

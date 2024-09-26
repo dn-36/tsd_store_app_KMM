@@ -1,13 +1,14 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel
 
-import android.bluetooth.BluetoothDevice
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.project.printer_barcode.TSCprinter
 import com.project.printer_barcode.VKPUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.example.project.presentation.core.NavigatorComponent
 import org.example.project.presentation.feature.qr_code_menu.screens.product_search.ui.ProductSearchScreen
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.ConectUSBUseCase
@@ -17,7 +18,9 @@ import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_scr
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.GetTitleProductBiteMapUseCase
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.PrintOnTscUseCase
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.PrintOnVkpUseCase
-import org.koin.mp.KoinPlatform.getKoin
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.StopBluetoothDiscovery
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.CategoryPrinter
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.StatusBluetoothLoading
 
 class QRcodeMenuViewModel(
     private val conectUSBUseCase: ConectUSBUseCase,
@@ -26,7 +29,8 @@ class QRcodeMenuViewModel(
     private val getTitleProductUseCase: GetTitleProductBiteMapUseCase,
     private val getListDeviceBluetooth: GetListBluetoothDeviceUseCase,
     private val connectToBleutoothDeviceUseCase: ConnectToBleutoothDeviceUseCase,
-    private val printOnTscUseCase:PrintOnTscUseCase<Bitmap>
+    private val printOnTscUseCase:PrintOnTscUseCase<Bitmap>,
+    private val stopBluetoothDiscovery: StopBluetoothDiscovery
 ) : ViewModel() {
 
     val state = MutableStateFlow(QRCodeMenuState())
@@ -77,7 +81,7 @@ class QRcodeMenuViewModel(
                     }
                     CategoryPrinter.TSC -> {
                         printOnTscUseCase.execute(
-                            VKPUtils.textToBitmap("product tsd store",160,7F,true)!!,
+                            VKPUtils.generateBarcode ("product tsd store",20F)!!,
                             VKPUtils.textToBitmap("product tsd store",50,7F,true)!!,
                         )
                     }
@@ -92,19 +96,31 @@ class QRcodeMenuViewModel(
                 when(state.value.categoryPrinter){
                    CategoryPrinter.VKP ->{state.update { it.copy(isOpenedSettingsVKP = true) }}
                    CategoryPrinter.TSC ->{
-                       state.update { state.value.copy(isOpenedSettingsTSC = true) }
+                       state.update {
+                           state.value.copy(
+                           bluetoothDeviceList = listOf(),
+                           isOpenedSettingsTSC = true,
+                           statusSearchBluetoothDevice = StatusBluetoothLoading.LOADING
+                               )
+                       }
 
-                       getListDeviceBluetooth.execute({
-                           Log.d("tests_qqq",it)
-                           val list = state.value.bluetoothDeviceList.toMutableList()
-                           list.add(it)
-                           state.update { state.value.copy(
-                               isOpenedSettingsTSC = true,
-                               bluetoothDeviceList = list
-                               ) }
-                       },{
-                           Log.d("tests_qqq","result")
-                       })
+                      intent.scope.launch {
+                          getListDeviceBluetooth.execute({
+                              Log.d("tests_qqq",it)
+                              val list = state.value.bluetoothDeviceList.toMutableList()
+                              list.add(it)
+                              state.update { state.value.copy(
+                                  isOpenedSettingsTSC = true,
+                                  bluetoothDeviceList = list
+                              ) }
+                          },
+                              {
+                                  state.update { state.value.copy(
+                                       statusSearchBluetoothDevice = StatusBluetoothLoading.SUCCESSFULL
+                                  ) }
+                              Log.d("tests_qqq","result")
+                          })
+                      }
                            //isOpenedSettingsTSC = true)
 
                    }
@@ -152,7 +168,11 @@ class QRcodeMenuViewModel(
                 }
 
             is QRcodeMenuIntent.CloseSettingsTsc ->{
-                connectToBleutoothDeviceUseCase.execute(intent.device)
+                intent.scope.launch(Dispatchers.IO) {
+                    connectToBleutoothDeviceUseCase.execute(intent.device,{},{})
+                    stopBluetoothDiscovery.execute()
+                }
+
                 state.update {
                     it.copy(isOpenedSettingsTSC = false)
                 }

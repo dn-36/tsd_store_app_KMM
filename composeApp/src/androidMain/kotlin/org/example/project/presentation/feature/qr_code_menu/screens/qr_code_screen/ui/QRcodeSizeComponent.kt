@@ -116,12 +116,7 @@ object QRcodeSizeComponent {
                         }
 
                     }
-//
-                   /* Image(
-                        bitmap = title.asImageBitmap(),
-                        contentDescription = null,
-                        modifier = Modifier.height(100.dp).width(250.dp)
-                    )*/
+
                     Column {
 
                         Text("Размер шрифта", color = Color.Black, fontSize = 20.sp)

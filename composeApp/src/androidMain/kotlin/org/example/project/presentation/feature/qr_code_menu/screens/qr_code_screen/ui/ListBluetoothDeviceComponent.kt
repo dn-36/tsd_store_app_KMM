@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,10 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -31,10 +30,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.example.project.R
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.StatusBluetoothLoading
 
 @Composable
-fun ListBluetoothDevicesComponent(list: List<String>,clickableItem:(String)->Unit) {
+fun ListBluetoothDevicesComponent(
+    list: List<String>,
+    clickableItem:(String)->Unit,
+    status:StatusBluetoothLoading = StatusBluetoothLoading.LOADING
+) {
     Box(Modifier.fillMaxSize()){
     Card(
         modifier = Modifier
@@ -47,14 +52,35 @@ fun ListBluetoothDevicesComponent(list: List<String>,clickableItem:(String)->Uni
             .clip(RoundedCornerShape(15.dp)) // Применяй clip после shadow
             .background(Color.White) // Обязательно добавь фон
     ) {
-        Column (modifier = Modifier.height(400.dp).width(300.dp)) {
-            Text("устройства", modifier = Modifier.padding(10.dp),
-                    style = MaterialTheme.typography.body1 .copy(fontWeight = FontWeight.Bold)
-            )
+        Column (modifier = Modifier.height(525.dp).width(300.dp)) {
+            Row {
+                Text(
+                    "устройства", modifier = Modifier.padding(10.dp),
+                    style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
+                )
+                if(status == StatusBluetoothLoading.LOADING) {
+                    CircularProgressIndicator(
+                        Modifier.size(20.dp).align(Alignment.CenterVertically)
+                    )
+
+                }
+                Spacer(modifier = Modifier.width(130.dp))
+                Image(
+                    painterResource(R.drawable.img),
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp).align(Alignment.CenterVertically)
+                        .clickable {
+                            clickableItem("product tsd store")
+                        }
+                )
+            }
+
             Spacer(modifier = Modifier.size(20.dp))
 
-            LazyColumn(modifier = Modifier.padding(7.dp).height(230.dp).width(250.dp)
-                .align(Alignment.CenterHorizontally)) {
+            LazyColumn(
+                modifier = Modifier.padding(7.dp).height(370.dp).width(270.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
                 items(list) { item ->
                     Card(
                         modifier = Modifier
@@ -62,8 +88,8 @@ fun ListBluetoothDevicesComponent(list: List<String>,clickableItem:(String)->Uni
                             .padding(horizontal = 20.dp, vertical = 3.dp)
                             .shadow(
                                 elevation = 16.dp,
-                                shape = RoundedCornerShape(16.dp), // Форма, которая отбрасывает тень
-                                clip = false // Если true, то контент будет обрезан по форме
+                                shape = RoundedCornerShape(16.dp),
+                                clip = false
                             )
                             .clip(RoundedCornerShape(5.dp))
                             .background(Color.White)
@@ -73,7 +99,10 @@ fun ListBluetoothDevicesComponent(list: List<String>,clickableItem:(String)->Uni
                         //.border(1.dp, color = Color.Black)
                     ) {
                         Box(Modifier.height(40.dp)) {
-                            Text(item, modifier = Modifier.padding(5.dp).align(Alignment.CenterStart))
+                            Text(
+                                item,
+                                modifier = Modifier.padding(5.dp).align(Alignment.CenterStart)
+                            )
                             Image(
                                 painter = painterResource(R.drawable.bluetooth),
                                 contentDescription = null,
@@ -86,11 +115,21 @@ fun ListBluetoothDevicesComponent(list: List<String>,clickableItem:(String)->Uni
                     }
                 }
             }
-            //Box(){}
-      CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            if (status == StatusBluetoothLoading.SUCCESSFULL) {
+                    Text(
+                        text = "ПОИСК",
+                        fontSize = 20.sp,
+                        modifier = Modifier
+                            .padding(top = 15.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+
+
 
             }
         }
-    }
-    }
-//}
+
+
+            }
+        }

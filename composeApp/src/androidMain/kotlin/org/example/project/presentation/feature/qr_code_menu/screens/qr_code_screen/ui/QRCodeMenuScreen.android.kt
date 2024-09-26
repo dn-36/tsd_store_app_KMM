@@ -32,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +46,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.example.project.presentation.core.models.ProductPresentationModel
-import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.CategoryPrinter
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.CategoryPrinter
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -64,12 +65,12 @@ actual class QRCodeMenuScreen : Screen {
 
     val viewModel =
         QRcodeMenuViewModel(getKoin().get(),getKoin().get(),getKoin().get(),getKoin().get(), getKoin().get(),
-            getKoin().get(), getKoin().get()
+            getKoin().get(), getKoin().get(), getKoin().get()
         )
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
      override fun Content() {
-
+val scope = rememberCoroutineScope()
         //var productTsdStore by remember { mutableStateOf("product") }
 
         //var selectedPrinter by remember { mutableStateOf("VKP принтер") }
@@ -209,7 +210,7 @@ actual class QRCodeMenuScreen : Screen {
                                 .padding(start = 8.dp)
                                 .height(48.dp)
                                 .width(48.dp)
-                                .clickable { viewModel.processIntent(QRcodeMenuIntent.OpenSettingsPrinter) },
+                                .clickable { viewModel.processIntent(QRcodeMenuIntent.OpenSettingsPrinter(scope)) },
                             painter = painterResource(Res.drawable.settings),
                             contentDescription = "Настройки"
                         )
@@ -292,8 +293,11 @@ actual class QRCodeMenuScreen : Screen {
                 }
             }
             if(state.isOpenedSettingsTSC){
-                ListBluetoothDevicesComponent(state.bluetoothDeviceList,
-                    {viewModel.processIntent(QRcodeMenuIntent.CloseSettingsTsc(it))})
+                ListBluetoothDevicesComponent(
+                    state.bluetoothDeviceList,
+                    {viewModel.processIntent(QRcodeMenuIntent.CloseSettingsTsc(it,scope))},
+                    state.statusSearchBluetoothDevice
+                )
             }
             }
         }

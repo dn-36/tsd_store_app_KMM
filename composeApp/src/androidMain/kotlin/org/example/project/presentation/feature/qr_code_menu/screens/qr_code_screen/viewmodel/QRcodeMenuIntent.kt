@@ -2,7 +2,9 @@ package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_sc
 
 import android.content.Context
 import cafe.adriel.voyager.navigator.Navigator
+import kotlinx.coroutines.CoroutineScope
 import org.example.project.presentation.core.models.ProductPresentationModel
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.CategoryPrinter
 
 
 sealed class QRcodeMenuIntent {
@@ -13,14 +15,14 @@ sealed class QRcodeMenuIntent {
     ): QRcodeMenuIntent()
     object OpenProductSearch: QRcodeMenuIntent()
     data class PrintQRcode(val product: ProductPresentationModel): QRcodeMenuIntent()
-     object OpenSettingsPrinter: QRcodeMenuIntent()
+     data class OpenSettingsPrinter(val scope:CoroutineScope): QRcodeMenuIntent()
      data class ChangeFontSize(val fontSize:Float,val title:String): QRcodeMenuIntent()
      data class ChangeHeightQrCode(val heightQRcode:Float,val dataQRcode:String): QRcodeMenuIntent()
      object SavedSettings:QRcodeMenuIntent()
-    data class CloseSettingsTsc (val device: String):QRcodeMenuIntent()
+    data class CloseSettingsTsc (val device: String,val scope:CoroutineScope):QRcodeMenuIntent()
      object CloseSettingsVKP:QRcodeMenuIntent()
 
-    data class СhoicePrinter(val category:CategoryPrinter):QRcodeMenuIntent()
+    data class СhoicePrinter(val category: CategoryPrinter):QRcodeMenuIntent()
 
 
 }

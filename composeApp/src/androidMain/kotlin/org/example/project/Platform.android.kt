@@ -15,6 +15,7 @@ import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_scr
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.GetTitleProductBiteMapUseCase
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.PrintOnTscUseCase
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.PrintOnVkpUseCase
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.StopBluetoothDiscovery
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`infrastructure-api`.InfrastructurePrinterTscAPI
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuViewModel
 import org.koin.core.module.Module
@@ -36,12 +37,13 @@ actual val platformModule: Module = module {
     factory {
         PrinterImpl(get(),get()) as InfrastructurePrinterVkpAPI
     }
-    factory { PrinterTscImpl(get()) as InfrastructurePrinterTscAPI<*> }
+    factory { PrinterTscImpl(get()) as InfrastructurePrinterTscAPI }
 
     single {TSCprinter(get())}
 
     factory { VKPPrinter() }
-    factory { QRcodeMenuViewModel(get(),get(),get(),get(),get(),get(),get())  }
+    factory { QRcodeMenuViewModel(get(),get(),get(),get(),get(),get(),get(),get())  }
+    factory { StopBluetoothDiscovery(get()) }
     factory { PrintOnTscUseCase<Bitmap>(get()) }
     factory { GetTitleProductBiteMapUseCase(get()) }
     factory { GetQRcodeBitmapUseCase(get())  }

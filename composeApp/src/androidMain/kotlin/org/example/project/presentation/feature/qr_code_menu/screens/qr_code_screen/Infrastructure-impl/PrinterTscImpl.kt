@@ -1,35 +1,40 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`Infrastructure-impl`
 
-import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothAdapter
 import android.graphics.Bitmap
 import com.project.printer_barcode.TSCprinter
+import kotlinx.coroutines.delay
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`infrastructure-api`.InfrastructurePrinterTscAPI
 import org.koin.mp.KoinPlatform.getKoin
-import tsdstorekmm.composeapp.generated.resources.Res
 
 
-class PrinterTscImpl(private val printer:TSCprinter):InfrastructurePrinterTscAPI<Bitmap> {
+class PrinterTscImpl(private val printer:TSCprinter):InfrastructurePrinterTscAPI {
 
     override fun listBluetoothDevice(  actionAddDevice: (String) -> Unit,
                                        actionSecuesfull: () -> Unit) : List<String> {
 
-        return printer.searchForDevices(actionAddDevice,actionSecuesfull).map { it.name?:it.address }.toSet().toList()
+        val list =  printer.searchForDevices(actionAddDevice)
+            .map { it.name?:it.address }.toSet().toList()
+        return list
 
     }
 
-    override fun print(barCode: Bitmap, title: Bitmap) {
-       printer.print(barCode, title)
+    override fun  <T> print(barCode: T, title: T) {
+       printer.print(barCode as Bitmap, title as Bitmap)
     }
 
-    override fun connectToDevice(device: String) {
-                 printer.connectToDevice(device,getKoin().get())
+    override suspend fun connectToDevice(device: String,
+                                         actionSuccessfully: () -> Unit,
+                                         actionError: () -> Unit,) {
+                 printer.connectToDevice(device,getKoin().get(),
+                     actionSuccessfully,
+                     actionError
+                 )
     }
 
-    override fun cleanup() {
-        printer.cleanup()
+
+    override fun stopBluetoothDiscovery() {
+        printer.stopBluetoothDiscovery()
     }
-
-
-    //override var bluetoothDevice: BluetoothDevice? = null
 
 }

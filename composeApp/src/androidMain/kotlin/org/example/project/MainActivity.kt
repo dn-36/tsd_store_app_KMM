@@ -18,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.project.printer_barcode.TSCprinter
 import org.example.project.presentation.core.app.ui.App
 import org.example.project.presentation.core.initKoin
@@ -48,7 +47,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        TSCprinter(this).cleanup()
+        TSCprinter(this).stopBluetoothDiscovery()
     }
 
 
