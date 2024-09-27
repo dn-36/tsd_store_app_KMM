@@ -1,4 +1,4 @@
-package org.tsdstore.project.feature.authorization.presentation.screens.entering_number.component
+package org.example.project.presentation.feature.authorization.screens.entering_number.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

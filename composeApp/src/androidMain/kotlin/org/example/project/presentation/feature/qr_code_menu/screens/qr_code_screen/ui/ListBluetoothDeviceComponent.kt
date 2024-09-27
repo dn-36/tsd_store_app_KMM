@@ -26,18 +26,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.example.project.R
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.StatusBluetoothLoading
+import org.jetbrains.compose.resources.painterResource
+import tsdstorekmm.composeapp.generated.resources.Res
+import tsdstorekmm.composeapp.generated.resources.bluetooth
+import tsdstorekmm.composeapp.generated.resources.img
+
 
 @Composable
 fun ListBluetoothDevicesComponent(
     list: List<String>,
     clickableItem:(String)->Unit,
+    closeSettingsBluetooth:()->Unit,
+    searchBluetoothDevice:()->Unit,
     status:StatusBluetoothLoading = StatusBluetoothLoading.LOADING
 ) {
     Box(Modifier.fillMaxSize()){
@@ -66,11 +71,11 @@ fun ListBluetoothDevicesComponent(
                 }
                 Spacer(modifier = Modifier.width(130.dp))
                 Image(
-                    painterResource(R.drawable.img),
+                    painterResource(Res.drawable.img),
                     contentDescription = null,
                     modifier = Modifier.size(20.dp).align(Alignment.CenterVertically)
                         .clickable {
-                            clickableItem("product tsd store")
+                            closeSettingsBluetooth()  //clickableItem("product tsd store")
                         }
                 )
             }
@@ -104,7 +109,7 @@ fun ListBluetoothDevicesComponent(
                                 modifier = Modifier.padding(5.dp).align(Alignment.CenterStart)
                             )
                             Image(
-                                painter = painterResource(R.drawable.bluetooth),
+                                painter = painterResource(Res.drawable.bluetooth),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .padding(2.dp)
@@ -115,13 +120,17 @@ fun ListBluetoothDevicesComponent(
                     }
                 }
             }
-            if (status == StatusBluetoothLoading.SUCCESSFULL) {
+            if (status == StatusBluetoothLoading.SUCCSSFULL) {
                     Text(
                         text = "ПОИСК",
                         fontSize = 20.sp,
                         modifier = Modifier
                             .padding(top = 15.dp)
                             .align(Alignment.CenterHorizontally)
+                            .clickable {
+                                searchBluetoothDevice()
+                            }
+
                     )
                 }
 

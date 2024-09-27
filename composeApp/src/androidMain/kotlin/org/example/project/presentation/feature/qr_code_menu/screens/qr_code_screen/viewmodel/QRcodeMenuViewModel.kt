@@ -3,8 +3,7 @@ package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_sc
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.project.printer_barcode.VKPUtils
-import kotlinx.coroutines.CoroutineScope
+import com.project.phone.VKPUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -20,6 +19,7 @@ import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_scr
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.PrintOnVkpUseCase
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.domain.usecases.StopBluetoothDiscovery
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.CategoryPrinter
+import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.ConnectionDeviseStatus
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.StatusBluetoothLoading
 
 class QRcodeMenuViewModel(
@@ -28,7 +28,7 @@ class QRcodeMenuViewModel(
     private val getQRcodeBitmapUseCase: GetQRcodeBitmapUseCase,
     private val getTitleProductUseCase: GetTitleProductBiteMapUseCase,
     private val getListDeviceBluetooth: GetListBluetoothDeviceUseCase,
-    private val connectToBleutoothDeviceUseCase: ConnectToBleutoothDeviceUseCase,
+    private val connectToBluetoothDeviceUseCase: ConnectToBleutoothDeviceUseCase,
     private val printOnTscUseCase:PrintOnTscUseCase<Bitmap>,
     private val stopBluetoothDiscovery: StopBluetoothDiscovery
 ) : ViewModel() {
@@ -43,10 +43,7 @@ class QRcodeMenuViewModel(
             is QRcodeMenuIntent.SetScreen -> {
                 if (isSetedScreen) return
                 isSetedScreen = true
-               // var device:BluetoothDevice? = null
-               // printer.searchForDevices({Log.d("opop",it)},{})
 
-//                TSCprinter.init(device!!)
                 val qrCodeBiteMap = getQRcodeBitmapUseCase
                     .execute(
                         intent.product.qrCodeData ?: "",
@@ -60,6 +57,7 @@ class QRcodeMenuViewModel(
                         intent.product.fontSize
                     )
                 )
+                state.update { state.value.copy(isLoadingDataOnScreen = false) }
                 NavigatorComponent.navigator = intent.navigator
                 conectUSBUseCase.execute()
 
@@ -81,8 +79,8 @@ class QRcodeMenuViewModel(
                     }
                     CategoryPrinter.TSC -> {
                         printOnTscUseCase.execute(
-                            VKPUtils.generateBarcode ("product tsd store",20F)!!,
-                            VKPUtils.textToBitmap("product tsd store",50,7F,true)!!,
+                          state.value.imgBitmap!!,
+                          getTitleProductUseCase.execute(intent.product.title,intent.product.fontSize/2),
                         )
                     }
                     CategoryPrinter.ZEBRA ->{
@@ -100,28 +98,26 @@ class QRcodeMenuViewModel(
                            state.value.copy(
                            bluetoothDeviceList = listOf(),
                            isOpenedSettingsTSC = true,
+
                            statusSearchBluetoothDevice = StatusBluetoothLoading.LOADING
                                )
                        }
 
                       intent.scope.launch {
                           getListDeviceBluetooth.execute({
-                              Log.d("tests_qqq",it)
                               val list = state.value.bluetoothDeviceList.toMutableList()
                               list.add(it)
                               state.update { state.value.copy(
-                                  isOpenedSettingsTSC = true,
                                   bluetoothDeviceList = list
                               ) }
                           },
                               {
                                   state.update { state.value.copy(
-                                       statusSearchBluetoothDevice = StatusBluetoothLoading.SUCCESSFULL
+                                       statusSearchBluetoothDevice = StatusBluetoothLoading.SUCCSSFULL
                                   ) }
                               Log.d("tests_qqq","result")
                           })
                       }
-                           //isOpenedSettingsTSC = true)
 
                    }
                    CategoryPrinter.ZEBRA ->{}
@@ -150,9 +146,9 @@ class QRcodeMenuViewModel(
                 }
                 }
             is QRcodeMenuIntent.SavedSettings -> {
-             //   state.update {
-                  //  it.copy(isOpenedSettingsVKP = false)
-             //   }
+                state.update {
+                   it.copy(isOpenedSettingsVKP = false)
+               }
             }
             is QRcodeMenuIntent.CloseSettingsVKP -> {
                 state.update {
@@ -167,19 +163,77 @@ class QRcodeMenuViewModel(
              }
                 }
 
-            is QRcodeMenuIntent.CloseSettingsTsc ->{
+            is QRcodeMenuIntent.SelectBluetoothDevice -> {
+
                 intent.scope.launch(Dispatchers.IO) {
-                    connectToBleutoothDeviceUseCase.execute(intent.device,{},{})
+                    connectToBluetoothDeviceUseCase.execute(intent.device,{
+                        state.update {
+                            it.copy(
+                            isLoadingConnectionDevice = false,
+                            statusConnected = ConnectionDeviseStatus.IsConnected,
+                            )
+                        }
+                    },{
+                        state.update {
+                            it.copy(
+                                isLoadingConnectionDevice = false,
+                                statusConnected = ConnectionDeviseStatus.IsNotConnected
+                            )
+                        }
+                    })
                     stopBluetoothDiscovery.execute()
                 }
-
                 state.update {
-                    it.copy(isOpenedSettingsTSC = false)
+                    it.copy(
+                        deviceTitle = intent.device,
+                        isLoadingConnectionDevice = true,
+                        statusConnected = ConnectionDeviseStatus.NoShowStatus,
+                        isOpenedSettingsTSC = false)
+                }
+            }
+            is QRcodeMenuIntent.SearchBluetoothDevice -> {
+                state.update {
+                    state.value.copy(
+                        bluetoothDeviceList = listOf(),
+                        isOpenedSettingsTSC = true,
+                        statusSearchBluetoothDevice = StatusBluetoothLoading.LOADING
+                    )
                 }
 
+                intent.scope.launch {
+                    getListDeviceBluetooth.execute({
+                        val list = state.value.bluetoothDeviceList.toMutableList()
+                        list.add(it)
+                        state.update { state.value.copy(
+                            isOpenedSettingsTSC = true,
+                            bluetoothDeviceList = list
+                        ) }
+                    },
+                        {
+                            state.update {
+                                state.value.copy(
+                                statusSearchBluetoothDevice = StatusBluetoothLoading.SUCCSSFULL
+                            )
+                            }
+                        })
+                }
             }
 
-        }
+            is QRcodeMenuIntent.CloseSettingsBluetooth -> {
+                state.update {
+                    state.value.copy(
+                        isOpenedSettingsTSC = false,
+                        isLoadingConnectionDevice = false,
+                        statusConnected = ConnectionDeviseStatus.NoShowStatus
+                    )
+                }
+                    intent.scope.launch {
+                        stopBluetoothDiscovery.execute()
+                    }
+
+                }
             }
         }
+            }
+
 

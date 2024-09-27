@@ -19,6 +19,7 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation("io.ktor:ktor-client-okhttp:2.3.12")
+          //  implementation("")
         }
         commonMain.dependencies {
             implementation("com.russhwolf:multiplatform-settings:1.0.0")

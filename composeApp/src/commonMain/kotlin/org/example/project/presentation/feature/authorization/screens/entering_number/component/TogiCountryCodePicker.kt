@@ -1,4 +1,4 @@
-package org.tsdstore.project.feature.authorization.presentation.screens.entering_number.component
+package org.example.project.presentation.feature.authorization.screens.entering_number.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import org.example.project.presentation.feature.authorization.screens.entering_number.component.TogiCodeDialog
 import org.example.project.presentation.feature.authorization.screens.entering_number.model.CountryData
 
 

@@ -1,4 +1,4 @@
-package com.project.printer_barcode
+package com.project.phone
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -56,7 +56,7 @@ import java.util.UUID
 
                         }
 
-                         _actionSecuesfull()
+                         //_actionSecuesfull()
 
                      }
                  }
@@ -88,7 +88,7 @@ import java.util.UUID
              tscDll.openport(
                  _device!!.address
              )
-             //TscDll.downloadttf("ARIAL.TTF")
+
 
              tscDll.sendcommand("SIZE 60 mm, 60 mm\r\n")
              tscDll.sendcommand("GAP 3 mm, 0 mm\r\n")
@@ -97,20 +97,8 @@ import java.util.UUID
              tscDll.setup(widthTicket, heightTicket, 4, 3, 0, 1, 0)
              tscDll.clearbuffer()
 
-             // tscDll.sen
-
-           /*  tscDll.barcode(
-                 (((widthTicket / 2) - (cefWidthQrCode * countChars * 0.9F)) * densty * 2).toInt(),
-                 (heightTicket / 2 - heightQRcode / 1.5F).toInt() * densty * 2,
-                 "128",
-                 heightQRcode * densty * 2,
-                 1,
-                 0,
-                 cefWidthQrCode,
-                 cefWidthQrCode,
-                 "tsd store"
-             )*/
-             tscDll.sendbitmap(0,400,barCode,)
+             tscDll.sendbitmap(75,150,barCode)
+           //  tscDll.sendbitmap(0,200,title)
            //  tscDll.send
              //tscDll.sendbitmap(40,0,title,)
              tscDll.printlabel(1, 1)
@@ -128,7 +116,6 @@ import java.util.UUID
 
 
 
-     // Функция для поиска Bluetooth-устройств
      fun searchForDevices(
          actionAddDevice: (String) -> Unit,
      ): List<BluetoothDevice> {
@@ -204,20 +191,14 @@ import java.util.UUID
              if(_device != null) {
                  bluetoothSocket = _device!!.createRfcommSocketToServiceRecord(uuid)
                  bluetoothSocket?.connect()
-                 withContext(Dispatchers.Main){
-                     Toast.makeText(context,"успешное подключение ${_device!!.name}!",Toast.LENGTH_SHORT).show()
-                 }
+               actionSuccessfully()
              }else{
-                 withContext(Dispatchers.Main) {
-                     Toast.makeText(context, "Не получилось подключиться!", Toast.LENGTH_SHORT).show()
-                 }
+               actionError()
              }
 
 
          } catch (e: IOException) {
-             withContext(Dispatchers.Main) {
-                 Toast.makeText(context, "Не получилось подключиться!", Toast.LENGTH_SHORT).show()
-             }
+             actionError()
              e.printStackTrace()
              try {
                  bluetoothSocket?.close()

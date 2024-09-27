@@ -1,10 +1,10 @@
 package org.example.project
 
 import android.graphics.Bitmap
-import com.project.printer_barcode.VKPPrinter
+import com.project.phone.VKPPrinter
 import io.ktor.client.engine.okhttp.OkHttp
 import authorization_network.createHttpClient
-import com.project.printer_barcode.TSCprinter
+import com.project.phone.TSCprinter
 import org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.Infrastructure.PrinterImpl
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`Infrastructure-impl`.PrinterTscImpl
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`infrastructure-api`.InfrastructurePrinterVkpAPI

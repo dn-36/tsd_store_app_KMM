@@ -24,7 +24,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.example.project.presentation.feature.authorization.screens.entering_number.component.LoadingComponent
 import org.example.project.presentation.core.NavigatorComponent
-import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.component.TogiCountryCodePicker
+import org.example.project.presentation.feature.authorization.screens.entering_number.component.TogiCountryCodePicker
 import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.viewmodel.EnteringNumberEvent
 import org.example.project.presentation.feature.authorization.screens.entering_number.viewmodel.EnteringNumberViewModel
 import org.koin.mp.KoinPlatform.getKoin

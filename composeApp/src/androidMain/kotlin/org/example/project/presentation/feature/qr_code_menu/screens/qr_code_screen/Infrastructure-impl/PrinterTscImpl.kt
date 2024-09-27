@@ -1,9 +1,7 @@
 package org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`Infrastructure-impl`
 
-import android.bluetooth.BluetoothAdapter
 import android.graphics.Bitmap
-import com.project.printer_barcode.TSCprinter
-import kotlinx.coroutines.delay
+import com.project.phone.TSCprinter
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`infrastructure-api`.InfrastructurePrinterTscAPI
 import org.koin.mp.KoinPlatform.getKoin
 
@@ -26,7 +24,9 @@ class PrinterTscImpl(private val printer:TSCprinter):InfrastructurePrinterTscAPI
     override suspend fun connectToDevice(device: String,
                                          actionSuccessfully: () -> Unit,
                                          actionError: () -> Unit,) {
-                 printer.connectToDevice(device,getKoin().get(),
+                 printer.connectToDevice(
+                     device,
+                     getKoin().get(),
                      actionSuccessfully,
                      actionError
                  )

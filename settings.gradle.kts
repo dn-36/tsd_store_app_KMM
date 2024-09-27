@@ -31,7 +31,7 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":core")
 include(":common")
-
+include(":common:phone")
 include(":common:printer-barcode-vkp")
 include(":common:printer-barcode-tsc")
 

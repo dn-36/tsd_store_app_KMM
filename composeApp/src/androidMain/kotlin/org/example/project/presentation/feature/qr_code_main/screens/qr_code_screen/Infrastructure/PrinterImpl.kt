@@ -1,7 +1,7 @@
 package org.example.project.presentation.feature.qr_code_main.screens.qr_code_screen.Infrastructure
 
 import android.content.Context
-import com.project.printer_barcode.VKPPrinter
+import com.project.phone.VKPPrinter
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.`infrastructure-api`.InfrastructurePrinterVkpAPI
 
 class PrinterImpl(

@@ -1,9 +1,7 @@
-package com.project.printer_barcode
+package com.project.phone
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import android.widget.Toast
 import it.custom.printer.api.android.CustomAndroidAPI
 import it.custom.printer.api.android.CustomException

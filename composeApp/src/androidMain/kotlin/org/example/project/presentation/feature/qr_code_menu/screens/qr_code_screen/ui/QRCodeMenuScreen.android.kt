@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
@@ -36,15 +37,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.example.project.R
 import org.example.project.presentation.core.models.ProductPresentationModel
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.model.CategoryPrinter
 import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
@@ -54,14 +58,12 @@ import org.koin.mp.KoinPlatform.getKoin
 
 import tsdstorekmm.composeapp.generated.resources.Res
 import tsdstorekmm.composeapp.generated.resources.barcode
+import tsdstorekmm.composeapp.generated.resources.bluetooth
 import tsdstorekmm.composeapp.generated.resources.search
 import tsdstorekmm.composeapp.generated.resources.settings
 
 actual class QRCodeMenuScreen : Screen {
-
-      actual var product = ProductPresentationModel()
-
-
+   actual var product = ProductPresentationModel()
 
     val viewModel =
         QRcodeMenuViewModel(getKoin().get(),getKoin().get(),getKoin().get(),getKoin().get(), getKoin().get(),
@@ -70,10 +72,8 @@ actual class QRCodeMenuScreen : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
      override fun Content() {
-val scope = rememberCoroutineScope()
-        //var productTsdStore by remember { mutableStateOf("product") }
 
-        //var selectedPrinter by remember { mutableStateOf("VKP принтер") }
+        val scope = rememberCoroutineScope()
         var printersExpanded by remember { mutableStateOf(false) }
         val printers = listOf(
             CategoryPrinter.VKP,
@@ -96,6 +96,7 @@ val scope = rememberCoroutineScope()
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .alpha(if (state.isLoadingDataOnScreen) 0F else 1F)
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -216,8 +217,6 @@ val scope = rememberCoroutineScope()
                         )
                     }
 
-
-                    // Выпадающее меню выбора принтера
                     DropdownMenu(
                         expanded = printersExpanded,
                         onDismissRequest = { printersExpanded = false }
@@ -238,7 +237,40 @@ val scope = rememberCoroutineScope()
                     }
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
+
+
+                    Box(Modifier.fillMaxWidth()) {
+Row {
+
+    Image(painter = painterResource(Res.drawable.bluetooth), contentDescription = null)
+                        Text(
+                            state.statusConnected.text,
+                            Modifier.padding(start = 15.dp).align(Alignment.Top),
+                            fontSize = 12.sp,
+                            color = state.statusConnected.colorText
+                        )
+                        if(state.isLoadingConnectionDevice){
+                        Row(Modifier.align(Alignment.Top))  {
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                "Подключение к устройству",
+                                 Modifier.align(Alignment.CenterVertically),
+                                fontSize = 10.sp
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            CircularProgressIndicator(
+                                Modifier.size(25.dp).align(Alignment.CenterVertically),
+                            )
+
+                        }
+                    }
+    }
+                }
+
+
+
+
+
             }
 
             Button(
@@ -295,7 +327,9 @@ val scope = rememberCoroutineScope()
             if(state.isOpenedSettingsTSC){
                 ListBluetoothDevicesComponent(
                     state.bluetoothDeviceList,
-                    {viewModel.processIntent(QRcodeMenuIntent.CloseSettingsTsc(it,scope))},
+                    {viewModel.processIntent(QRcodeMenuIntent.SelectBluetoothDevice(it,scope))},
+                    {viewModel.processIntent(QRcodeMenuIntent.CloseSettingsBluetooth(scope))},
+                    {viewModel.processIntent(QRcodeMenuIntent.SearchBluetoothDevice(scope) )},
                     state.statusSearchBluetoothDevice
                 )
             }

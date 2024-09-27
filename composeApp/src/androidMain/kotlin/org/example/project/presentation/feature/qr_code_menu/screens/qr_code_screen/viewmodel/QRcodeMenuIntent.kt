@@ -13,16 +13,16 @@ sealed class QRcodeMenuIntent {
         val navigator: Navigator,
         val context:Context
     ): QRcodeMenuIntent()
-    object OpenProductSearch: QRcodeMenuIntent()
-    data class PrintQRcode(val product: ProductPresentationModel): QRcodeMenuIntent()
+     object OpenProductSearch: QRcodeMenuIntent()
+     data class PrintQRcode(val product: ProductPresentationModel): QRcodeMenuIntent()
      data class OpenSettingsPrinter(val scope:CoroutineScope): QRcodeMenuIntent()
      data class ChangeFontSize(val fontSize:Float,val title:String): QRcodeMenuIntent()
      data class ChangeHeightQrCode(val heightQRcode:Float,val dataQRcode:String): QRcodeMenuIntent()
      object SavedSettings:QRcodeMenuIntent()
-    data class CloseSettingsTsc (val device: String,val scope:CoroutineScope):QRcodeMenuIntent()
+     data class SelectBluetoothDevice (val device: String, val scope:CoroutineScope):QRcodeMenuIntent()
      object CloseSettingsVKP:QRcodeMenuIntent()
-
-    data class СhoicePrinter(val category: CategoryPrinter):QRcodeMenuIntent()
-
+     data class SearchBluetoothDevice(val scope: CoroutineScope):QRcodeMenuIntent()
+     data class СhoicePrinter(val category: CategoryPrinter):QRcodeMenuIntent()
+     data class CloseSettingsBluetooth(val scope:CoroutineScope):QRcodeMenuIntent()
 
 }
