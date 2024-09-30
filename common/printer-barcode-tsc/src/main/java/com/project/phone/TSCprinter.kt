@@ -73,13 +73,19 @@ import java.util.UUID
          }
      }
 
-     fun print(barCode: Bitmap, title: Bitmap, ) {
+     fun print(barCode: Bitmap,
+               title: Bitmap,
+               heightTicket:Int,
+               widthTicket:Int,
+               xQrCode:Int,
+               yQrCode:Int
+               ) {
 
          val heightQRcode = 25
          val densty = 4
 
-         val widthTicket = 60
-         val heightTicket = 60
+        // val widthTicket = 60
+        // val heightTicket = 60
          val cefWidthQrCode = 2
          val countChars = ("barcode").chars().count().toInt()
 
@@ -90,17 +96,15 @@ import java.util.UUID
              )
 
 
-             tscDll.sendcommand("SIZE 60 mm, 60 mm\r\n")
+             tscDll.sendcommand("SIZE ${heightTicket} mm, ${widthTicket} mm\r\n")
              tscDll.sendcommand("GAP 3 mm, 0 mm\r\n")
              tscDll.sendcommand("CODEPAGE UTF-8\r\n")
              tscDll.downloadttf("ARIAL.TTF")
              tscDll.setup(widthTicket, heightTicket, 4, 3, 0, 1, 0)
              tscDll.clearbuffer()
 
-             tscDll.sendbitmap(75,150,barCode)
-           //  tscDll.sendbitmap(0,200,title)
-           //  tscDll.send
-             //tscDll.sendbitmap(40,0,title,)
+            // tscDll.sendbitmap(xQrCode,yQrCode,barCode)
+             tscDll.sendbitmap(xQrCode,yQrCode,title)
              tscDll.printlabel(1, 1)
              // tscDll.printlabel(1, 1)
              //val status = tscDll.printerstatus()

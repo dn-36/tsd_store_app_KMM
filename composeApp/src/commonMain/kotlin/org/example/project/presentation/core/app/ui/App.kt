@@ -9,7 +9,7 @@ import org.example.project.presentation.core.app.domain.AuthorizationStatus
 import org.example.project.presentation.core.app.viewmodel.AppIntent
 import org.example.project.presentation.core.app.viewmodel.AppViewModel
 import org.example.project.presentation.feature.authorization.screens.entering_number.ui.EnteringAnumberScreen
-import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.ui.QRCodeMenuScreen
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.QRCodeMenuScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.mp.KoinPlatform.getKoin
 

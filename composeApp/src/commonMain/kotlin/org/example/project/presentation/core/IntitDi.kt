@@ -3,7 +3,7 @@ package org.example.project.presentation.core
 import org.example.project.platformModule
 import org.example.project.presentation.core.app.appModule
 import org.example.project.presentation.feature.authorization.core.auhtorizationFeatureModule
-import org.example.project.presentation.feature.qr_code_menu.core.qrCodeFeatureModule
+import org.example.project.presentation.feature.qr_code.core.qrCodeFeatureModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 

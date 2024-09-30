@@ -39,6 +39,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
             implementation(project(":common:printer-barcode-vkp"))
+            implementation(project(":common:phone"))
 
 
         }

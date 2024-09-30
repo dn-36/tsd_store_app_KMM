@@ -8,7 +8,7 @@ import org.example.project.presentation.core.NavigatorComponent
 import org.example.project.presentation.core.StringRes
 import org.example.project.presentation.feature.authorization.datasource.authorization_client.UserStatus
 import org.example.project.presentation.feature.authorization.screens.check_sms.domain.CheckCodeSmsUseCase
-import org.example.project.presentation.feature.qr_code_menu.screens.qr_code_screen.ui.QRCodeMenuScreen
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.QRCodeMenuScreen
 
 class CheckSMSViewModel(val checkCodeSmsUseCase: CheckCodeSmsUseCase):ViewModel(){
 
