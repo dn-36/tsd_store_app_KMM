@@ -1,6 +1,5 @@
 package org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui
 
-import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -39,29 +39,27 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import tsdstorekmm.composeapp.generated.resources.Res
-import tsdstorekmm.composeapp.generated.resources.down
+import tsdstorekmm.composeapp.generated.resources.bluetooth
+
 
 object SettingsTicketSizeComponent  {
-    @Composable
-    fun Content(
-        qrCode: Bitmap,
-        title:Bitmap,
-        heightQrCode: Float,
-        fontSize:Float,
-        actionChangeFontSize:(Float)->Unit,
-        actionChangeHeightQRcode:(Float)->Unit,
-        actionSavedSettings:()->Unit,
 
-    ) {
+
+    @Composable
+    fun Content() {
 
 
         var width by remember { mutableStateOf("") }
         var height by remember { mutableStateOf("") }
+
+        var fontSize by remember { mutableStateOf(15F) }
+        var heightQrCode by remember { mutableStateOf(50) }
 
         var expendWidth by remember { mutableStateOf(false) }
         var expendHeight by remember { mutableStateOf(false) }
@@ -94,122 +92,97 @@ object SettingsTicketSizeComponent  {
                     verticalArrangement = Arrangement.Center
                 ) {
 
-                    Text("Настройки печати:", color = Color.Black, fontSize = 20.sp)
+                    //Text("Настройки печати:", color = Color.Black, fontSize = 20.sp)
 
-                    Spacer(modifier = Modifier.height(30.dp))
+                    //Spacer(modifier = Modifier.height(30.dp))
 
-                    Box(modifier = Modifier.size(250.dp).border(width = 2.dp,color = Color.Black, RoundedCornerShape(15.dp))) {
+                    Box(modifier = Modifier.size(280.dp).border(width = 1.dp,color = Color.Black, RoundedCornerShape(15.dp))
+                    , contentAlignment = Alignment.Center) {
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Image(
+
+
+                            Image(painter = painterResource(Res.drawable.bluetooth),contentDescription = null
+                            , modifier = Modifier.height((heightQrCode * 3.5F).dp)
+                                    .width(150.dp))
+                           /* Image(
                                 bitmap = qrCode.asImageBitmap(),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .height((heightQrCode * 3.5F).dp)
                                     .width(150.dp)
-                            )
+                            )*/
 
                             //Spacer(modifier = Modifier.height(32.dp))
                             Spacer(modifier = Modifier.height(10.dp))
 
-                            Image(
+
+                            Text("Продукт", fontSize = fontSize.sp)
+                            /*Image(
                                 bitmap = title.asImageBitmap(),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .height(130.dp)
                                     .width(250.dp)
-                            )
+                            )*/
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(25.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
 
-                    Row(modifier = Modifier.fillMaxWidth(0.8f), horizontalArrangement = Arrangement.SpaceBetween){
+                    Row(modifier = Modifier.fillMaxWidth(0.75f), horizontalArrangement = Arrangement.SpaceBetween){
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text("Ширина",fontSize = 12.sp)
-                            Spacer(modifier = Modifier.height(5.dp))
-                            OutlinedTextField(
-                                value = width,
-                                onValueChange = {
-                                    width = it
-                                })
-
+                            Spacer(modifier = Modifier.height(1.dp))
                                     OutlinedTextField(
-                                        value = height,
+                                        value = width,
                                         onValueChange = {
-                                            height = it
+                                            width = it
                                         },
                                         label = { },
-                                        trailingIcon = {
-                                            IconButton(
-                                                onClick = {
-
-                                                    expendHeight != expendHeight
-
-                                                }
-                                            ) {
-                                                Icon(
-                                                    painter = painterResource(Res.drawable.down),
-                                                    contentDescription = "Поиск",
-                                                    modifier = Modifier.size(80.dp)
-                                                )
-                                            }
-                                        },
+                                        textStyle = TextStyle(fontSize = 12.sp),
+                                        keyboardOptions = KeyboardOptions.Default.copy(
+                                            keyboardType = KeyboardType.Number // Установка клавиатуры на числовую
+                                        ),
                                         modifier = Modifier
-                                            .width(90.dp)
-                                            .height(70.dp)
+                                            .width(70.dp)
+                                            .height(55.dp)
                                             .clickable(
                                                 indication = null, // Отключение эффекта затемнения
                                                 interactionSource = remember { MutableInteractionSource() })
                                             { }// Стандартная высота TextField
                                     )
-                                    if (expendHeight) {
-                                        Box(
-                                            modifier = Modifier.width(90.dp)
-                                                .height(100.dp)
-                                        ) {
-                                            Card(
-                                                modifier = Modifier.fillMaxSize()
-                                                    .shadow(
-                                                        elevation = 8.dp,
-                                                        shape = RoundedCornerShape(8.dp)
-                                                    ),
-                                                backgroundColor = Color.White,
-                                                shape = RoundedCornerShape(8.dp)
-                                            ) {}
-                                            LazyColumn {
-                                                itemsIndexed(
-                                                    listOf(
-                                                        20,
-                                                        30,
-                                                        40,
-                                                        50,
-                                                        60
-                                                    )
-                                                ) { index, item ->
-                                                    Text(text = "${item}",
-                                                        fontSize = 12.sp,
-                                                        modifier = Modifier.fillMaxWidth(0.9f)
-                                                            .padding(8.dp)
-                                                            .clickable(
-                                                                indication = null, // Отключение эффекта затемнения
-                                                                interactionSource = remember { MutableInteractionSource() })
-                                                            {
-
-                                                            })
-                                                }
-                                            }
-                                        }
-                                    }
                                 }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Высота",fontSize = 12.sp)
+                            Spacer(modifier = Modifier.height(1.dp))
+                            OutlinedTextField(
+                                value = height,
+                                onValueChange = {
+                                    height = it
+                                },
+                                textStyle = TextStyle(fontSize = 12.sp),
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Number // Установка клавиатуры на числовую
+                                ),
+                                label = { },
+                                modifier = Modifier
+                                    .width(70.dp)
+                                    .height(55.dp)
+                                    .clickable(
+                                        indication = null, // Отключение эффекта затемнения
+                                        interactionSource = remember { MutableInteractionSource() })
+                                    { }// Стандартная высота TextField
+                            )
                         }
-
+                        }
+Spacer(modifier = Modifier.height(5.dp))
 
                         Column {
 
-                            Text("Bысота QR code", color = Color.Black, fontSize = 20.sp)
+                            Text("Ось x:", color = Color.Black, fontSize = 20.sp)
 
                             Spacer(modifier = Modifier.height(10.dp))
 
@@ -217,8 +190,10 @@ object SettingsTicketSizeComponent  {
                                 Text("${(heightQrCode).toInt()}", color = Color.Black, fontSize = 20.sp)
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Slider(
-                                    value = heightQrCode.toFloat(),
-                                    onValueChange = { actionChangeHeightQRcode(it) },
+                                    value = heightQrCode/10.toFloat(),
+                                    onValueChange = {
+                                        //actionChangeHeightQRcode(it)
+                                                    },
                                     valueRange = 10f..50f,  // Диапазон изменения шрифта
                                     modifier = Modifier.fillMaxWidth()
                                 )
@@ -228,7 +203,7 @@ object SettingsTicketSizeComponent  {
                         }
                         Column {
 
-                            Text("Размер шрифта", color = Color.Black, fontSize = 20.sp)
+                            Text("Ось y:", color = Color.Black, fontSize = 20.sp)
 
                             Spacer(modifier = Modifier.height(10.dp))
 
@@ -237,9 +212,11 @@ object SettingsTicketSizeComponent  {
                                 Spacer(modifier = Modifier.width(10.dp))
 
                                 Slider(
-                                    value = fontSize.toFloat(),
-                                    onValueChange = { actionChangeFontSize(it) },
-                                    valueRange = 5f..15f,
+                                    value = fontSize,
+                                    onValueChange = {
+                                    fontSize = it
+                                                    },
+                                    valueRange = 5f..16f,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             }
@@ -248,8 +225,8 @@ object SettingsTicketSizeComponent  {
                         Spacer(modifier = Modifier.height(22.dp))
 
                         Button(
-                            onClick = {
-                                actionSavedSettings() },
+                            onClick = { //actionSavedSettings()
+                                      },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(50.dp))
                                 .height(40.dp)
