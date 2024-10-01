@@ -21,6 +21,9 @@ import androidx.compose.material.Button
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.currentCompositionLocalContext
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -29,11 +32,16 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.phone.VKPPrinter
+import com.project.phone.VKPUtils
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.domain.usecases.PrintOnTscUseCase
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.model.CategoryPrinter
+import org.example.project.presentation.feature.qr_code.screens.settings_ticket_tsc_printer.ui.SettingsTicketsTSCprinter
 import org.jetbrains.compose.resources.painterResource
+import org.koin.mp.KoinPlatform.getKoin
 import tsdstorekmm.composeapp.generated.resources.Res
 import tsdstorekmm.composeapp.generated.resources.img
 
@@ -52,6 +60,8 @@ object QRcodeSizeComponent {
 
     ) {
 
+        var isClicked =  remember { mutableStateOf(false) }
+
         Box(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
@@ -66,7 +76,7 @@ object QRcodeSizeComponent {
                     .clip(RoundedCornerShape(30.dp))
                     .fillMaxHeight(0.85f)
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
+                    .align(BottomCenter)
                     .background(Color.White)
             ) {
                Image(
@@ -156,8 +166,7 @@ object QRcodeSizeComponent {
                     Spacer(modifier = Modifier.height(22.dp))
 
                         Button(
-                            onClick = {
-                                actionSavedSettings() },
+                            onClick = {isClicked.value = true},
                             modifier = Modifier
                                 .clip(RoundedCornerShape(50.dp))
                                 .height(40.dp)
@@ -166,8 +175,27 @@ object QRcodeSizeComponent {
                             Text(text = if(category == CategoryPrinter.VKP) "Сохранить" else "Далее")
                         }
 
+
                 }
 
+               val context =  LocalContext.current
+                if(isClicked.value) {
+                    SettingsTicketsTSCprinter().setScreen(
+                        qrCode,
+                        title,
+                        { x,y,height,widht ->
+                            PrintOnTscUseCase<Bitmap>(getKoin().get()).execute(
+                                qrCode,
+                                VKPUtils.setSizeBitMap(
+                                    title,
+                                    title.width/13,
+                                    title.height/13,
+                                    context
+                                )!!,
+                                height,widht,x,y )
+                        }
+                    ).Content()
+                }
             }
             Box(
                 modifier = Modifier

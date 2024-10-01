@@ -1,9 +1,12 @@
 package org.example.project.presentation.feature.qr_code.screens.settings_ticket_tsc_printer.ui
 
+import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,8 +17,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -32,18 +38,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.motionEventSpy
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import kotlinx.coroutines.NonCancellable.isActive
 import org.jetbrains.compose.resources.painterResource
 import tsdstorekmm.composeapp.generated.resources.Res
 import tsdstorekmm.composeapp.generated.resources.bluetooth
 
 
-object SettingsTicketsTSCprinter: Screen  {
+class SettingsTicketsTSCprinter(): Screen  {
+        private lateinit var barcode:Bitmap
+        private lateinit var text:Bitmap
+        private lateinit var actioTscPrinter:(x:Int,y:Int,height:Int,widht:Int)->Unit
+
+        fun setScreen( barcode:Bitmap,
+                       text:Bitmap,
+                       actioTscPrinter:(x:Int,y:Int,height:Int,widht:Int) -> Unit ):SettingsTicketsTSCprinter{
+           this.barcode = barcode
+           this.text = text
+           this.actioTscPrinter = actioTscPrinter
+            return this
+    }
 
     var heightTicketMM = 50
     var widthTicketMM = 50
@@ -59,9 +81,6 @@ object SettingsTicketsTSCprinter: Screen  {
         var _hieghtTicketMM by remember { mutableStateOf(50) }
         var _widthTicketMM by remember { mutableStateOf(50) }
 
-        var expendWidth by remember { mutableStateOf(false) }
-        var expendHeight by remember { mutableStateOf(false) }
-
         Box(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
@@ -71,6 +90,8 @@ object SettingsTicketsTSCprinter: Screen  {
                     //  .clickable { actionCloseSettings() }
                     .background(Color.Black)
             )
+
+
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(30.dp))
@@ -93,27 +114,71 @@ object SettingsTicketsTSCprinter: Screen  {
                     //Text("Настройки печати:", color = Color.Black, fontSize = 20.sp)
 
                     //Spacer(modifier = Modifier.height(30.dp))
-
-                    Box(modifier = Modifier.width(
-                        if( _widthTicketMM > 10) {_widthTicketMM.dp*5}else{25.dp}
+                    Column {
+                        Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(30.dp)
+                                .background(Color.White)
+                        )
+                    Box(modifier = Modifier.align(Alignment.CenterHorizontally) .width(
+                        if (_widthTicketMM > 10) {
+                            (_widthTicketMM * 4.5).dp
+                        } else {
+                            25.dp
+                        }
                     )
                         .height(
-                            if( _hieghtTicketMM > 10)_hieghtTicketMM.dp*5 else {25.dp}
+                            if (_hieghtTicketMM > 10) (_hieghtTicketMM* 4.5).dp else {
+                                25.dp
+                            }
                         )
                         .border(
-                            width = 1.dp,color = Color.Black, RoundedCornerShape(15.dp)
-                        )
-                        , contentAlignment = Alignment.TopStart) {
+                            width = 1.dp, color = Color.Black, RoundedCornerShape(15.dp)
+                        ).pointerInput(this@Box) {
+
+                            /* detectTapGestures { offset ->
+                              x =  offset.x
+                              y = offset.y
+                            }*/
+                            awaitPointerEventScope {
+                                while (isActive) {
+                                    val event = awaitPointerEvent()
+                                    event.changes.forEach { change ->
+                                        var _x = x + (change.positionChange().x / 2)
+                                        var _y = y + (change.positionChange().y / 2)
+                                        if (_x >= 0 && _y >= 0 && _x < _widthTicketMM.toFloat() * 2.1
+                                            && _y < _hieghtTicketMM.toFloat() * 3.7
+                                        ) {
+                                            x += (change.positionChange().x / 2)
+                                            y += (change.positionChange().y / 2)
+                                        } else {
+
+                                        }
+                                        when (x) {
+
+                                        }
+                                        when (y) {
+
+                                        }
+                                    }
+                                }
+                            }
+                        }, contentAlignment = Alignment.TopStart) {
 
                         Column(
-                            modifier = Modifier.padding(start = x.dp*5, top = y.dp*5),
-                            horizontalAlignment = Alignment.CenterHorizontally) {
+                            modifier = Modifier.offset(x.dp, y.dp)
+                                .align(Alignment.TopStart),//.padding(start = x.dp*5, top = y.dp*5),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
 
 
-                            Image(painter = painterResource(Res.drawable.bluetooth),
+                            Image(
+                                bitmap = barcode.asImageBitmap(),//painter = painterResource(Res.drawable.bluetooth),
                                 contentDescription = null,
-                                modifier = Modifier.height(60.dp)
-                                    .width(60.dp)
+                                modifier = Modifier
+                                    .width((barcode.width / 2).dp)
+                                    .height((barcode.height / 2).dp)
                             )
                             /* Image(
                                  bitmap = qrCode.asImageBitmap(),
@@ -124,10 +189,15 @@ object SettingsTicketsTSCprinter: Screen  {
                              )*/
 
                             //Spacer(modifier = Modifier.height(32.dp))
-                            Spacer(modifier = Modifier.height(10.dp))
 
 
-                            Text("Продукт", fontSize = 20.sp)
+                            Image(
+                                bitmap = text.asImageBitmap(),//painter = painterResource(Res.drawable.bluetooth),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .width((text.width / 10).dp)
+                                    .height((text.height / 4).dp)
+                            )
                             /*Image(
                                 bitmap = title.asImageBitmap(),
                                 contentDescription = null,
@@ -137,6 +207,14 @@ object SettingsTicketsTSCprinter: Screen  {
                             )*/
                         }
                     }
+                        Box(
+                            Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                                .background(Color.White)
+                        )
+                }
+
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -149,6 +227,8 @@ object SettingsTicketsTSCprinter: Screen  {
                             OutlinedTextField(
                                 value =if( _widthTicketMM == -1) {""}else{ _widthTicketMM.toString()},
                                 onValueChange = {
+                                    x = 0F
+                                    y = 0F
                                     if(it.isNotBlank()) {
                                         _widthTicketMM = it.toInt()
                                          widthTicketMM = it.toInt()
@@ -178,6 +258,8 @@ object SettingsTicketsTSCprinter: Screen  {
                             OutlinedTextField(
                                 value = if( _hieghtTicketMM == -1) {""}else{ _hieghtTicketMM.toString()},
                                 onValueChange = {
+                                    x = 0F
+                                    y = 0F
                                     if(it.isNotBlank()) {
                                         _hieghtTicketMM = it.toInt()
                                         heightTicketMM = it.toInt()
@@ -203,51 +285,19 @@ object SettingsTicketsTSCprinter: Screen  {
                     }
                     Spacer(modifier = Modifier.height(5.dp))
 
-                    Column {
 
-                        Text("Ось x:", color = Color.Black, fontSize = 20.sp)
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("${(_widthTicketMM).toInt()}", color = Color.Black, fontSize = 20.sp)
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Slider(
-                                value = x,
-                                onValueChange = {
-                                    x = it
-                                },
-                                valueRange = 0f..50f,  // Диапазон изменения шрифта
-                                modifier = Modifier.fillMaxWidth()
-                            )
-
-                        }
-
-                    }
-                    Column {
-
-                        Text("Ось y:", color = Color.Black, fontSize = 20.sp)
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("${_hieghtTicketMM}", color = Color.Black, fontSize = 20.sp)
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Slider(
-                                value = y,
-                                onValueChange = {
-                                   y = it
-                                },
-                                valueRange = 0F..50F,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
 
                     Spacer(modifier = Modifier.height(22.dp))
 
                     Button(
-                        onClick = { //actionSavedSettings()
+                        onClick = {
+                            Log.d("x,y","x = ${x} y = ${y}")
+                            actioTscPrinter(
+                                (x.toInt()*1.5).toInt(),
+                                (y.toInt()*1.5).toInt(),
+                                heightTicketMM,
+                                widthTicketMM
+                            )
                         },
                         modifier = Modifier
                             .clip(RoundedCornerShape(50.dp))
@@ -258,6 +308,8 @@ object SettingsTicketsTSCprinter: Screen  {
                     }
 
                 }
+
+                Box(Modifier.fillMaxWidth().height(40.dp))
 
             }
             Box(

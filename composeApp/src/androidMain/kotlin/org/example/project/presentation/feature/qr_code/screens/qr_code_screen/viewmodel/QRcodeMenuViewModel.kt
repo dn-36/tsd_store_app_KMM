@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
+import com.project.phone.TSCprinter
 import com.project.phone.VKPUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,7 @@ import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.d
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.model.CategoryPrinter
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.model.ConnectionDeviseStatus
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.model.StatusBluetoothLoading
+import org.example.project.presentation.feature.qr_code.screens.settings_ticket_tsc_printer.ui.SettingsTicketsTSCprinter
 
 class QRcodeMenuViewModel(
     private val conectUSBUseCase: ConectUSBUseCase,
@@ -108,6 +110,9 @@ class QRcodeMenuViewModel(
                             30,60,
                             0,50
                           )
+
+
+
                     }
                     CategoryPrinter.ZEBRA ->{
 

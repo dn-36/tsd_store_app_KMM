@@ -81,6 +81,9 @@ import java.util.UUID
                yQrCode:Int
                ) {
 
+       // val heightTicket:Int = 30
+      //  val widthTicket:Int = 30
+
          val heightQRcode = 25
          val densty = 4
 
@@ -103,8 +106,8 @@ import java.util.UUID
              tscDll.setup(widthTicket, heightTicket, 4, 3, 0, 1, 0)
              tscDll.clearbuffer()
 
-            // tscDll.sendbitmap(xQrCode,yQrCode,barCode)
-             tscDll.sendbitmap(xQrCode,yQrCode,title)
+             tscDll.sendbitmap(xQrCode,yQrCode,barCode)
+             tscDll.sendbitmap(xQrCode,yQrCode+10+barCode.height,title)
              tscDll.printlabel(1, 1)
              // tscDll.printlabel(1, 1)
              //val status = tscDll.printerstatus()
