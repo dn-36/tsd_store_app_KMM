@@ -15,8 +15,13 @@ data class QRCodeMenuState(
     val isOpenedSettingsVKP:Boolean = false,
     val isOpenedBluetoothSettingsTSC:Boolean = false,
     val isLoadingConnectionDevice:Boolean = false,
+    val isOpenTicketSettingsTSC:Boolean = false,
     val deviceTitle:String = "",
     val statusConnected:ConnectionDeviseStatus = ConnectionDeviseStatus.NoShowStatus,
     val statusSearchBluetoothDevice:StatusBluetoothLoading = StatusBluetoothLoading.LOADING,
-    val bluetoothDeviceList: List<String> = listOf()
+    val bluetoothDeviceList: List<String> = listOf(),
+    val x: Float = 0F,
+    val y: Float = 0F,
+    val heightTicketTsc: Int = 60,
+    val weightTicketTsc: Int = 60
 )

@@ -1,4 +1,4 @@
-package org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui
+package org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
@@ -21,7 +21,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,16 +31,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.project.phone.VKPPrinter
-import com.project.phone.VKPUtils
-import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.domain.usecases.PrintOnTscUseCase
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.model.CategoryPrinter
-import org.example.project.presentation.feature.qr_code.screens.settings_ticket_tsc_printer.ui.SettingsTicketsTSCprinter
 import org.jetbrains.compose.resources.painterResource
-import org.koin.mp.KoinPlatform.getKoin
 import tsdstorekmm.composeapp.generated.resources.Res
 import tsdstorekmm.composeapp.generated.resources.img
 
@@ -178,24 +171,6 @@ object QRcodeSizeComponent {
 
                 }
 
-               val context =  LocalContext.current
-                if(isClicked.value) {
-                    SettingsTicketsTSCprinter().setScreen(
-                        qrCode,
-                        title,
-                        { x,y,height,widht ->
-                            PrintOnTscUseCase<Bitmap>(getKoin().get()).execute(
-                                qrCode,
-                                VKPUtils.setSizeBitMap(
-                                    title,
-                                    title.width/13,
-                                    title.height/13,
-                                    context
-                                )!!,
-                                height,widht,x,y )
-                        }
-                    ).Content()
-                }
             }
             Box(
                 modifier = Modifier

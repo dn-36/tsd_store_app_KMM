@@ -49,6 +49,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.example.project.presentation.core.models.ProductPresentationModel
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.BarCodeVkpComponent
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.ListBluetoothDevicesComponent
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.QRcodeSizeComponent
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.SettingsTicketsTSCprinterComponent
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.model.CategoryPrinter
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.QRcodeMenuIntent
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.QRcodeMenuViewModel
@@ -143,48 +147,28 @@ actual class QRCodeMenuScreen : Screen {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
+                when(state.categoryPrinter){
 
-                    if (state.imgBitmap != null) {
-                        Image(
-                            bitmap = state.imgBitmap!!.asImageBitmap(),
-                            modifier = Modifier
-                                .width(300.dp)
-                                .height(
-                                    (product.heightQRcode * 5).dp
-                                ),
-                            contentDescription = "qrCode"
-                        )
-                        Spacer(modifier = Modifier.height(22.dp))
-                        Image(
-                            bitmap = state.titleProductQRcodeBiteMap!!.asImageBitmap(),
-                            modifier = Modifier
-                                .width(350.dp)
-                                .wrapContentHeight(),
-                            contentDescription = "qrCode"
-                        )
-                    } else {
-                        Image(
-                            painter = painterResource(Res.drawable.barcode),
-                            "qrCode"
-                        )
-                        Text(
-                            text = "product",
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.h6,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+                    CategoryPrinter.VKP ->  BarCodeVkpComponent(
+                        state.imgBitmap,
+                        state.titleProductQRcodeBiteMap,
+                        state.heightQRcode
+                    )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    CategoryPrinter.TSC -> SettingsTicketsTSCprinterComponent(
+                        state.imgBitmap!!,
+                        state.titleProductQRcodeBiteMap!!,
+                        {x: Int, y: Int, height: Int, weight: Int ->
+                         viewModel.processIntent(QRcodeMenuIntent.ChangeSettingsTsc(
+                             x,y,height,weight
+                         ))
+                        }
+                    )
+
+                    CategoryPrinter.ZEBRA ->{}
 
                 }
+
 
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -352,8 +336,30 @@ Row {
                     state.statusSearchBluetoothDevice
                 )
             }
+            //if(state.categoryPrinter == CategoryPrinter.TSC) {
+
+            //}
             }
         }
     }
+/*
+                val context = LocalContext.current
+                SettingsTicketsTSCprinterComponent(
+                    state.imgBitmap!!,
+                    state.titleProductQRcodeBiteMap!!,
+                    { x, y, height, widht ->
+                        PrintOnTscUseCase<Bitmap>(getKoin().get()).execute(
+                            state.imgBitmap!!,
+                            VKPUtils.setSizeBitMap(
+                                state.titleProductQRcodeBiteMap!!,
+                                state.titleProductQRcodeBiteMap!!.width / 13,
+                                state.titleProductQRcodeBiteMap!!.height / 13,
+                                context
+                            )!!,
+                            height, widht, x, y
+                        )
+                    }
+                )
+ */
 
 

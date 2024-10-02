@@ -1,10 +1,7 @@
 package org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel
 
 import android.graphics.Bitmap
-import android.util.Log
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
-import com.project.phone.TSCprinter
 import com.project.phone.VKPUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +20,6 @@ import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.d
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.model.CategoryPrinter
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.model.ConnectionDeviseStatus
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.viewmodel.model.StatusBluetoothLoading
-import org.example.project.presentation.feature.qr_code.screens.settings_ticket_tsc_printer.ui.SettingsTicketsTSCprinter
 
 class QRcodeMenuViewModel(
     private val conectUSBUseCase: ConectUSBUseCase,
@@ -39,6 +35,10 @@ class QRcodeMenuViewModel(
     val state = MutableStateFlow(QRCodeMenuState())
     private var isSetedScreen = false
 
+    private var x: Int = 0
+    private var y: Int = 0
+    private var height: Int = 40
+    private var weight: Int = 40
 
     fun processIntent(intent: QRcodeMenuIntent) {
 
@@ -86,7 +86,7 @@ class QRcodeMenuViewModel(
                       val  title = getTitleProductUseCase
                             .execute(
                                 intent.product.title,
-                                intent.product.fontSize*2,
+                                intent.product.fontSize
                             )
 
                         printOnTscUseCase.execute(
@@ -94,21 +94,12 @@ class QRcodeMenuViewModel(
                             VKPUtils.setSizeBitMap(
                              title,
                               title.width/13,
-                               title.height/13, //(state.value.titleProductQRcodeBiteMap!!.height/40).toInt(),
-                                intent.context
+                               title.height/13,
+                                intent.context,
                             )
-
-                          /*VKPUtils.setSizeBitMap(
-                              getTitleProductUseCase
-                                  .execute(
-                                      intent.product.title,
-                                      intent.product.fontSize,
-                                  ),
-                              (intent.product.fontSize*10).toInt(),
-                              (intent.product.fontSize*3).toInt(),intent.context
-                          )*/,
-                            30,60,
-                            0,50
+                            ,
+                            height,weight,
+                            x,y
                           )
 
 
@@ -285,7 +276,15 @@ is QRcodeMenuIntent.CloseSettingsBluetooth -> {
      }
 
  }
-}
+
+            is QRcodeMenuIntent.ChangeSettingsTsc -> {
+                if(intent.x<0) x = 0 else x = (intent.x*1.25).toInt()
+                if(intent.y<0) y = 0 else y = (intent.y*1.25).toInt()
+
+                height = intent.height
+                weight = intent.weight
+            }
+        }
 }
 }
 

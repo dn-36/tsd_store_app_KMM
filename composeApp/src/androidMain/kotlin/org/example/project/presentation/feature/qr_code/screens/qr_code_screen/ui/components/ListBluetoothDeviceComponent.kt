@@ -1,4 +1,4 @@
-package org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui
+package org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
