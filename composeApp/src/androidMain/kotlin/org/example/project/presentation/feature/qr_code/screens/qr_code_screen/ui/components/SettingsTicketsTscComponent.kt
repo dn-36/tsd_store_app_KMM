@@ -159,16 +159,11 @@ import kotlinx.coroutines.NonCancellable.isActive
                             )*/
                     }
                 }
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .background(Color.White)
-                )
+
             }
 
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
 
             Row(

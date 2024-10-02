@@ -147,31 +147,37 @@ actual class QRCodeMenuScreen : Screen {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                when(state.categoryPrinter){
+                when(state.categoryPrinter) {
 
-                    CategoryPrinter.VKP ->  BarCodeVkpComponent(
+                    CategoryPrinter.VKP -> BarCodeVkpComponent(
                         state.imgBitmap,
                         state.titleProductQRcodeBiteMap,
                         state.heightQRcode
                     )
 
-                    CategoryPrinter.TSC -> SettingsTicketsTSCprinterComponent(
-                        state.imgBitmap!!,
-                        state.titleProductQRcodeBiteMap!!,
-                        {x: Int, y: Int, height: Int, weight: Int ->
-                         viewModel.processIntent(QRcodeMenuIntent.ChangeSettingsTsc(
-                             x,y,height,weight
-                         ))
-                        }
-                    )
+                    CategoryPrinter.TSC -> {
+                        SettingsTicketsTSCprinterComponent(
+                            state.imgBitmap!!,
+                            state.titleProductQRcodeBiteMap!!,
+                            { x: Int, y: Int, height: Int, weight: Int ->
+                                viewModel.processIntent(
+                                    QRcodeMenuIntent.ChangeSettingsTsc(
+                                        x, y, height, weight
+                                    )
+                                )
+                            })
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
 
-                    CategoryPrinter.ZEBRA ->{}
+
+
+                    CategoryPrinter.ZEBRA ->{ }
 
                 }
 
 
 
-                Spacer(modifier = Modifier.height(10.dp))
+
 
 
                 Column {
@@ -199,12 +205,25 @@ actual class QRCodeMenuScreen : Screen {
                         Icon(
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .height(48.dp)
-                                .width(48.dp)
+                                .height(30.dp)
+                                .width(30.dp)
                                 .clickable { viewModel.processIntent(QRcodeMenuIntent.OpenSettingsPrinter(scope)) },
                             painter = painterResource(Res.drawable.settings),
                             contentDescription = "Настройки"
                         )
+                        if(state.categoryPrinter == CategoryPrinter.TSC) {
+                            Image(
+                                painter = painterResource(Res.drawable.bluetooth),
+                                modifier = Modifier
+                                    .padding(start = 15.dp)
+                                    .size(30.dp)
+                                    .clickable {
+                                        viewModel.processIntent(QRcodeMenuIntent.OpenSettingsBluetooth(scope))
+                                    }
+                                ,
+                                contentDescription = null
+                            )
+                        }
                     }
 
                     DropdownMenu(
@@ -231,19 +250,7 @@ actual class QRCodeMenuScreen : Screen {
 
                     Box(Modifier.fillMaxWidth()) {
 Row {
-    if(state.categoryPrinter == CategoryPrinter.TSC) {
-        Image(
-            painter = painterResource(Res.drawable.bluetooth),
-            modifier = Modifier
-                .padding(start = 15.dp)
-                .size(30.dp)
-                .clickable {
-                    viewModel.processIntent(QRcodeMenuIntent.OpenSettingsBluetooth(scope))
-                }
-            ,
-            contentDescription = null
-        )
-    }
+
 
                         Text(
                             state.statusConnected.text,
