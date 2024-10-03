@@ -38,8 +38,10 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
-            implementation(project(":common:printer-barcode-vkp"))
+            implementation(project(":core"))
             implementation(project(":common:phone"))
+            implementation(project(":common:printer-barcode-vkp"))
+            implementation(project(":common:printer-barcode-tsc"))
 
 
         }
@@ -110,10 +112,7 @@ android {
 }
 dependencies {
     implementation(project(":core"))
-    implementation(project(":common:phone"))
-    implementation(project(":common:printer-barcode-vkp"))
-    implementation(project(":common:printer-barcode-tsc"))
-
-
+    implementation(project(":core"))
 }
+
 

@@ -22,21 +22,18 @@ class ProductSearchViewModel(
                 if(isSetedScreen) return
                     isSetedScreen = true
                     intent.scope.launch {
-                        _state.value =
-                            _state.value.copy(
-                                items = repository.getProduct()//.map { it.title?:"" }
-
+                        _state.value = _state.value.copy(
+                                items = repository.getProduct()
                             )
                     }
-
             }
             is ProductSearchIntent.EnterSearchProduct -> {
                 _state.update { it.copy(searchText = intent.text) }
             }
-            is ProductSearchIntent.SelectProduct -> {
-                _state.update { it.copy(selectedItem = intent.item.title?:"") }
-                val screen = QRCodeMenuScreen()
 
+            is ProductSearchIntent.SelectProduct -> {
+                _state.update { it.copy(selectedItem = intent.item.title) }
+                val screen = QRCodeMenuScreen()
                 screen.product = intent.item
                 println(screen.product)
 

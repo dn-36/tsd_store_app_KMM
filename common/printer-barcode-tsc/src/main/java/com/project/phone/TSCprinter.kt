@@ -81,15 +81,9 @@ import java.util.UUID
                yQrCode:Int
                ) {
 
-       // val heightTicket:Int = 30
-      //  val widthTicket:Int = 30
 
-         val heightQRcode = 25
-         val densty = 4
 
-        // val widthTicket = 60
-        // val heightTicket = 60
-         val cefWidthQrCode = 2
+
          val countChars = ("barcode").chars().count().toInt()
 
          try {
@@ -107,16 +101,11 @@ import java.util.UUID
              tscDll.clearbuffer()
 
              tscDll.sendbitmap(xQrCode,yQrCode,barCode)
-             tscDll.sendbitmap(xQrCode,yQrCode+10+barCode.height,title)
+             tscDll.sendbitmap(xQrCode+6,yQrCode+10+barCode.height,title)
              tscDll.printlabel(1, 1)
-             // tscDll.printlabel(1, 1)
-             //val status = tscDll.printerstatus()
-             //vb.tvPrinterStatus.text = "Готово [$status]"
              tscDll.closeport(1000)
          } catch (e: Exception) {
              Log.d("errora", e.message.toString())
-             //   vb.tvPrinterStatus.text = "Ошибка печати"
-             //    showError(e.message)
          }
      }
 
@@ -148,6 +137,8 @@ import java.util.UUID
 
          //val filterAdress:List<String> = deviceList.map { it.address }.toSet().toList()
           Log.d("test_111_111a",deviceList.distinctBy { it.address }.map { it.address }.toString())
+        val deviceList = deviceList.distinctBy { it.address }
+         stopBluetoothDiscovery()
          return deviceList.distinctBy { it.address }
      }
 

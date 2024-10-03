@@ -57,8 +57,8 @@ import kotlinx.coroutines.NonCancellable.isActive
      ) {
 
 
-        var x by remember { mutableStateOf(0F) }
-        var y by remember { mutableStateOf(0F) }
+        var x by remember { mutableStateOf(42F) }
+        var y by remember { mutableStateOf(90F) }
 
         var _hieghtTicketMM by remember { mutableStateOf(50) }
         var _widthTicketMM by remember { mutableStateOf(50) }
