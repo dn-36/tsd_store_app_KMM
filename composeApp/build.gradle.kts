@@ -34,6 +34,7 @@ kotlin {
     sourceSets {
         
         androidMain.dependencies {
+            implementation(project(":common:phone"))
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
