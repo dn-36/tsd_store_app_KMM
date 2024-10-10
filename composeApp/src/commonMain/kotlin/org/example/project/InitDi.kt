@@ -3,6 +3,7 @@ package org.example.project
 import com.profile.`printer-impl`.profileScreensModule
 import com.profile.profile.qr_code.printerPlatformModule
 import com.profile.profile.qr_code.printerScreenModule
+import com.profile.profile.warehouseScreensModule
 import com.project.chats.chatsModule
 import org.example.project.app.moduls_di.appModule
 import com.project.`local-storage`.`profile-storage`.localStorageModule
@@ -29,7 +30,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             authorizationModule,
             network_module,
             printerPlatformModule,
-            printerScreenModule
+            printerScreenModule,
+            warehouseScreensModule
         )
     }
 }

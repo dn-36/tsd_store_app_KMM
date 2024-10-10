@@ -21,17 +21,20 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "chats-impl"
+            baseName = "menu"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":core:network"))
-            implementation(project(":features:application-sections:chat-section:chats-api"))
-            implementation(project(":core:recources"))
+            implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-api"))
+            implementation(project(":features:application-sections:profile-section:profile-feature:profile-api"))
+
             implementation(project(":core:app"))
+            implementation(project(":core:recources"))
+            implementation(project(":core:local-storage"))
+            implementation(project(":core:network"))
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -41,15 +44,9 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-
-            // implementation(libs.koin.core)
-            api(libs.koin.core)
+             implementation(libs.koin.core)
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
-            implementation(libs.cafe.adriel.voyager.voyager.transitions)
-
-            implementation(dependencyNotation = libs.peekaboo.ui)
-            implementation(dependencyNotation = libs.peekaboo.imagepicker)
-        }
+            implementation(libs.cafe.adriel.voyager.voyager.transitions)        }
 
     }
 }
@@ -61,4 +58,3 @@ android {
         minSdk = 24
     }
 }
-

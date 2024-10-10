@@ -56,6 +56,8 @@ kotlin {
             implementation(project(":features:application-sections:profile-section:profile-feature:profile-impl"))
             implementation(project(":features:outhorization-feature:outhorization-screen-impl"))
             implementation(project(":features:application-sections:profile-section:printer-feature:printer-impl"))
+            implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-api"))
+            implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-impl"))
             implementation(project(":core:network"))
             api(libs.koin.core)
             implementation(compose.runtime)

@@ -91,6 +91,8 @@ include(":features:application-sections")
 /** api and impl **/
 /*----*/include(":features:application-sections:profile-section:profile-feature:profile-impl")
 /*----*/include(":features:application-sections:profile-section:profile-feature:profile-api")
+/*----*/include(":features:application-sections:profile-section:warehouse-feature:warehouse-api")
+/*----*/include(":features:application-sections:profile-section:warehouse-feature:warehouse-impl")
 /** printer-feature **/
 /*--*/include(":features:application-sections:profile-section:printer-feature")
 /** api and impl **/

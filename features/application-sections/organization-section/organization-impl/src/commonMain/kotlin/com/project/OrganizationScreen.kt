@@ -42,7 +42,7 @@ class OrganizationScreen(): Screen {
                     menuCrmScreens.MenuCrm(),
                     profileScreens.profile() ,
                     organizationScreens.organization(),
-                    chatsScreens.ChatsScreen(),
+                    chatsScreens.chatsScreen(),
                     tapeScreens.tape(),
                 ) .Content()
             }

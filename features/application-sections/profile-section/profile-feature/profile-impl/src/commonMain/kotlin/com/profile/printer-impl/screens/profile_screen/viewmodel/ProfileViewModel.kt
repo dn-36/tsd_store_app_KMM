@@ -4,11 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.project.chats.WarehouseScreensApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
-import com.profile.profile.screens.warehouse_feature.main_refactor.screen.WarehouseScreen
 import com.project.network.Navigation
 import com.project.`local-storage`.`profile-storage`.KeyValueStorageApi
 import org.koin.mp.KoinPlatform.getKoin
@@ -30,7 +30,9 @@ class ProfileViewModel:ViewModel() {
 
     fun warehouse(){
 
-        Navigation.navigator.push(WarehouseScreen)
+        val warehouseScreen: WarehouseScreensApi = getKoin().get()
+
+        Navigation.navigator.push(warehouseScreen.warehouse())
 
     }
 
