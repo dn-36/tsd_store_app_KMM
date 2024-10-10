@@ -21,7 +21,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "menu"
+            baseName = "notes_screens_impl"
             isStatic = true
         }
     }
@@ -43,13 +43,17 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.koin.core)
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
-            implementation(libs.cafe.adriel.voyager.voyager.transitions)        }
+            implementation(libs.cafe.adriel.voyager.voyager.transitions)
+            implementation(libs.bundles.ktor)
+
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+        }
 
     }
 }
 
 android {
-    namespace = "com.example.notes-screens-impl"
+    namespace = "com.example.notes_screens_impl"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

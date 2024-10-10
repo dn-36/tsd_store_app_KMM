@@ -48,6 +48,7 @@ import org.example.project.nika_screens_chats.title_group_feature.viewmodel.Titl
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
+import project.core.resources.ready
 import project.core.resources.user
 import project.core.resources.user_chats
 
@@ -141,7 +142,7 @@ class TitleGroupScreen : Screen {
                 }
             }
             Image(
-                painter = painterResource(Res.drawable.back), contentDescription = null,
+                painter = painterResource(Res.drawable.ready), contentDescription = null,
                 modifier = Modifier.padding(25.dp).size(60.dp).align(Alignment.BottomEnd).clickable(
                     indication = null, // Отключение эффекта затемнения
                     interactionSource = remember { MutableInteractionSource() })

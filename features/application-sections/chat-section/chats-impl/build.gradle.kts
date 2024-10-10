@@ -32,6 +32,7 @@ kotlin {
             implementation(project(":features:application-sections:chat-section:chats-api"))
             implementation(project(":core:recources"))
             implementation(project(":core:app"))
+            implementation(project(":core:contact-provider"))
 
             implementation(compose.runtime)
             implementation(compose.foundation)

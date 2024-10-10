@@ -7,6 +7,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.project.chats.screen.ChatsScreen
 import com.project.network.Navigation
+import contact_provider.ContactProviderApi
+import model.Contact
 
 import org.example.project.nika_screens_chats.title_group_feature.screen.TitleGroupScreen
 import org.example.project.presentation.nika_screens_chats.add_chat_feature.select_contacts_screen.viewmodel.SelectContactsState
@@ -30,12 +32,9 @@ class SelectContactsViewModel:ViewModel() {
 
             is SelectContactsIntents.ColorButtonOrganization -> {colorButtonOrganization()}
 
-            is SelectContactsIntents.SelectContact -> {selectContact(
-               // intent.selectedContact
-            )}
+            is SelectContactsIntents.SelectContact -> {selectContact(intent.selectedContact)}
 
-            is SelectContactsIntents.CanselContact -> {cancelContact(//intent.contact
-            )}
+            is SelectContactsIntents.CanselContact -> {cancelContact(intent.contact)}
 
             is SelectContactsIntents.ClearingTypedText -> {clearingTypingText()}
         }
@@ -70,30 +69,26 @@ class SelectContactsViewModel:ViewModel() {
 
     }
 
-    fun selectContact(//selectedContact: Contact
-    ){
+    fun selectContact(selectedContact: Contact){
 
-        //var newList = selectContactsState.listSelectedContacts.toMutableList()
+        var newList = selectContactsState.listSelectedContacts.toMutableList()
 
-       // newList.add(//selectedContact
-        //)
+        newList.add(selectedContact)
 
         selectContactsState = selectContactsState.copy(
-            //listSelectedContacts = newList
+            listSelectedContacts = newList
         )
 
     }
 
-    fun cancelContact(//contact:Contact
-    ){
+    fun cancelContact(contact:Contact){
 
-       // var newList = selectContactsState.listSelectedContacts.toMutableList()
+        var newList = selectContactsState.listSelectedContacts.toMutableList()
 
-      // newList.remove(//contact
-      // )
+       newList.remove(contact)
 
         selectContactsState = selectContactsState.copy(
-          //  listSelectedContacts = newList
+            listSelectedContacts = newList
         )
 
     }
@@ -113,21 +108,21 @@ class SelectContactsViewModel:ViewModel() {
 
             selectContactsState.isUsed.value = false
 
-         //   val contactProvider: ContactProviderApi = KoinPlatform.getKoin().get()
+            val contactProvider: ContactProviderApi = KoinPlatform.getKoin().get()
 
 
 
             println("2")
             println("2")
-         //   println("${contactProvider.getAllContacts()}")
+            println("${contactProvider.getAllContacts()}")
             println("2")
             println("2")
 
             selectContactsState = selectContactsState.copy(
 
-               //listContacts = contactProvider.getAllContacts(),
+               listContacts = contactProvider.getAllContacts(),
 
-               // filteredContacts = contactProvider.getAllContacts()
+                filteredContacts = contactProvider.getAllContacts()
 
             )
         }

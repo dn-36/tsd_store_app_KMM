@@ -30,6 +30,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:app"))
             implementation(project( ":features:application-sections:crm-section:munu-crm-feature:menu-crm-api"))
+            implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

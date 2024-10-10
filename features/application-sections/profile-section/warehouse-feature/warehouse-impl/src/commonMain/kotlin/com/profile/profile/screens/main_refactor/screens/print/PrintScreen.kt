@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 
 class PrintScreen:Screen{
 
@@ -23,7 +24,7 @@ class PrintScreen:Screen{
                 Text("Печать", color = Color.Black, fontSize = 20.sp)
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-              //  MenuBottomBarWarehouse().Content()
+                MenuBottomBarWarehouse().Content()
             }
         }
     }

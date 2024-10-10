@@ -3,12 +3,13 @@ package org.example.project.presentation.nika_screens_chats.add_chat_feature.sel
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
+import model.Contact
 
 data class SelectContactsState(
 
-   // val filteredContacts: List<Contact> = emptyList(),
+    val filteredContacts: List<Contact> = emptyList(),
 
-   // val listContacts: List<Contact> = emptyList(),
+    val listContacts: List<Contact> = emptyList(),
 
     val isUsed: MutableState<Boolean> = mutableStateOf(true),
 
@@ -18,6 +19,6 @@ data class SelectContactsState(
 
     val colorButtonOrganization: Color = Color.LightGray,
 
-    //val listSelectedContacts: MutableList<Contact> = mutableListOf()
+    val listSelectedContacts: MutableList<Contact> = mutableListOf()
 
 )

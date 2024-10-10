@@ -1,5 +1,6 @@
 package org.example.project
 
+import com.example.notes_screens_impl.notesModule
 import com.profile.`printer-impl`.profileScreensModule
 import com.profile.profile.qr_code.printerPlatformModule
 import com.profile.profile.qr_code.printerScreenModule
@@ -12,6 +13,7 @@ import com.project.`menu-crm-impl`.menuCrmModule
 import com.project.network.network_module
 import com.project.`outhorization-screen-impl`.authorizationModule
 import com.project.tape.tapeScreenModule
+import coreModuleContactProvider
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -28,10 +30,12 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             platforModule,
             appModule,
             authorizationModule,
+            notesModule,
             network_module,
             printerPlatformModule,
             printerScreenModule,
-            warehouseScreensModule
+            warehouseScreensModule,
+            coreModuleContactProvider
         )
     }
 }

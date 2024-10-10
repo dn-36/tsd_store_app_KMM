@@ -49,6 +49,7 @@ import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.ready
 import project.core.resources.user
+import project.core.resources.user_chats
 
 
 class SelectContactsScreen : Screen {
@@ -58,17 +59,13 @@ class SelectContactsScreen : Screen {
     @Composable
     override fun Content() {
 
-     /*   vm.processIntent(SelectContactsIntents.SetScreen)
+       vm.processIntent(SelectContactsIntents.SetScreen)
 
         Box(modifier = Modifier.fillMaxSize())
         {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(painterResource(Res.drawable.back),contentDescription = null,
-                    modifier = Modifier.padding(10.dp).size(20.dp).clickable(
-                        indication = null, // Отключение эффекта затемнения
-                        interactionSource = remember { MutableInteractionSource() })
-                    { vm.processIntent(SelectContactsIntents.Back) })
+
                 TextField(
                     value = vm.selectContactsState.text,
                     onValueChange = { textInput ->
@@ -237,13 +234,25 @@ class SelectContactsScreen : Screen {
                     }
                 }
             }
-            Image(
-                painter = painterResource(Res.drawable.ready), contentDescription = null,
-                modifier = Modifier.padding(25.dp).size(60.dp).align(Alignment.BottomEnd).clickable(
-                    indication = null, // Отключение эффекта затемнения
-                    interactionSource = remember { MutableInteractionSource() })
-                { vm.processIntent(SelectContactsIntents.Next) }
-            )
-        }*/
+            Row(modifier = Modifier.fillMaxWidth().padding(25.dp).align(Alignment.BottomEnd),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically) {
+
+                Image(painterResource(Res.drawable.back), contentDescription = null,
+                    modifier = Modifier.padding(10.dp).size(30.dp).clickable(
+                        indication = null, // Отключение эффекта затемнения
+                        interactionSource = remember { MutableInteractionSource() })
+                    { vm.processIntent(SelectContactsIntents.Back) })
+
+                Image(
+                    painter = painterResource(Res.drawable.ready), contentDescription = null,
+                    modifier = Modifier.size(60.dp)
+                        .clickable(
+                            indication = null, // Отключение эффекта затемнения
+                            interactionSource = remember { MutableInteractionSource() })
+                        { vm.processIntent(SelectContactsIntents.Next) }
+                )
+            }
+        }
     }
 }

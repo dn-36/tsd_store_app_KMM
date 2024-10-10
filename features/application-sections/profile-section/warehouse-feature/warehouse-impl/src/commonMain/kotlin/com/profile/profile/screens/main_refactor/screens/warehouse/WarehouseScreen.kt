@@ -21,6 +21,7 @@ import com.profile.profile.screens.profile_screen.screens.print.PrintScreen
 import com.project.chats.ProfileScreensApi
 import com.project.chats.WarehouseScreensApi
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.koin.mp.KoinPlatform
 
 class WarehouseScreen: Screen {
@@ -37,12 +38,12 @@ class WarehouseScreen: Screen {
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
 
-               /* MenuBottomBarWarehouse().init(
+                MenuBottomBarWarehouse().init(
                     warehouseScreens.warehouse(),
                     profileScreens.profile(),
                     FinanceScreen(),
                     PrintScreen()
-                ).Content()*/
+                ).Content()
 
             }
         }
