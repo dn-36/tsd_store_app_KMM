@@ -5,42 +5,39 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.project.phone.AskPermissions
-
-import com.project.phone.TSCprinter
-import com.project.phone.VKPUtils
-import org.example.project.presentation.core.app.ui.App
-import org.example.project.presentation.core.initKoin
+import org.example.project.app.ui.App
 import org.koin.android.ext.koin.androidContext
 
-
 class MainActivity : ComponentActivity() {
+
+    companion object{
+        lateinit var context: MainActivity
+    }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AskPermissions(this).execute(AskPermissions.PPERMISSION.BLUETOOTH, {}, {})
+        context = this
         initKoin {
             androidContext(this@MainActivity.applicationContext)
         }
-        setContent {
-           App.content()
 
+
+       /*initKoin {
+            androidContext(this@MainActivity.applicationContext)
+        }*/
+        setContent {
+            App.Content()
+          //  chatScreen.ChatsScreen().Content()
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        TSCprinter(this).stopBluetoothDiscovery()
-    }
-
-
 }
-
 
 @Preview
 @Composable
-fun PreviewComponent(){
-
+fun AppAndroidPreview() {
+    App.Content()
 }
+

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="text_grey">#99000000</color>
+    <color name="red">#DF1021</color>
+    <color name="black">#FF000000</color>
+    <color name="grey_50">#ADCFCFCF</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#0D72FF</color>
+    <color name="light_blue">#590D72FF</color>
+    <color name="messages_background">#260D72FF</color>
+    <color name="grey">#32000000</color>
+    <color name="light_grey">#CFCFCF</color>
+    <color name="purple">#596D23C1</color>
+    <color name="orange">#59DFB127</color>
+    <color name="orange_100">#DFA90B</color>
+    <color name="green">#5914CC67</color>
+    <color name="green2">#509341</color>
+    <color name="green3">#B5E4A9</color>
+    <color name="purple2">#59CC1489</color>
+    <color name="light_red">#59EA0909</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="ucrop_color_toolbar">@color/blue</color>
+    <color name="ucrop_color_statusbar">@color/white</color>
+    <color name="ucrop_color_widget_active">@color/blue</color>
+
+    <color name="red_closed">#D45757</color>
+    <color name="gray_dark">#969696</color>
+
+    <color name="color_primary">#7367f0</color>
+    <color name="color_on_primary">#ffffff</color>
+    <color name="color_primary_container">#DCE4F1</color>
+    <color name="color_on_primary_container">#ffffff</color>
+
+
+    <color name="color_secondary">#7367f0</color>
+    <color name="color_on_secondary">#ffffff</color>
+    <color name="color_secondary_container">#FF9900</color>
+    <color name="color_on_secondary_container">#ffffff</color>
+
+
+
+    <color name="color_background">#FFFfff</color>
+    <color name="color_on_background">#000000</color>
+    <color name="color_surface">#ffffff</color>
+    <color name="color_on_surface">#1C1C1C</color>
+
+    <color name="color_outline">#7367f0</color>
+
+    <color name="color_gray">#F9F9F9</color>
+    <color name="color_gray_icon">#DDDDDD</color>
+    <color name="color_gray_dark">#9CA1A7</color>
+    <color name="color_gray_light">#FAFAFC</color>
+    <color name="colorBlackTransparent">#43000000</color>
+    <color name="coupon_background">#E9F1F8</color>
+    <color name="progress_bar_background">#20000000</color>
+</resources>

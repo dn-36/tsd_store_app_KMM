@@ -1,16 +1,9 @@
 package org.example.project
 
-import androidx.compose.ui.interop.LocalUIViewController
 import androidx.compose.ui.window.ComposeUIViewController
-import org.example.project.presentation.core.app.ui.App
-import org.example.project.presentation.core.initKoin
-
-
+import org.example.project.app.ui.App
 
 fun MainViewController() = ComposeUIViewController {
-
     initKoin()
-    App.content()
+    App.Content()
 }
-
-//UINavigationController

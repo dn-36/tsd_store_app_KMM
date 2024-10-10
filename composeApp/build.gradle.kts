@@ -3,19 +3,20 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-   // kotlin("multiplatform") version "1.7.20"
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
+
 }
 
 kotlin {
     androidTarget {
+
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
     
@@ -35,18 +36,28 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
-            implementation(project(":core"))
-            implementation(project(":common:phone"))
-            implementation(project(":common:printer-barcode-vkp"))
-            implementation(project(":common:printer-barcode-tsc"))
-
-
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
-            implementation(project(":core"))
+            implementation(project(":core:app"))
+            implementation(project(":core:local-storage"))
+            implementation(project(":features:outhorization-feature:outhorization-screen-api"))
+            implementation(project(":features:application-sections:organization-section:organization-api"))
+            implementation(project(":features:application-sections:chat-section:chats-api"))
+            implementation(project(":features:application-sections:chat-section:chats-impl"))
+            implementation(project(":features:application-sections:organization-section:organization-api"))
+            implementation(project(":features:application-sections:organization-section:organization-impl"))
+            implementation(project(":features:application-sections:crm-section:munu-crm-feature:menu-crm-impl"))
+            implementation(project(":features:application-sections:crm-section:munu-crm-feature:menu-crm-api"))
+            implementation(project(":features:application-sections:tape-section:tape-impl"))
+            implementation(project(":features:application-sections:profile-section:profile-feature:profile-api"))
+            implementation(project(":features:application-sections:profile-section:profile-feature:profile-impl"))
+            implementation(project(":features:outhorization-feature:outhorization-screen-impl"))
+            implementation(project(":features:application-sections:profile-section:printer-feature:printer-impl"))
+            implementation(project(":core:network"))
+            api(libs.koin.core)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -58,9 +69,7 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
-            implementation(libs.multiplatform.settings)
-            api(libs.koin.core)
-
+            implementation(libs.kotlinx.datetime)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -94,8 +103,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
         compose = true
@@ -103,16 +112,5 @@ android {
     dependencies {
         debugImplementation(compose.uiTooling)
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
 }
-dependencies {
-    implementation(project(":core"))
-    implementation(project(":core"))
-}
-
 
