@@ -21,8 +21,13 @@ class MainActivity : ComponentActivity() {
         }
 
 
-        PermissionManeger(this).askPermissions(
+        val permissionManeger =  PermissionManeger(this)
+
+        permissionManeger.askPermissions(
             PermissionManeger.PERMISSION.BLUETOOTH_PERMISSION
+        )
+        permissionManeger.askPermissions(
+            PermissionManeger.PERMISSION.CONTACTS_PERMISSION
         )
 
         setContent {

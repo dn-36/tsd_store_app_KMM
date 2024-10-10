@@ -30,7 +30,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-api"))
             implementation(project(":features:application-sections:profile-section:profile-feature:profile-api"))
-
+            implementation(project(":features:application-sections:profile-section:printer-feature:printer-api"))
             implementation(project(":core:app"))
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))

@@ -21,17 +21,18 @@ import com.profile.profile.screens.profile_screen.screens.print.PrintScreen
 import com.project.chats.ProfileScreensApi
 import com.project.chats.WarehouseScreensApi
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.`printer-api`.PrinterScreensApi
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
-import org.koin.mp.KoinPlatform
+import org.koin.mp.KoinPlatform.getKoin
 
 class WarehouseScreen: Screen {
     @Composable
     override fun Content() {
 
-        val warehouseScreens : WarehouseScreensApi = KoinPlatform.getKoin().get()
+        val warehouseScreens : WarehouseScreensApi = getKoin().get()
 
-        val profileScreens : ProfileScreensApi = KoinPlatform.getKoin().get()
-
+        val profileScreens : ProfileScreensApi = getKoin().get()
+        val printScreen:PrinterScreensApi = getKoin().get()
         Box(modifier = Modifier.fillMaxSize().background(Color.White)){
             Column(modifier = Modifier.padding(16.dp),) {
                 Text("Склад", color = Color.Black, fontSize = 20.sp)
@@ -42,7 +43,8 @@ class WarehouseScreen: Screen {
                     warehouseScreens.warehouse(),
                     profileScreens.profile(),
                     FinanceScreen(),
-                    PrintScreen()
+                    printScreen.printer()
+
                 ).Content()
 
             }

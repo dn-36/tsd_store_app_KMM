@@ -16,32 +16,30 @@ class AndroidContactProvider (val context:Context): ContactProviderApi {
 
         var result = listOf<Contact>()
 
-        val requestPermissionLauncher = (context as ComponentActivity).registerForActivityResult(
+       /* val requestPermissionLauncher = (context as ComponentActivity).registerForActivityResult(
             ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
+            if (isGranted) {*/
                 // Разрешение уже есть, продолжаем
                 result =  AndroidContactProvider(context).fetchContact()
-            } else {
+          /*  } else {
                 // Разрешение не предоставлено
             }
 
-        }
+        }*/
         // Проверка разрешения на доступ к контактам
-        when {
+        if(
             ContextCompat.checkSelfPermission(
                 context, Manifest.permission.READ_CONTACTS
-            ) == PackageManager.PERMISSION_GRANTED -> {
+            ) == PackageManager.PERMISSION_GRANTED ) {
 
                 // Разрешение уже есть, продолжаем
                 result = AndroidContactProvider(context).fetchContact()
-            }
-
-            else -> {
+            } else{
                 // Запрашиваем разрешение
-                requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+              //  requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
 
             }
-        }
+
         return result
     }
      private fun fetchContact(): List<Contact> {
