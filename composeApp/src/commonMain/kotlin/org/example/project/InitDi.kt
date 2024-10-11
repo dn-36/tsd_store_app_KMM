@@ -13,7 +13,7 @@ import com.project.`menu-crm-impl`.menuCrmModule
 import com.project.network.network_module
 import com.project.`outhorization-screen-impl`.authorizationModule
 import com.project.tape.tapeScreenModule
-import coreModuleContactProvider
+import contactProviderModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -35,7 +35,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             printerPlatformModule,
             printerScreenModule,
             warehouseScreensModule,
-            coreModuleContactProvider
+            contactProviderModule
         )
     }
 }

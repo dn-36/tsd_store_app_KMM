@@ -14,4 +14,5 @@ val network_module = module {
     factory {
         AuthorizationClient(get())
     }
+
 }

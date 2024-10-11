@@ -48,7 +48,7 @@ import project.core.resources.cancel
 import project.core.resources.down_arrow
 
 
-object CreateNotesScreen : Screen {
+class CreateNotesScreen : Screen {
     val vm = CreateNotesViewModel()
 
     var usersNoteCreated = mutableStateListOf<User>()

@@ -30,12 +30,12 @@ import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import org.example.project.presentation.crm_feature.notes_screen.model.Notes
 import org.example.project.presentation.crm_feature.notes_screen.util.formatDateTime
 import org.example.project.presentation.crm_feature.notes_screen.viewmodel.NotesIntents
-import org.example.project.presentation.crm_feature.notes_screen.viewmodel.NotesViewModel
+import com.example.notes_screens_impl.screens.notes.viewmodel.NotesViewModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.plus
 
-object NotesScreen:Screen{
+class NotesScreen:Screen{
     val vm = NotesViewModel()
     @Composable
     override fun Content() {

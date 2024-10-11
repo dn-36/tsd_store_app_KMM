@@ -13,7 +13,6 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.project.network.Navigation
 import com.project.`local-storage`.`profile-storage`.KeyValueStorageApi
-import com.project.network.notes_network.NotesApi
 import org.koin.mp.KoinPlatform.getKoin
 
 class ProfileViewModel:ViewModel() {

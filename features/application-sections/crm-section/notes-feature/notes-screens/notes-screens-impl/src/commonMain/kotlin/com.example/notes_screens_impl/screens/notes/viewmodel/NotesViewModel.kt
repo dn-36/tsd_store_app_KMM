@@ -1,10 +1,9 @@
-package org.example.project.presentation.crm_feature.notes_screen.viewmodel
+package com.example.notes_screens_impl.screens.notes.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.notes_screens_impl.screens.notes.viewmodel.NotesState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -16,6 +15,7 @@ import com.project.network.notes_network.NotesApi
 import com.project.network.notes_network.model.NoteResponse
 import com.project.network.notes_network.model.removeHtmlTags
 import org.example.project.presentation.crm_feature.edit_note_screen.screen.EditNoteScreen
+import org.example.project.presentation.crm_feature.notes_screen.viewmodel.NotesIntents
 
 class NotesViewModel:ViewModel() {
     var notesState by mutableStateOf(NotesState())
@@ -28,7 +28,7 @@ class NotesViewModel:ViewModel() {
     }
     fun createNotesIntent(){
 
-        Navigation.navigator.push(CreateNotesScreen)
+        Navigation.navigator.push(CreateNotesScreen())
     }
     fun editNote(note: NoteResponse){
 

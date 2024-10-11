@@ -4,5 +4,7 @@ import com.example.`notes-screens-api`.NotesScreensApi
 import org.koin.dsl.module
 
 val notesModule = module {
-    NotesScreensImpl() as NotesScreensApi
+    factory {
+        NotesScreensImpl() as NotesScreensApi
+    }
 }

@@ -45,6 +45,7 @@ kotlin {
             implementation(project(":core:app"))
             implementation(project(":core:local-storage"))
             implementation(project(":core:contact-provider"))
+            implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api"))
             implementation(project(":features:outhorization-feature:outhorization-screen-api"))
             implementation(project(":features:application-sections:organization-section:organization-api"))
             implementation(project(":features:application-sections:chat-section:chats-api"))

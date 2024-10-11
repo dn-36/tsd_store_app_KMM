@@ -10,7 +10,7 @@ import org.koin.mp.KoinPlatform.getKoin
 
 class NotesScreensImpl: NotesScreensApi {
     override fun createNotesScreen(): Screen {
-    return  CreateNotesScreen
+    return  CreateNotesScreen()
     }
 
     override fun editNoteScreen(): Screen {
@@ -18,6 +18,6 @@ class NotesScreensImpl: NotesScreensApi {
     }
 
     override fun notesScreen(): Screen {
-      return NotesScreen
+      return NotesScreen()
     }
 }

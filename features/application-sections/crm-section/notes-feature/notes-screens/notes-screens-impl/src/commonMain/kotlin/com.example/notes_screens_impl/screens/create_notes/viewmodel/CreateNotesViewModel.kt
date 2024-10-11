@@ -67,7 +67,7 @@ class CreateNotesViewModel():ViewModel() {
 
             notesApi.createNote(note)
 
-            Navigation.navigator.push(NotesScreen)
+            Navigation.navigator.push(NotesScreen())
 
             createNotesState = createNotesState.copy(
                 name = "",
@@ -86,7 +86,7 @@ class CreateNotesViewModel():ViewModel() {
 
 }
     fun cancel(){
-        Navigation.navigator.push(NotesScreen)
+        Navigation.navigator.push(NotesScreen())
 
         createNotesState = createNotesState.copy(
             name = "",
@@ -102,7 +102,7 @@ class CreateNotesViewModel():ViewModel() {
     }
     fun back(){
 
-        Navigation.navigator.push(NotesScreen)
+        Navigation.navigator.push(NotesScreen())
 
         createNotesState = createNotesState.copy(
             name = "",

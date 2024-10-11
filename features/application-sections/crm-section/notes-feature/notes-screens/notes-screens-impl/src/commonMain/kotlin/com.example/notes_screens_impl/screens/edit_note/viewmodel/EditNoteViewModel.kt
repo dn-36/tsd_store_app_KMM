@@ -157,7 +157,7 @@ class EditNoteViewModel : ViewModel() {
                 )
             } else {
 
-                Navigation.navigator.push(NotesScreen)
+                Navigation.navigator.push(NotesScreen())
 
             }
         }
@@ -424,7 +424,7 @@ class EditNoteViewModel : ViewModel() {
 
             notesApi.updateNote(noteId = "${note.ui}", updatedNote = updatedNote)
 
-            Navigation.navigator.push(NotesScreen)
+            Navigation.navigator.push(NotesScreen())
 
         }
     }
@@ -440,7 +440,7 @@ class EditNoteViewModel : ViewModel() {
 
             notesApi.deleteNote(noteId = "${note.ui}")
 
-            Navigation.navigator.push(NotesScreen)
+            Navigation.navigator.push(NotesScreen())
 
         }
 

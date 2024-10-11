@@ -11,12 +11,12 @@ class MenuViewModel:ViewModel() {
     fun processIntent(intent: MenuIntents){
         when(intent){
 
-            is MenuIntents.ClickedBookmarks -> {clickBookmarksIntent()}
+            is MenuIntents.ClickedBookmarks -> {shownotesIntent()}
 
         }
     }
 
-    fun clickBookmarksIntent(){
+    fun shownotesIntent(){
 
         val notesScreen: NotesScreensApi = getKoin().get()
 
