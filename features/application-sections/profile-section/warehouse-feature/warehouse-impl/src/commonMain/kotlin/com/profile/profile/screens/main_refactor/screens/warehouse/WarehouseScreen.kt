@@ -13,14 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import com.profile.profile.screens.profile_screen.screens.finance.FinanceScreen
-import com.profile.profile.screens.profile_screen.screens.print.PrintScreen
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.screen.ArrivalAndConsumptionScreen
 
 import com.project.chats.ProfileScreensApi
 import com.project.chats.WarehouseScreensApi
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.`printer-api`.PrinterScreensApi
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.koin.mp.KoinPlatform.getKoin
@@ -42,7 +38,7 @@ class WarehouseScreen: Screen {
                 MenuBottomBarWarehouse().init(
                     warehouseScreens.warehouse(),
                     profileScreens.profile(),
-                    FinanceScreen(),
+                    ArrivalAndConsumptionScreen(),
                     printScreen.printer()
 
                 ).Content()
