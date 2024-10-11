@@ -1,4 +1,4 @@
-package com.project.chats.model
+package com.project.chats.screens.chats.model
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,26 +22,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.project.nika_screens_chats.list_dialog_feature.viewmodel.ListDialogIntents
-import org.example.project.nika_screens_chats.list_dialog_feature.viewmodel.ListDialogViewModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
-import project.core.resources.user
 import project.core.resources.user_chats
 
+
 @Composable
-fun listDialogItem(vm : ListDialogViewModel){
+fun listDialogItem(
+    titleChat:String,
+    //vm : ChatsViewModel
+    onClickDialogue:()->Unit
+){
+
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp).clickable(
         indication = null, // Отключение эффекта затемнения
         interactionSource = remember { MutableInteractionSource() })
-    { vm.processIntent(ListDialogIntents.DialogueSelection) },
+        {onClickDialogue()},
+    //{ vm.processIntent(ChatsIntents.DialogueSelection) },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically){
         Image(painter = painterResource(Res.drawable.user_chats),contentDescription = null,
             modifier = Modifier.size(50.dp))
         Spacer(modifier = Modifier.width(10.dp))
         Column(modifier = Modifier.height(60.dp), verticalArrangement = Arrangement.SpaceBetween) {
-            Text("Название чата", fontSize = 18.sp)
+            Text(titleChat, fontSize = 18.sp)
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(
                     "последнее сообщение",
