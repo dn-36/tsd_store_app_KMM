@@ -1,4 +1,4 @@
-package com.project.chats.screens.chats.model
+package com.project.chats.screens.chats.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,14 +30,16 @@ import project.core.resources.user_chats
 @Composable
 fun listDialogItem(
     titleChat:String,
+    lastMassage:String,
+    userId:String,
     //vm : ChatsViewModel
-    onClickDialogue:()->Unit
+    onClickDialogue:(String)->Unit
 ){
 
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp).clickable(
         indication = null, // Отключение эффекта затемнения
         interactionSource = remember { MutableInteractionSource() })
-        {onClickDialogue()},
+        {onClickDialogue(userId)},
     //{ vm.processIntent(ChatsIntents.DialogueSelection) },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically){
@@ -48,7 +50,7 @@ fun listDialogItem(
             Text(titleChat, fontSize = 18.sp)
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(
-                    "последнее сообщение",
+                    lastMassage,
                     fontSize = 13.sp,
                     color = Color.LightGray
                 )

@@ -10,7 +10,7 @@ import org.example.project.app.moduls_di.appModule
 import com.project.`local-storage`.`profile-storage`.localStorageModule
 import com.project.organizationScreenModule
 import com.project.`menu-crm-impl`.menuCrmModule
-import com.project.network.network_module
+import com.project.network.networkModule
 import com.project.`outhorization-screen-impl`.authorizationModule
 import com.project.tape.tapeScreenModule
 import contactProviderModule
@@ -31,7 +31,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             appModule,
             authorizationModule,
             notesModule,
-            network_module,
+            networkModule,
             printerPlatformModule,
             printerScreenModule,
             warehouseScreensModule,

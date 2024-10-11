@@ -1,9 +1,14 @@
-package org.example.project.nika_screens_chats.list_dialog_feature.viewmodel
+package com.project.chats.screens.chats.viewmodel
 
-sealed class ListDialogIntents {
+import kotlinx.coroutines.CoroutineScope
 
-    object DialogueSelection : ListDialogIntents()
+sealed class ChatsIntents {
 
-    object AddChat : ListDialogIntents()
+    data class DialogueSelection(
+        val scope:CoroutineScope,
+        val userId:String)
+        : ChatsIntents()
 
+    object AddChat : ChatsIntents()
+    data class SetScreen(val scope:CoroutineScope) : ChatsIntents()
 }

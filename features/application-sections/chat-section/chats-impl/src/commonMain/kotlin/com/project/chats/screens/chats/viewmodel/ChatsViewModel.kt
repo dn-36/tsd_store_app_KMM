@@ -1,35 +1,62 @@
 package org.example.project.nika_screens_chats.list_dialog_feature.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.project.chats.screens.chats.domain.GetListChatsUseCase
+import com.project.chats.screens.chats.viewmodel.ChatsIntents
+import com.project.chats.screens.chats.viewmodel.ChatsState
 import com.project.network.Navigation
+import com.project.network.chats_network.ChatsApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.example.project.nika_screens_chats.add_chat_feature.screen.SelectContactsScreen
 import org.example.project.nika_screens_chats.dialog_feature.screen.DialogScreen
 
-import org.koin.mp.KoinPlatform
+class ChatsViewModel(
+    val getListChatsUseCase: GetListChatsUseCase
+) : ViewModel() {
 
-class ListDialogViewModel : ViewModel() {
+    private var isSeted = false
+    var state = MutableStateFlow(ChatsState())
+        private set
 
-    fun processIntent(intent: ListDialogIntents) {
+    fun processIntent(intent: ChatsIntents) {
         when (intent) {
-            is ListDialogIntents.DialogueSelection -> {
-                dialogueSelection()
+            is ChatsIntents.DialogueSelection -> {
+                dialogueSelection(intent.userId,intent.scope)
             }
-            is ListDialogIntents.AddChat -> {
+            is ChatsIntents.AddChat -> {
                 addChat()
+            }
+            is ChatsIntents.SetScreen -> {
+                setScreen(intent.scope)
             }
         }
     }
 
-    fun dialogueSelection() {
-
+    fun dialogueSelection( userId:String,coroutineScope: CoroutineScope) {
         Navigation.navigator.push(DialogScreen())
-
+        coroutineScope.launch(Dispatchers.IO){
+            println("qqqqq: ${ChatsApi().getListMassengers(userId)}")
+        }
     }
 
     fun addChat() {
-
         Navigation.navigator.push(SelectContactsScreen())
-
     }
 
+    fun setScreen( scope: CoroutineScope) {
+        if (!isSeted) {
+            scope.launch(Dispatchers.IO) {
+                isSeted = true
+                state.update {
+                    it.copy(getListChatsUseCase.execute())
+                }
+            }
+
+        }
+    }
 }
