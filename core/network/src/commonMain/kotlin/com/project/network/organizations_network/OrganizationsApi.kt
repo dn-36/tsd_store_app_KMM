@@ -1,6 +1,7 @@
 package com.project.network.organizations_network
 
 import com.project.network.httpClientEngine
+import com.project.network.organizations_network.model.ActiveOrganizationRequest
 import com.project.network.organizations_network.model.Response
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -47,14 +48,43 @@ object OrganizationsApi {
             return response.body<List<Response>>()
         }
 
-    // Функция для установки активной организации
+    // Функция для установки активной организации с обработкой ошибок
     suspend fun setActiveOrganization(organizationUi: String): Boolean {
-        val response: HttpResponse = client.post("https://delta.online/api/active-company") {
-            contentType(ContentType.Application.Json)
-            setBody(organizationUi)
-        }
+        return try {
+            val response: HttpResponse = client.post("https://delta.online/api/active-company") {
+                contentType(ContentType.Application.Json)
+                setBody(ActiveOrganizationRequest(ui = organizationUi))
+            }
+            println(" ////////////////////++++++++++")
+            println("Смена активной организации ${response}")
+            println(" ////////////////////++++++++++")
+            // Проверяем успешность запроса
+            response.status == HttpStatusCode.OK
 
-        // Проверяем успешность запроса
-        return response.status == HttpStatusCode.OK
+        } catch (e: Exception) {
+            // Логируем или выводим информацию об ошибке
+            println("Ошибка при установке активной организации: ${e.message}")
+            false
+        }
+    }
+
+    // Функция для удаления организации
+    suspend fun deleteOrganization(organizationUi: String): Boolean {
+        return try {
+            val response: HttpResponse = client.post("https://delta.online/api/delete-company") {
+                contentType(ContentType.Application.Json)
+                setBody(ActiveOrganizationRequest(ui = organizationUi))
+            }
+            println(" ////////////////////++++++++++")
+            println("Удаление организации  ${response}")
+            println(" ////////////////////++++++++++")
+            // Проверяем успешность запроса
+            response.status == HttpStatusCode.OK
+
+        } catch (e: Exception) {
+            // Логируем или выводим информацию об ошибке
+            println("Ошибка при удалении организации : ${e.message}")
+            false
+        }
     }
 }

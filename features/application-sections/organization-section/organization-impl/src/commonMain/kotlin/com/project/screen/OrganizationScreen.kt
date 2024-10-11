@@ -1,6 +1,9 @@
 package com.project.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,10 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +43,10 @@ import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.menu.screen.TapeScreenApi
 import com.project.viewmodel.OrganizationsIntents
 import com.project.viewmodel.OrganizationsViewModel
+import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
+import project.core.resources.Res
+import project.core.resources.cancel
 
 class OrganizationScreen(): Screen {
 
@@ -62,27 +70,58 @@ class OrganizationScreen(): Screen {
             Column(modifier = Modifier.padding(16.dp),) {
                 Text("Организации", color = Color.Black, fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn { items(vm.organizationsState.allOrganizations){item ->
+                LazyColumn { itemsIndexed(vm.organizationsState.allOrganizations){index,item ->
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(modifier = Modifier.size(30.dp).clip(CircleShape)
-                            .background(Color.Green))
+                    Box() {
+                        Row(verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(vertical = 8.dp).clickable(
+                                indication = null, // Отключение эффекта затемнения
+                                interactionSource = remember { MutableInteractionSource() })
+                            {
+                                vm.processIntent(
+                                    OrganizationsIntents.ChoosingActiveOrganization(
+                                        scope,
+                                        item.company!!.ui!!
+                                    )
+                                )
+                            }) {
 
-                        Spacer(modifier = Modifier.width(10.dp))
+                            Box(
+                                modifier = Modifier.size(30.dp).clip(CircleShape)
+                                    .background(vm.organizationsState.listColorActiveOrganizations[index])
+                            )
 
-                        Column(modifier = Modifier.height(60.dp), verticalArrangement = Arrangement.SpaceBetween) {
+                            Spacer(modifier = Modifier.width(10.dp))
 
-                            Text(item.company.name, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                            Column(
+                                modifier = Modifier.height(60.dp),
+                                verticalArrangement = Arrangement.SpaceBetween
+                            ) {
 
-                            Text("${item.company.url}", fontSize = 12.sp, color = Color.Blue)
+                                Text(
+                                    item.company!!.name!!,
+                                    fontSize = 17.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
 
-                            Box(modifier = Modifier.height(1.dp).fillMaxWidth(0.9f).background(Color.LightGray))
+                                Text("${item.company!!.url}", fontSize = 12.sp, color = Color.Blue)
 
+                                Box(
+                                    modifier = Modifier.height(1.dp).fillMaxWidth(0.9f)
+                                        .background(Color.LightGray)
+                                )
+
+                            }
                         }
-                    }
 
+                       Image(painter = painterResource(Res.drawable.cancel),contentDescription = null,
+                           modifier = Modifier.size(10.dp).align(Alignment.TopEnd).clickable(
+                               indication = null, // Отключение эффекта затемнения
+                               interactionSource = remember { MutableInteractionSource() })
+                           { vm.processIntent(OrganizationsIntents.DeleteOrganization(scope,item.company!!.ui!!)) })
+                    }
                 }
-                }
+              }
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
                 MenuBottomBar().init(

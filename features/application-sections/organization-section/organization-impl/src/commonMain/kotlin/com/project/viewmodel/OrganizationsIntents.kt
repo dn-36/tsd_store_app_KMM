@@ -4,4 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 
 sealed class OrganizationsIntents {
     data class SetScreen(val coroutineScope: CoroutineScope):OrganizationsIntents()
+    data class ChoosingActiveOrganization(val coroutineScope: CoroutineScope,val ui:String):OrganizationsIntents()
+    data class DeleteOrganization(val coroutineScope: CoroutineScope,val ui:String):OrganizationsIntents()
 }
