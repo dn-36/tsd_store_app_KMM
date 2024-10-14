@@ -41,12 +41,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.project.network.organizations_network.model.Response
+import com.project.network.warehouse_network.ResponseItem
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.cancel
 import project.core.resources.down_arrow
 
-class CreateWarehouseComponent : Screen {
+class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>): Screen {
 
     var name by mutableStateOf("")
 
@@ -54,7 +56,7 @@ class CreateWarehouseComponent : Screen {
 
     var expandedLocation by mutableStateOf(false)
 
-    var selectedLocation = mutableStateListOf<String>()
+    var selectedLocation = mutableStateListOf<ResponseItem>()
     @Composable
     override fun Content() {
 
@@ -125,8 +127,8 @@ class CreateWarehouseComponent : Screen {
                                     shape = RoundedCornerShape(8.dp)
                                 ) {}
                                 LazyColumn {
-                                    itemsIndexed(listOf("привет","пока","привет","пока","привет","пока")) { index, item ->
-                                        Text(item,
+                                    itemsIndexed(listAllLocations) { index, item ->
+                                            Text(item.name!!,
                                             fontSize = 20.sp,
                                             modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
                                                 .clickable(
@@ -135,23 +137,24 @@ class CreateWarehouseComponent : Screen {
 
                                                 { selectedLocation.add(item)
                                                     expandedLocation = false
-                                                })
-                                    }
+                                                }) }
+
                                 }
                             }
                         }
                         LazyColumn (modifier = Modifier.fillMaxWidth()) {
                             items(selectedLocation){item ->
-                                Box(modifier = Modifier.padding(vertical = 5.dp).clip(RoundedCornerShape(10.dp))
-                                    .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))){
-                                    Text(text = item,color = Color.White, fontSize = 15.sp, modifier = Modifier.padding(8.dp).align(
-                                        Alignment.CenterStart))
-                                    Image(painter = painterResource(Res.drawable.cancel),contentDescription = null,
-                                        modifier = Modifier.padding(8.dp).size(10.dp).align(Alignment.TopEnd).clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
-                                        {selectedLocation.remove(item)})
-                                }
+                                    Box(modifier = Modifier.padding(vertical = 5.dp).clip(RoundedCornerShape(10.dp))
+                                        .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))){
+                                        Text(text = item.name!!,color = Color.White, fontSize = 15.sp, modifier = Modifier.padding(8.dp).align(
+                                            Alignment.CenterStart))
+                                        Image(painter = painterResource(Res.drawable.cancel),contentDescription = null,
+                                            modifier = Modifier.padding(8.dp).size(10.dp).align(Alignment.TopEnd).clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
+                                            {selectedLocation.remove(item)})
+                                    }
+
                             }
                         }
                     }

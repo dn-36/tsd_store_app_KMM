@@ -4,19 +4,7 @@ import com.project.core_app.menu_bottom_bar.model.CountryData
 
 
 object ConstData {
-    const val TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMz" +
-            "FmMjEyNTljYTMwOWU0YTRiMDU5NWMyODQ0ZmIzMWM4MDY0YTE5YmZlZGYwYjA4OWYwYmQzYjU1ZDljZGMwO" +
-            "DlkNDRiMDFmZjA3ZTgwNmEiLCJpYXQiOjE3MjYyNDAwOTcuODkyODYyLCJuYmYiOjE3MjYyNDAwOTcuODky" +
-            "ODY1LCJleHAiOjE3NTc3NzYwOTcuODU4NzQyLCJzdWIiOiIyNTQiLCJzY29wZXMiOlsidXNlcl9zZXJ2aWN" +
-            "lIl19.zfXlDgMPv3YeW-CJ_0851uuPR3PJuVCFBEjtq7FGcAVaShmy6xI9ZAAveKTvN5_8VOVWlZOTgu9_Y" +
-            "2b2FjuRWiKmzcZChbHUFy7PGhVUJC33sL7-er9eav50I-dMdP7w7J5KlCqZqru8x4TCqaR0VgOihurz8cWJ" +
-            "0j9qEipUe8aj9g2DAymzI7Cv7J5LgMbz8iCpAlhzEjJ7-u3mN0mMFjWvSbXqMT6KmxYVPbDjC1NHJ_wXKaA" +
-            "7dMTN32seXW0OQgQsx2hMm6WB3GWZpY-szyiSPNqG4c6fZEjfMUH2mVAjCpUvvJasva6_TdrInQpnf-aYXI" +
-            "e27qgCFHMD8X0WfAj4RdWAZ3bZFzEik4n5ZFzT8Bg7Hu3BRUVWFZuSVekGPn7hrvF3yhrZLHF_jXVL0Y-Hv" +
-            "ywbxvNrTPYI1QW5J744NUKY423ninLKflPxnIiSzPFGLj-iHL-3qPOQKPz6F_fzcx-SdwSROPl244mNUnlf" +
-            "jJq7CeQKYyzLHK7ZoDXYQycpAV7dIKrZHoW-2F0FC49YyAKf8dHKLfkjX-rYrmg_QeAtng31rSpADtpimug" +
-            "H9Gzv6Ak3lOvSHHJAfDFPvPpbNxixgt36y5DvCZPlPcFpp-KUhqIfqPYRFUAO_qCamaAALpQyknOYCB1zW" +
-            "cedzSX-j_oyMEQcECcu9Y2MjpE"
+    const val TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNDgwYmI4YTZmODc3M2M5NzZlNjczODMzYmRjODEwNzlhZWE3MTlmYWQ3M2Y3YTMyODkxZTc0ODk4YjhhNDIxZWY2NjAwNTZkOGMzYjBjYjEiLCJpYXQiOjE3Mjg5MjAxNTguNzA5NDA5LCJuYmYiOjE3Mjg5MjAxNTguNzA5NDEzLCJleHAiOjE3NjA0NTYxNTguNjk0NTYzLCJzdWIiOiIyODIiLCJzY29wZXMiOlsidXNlcl9zZXJ2aWNlIl19.1VyqXO-OQbnXx--dH1kGNp9Jad8H089w2U3nxG72C5ftOVvRd3dYhnaiaRFVSV2oDsLBXVAgdQ7NikGCkT6crMd7kZ4HUO6feHJwgBzmUZ0z3t2yjGSTCuhkF8zdT32WlGSLe2vdC3RZvkajKnsj0XeKBGLfUVW6cv8QF1FH4DYBTWIMPftGlWQHiJzl6qmgB--3tbJvdALxn4jd-i9DBcbF8Qwf1Gj9eJJxsqw-2CIw3i_lgx-2IgPKiZ1LCTRWum_Nn5QV8R-2K1CQGAOXzsI1VcQqSUWKviwNG1Z9Wn5dUpeahh-3R8KpD1zbBoSMXYM-g-4GmiSJmh5rZbtFygTtTrdi1zcNGSBs4jMmt9fwDSvGOYSJ3BFK6fn-PO9WUsPX-YM2luhkG-fgpJQDK8yPm3iNSkq7nyfiGw6tiVC8H94CSKrW_RkLzjIw_8BNuaiByHNPD3M6E8f7rOX24xq4D56lEMlqVNzYpfTjtd8vO-e0zseB_xC_xxhDLivfzvmUKEVHdTurKKD_YfYPTP6LGGlh0kxmAluPIYMApu7_FMIDHWwXi64wKQD1vLS9I-758rMIUaw7xDM36t4LYHvTXOjnfWfCoK4Q4oExB_jSDUcKzt9ZpNJhSt-la6n75ADkiDh7zgRBlNpT1-kMViA-PKdlh-vEaXTJBaGjfNc"
    val  LIB_COUNTRIES: List<CountryData> = mutableListOf(
         CountryData("ad", "+376", "Andorra"),
         CountryData("ae", "+971", "United Arab Emirates (UAE)"),

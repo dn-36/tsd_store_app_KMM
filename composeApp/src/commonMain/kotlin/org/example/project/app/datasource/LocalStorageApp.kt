@@ -10,5 +10,4 @@ class LocalStorageApp(private val sharedPrefs: AuthorizationStorage): LocalStora
       sharedPrefs.saveUsername(number)
     }
 
-
 }

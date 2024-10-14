@@ -47,28 +47,26 @@ class ProfileViewModel:ViewModel() {
 
             profileState.isUsed.value = false
 
-           // val token = ConstData.TOKEN
+            val token = ConstData.TOKEN
 
-           // NotesApi.token = token
+            NotesApi.token = token
 
-           // val notesApi = NotesApi
+            val notesApi = NotesApi
 
 
 
             coroutineScope.launch(Dispatchers.IO) {
 
-               // val user = notesApi.getUsers().find { it.phone == keyValueStorage.getUsername()!! }
+                val user = notesApi.getUsers().find { it.phone == keyValueStorage.getUsername()!! }
 
-                //println("${notesApi.getUsers()}")
+                println("${notesApi.getUsers()}")
 
                 profileState = profileState.copy(
-                   // name = user!!.name!!,
+                    name = user!!.name!!,
                     numberPhone = keyValueStorage.getUsername()!!
                 )
 
                 println("${keyValueStorage.getUsername()!!}")
-                //println("${keyValueStorage.getCurrentNumber("currentName")}")
-
             }
         }
     }

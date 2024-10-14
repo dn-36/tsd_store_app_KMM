@@ -15,6 +15,7 @@ import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
@@ -48,6 +49,15 @@ object OrganizationsApi {
             println(" ////////////////////++++++++++")
             return response.body<List<Response>>()
         }
+
+    // Получение списка организаций
+    suspend fun getOr(): String {
+        val response = client.get("https://delta.online/api/company")
+        println(" ////////////////////++++++++++")
+        println(" ${response}")
+        println(" ////////////////////++++++++++")
+        return response.bodyAsText()
+    }
 
     // Функция для установки активной организации с обработкой ошибок
     suspend fun setActiveOrganization(organizationUi: String): Boolean {

@@ -8,6 +8,7 @@ class AuthorizationStorage(private val settings: Settings) {
 
     companion object {
         private const val USERNAME_KEY = "username"
+
     }
 
     fun saveUsername(username: String) {
@@ -17,4 +18,5 @@ class AuthorizationStorage(private val settings: Settings) {
     fun getUsername(): String? {
         return settings[USERNAME_KEY]
     }
+
 }

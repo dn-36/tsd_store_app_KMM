@@ -3,16 +3,22 @@ package com.project.network.authorization_network
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import util.NetworkError
 import util.Result
 
 class AuthorizationClient(
     private val httpClient: HttpClient
 ) {
+    var userToken: String? = null  // Переменная для хранения токена
 
     // 1. Регистрация: создание кода
     suspend fun registerCreateCode(phone: String): Result<String, NetworkError> {
@@ -53,7 +59,26 @@ class AuthorizationClient(
         }
 
         return when (response.status.value) {
-            in 200..299 -> Result.Success("Registration successful")
+            in 200..299 -> {
+                // Извлекаем тело ответа
+                val responseBody = response.bodyAsText()
+
+                println("${responseBody}")
+                val json = Json.parseToJsonElement(responseBody).jsonObject
+
+                // Пытаемся получить токен пользователя
+                userToken = json["access_token"]?.jsonPrimitive?.contentOrNull
+
+                if (userToken != null) {
+                    println("User token: $userToken")  // Выводим токен для отладки
+                    Result.Success("Login successful")  // Возвращаем успешный результат
+                } else {
+                    println("user token: null")
+                    Result.Error(NetworkError.UNKNOWN)  // Если токен не найден
+                }
+                return Result.Success("Registration successful")
+            }
+
             401 -> Result.Error(NetworkError.UNAUTHORIZED)
             in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
             else -> Result.Error(NetworkError.UNKNOWN)
@@ -99,7 +124,25 @@ class AuthorizationClient(
         }
 
         return when (response.status.value) {
-            in 200..299 -> Result.Success("Login successful")
+            in 200..299 -> {
+                // Извлекаем тело ответа
+                val responseBody = response.bodyAsText()
+
+                println("${responseBody}")
+                val json = Json.parseToJsonElement(responseBody).jsonObject
+
+                // Пытаемся получить токен пользователя
+                userToken = json["access_token"]?.jsonPrimitive?.contentOrNull
+
+                if (userToken != null) {
+                    println("User token: $userToken")  // Выводим токен для отладки
+                    Result.Success("Login successful")  // Возвращаем успешный результат
+                } else {
+                    println("user token: null")
+                    Result.Error(NetworkError.UNKNOWN)  // Если токен не найден
+                }
+                return Result.Success("Login successful")
+            }
             401 -> Result.Error(NetworkError.UNAUTHORIZED)
             in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
             else -> Result.Error(NetworkError.UNKNOWN)

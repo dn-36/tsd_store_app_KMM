@@ -5,4 +5,5 @@ interface AuthorizationStorageApi {
     fun saveUserNumber(username: String)
 
     fun getUserNumber(): String?
+
 }
