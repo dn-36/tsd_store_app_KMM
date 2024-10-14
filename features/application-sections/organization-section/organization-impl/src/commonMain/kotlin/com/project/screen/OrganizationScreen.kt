@@ -16,10 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -37,6 +35,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.project.menu.screen.OrganizationScreenApi
 import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
+import com.project.component.CreateOrganization
 import com.project.network.Navigation
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.`menu-crm-api`.MenuCrmScreenApi
@@ -47,6 +46,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.cancel
+import project.core.resources.plus
 
 class OrganizationScreen(): Screen {
 
@@ -123,14 +123,25 @@ class OrganizationScreen(): Screen {
                 }
               }
             }
-            Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                MenuBottomBar().init(
-                    menuCrmScreens.MenuCrm(),
-                    profileScreens.profile() ,
-                    organizationScreens.organization(),
-                    chatsScreens.chatsScreen(),
-                    tapeScreens.tape(),
-                ) .Content()
+
+            Column(horizontalAlignment = Alignment.End, modifier = Modifier.align(Alignment.BottomCenter)) {
+
+                Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
+                    modifier = Modifier.padding(16.dp).size(70.dp)
+                        .clickable(
+                            indication = null, // Отключение эффекта затемнения
+                            interactionSource = remember { MutableInteractionSource() })
+                        {vm.processIntent(OrganizationsIntents.AddOrganizationNavigate)})
+
+                Box(modifier = Modifier) {
+                    MenuBottomBar().init(
+                        menuCrmScreens.MenuCrm(),
+                        profileScreens.profile(),
+                        organizationScreens.organization(),
+                        chatsScreens.chatsScreen(),
+                        tapeScreens.tape(),
+                    ).Content()
+                }
             }
         }
     }

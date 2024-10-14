@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.project.chats.model.listDialogItem
+import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import org.example.project.nika_screens_chats.list_dialog_feature.viewmodel.ListDialogIntents
 import org.example.project.nika_screens_chats.list_dialog_feature.viewmodel.ListDialogViewModel
 
@@ -49,11 +50,18 @@ class ChatsScreen : Screen {
                     }
                 }
             }
-            Image(painter = painterResource(Res.drawable.plus),contentDescription = null,
-                modifier = Modifier.padding(16.dp).size(60.dp).align(Alignment.BottomEnd).clickable(
-                    indication = null, // Отключение эффекта затемнения
-                    interactionSource = remember { MutableInteractionSource() })
-                { vm.processIntent(ListDialogIntents.AddChat) })
+            Column(horizontalAlignment = Alignment.End, modifier = Modifier.align(Alignment.BottomCenter)) {
+
+                Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
+                    modifier = Modifier.padding(16.dp).size(60.dp).clickable(
+                        indication = null, // Отключение эффекта затемнения
+                        interactionSource = remember { MutableInteractionSource() })
+                    { vm.processIntent(ListDialogIntents.AddChat) })
+
+                Box(modifier = Modifier) {
+                    MenuBottomBar().Content()
+                }
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.project.network.organizations_network
 
 import com.project.network.httpClientEngine
 import com.project.network.organizations_network.model.ActiveOrganizationRequest
+import com.project.network.organizations_network.model.CreateOrganizationRequest
 import com.project.network.organizations_network.model.Response
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -84,6 +85,26 @@ object OrganizationsApi {
         } catch (e: Exception) {
             // Логируем или выводим информацию об ошибке
             println("Ошибка при удалении организации : ${e.message}")
+            false
+        }
+    }
+
+    // Функция для создания организации
+    suspend fun createOrganization(name: String, url: String?): Boolean {
+        return try {
+            val response: HttpResponse = client.post("https://delta.online/api/company") {
+                contentType(ContentType.Application.Json)
+                setBody(CreateOrganizationRequest(name, url))
+            }
+            println(" ////////////////////++++++++++")
+            println("Создание организации  ${response}")
+            println(" ////////////////////++++++++++")
+            // Проверяем успешность запроса
+            response.status == HttpStatusCode.OK
+
+        } catch (e: Exception) {
+            // Логируем или выводим информацию об ошибке
+            println("Ошибка при добавлении организации : ${e.message}")
             false
         }
     }

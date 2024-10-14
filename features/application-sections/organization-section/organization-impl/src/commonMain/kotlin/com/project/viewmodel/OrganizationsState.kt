@@ -11,6 +11,8 @@ data class OrganizationsState(
 
     val isUsed: MutableState<Boolean> = mutableStateOf(true),
 
-    val listColorActiveOrganizations:MutableList<Color> = mutableListOf()
+    val isAddOrganization: MutableState<Boolean> = mutableStateOf(false),
+
+    val listColorActiveOrganizations:MutableList<Color> = mutableListOf(),
 
 )
