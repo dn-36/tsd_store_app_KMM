@@ -60,10 +60,10 @@ class ProfileViewModel:ViewModel() {
 
                 profileState = profileState.copy(
                    // name = user!!.name!!,
-                    numberPhone = keyValueStorage.getCurrentName ()!!
+                    numberPhone = keyValueStorage.getCurrentNumber()!!
                 )
 
-                println("${keyValueStorage.getCurrentName ()!!}")
+                println("${keyValueStorage.getCurrentNumber()!!}")
                 //println("${keyValueStorage.getCurrentNumber("currentName")}")
 
             }
