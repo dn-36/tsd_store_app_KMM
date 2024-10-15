@@ -28,7 +28,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":features:outhorization-feature:outhorization-screen-api"))
+            implementation(project(":features:authorization-feature:authorization-screen-api"))
             implementation(project(":core:app"))
             implementation(project(":core:network"))
             implementation(project(":core:recources"))
