@@ -1,9 +1,7 @@
-package org.example.project.nika_screens_chats.list_dialog_feature.viewmodel
+package com.project.chats.screens.chats.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.project.chats.screens.chats.domain.GetListChatsUseCase
-import com.project.chats.screens.chats.viewmodel.ChatsIntents
-import com.project.chats.screens.chats.viewmodel.ChatsState
 import com.project.network.Navigation
 import com.project.network.chats_network.ChatsApi
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.example.project.nika_screens_chats.add_chat_feature.screen.SelectContactsScreen
-import org.example.project.nika_screens_chats.dialog_feature.screen.DialogScreen
+import com.project.chats.screens.dialog.screen.DialogScreen
 
 class ChatsViewModel(
     val getListChatsUseCase: GetListChatsUseCase
@@ -37,10 +35,12 @@ class ChatsViewModel(
         }
     }
 
-    fun dialogueSelection( userId:String,coroutineScope: CoroutineScope) {
-        Navigation.navigator.push(DialogScreen())
+    fun dialogueSelection(chatsUi:String, coroutineScope: CoroutineScope) {
         coroutineScope.launch(Dispatchers.IO){
-            println("qqqqq: ${ChatsApi().getListMassengers(userId)}")
+            println("--------qqqqq-----------")
+            println("qqqqq: ${ChatsApi().getListMassengers(chatsUi)}")
+            println("--------qqqqq-----------")
+            Navigation.navigator.push(DialogScreen(chatsUi))
         }
     }
 
@@ -53,7 +53,9 @@ class ChatsViewModel(
             scope.launch(Dispatchers.IO) {
                 isSeted = true
                 state.update {
-                    it.copy(getListChatsUseCase.execute())
+                    it.copy(
+                        getListChatsUseCase.execute()
+                    )
                 }
             }
 

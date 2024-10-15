@@ -2,7 +2,7 @@ package com.project.`outhorization-screen-impl`.screens.check_sms.domain.reposit
 
 interface AuthorizationStorageApi {
 
-    fun saveUserNumber(username: String)
+    suspend fun saveUserNumber(username: String)
 
-    fun getUserNumber(): String?
+    suspend fun getUserNumber(): String?
 }

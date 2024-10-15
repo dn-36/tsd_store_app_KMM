@@ -5,7 +5,7 @@ import com.profile.`printer-impl`.profileScreensModule
 import com.profile.profile.qr_code.printerPlatformModule
 import com.profile.profile.qr_code.printerScreenModule
 import com.profile.profile.warehouseScreensModule
-import com.project.chats.chatsModule
+import com.project.chats.core.chatsModule
 import org.example.project.app.moduls_di.appModule
 import com.project.`local-storage`.`profile-storage`.localStorageModule
 import com.project.organizationScreenModule

@@ -5,14 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.project.chats.WarehouseScreensApi
-import com.project.core_app.ConstData
-import com.project.`local-storage`.`outhorization-storage`.AuthorizationStorage
+import com.project.`local-storage`.`profile-storage`.ProfileValueStorageApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.project.network.Navigation
-import com.project.`local-storage`.`profile-storage`.KeyValueStorageApi
 import org.koin.mp.KoinPlatform.getKoin
 
 class ProfileViewModel:ViewModel() {
@@ -40,7 +38,7 @@ class ProfileViewModel:ViewModel() {
 
     fun setScreen(coroutineScope: CoroutineScope){
 
-       val keyValueStorage: AuthorizationStorage = getKoin().get()
+       val keyValueStorage: ProfileValueStorageApi = getKoin().get()
 
         if(profileState.isUsed.value) {
 
@@ -62,10 +60,10 @@ class ProfileViewModel:ViewModel() {
 
                 profileState = profileState.copy(
                    // name = user!!.name!!,
-                    numberPhone = keyValueStorage.getUsername()!!
+                    numberPhone = keyValueStorage.getCurrentName ()!!
                 )
 
-                println("${keyValueStorage.getUsername()!!}")
+                println("${keyValueStorage.getCurrentName ()!!}")
                 //println("${keyValueStorage.getCurrentNumber("currentName")}")
 
             }

@@ -28,9 +28,10 @@ import project.core.resources.user_chats
 
 
 @Composable
-fun listDialogItem(
+fun DialogItem(
     titleChat:String,
     lastMassage:String,
+    timeLastMessage:String,
     userId:String,
     //vm : ChatsViewModel
     onClickDialogue:(String)->Unit
@@ -55,7 +56,7 @@ fun listDialogItem(
                     color = Color.LightGray
                 )
                 Text(
-                    "13:40",
+                    timeLastMessage ,
                     fontSize = 13.sp,
                     color = Color.LightGray
                 )

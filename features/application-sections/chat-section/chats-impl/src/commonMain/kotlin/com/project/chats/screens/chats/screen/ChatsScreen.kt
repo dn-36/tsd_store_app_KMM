@@ -25,10 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import com.project.chats.screens.chats.component.listDialogItem
+import com.project.chats.screens.chats.component.DialogItem
 import com.project.network.chats_network.ChatsApi
 import com.project.chats.screens.chats.viewmodel.ChatsIntents
-import org.example.project.nika_screens_chats.list_dialog_feature.viewmodel.ChatsViewModel
+import com.project.chats.screens.chats.viewmodel.ChatsViewModel
 
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
@@ -37,7 +37,7 @@ import project.core.resources.plus
 
 class ChatsScreen : Screen {
 
-    private val vm:ChatsViewModel = getKoin().get()
+    private val vm: ChatsViewModel = getKoin().get()
 
     @Composable
     override fun Content() {
@@ -59,10 +59,11 @@ class ChatsScreen : Screen {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(state.chats) { item ->
-                        listDialogItem(
+                        DialogItem(
                             item.title,
                             item.lastMassage,
-                            "nmhdo3jc-ht9v2nxa-08iv2hsd",
+                            "${item.timeEndDate.time} ${item.timeEndDate.date}",
+                            item.uiChat,
                             {vm.processIntent(ChatsIntents.DialogueSelection(scope,it))}
                         )
                     }

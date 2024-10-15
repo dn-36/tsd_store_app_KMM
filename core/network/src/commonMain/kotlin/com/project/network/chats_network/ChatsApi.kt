@@ -48,7 +48,7 @@ class ChatsApi {
 
 
     // Обновление заметки
-    suspend fun getListMassengers(noteId: String): String {
+    suspend fun getListMassengers(noteId: String): ChatResponseMessages {
 
         return try {
             val response = client.get("https://delta.online/api/chats/dw619qfj-9xcwp78q-wp72in5v?page=1") {

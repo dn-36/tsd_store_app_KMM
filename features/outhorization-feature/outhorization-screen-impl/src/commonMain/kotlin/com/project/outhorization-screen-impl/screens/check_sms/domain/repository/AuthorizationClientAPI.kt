@@ -20,7 +20,7 @@ interface AuthorizationClientAPI {
         token:String,
         number:String,
         name:String,
-        actionOnSuccess:()->Unit,
+        actionOnSuccess:suspend ()->Unit,
         actionOnError:()->Unit
     )
 }

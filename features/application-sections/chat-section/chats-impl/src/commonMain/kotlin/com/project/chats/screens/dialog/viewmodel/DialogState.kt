@@ -1,6 +1,8 @@
-package org.example.project.presentation.nika_screens_chats.dialog_feature.viewmodel
+package com.project.chats.screens.dialog.viewmodel
+
+import com.project.chats.screens.dialog.domain.models.Message
 
 data class DialogState(
-    var text: String = ""
-
+    var titleChats: String = "",
+    val listMessage:List<Message> = listOf()
 )

@@ -1,6 +1,6 @@
-package com.project.core_app.app.domain
+package org.example.project.app.domain
 
 interface LocalStorageAppApi {
-    fun number():String
-    fun saveNumber(number:String)
+    suspend fun number():String
+    suspend fun saveNumber(number:String)
 }

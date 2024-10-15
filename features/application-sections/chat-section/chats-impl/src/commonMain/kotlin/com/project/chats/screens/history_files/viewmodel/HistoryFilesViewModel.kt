@@ -2,7 +2,7 @@ package org.example.project.nika_screens_chats.history_files_feature.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.project.network.Navigation
-import org.example.project.nika_screens_chats.dialog_feature.screen.DialogScreen
+import com.project.chats.screens.dialog.screen.DialogScreen
 
 class HistoryFilesViewModel : ViewModel() {
 
@@ -16,7 +16,7 @@ class HistoryFilesViewModel : ViewModel() {
 
     fun back() {
 
-        Navigation.navigator.push(DialogScreen())
+       // Navigation.navigator.push(DialogScreen())
 
     }
 

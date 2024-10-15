@@ -1,7 +1,7 @@
-package org.example.project.nika_screens_chats.title_group_feature.viewmodel
+package com.project.chats.screens.titile_group.viewmodel
 
 sealed class TitleGroupIntents {
 
-    object Ready:TitleGroupIntents()
+    object Ready: TitleGroupIntents()
 
 }

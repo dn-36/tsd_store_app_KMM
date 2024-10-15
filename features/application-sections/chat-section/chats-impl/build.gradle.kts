@@ -29,6 +29,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:network"))
+            implementation(project(":core:local-storage"))
             implementation(project(":features:application-sections:chat-section:chats-api"))
             implementation(project(":core:recources"))
             implementation(project(":core:app"))

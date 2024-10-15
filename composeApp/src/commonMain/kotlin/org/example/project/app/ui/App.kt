@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import com.project.menu.screen.OrganizationScreenApi
 import com.project.network.Navigation
 import com.project.`outhorization-screen-api`.AuthorizationScreensApi
+import kotlinx.coroutines.CoroutineScope
 import org.example.project.app.domain.AuthorizationStatus
 import org.example.project.app.viewmodel.AppIntent
 import org.example.project.app.viewmodel.AppViewModel
@@ -24,8 +25,8 @@ object App {
         val state by viewModel.state.collectAsState()
         val authorization:AuthorizationScreensApi = getKoin().get()
         val organizationScreen: OrganizationScreenApi = getKoin().get()
-
-        viewModel.proccesIntent(AppIntent.SetScreenIntent)
+        val scope:CoroutineScope = rememberCoroutineScope()
+        viewModel.proccesIntent(AppIntent.SetScreenIntent(scope))
         when (state.authorizationStatus) {
             AuthorizationStatus.LOADING -> {
                 Box(modifier = Modifier.fillMaxSize()) {

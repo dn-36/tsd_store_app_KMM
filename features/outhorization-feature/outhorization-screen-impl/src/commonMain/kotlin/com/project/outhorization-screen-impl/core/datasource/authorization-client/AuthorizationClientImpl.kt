@@ -45,13 +45,13 @@ private val authorizationClient: AuthorizationClient
      }
     }
 
-    override  suspend fun checkSMS(
+    override suspend fun checkSMS(
         code: String,
-        token:String,
-        number:String,
-        name:String,
-        actionOnSuccess:()->Unit,
-        actionOnError:()->Unit
+        token: String,
+        number: String,
+        name: String,
+        actionOnSuccess: suspend () -> Unit,
+        actionOnError: () -> Unit
     ) {
 
 
