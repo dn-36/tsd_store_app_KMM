@@ -113,12 +113,13 @@ class OrganizationScreen(): Screen {
 
                             }
                         }
-
-                       Image(painter = painterResource(Res.drawable.cancel),contentDescription = null,
-                           modifier = Modifier.size(10.dp).align(Alignment.TopEnd).clickable(
-                               indication = null, // Отключение эффекта затемнения
-                               interactionSource = remember { MutableInteractionSource() })
-                           { vm.processIntent(OrganizationsIntents.DeleteOrganization(scope,item.company!!.ui!!)) })
+                            Image(painter = painterResource(Res.drawable.cancel),
+                                contentDescription = null,
+                                modifier = Modifier.size(10.dp).align(Alignment.TopEnd).clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+                                { //vm.processIntent(OrganizationsIntents.DeleteOrganization(scope, item.company!!.ui!!))
+                                })
                     }
                 }
               }

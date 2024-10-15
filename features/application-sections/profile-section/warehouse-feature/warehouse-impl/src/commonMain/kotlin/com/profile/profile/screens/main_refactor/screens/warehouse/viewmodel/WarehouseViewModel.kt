@@ -35,7 +35,7 @@ fun addWarehouse(coroutineScope: CoroutineScope){
          val newList = WarehouseApi.getLocations()
 
         warehouseState = warehouseState.copy(
-            listAllLocations = emptyList()
+            listAllLocations = newList
         )
         println("Locations:${newList}")
 

@@ -1,5 +1,6 @@
-package com.project.network.warehouse_network
+package com.project.network.warehouse_network.model
 
+import com.project.network.warehouse_network.model.Company
 import kotlinx.serialization.Serializable
 
 @Serializable

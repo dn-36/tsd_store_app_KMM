@@ -41,8 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import com.project.network.organizations_network.model.Response
-import com.project.network.warehouse_network.ResponseItem
+import com.project.network.warehouse_network.model.ResponseItem
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.cancel
@@ -57,6 +56,9 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>): Screen
     var expandedLocation by mutableStateOf(false)
 
     var selectedLocation = mutableStateListOf<ResponseItem>()
+
+    var filter by mutableStateOf(listAllLocations)
+
     @Composable
     override fun Content() {
 
@@ -97,8 +99,13 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>): Screen
 
                         OutlinedTextField(
                             value = location,
-                            onValueChange = {
-                                location = it
+                            onValueChange = {inputText ->
+                                location = inputText
+
+                                    filter = listAllLocations.filter {
+                                        it.name!!.contains(inputText, ignoreCase = true)
+                                    }
+
                             },
                             trailingIcon = {
                                 IconButton(
@@ -127,7 +134,7 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>): Screen
                                     shape = RoundedCornerShape(8.dp)
                                 ) {}
                                 LazyColumn {
-                                    itemsIndexed(listAllLocations) { index, item ->
+                                    itemsIndexed(filter) { index, item ->
                                             Text(item.name!!,
                                             fontSize = 20.sp,
                                             modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
@@ -135,7 +142,13 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>): Screen
                                                     indication = null, // Отключение эффекта затемнения
                                                     interactionSource = remember { MutableInteractionSource() })
 
-                                                { selectedLocation.add(item)
+                                                { if(selectedLocation.size == 0) {
+                                                    selectedLocation.add(item)
+                                                }
+                                                    else {
+                                                        selectedLocation.removeAt(0)
+                                                    selectedLocation.add(item)
+                                                    }
                                                     expandedLocation = false
                                                 }) }
 

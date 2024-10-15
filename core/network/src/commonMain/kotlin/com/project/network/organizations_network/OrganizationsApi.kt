@@ -50,15 +50,6 @@ object OrganizationsApi {
             return response.body<List<Response>>()
         }
 
-    // Получение списка организаций
-    suspend fun getOr(): String {
-        val response = client.get("https://delta.online/api/company")
-        println(" ////////////////////++++++++++")
-        println(" ${response}")
-        println(" ////////////////////++++++++++")
-        return response.bodyAsText()
-    }
-
     // Функция для установки активной организации с обработкой ошибок
     suspend fun setActiveOrganization(organizationUi: String): Boolean {
         return try {
