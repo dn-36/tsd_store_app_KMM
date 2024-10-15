@@ -68,6 +68,7 @@ class NotesScreen:Screen{
                     }
                 }
             }
+
             Column(horizontalAlignment = Alignment.End, modifier = Modifier.align(Alignment.BottomCenter)) {
                 Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
                     modifier = Modifier.padding(16.dp).size(70.dp)
@@ -79,6 +80,7 @@ class NotesScreen:Screen{
                     MenuBottomBar().Content()
                 }
             }
+
         }
     }
 }

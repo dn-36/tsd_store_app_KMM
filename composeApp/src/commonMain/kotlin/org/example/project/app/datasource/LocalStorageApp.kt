@@ -10,5 +10,4 @@ class LocalStorageApp(private val sharedPrefs: ProfileValueStorageApi): LocalSto
       sharedPrefs.saveCurrentNumber (number)
     }
 
-
 }

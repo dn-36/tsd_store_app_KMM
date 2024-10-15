@@ -30,6 +30,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:app"))
+            implementation(project(":core:network"))
+            implementation(project(":core:recources"))
             implementation(project(":features:application-sections:organization-section:organization-api"))
             implementation(project(":features:application-sections:chat-section:chats-api"))
             implementation(project(":features:application-sections:crm-section:munu-crm-feature:menu-crm-api"))
