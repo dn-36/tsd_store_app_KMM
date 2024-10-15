@@ -41,21 +41,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import com.project.network.warehouse_network.model.ResponseItem
+import com.project.network.locations_network.model.ResponseItem
+import com.project.network.warehouse_network.model.Warehouse
+import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.cancel
 import project.core.resources.down_arrow
 
-class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>): Screen {
+class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>,val onClickUpdate:(scope:CoroutineScope,name:String,localId:String,ui:String) -> Unit
+,val warehouse:Warehouse?,val onClickCreate:(scope:CoroutineScope,name:String,localId:String) -> Unit,val index:Int
+                                ,val locationUpdated:ResponseItem?): Screen {
 
-    var name by mutableStateOf("")
+    var location by mutableStateOf(if (warehouse != null) warehouse.stores[0]!!.local!!.name else "")
 
-    var location by mutableStateOf("")
+    var title by mutableStateOf(if (warehouse != null) warehouse.stores[0]!!.name else "")
 
     var expandedLocation by mutableStateOf(false)
 
-    var selectedLocation = mutableStateListOf<ResponseItem>()
+    var selectedLocation = mutableStateListOf<ResponseItem>().apply {
+        if (warehouse != null && locationUpdated != null) {
+            add(locationUpdated)
+        }
+    }
 
     var filter by mutableStateOf(listAllLocations)
 
@@ -85,9 +93,9 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>): Screen
 
                     Column {
                         OutlinedTextField(
-                            value = name,
+                            value = title,
                             onValueChange = {
-                                name = it
+                                title = it
                             },
                             label = { Text("Название") },
                             modifier = Modifier
@@ -143,18 +151,24 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>): Screen
                                                     interactionSource = remember { MutableInteractionSource() })
 
                                                 { if(selectedLocation.size == 0) {
+
                                                     selectedLocation.add(item)
                                                 }
                                                     else {
                                                         selectedLocation.removeAt(0)
+
                                                     selectedLocation.add(item)
                                                     }
                                                     expandedLocation = false
+
+                                                    location = ""
+
                                                 }) }
 
                                 }
                             }
                         }
+
                         LazyColumn (modifier = Modifier.fillMaxWidth()) {
                             items(selectedLocation){item ->
                                     Box(modifier = Modifier.padding(vertical = 5.dp).clip(RoundedCornerShape(10.dp))
@@ -174,15 +188,44 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>): Screen
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Button(
-                        onClick = {},
-                        modifier = Modifier
-                            .padding(bottom = 10.dp)
-                            .clip(RoundedCornerShape(70.dp))
-                            .height(40.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(text = "Создать")
+                    if(index == 2) {
+
+                        Button(
+                            onClick = {
+                                onClickCreate(
+                                    scope,
+                                    title,
+                                    selectedLocation[0].id.toString()
+                                )
+                            },
+                            modifier = Modifier
+                                .padding(bottom = 10.dp)
+                                .clip(RoundedCornerShape(70.dp))
+                                .height(40.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(text = "Создать")
+                        }
+                    }
+                    else if(index == 1) {
+
+                        Button(
+                            onClick = {
+                                onClickUpdate(
+                                    scope,
+                                    title,
+                                    selectedLocation[0].id.toString(),
+                                    warehouse!!.stores[0]!!.ui.toString()
+                                )
+                            },
+                            modifier = Modifier
+                                .padding(bottom = 10.dp)
+                                .clip(RoundedCornerShape(70.dp))
+                                .height(40.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(text = "Редактировать")
+                        }
                     }
                 }
             }

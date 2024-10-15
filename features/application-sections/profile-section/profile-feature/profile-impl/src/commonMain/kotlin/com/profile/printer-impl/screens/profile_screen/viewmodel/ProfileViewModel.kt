@@ -5,12 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.project.chats.WarehouseScreensApi
+import com.project.core_app.ConstData
 import com.project.`local-storage`.`profile-storage`.ProfileValueStorageApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.project.network.Navigation
+import com.project.network.notes_network.NotesApi
 import org.koin.mp.KoinPlatform.getKoin
 
 class ProfileViewModel:ViewModel() {
@@ -44,22 +46,22 @@ class ProfileViewModel:ViewModel() {
 
             profileState.isUsed.value = false
 
-           // val token = ConstData.TOKEN
+            val token = ConstData.TOKEN
 
-           // NotesApi.token = token
+            NotesApi.token = token
 
-           // val notesApi = NotesApi
+            val notesApi = NotesApi
 
 
 
             coroutineScope.launch(Dispatchers.IO) {
 
-               // val user = notesApi.getUsers().find { it.phone == keyValueStorage.getUsername()!! }
+               val user = notesApi.getUsers().find { it.phone == keyValueStorage.getCurrentNumber()!! }
 
                 //println("${notesApi.getUsers()}")
 
                 profileState = profileState.copy(
-                   // name = user!!.name!!,
+                    name = user!!.name!!,
                     numberPhone = keyValueStorage.getCurrentNumber()!!
                 )
 

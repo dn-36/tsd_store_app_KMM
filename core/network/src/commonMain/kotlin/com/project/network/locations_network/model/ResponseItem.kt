@@ -1,6 +1,6 @@
-package com.project.network.warehouse_network.model
+package com.project.network.locations_network.model
 
-import com.project.network.warehouse_network.WarehouseApi
+import com.project.network.locations_network.LocationsApi
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,7 +14,7 @@ data class ResponseItem(
     val email: String?,
     val entity: Entity?,
     val phone: String?,
-    @Serializable(with = WarehouseApi.PointSerializer::class)
+    @Serializable(with = LocationsApi.PointSerializer::class)
     val point: List<Double>?,
     val text: String?,
     val workers: List<Worker>?

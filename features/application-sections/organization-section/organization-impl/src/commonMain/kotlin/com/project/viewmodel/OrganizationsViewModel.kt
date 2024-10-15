@@ -30,7 +30,7 @@ class OrganizationsViewModel:ViewModel() {
 
             is OrganizationsIntents.CreateOrganization -> createOrganization(intent.coroutineScope,intent.name,intent.url)
 
-            is OrganizationsIntents.AddOrganizationNavigate -> addOrganization()
+            is OrganizationsIntents.OpenWindowAddOrganization -> openWindowAddOrganization()
 
         }
     }
@@ -86,7 +86,7 @@ class OrganizationsViewModel:ViewModel() {
         }
     }
 
-    fun addOrganization(){
+    fun openWindowAddOrganization(){
 
     Navigation.navigator.push(CreateOrganization(onClick = {scope, name, url ->
         processIntent(OrganizationsIntents.CreateOrganization(scope,name,url))

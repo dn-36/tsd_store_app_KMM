@@ -1,7 +1,11 @@
 package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel
 
-sealed class ArrivalAndConsumptionIntents {
+import kotlinx.coroutines.CoroutineScope
 
-data class Arrival (val vm : ArrivalAndConsumptionViewModel) :ArrivalAndConsumptionIntents()
+sealed class ArrivalAndConsumptionIntents {
+data class Arrival (val coroutineScope: CoroutineScope) :ArrivalAndConsumptionIntents()
+    object Back:ArrivalAndConsumptionIntents()
+    object Next:ArrivalAndConsumptionIntents()
+    object SelectFromList:ArrivalAndConsumptionIntents()
 
 }

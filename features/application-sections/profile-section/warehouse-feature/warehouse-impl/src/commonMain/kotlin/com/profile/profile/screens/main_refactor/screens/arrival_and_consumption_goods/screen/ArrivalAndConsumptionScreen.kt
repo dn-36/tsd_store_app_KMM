@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,16 +30,21 @@ class ArrivalAndConsumptionScreen: Screen {
     val vm = ArrivalAndConsumptionViewModel()
     @Composable
     override fun Content() {
+
+        val scope = rememberCoroutineScope()
+
         Box(modifier = Modifier.fillMaxSize().background(Color.White)){
             Column(modifier = Modifier.padding(16.dp),) {
                 Text("Приход Расход", color = Color.Black, fontSize = 20.sp)
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
+
                 Column {
+
                     Row(modifier = Modifier.padding(10.dp).fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween) {
                         Button(
-                            onClick = { vm.processIntent(ArrivalAndConsumptionIntents.Arrival(vm)) },
+                            onClick = { vm.processIntent(ArrivalAndConsumptionIntents.Arrival(scope)) },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(70.dp))
                                 .height(40.dp)

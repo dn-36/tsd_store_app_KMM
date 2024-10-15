@@ -35,7 +35,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.project.menu.screen.OrganizationScreenApi
 import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
-import com.project.component.CreateOrganization
 import com.project.network.Navigation
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.`menu-crm-api`.MenuCrmScreenApi
@@ -74,7 +73,8 @@ class OrganizationScreen(): Screen {
 
                     Box() {
                         Row(verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(vertical = 8.dp).clickable(
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(vertical = 8.dp).clickable(
                                 indication = null, // Отключение эффекта затемнения
                                 interactionSource = remember { MutableInteractionSource() })
                             {
@@ -132,7 +132,7 @@ class OrganizationScreen(): Screen {
                         .clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-                        {vm.processIntent(OrganizationsIntents.AddOrganizationNavigate)})
+                        {vm.processIntent(OrganizationsIntents.OpenWindowAddOrganization)})
 
                 Box(modifier = Modifier) {
                     MenuBottomBar().init(

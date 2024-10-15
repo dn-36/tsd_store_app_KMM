@@ -1,4 +1,4 @@
-package com.project.network.warehouse_network.model
+package com.project.network.locations_network.model
 
 import kotlinx.serialization.Serializable
 

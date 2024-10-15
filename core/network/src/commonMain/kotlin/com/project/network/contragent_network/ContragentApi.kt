@@ -1,6 +1,6 @@
 package com.project.network.contragent_network
 
-import com.project.network.contragent_network.model.LocationResponse
+import com.project.network.contragent_network.model.ContragentResponse
 import com.project.network.httpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -47,20 +47,20 @@ object ContragentApi {
          }*/
 
          // получение всех контрагентов
-         suspend fun getLocations(): List<LocationResponse> {
+         suspend fun getContragents(): List<ContragentResponse> {
              return try {
-                 val response = client.get("https://delta.online/api/contragents") {
+                 val response = client.get("https://delta.online/api/contragent") {
                      // здесь можно добавить заголовки или другие параметры запроса
                  }
                  println(" ////////////////////++++++++++")
-                 println("лоКАЦИЯ ${response}")
+                 println("Контрагенты ${response}")
                  println(" ////////////////////++++++++++")
 
                  // Десериализуем ответ в список объектов LocationResponse
                  val responseBody = response.bodyAsText()
-                 Json { ignoreUnknownKeys = true }.decodeFromString<List<LocationResponse>>(responseBody)
+                 Json { ignoreUnknownKeys = true }.decodeFromString<List<ContragentResponse>>(responseBody)
              } catch (e: Exception) {
-                 println("Ошибка при получении локаций: ${e.message}")
+                 println("Ошибка при получении контрагентов: ${e.message}")
                  // Возвращаем пустой список в случае ошибки
                  emptyList()
              }
