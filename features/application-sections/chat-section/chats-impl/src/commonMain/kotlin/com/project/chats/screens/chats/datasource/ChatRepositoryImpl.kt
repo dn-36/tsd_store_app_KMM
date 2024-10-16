@@ -7,14 +7,16 @@ import com.project.network.chats_network.ChatsApi
 
 class ChatRepositoryImpl(private val chatApi:ChatsApi):ChatsRepositoryApi {
     override suspend fun getListChats():List<ChatsModel>{
+
        val listChats = chatApi.getChats().map {
+        //   println(">>>>>>>${it.ui}>>>>>>>>>")
            ChatsModel(
-               it.name,
-               it.message,
-               Utils.parseDateTimeManually(it.created_at),
-               it.ui
+               it?.name?:"",
+               it?.message?:"",
+               Utils.parseDateTimeManually(it.created_at?:""),
+               it?.ui?:""
            )
-       }
+       }?: listOf()
         return Utils.sortByNearestDate(listChats)
     }
 

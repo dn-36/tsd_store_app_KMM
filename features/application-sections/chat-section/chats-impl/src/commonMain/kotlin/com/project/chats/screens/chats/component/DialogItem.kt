@@ -32,16 +32,15 @@ fun DialogItem(
     titleChat:String,
     lastMassage:String,
     timeLastMessage:String,
-    userId:String,
-    //vm : ChatsViewModel
-    onClickDialogue:(String)->Unit
+    onClickDialogue:()->Unit
 ){
 
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp).clickable(
         indication = null, // Отключение эффекта затемнения
         interactionSource = remember { MutableInteractionSource() })
-        {onClickDialogue(userId)},
-    //{ vm.processIntent(ChatsIntents.DialogueSelection) },
+        {
+        onClickDialogue()
+        },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically){
         Image(painter = painterResource(Res.drawable.user_chats),contentDescription = null,

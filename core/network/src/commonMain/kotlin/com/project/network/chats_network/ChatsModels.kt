@@ -4,40 +4,40 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ChatsResponse(
-    val name: String,
-    val ui: String,
-    val count_new_message: Int,
+    val name: String? = null,
+    val ui: String? = null,
+    val count_new_message: Int? = null,
     val image: String? = null,
-    val users: List<User>,
+    val users: List<User>? = listOf(),
     val project: Project? = null,
-    val lastMessageUi: String,
-    val user_ui: String,
+    val lastMessageUi: String? = null,
+    val user_ui: String? = null,
     val user_image: String? = null,
-    val message: String,
-    val data: Long,
-    val created_at: String
+    val message: String? = null,
+    val data: Long? = null,
+    val created_at: String? = null
 )
 
 @Serializable
 data class User(
-    val phone: String,
-    val name: String,
-    val ui: String,
-    val active: Int,
+    val phone: String? = null,
+    val name: String? = null,
+    val ui: String? = null,
+    val active: Int? = null,
     val image: String? = null,
-    val id: Int,
-    val laravel_through_key: Int
+    val id: Int? = null,
+    val laravel_through_key: Int? = null
 )
 
 @Serializable
 data class Project(
-    val id: Int,
-    val name: String,
-    val creater_id: Int,
-    val company_id: Int,
-    val created_at: String,
-    val updated_at: String,
+    val id: Int? = null,
+    val name: String? = null,
+    val creater_id: Int? = null,
+    val company_id: Int? = null,
+    val created_at: String? = null,
+    val updated_at: String? = null,
     val entity_id: Int? = null,
-    val active: Int,
+    val active: Int? = null,
     val entity_client_id: Int? = null
 )

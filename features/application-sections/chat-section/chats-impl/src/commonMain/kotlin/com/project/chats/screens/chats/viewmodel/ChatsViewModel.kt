@@ -24,12 +24,13 @@ class ChatsViewModel(
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
             is ChatsIntents.DialogueSelection -> {
-                dialogueSelection(intent.userId,intent.scope)
+                dialogueSelection(intent.ui,intent.scope)
             }
             is ChatsIntents.AddChat -> {
                 addChat()
             }
             is ChatsIntents.SetScreen -> {
+                println("!!!!!!!!!!!!______!!!!!!!!!!!!")
                 setScreen(intent.scope)
             }
         }
@@ -37,9 +38,6 @@ class ChatsViewModel(
 
     fun dialogueSelection(chatsUi:String, coroutineScope: CoroutineScope) {
         coroutineScope.launch(Dispatchers.IO){
-            println("--------qqqqq-----------")
-            println("qqqqq: ${ChatsApi().getListMassengers(chatsUi)}")
-            println("--------qqqqq-----------")
             Navigation.navigator.push(DialogScreen(chatsUi))
         }
     }

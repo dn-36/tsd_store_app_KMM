@@ -57,9 +57,6 @@ object WarehouseApi {
     }
    suspend fun getLocations(): List<ResponseItem> {
        val response = client.get("https://delta.online/api/local")
-       println(" ////////////////////++++++++++")
-       println(" ${response}")
-       println(" ////////////////////++++++++++")
        return response.body<List<ResponseItem>>()
    }
 

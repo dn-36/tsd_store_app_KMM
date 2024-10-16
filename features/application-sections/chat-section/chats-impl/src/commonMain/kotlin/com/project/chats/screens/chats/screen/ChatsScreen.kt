@@ -1,12 +1,13 @@
-package com.project.chats.screen
+package com.project.chats.screens.chats.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,8 @@ import com.project.chats.screens.chats.component.DialogItem
 import com.project.network.chats_network.ChatsApi
 import com.project.chats.screens.chats.viewmodel.ChatsIntents
 import com.project.chats.screens.chats.viewmodel.ChatsViewModel
+import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
@@ -41,39 +44,56 @@ class ChatsScreen : Screen {
 
     @Composable
     override fun Content() {
-      val scope = rememberCoroutineScope()
-      val state by vm.state.collectAsState()
+        val scope = rememberCoroutineScope()
+        val state by vm.state.collectAsState()
         vm.processIntent(ChatsIntents.SetScreen(scope))
-        LaunchedEffect(true){
-            println("-------list_chats-------")
-           println("list_chats: "+ChatsApi().getChats().toString())
-            println("-------list_chats-------")
-        }
+/* LaunchedEffect(true){
+     print("-------list_chats-------")
+     println("list_chats: "+ChatsApi().getChats().toString())
+     println("-------list_chats-------")
+ }*/
 
-        Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
+ Box(modifier = Modifier.fillMaxSize()) {
 
-            Column(modifier = Modifier.align(Alignment.TopCenter).padding(16.dp)) {
-                Text("Чаты", fontSize = 20.sp)
-                Spacer(modifier = Modifier.height(10.dp))
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(state.chats) { item ->
-                        DialogItem(
-                            item.title,
-                            item.lastMassage,
-                            "${item.timeEndDate.time} ${item.timeEndDate.date}",
-                            item.uiChat,
-                            {vm.processIntent(ChatsIntents.DialogueSelection(scope,it))}
-                        )
-                    }
-                }
-            }
-            Image(painter = painterResource(Res.drawable.plus),contentDescription = null,
-                modifier = Modifier.padding(16.dp).size(60.dp).align(Alignment.BottomEnd).clickable(
-                    indication = null, // Отключение эффекта затемнения
-                    interactionSource = remember { MutableInteractionSource() })
-                { vm.processIntent(ChatsIntents.AddChat) })
-        }
-    }
+     Column(modifier = Modifier.align(Alignment.TopCenter).padding(16.dp)) {
+         Text("Чаты", fontSize = 20.sp)
+         Spacer(modifier = Modifier.height(10.dp))
+         LazyColumn(
+             modifier = Modifier.fillMaxWidth()
+         ) {
+             items(state.chats) { item ->
+                 DialogItem(
+                     item.title,
+                     item.lastMassage,
+                     "${item.timeEndDate.time} ${item.timeEndDate.date}",
+                     { vm.processIntent(ChatsIntents.DialogueSelection(scope, item.uiChat)) }
+                 )
+             }
+         }
+     }
+
+     // Изменения касаются расположения элементов внизу
+     Column(
+         modifier = Modifier
+             .align(Alignment.BottomCenter)  // Размещаем по центру снизу
+             .fillMaxWidth(),
+         verticalArrangement = Arrangement.Bottom
+     ) {
+         Image(
+             painter = painterResource(Res.drawable.plus),
+             contentDescription = null,
+             modifier = Modifier
+                 .size(60.dp)
+                 .align(Alignment.End)
+                 .clickable(
+                     indication = null,  // Отключение эффекта затемнения
+                     interactionSource = remember { MutableInteractionSource() })
+                 { vm.processIntent(ChatsIntents.AddChat) }
+         )
+
+         // Вызов нижнего меню
+         MenuBottomBar().Content()
+     }
+ }
+}
 }

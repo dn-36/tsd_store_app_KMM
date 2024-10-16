@@ -65,7 +65,6 @@ class WarehouseScreen: Screen {
                         profileScreens.profile(),
                         ArrivalAndConsumptionScreen(),
                         printScreen.printer()
-
                     ).Content()
                 }
             }
