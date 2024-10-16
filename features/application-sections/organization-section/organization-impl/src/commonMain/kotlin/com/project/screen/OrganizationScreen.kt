@@ -37,14 +37,8 @@ import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
 import com.project.network.Navigation
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
-import com.project.datasource.OrganizationClientImpl
-import com.project.domain.usecases.CreateOrganizationUseCase
-import com.project.domain.repository.OrganizationClientApi
-import com.project.domain.usecases.ChoosingActiveOrganizationUseCase
-import com.project.domain.usecases.DeleteOrganizationUseCase
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.menu.screen.TapeScreenApi
-import com.project.network.organizations_network.OrganizationsApi
 import com.project.viewmodel.OrganizationsIntents
 import com.project.viewmodel.OrganizationsViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -55,12 +49,11 @@ import project.core.resources.plus
 
 class OrganizationScreen(): Screen {
 
-    val n:OrganizationClientApi = OrganizationClientImpl(OrganizationsApi)
+ //   val n:OrganizationClientApi = OrganizationClientImpl(OrganizationsApi)
 
-    val vm = OrganizationsViewModel(CreateOrganizationUseCase(n), DeleteOrganizationUseCase(n)
-    , ChoosingActiveOrganizationUseCase((n))
+    val vm:OrganizationsViewModel = getKoin().get()
 
-    )//(getKoin().get())
+
     @Composable
     override fun Content() {
 

@@ -10,12 +10,13 @@ class DeleteOrganizationUseCase (
     ) {
 
     suspend fun execute( ui:String,
-                         scope: CoroutineScope
+                         scope: CoroutineScope,
+                         onDelete: () -> Unit
 
     ){
 
         client.deleteOrganization (
-            ui, scope
+            ui, scope, onDelete
         )
     }
 }

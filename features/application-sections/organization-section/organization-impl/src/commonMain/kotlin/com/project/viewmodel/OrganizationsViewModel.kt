@@ -11,7 +11,7 @@ import com.project.domain.usecases.ChoosingActiveOrganizationUseCase
 import com.project.domain.usecases.CreateOrganizationUseCase
 import com.project.domain.usecases.DeleteOrganizationUseCase
 import com.project.network.Navigation
-import com.project.network.organizations_network.OrganizationsApi
+import com.project.network.organizations_network.OrganizationsClient
 import com.project.screen.OrganizationScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,13 +38,14 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
 
                 intent.coroutineScope.launch(Dispatchers.IO) {
 
-                    choosingActiveOrganization.execute(intent.ui,intent.coroutineScope)
+                    choosingActiveOrganization.execute(intent.ui,intent.coroutineScope
 
-                    organizationsState = organizationsState.copy(
+                    , onChoosing = {organizationsState = organizationsState.copy(
 
-                        isUsed = mutableStateOf(true)
+                            isUsed = mutableStateOf(true)
 
-                    )
+                        )
+                    })
 
                 }
 
@@ -54,13 +55,13 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
-                    deleteOrganizationUseCase.execute(intent.ui,intent.coroutineScope)
+                    deleteOrganizationUseCase.execute(intent.ui,intent.coroutineScope
 
-                    organizationsState = organizationsState.copy(
+                    , onDelete = { organizationsState = organizationsState.copy(
 
-                        isUsed = mutableStateOf(true)
+                            isUsed = mutableStateOf(true)
 
-                    )
+                        ) } )
 
                 }
             }//deleteOrganization(intent.coroutineScope,intent.ui)
@@ -91,11 +92,11 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
 
         val token = ConstData.TOKEN
 
-        OrganizationsApi.token = token
+        OrganizationsClient.token = token
 
         coroutineScope.launch(Dispatchers.IO) {
 
-        OrganizationsApi.setActiveOrganization(ui)
+        OrganizationsClient.setActiveOrganization(ui)
 
             organizationsState = organizationsState.copy(
                 isUsed = mutableStateOf(true)
@@ -107,11 +108,11 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
 
         val token = ConstData.TOKEN
 
-        OrganizationsApi.token = token
+        OrganizationsClient.token = token
 
         coroutineScope.launch(Dispatchers.IO) {
 
-            OrganizationsApi.deleteOrganization(ui)
+            OrganizationsClient.deleteOrganization(ui)
 
             organizationsState = organizationsState.copy(
                 isUsed = mutableStateOf(true)
@@ -123,11 +124,11 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
 
         val token = ConstData.TOKEN
 
-        OrganizationsApi.token = token
+        OrganizationsClient.token = token
 
         coroutineScope.launch(Dispatchers.IO) {
 
-            OrganizationsApi.createOrganization(name,url)
+            OrganizationsClient.createOrganization(name,url)
 
 
             Navigation.navigator.push(OrganizationScreen())
@@ -154,11 +155,11 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
 
             val token = ConstData.TOKEN
 
-            OrganizationsApi.token = token
+            OrganizationsClient.token = token
 
             coroutineScope.launch(Dispatchers.IO) {
 
-                val allOrganizations = OrganizationsApi.getOrganizations()
+                val allOrganizations = OrganizationsClient.getOrganizations()
 
                 println(
                     "-------${allOrganizations}--------------"
