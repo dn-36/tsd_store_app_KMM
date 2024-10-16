@@ -13,8 +13,6 @@ class AuthorizationScreensImpl:AuthorizationScreensApi {
         return CheckSMSScreen(number,statusSMS)
     }
 
-
-
     override fun enteringNumber(): Screen {
         return EnteringAnumberScreen()
     }

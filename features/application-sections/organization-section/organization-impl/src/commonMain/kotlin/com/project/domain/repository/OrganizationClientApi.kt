@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 
 interface OrganizationClientApi {
 
-    suspend fun createOrganization (name: String, url: String)
+    suspend fun createOrganization (name: String, url: String, scope: CoroutineScope,
+                                    onCreate: () -> Unit)
 
 }

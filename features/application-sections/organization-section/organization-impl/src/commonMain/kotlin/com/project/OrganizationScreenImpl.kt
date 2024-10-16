@@ -6,7 +6,9 @@ import com.project.screen.OrganizationScreen
 
 class OrganizationScreenImpl(): OrganizationScreenApi {
     override fun organization(): Screen {
+
       return OrganizationScreen()
+
     }
 
 }

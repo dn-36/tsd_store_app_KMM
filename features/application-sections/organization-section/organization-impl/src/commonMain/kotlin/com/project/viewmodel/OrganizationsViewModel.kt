@@ -21,6 +21,7 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
     var organizationsState by mutableStateOf(OrganizationsState())
 
     fun processIntent(intent: OrganizationsIntents){
+
         when(intent){
 
             is OrganizationsIntents.SetScreen -> setScreen(intent.coroutineScope)
@@ -33,7 +34,15 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
 
                 intent.coroutineScope.launch(Dispatchers.IO) {
 
-                    createOrganizationUseCase.execute(intent.name,intent.url)
+                    createOrganizationUseCase.execute(intent.name,intent.url,
+
+                        intent.coroutineScope, onCreate = { Navigation.navigator.push(OrganizationScreen())
+
+                        organizationsState = organizationsState.copy(
+
+                            isUsed = mutableStateOf(true)
+
+                        )})
 
                 }
             }//createOrganization(intent.coroutineScope,intent.name,intent.url)

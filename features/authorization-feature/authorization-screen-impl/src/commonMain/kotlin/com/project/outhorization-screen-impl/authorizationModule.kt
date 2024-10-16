@@ -15,17 +15,20 @@ import product_network.httpClientEngine
 
 
 val authorizationModule = module {
+
     factory {
+
         AuthorizationScreensImpl() as AuthorizationScreensApi
     }
-    factory { EnteringNumberViewModel(get()) }
-    factory { CheckSMSViewModel(get()) }
-    factory { CheckCodeSmsUseCase(get(),get()) }
-    //factory { AuthorizationStorageImpl(get()) as AuthorizationStorageApi }
-    factory { SendNumberUseCase(get()) }
-    factory { AuthorizationClientImpl(get()) as AuthorizationClientAPI }
-   // factory { AuthorizationClient(get())}
 
-  /*  single { AuthorizationClient(get()) }*/
+    factory { EnteringNumberViewModel(get()) }
+
+    factory { CheckSMSViewModel(get()) }
+
+    factory { CheckCodeSmsUseCase(get(),get()) }
+
+    factory { SendNumberUseCase(get()) }
+
+    factory { AuthorizationClientImpl(get()) as AuthorizationClientAPI }
 
 }
