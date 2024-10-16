@@ -1,4 +1,4 @@
-package com.project.domain
+package com.project.domain.usecases
 
 import com.project.domain.repository.OrganizationClientApi
 import kotlinx.coroutines.CoroutineScope

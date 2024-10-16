@@ -1,5 +1,6 @@
 package com.project.datasource
 
+import androidx.compose.runtime.mutableStateOf
 import com.project.core_app.ConstData
 import com.project.domain.repository.OrganizationClientApi
 import com.project.network.organizations_network.OrganizationsApi
@@ -27,11 +28,20 @@ class OrganizationClientImpl (
 
             onCreate()
 
-                // Navigation.navigator.push(OrganizationScreen())
+        }
 
-            /*organizationsState = organizationsState.copy(
-                isUsed = mutableStateOf(true)
-            )*/
+    }
+
+    override suspend fun deleteOrganization( ui: String, scope: CoroutineScope) {
+
+        val token = ConstData.TOKEN
+
+        organizationClient.token = token
+
+        scope.launch(Dispatchers.IO) {
+
+            organizationClient.deleteOrganization(ui)
+
         }
 
     }
