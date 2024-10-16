@@ -2,9 +2,10 @@ package com.project.`local-storage`.`profile-storage`
 
 import android.content.Context
 
-class StorageAndroid(context:Context) : ProfileValueStorageApi {
+ class StorageAndroid(context:Context) : SharedPrefsApi {
     val NUMBER:String = "NUMBER"
     val NAME:String = "NAME"
+     val TOKEN:String = "TOKEN"
     private val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
     override suspend fun saveCurrentNumber( value: String) {
@@ -23,4 +24,13 @@ class StorageAndroid(context:Context) : ProfileValueStorageApi {
         return sharedPreferences.getString(NAME, null)
 
     }
-}
+
+     override suspend fun saveToken(value: String) {
+         sharedPreferences.edit().putString(TOKEN, value).apply()
+
+     }
+
+     override suspend fun getToken(): String? {
+         return sharedPreferences.getString(TOKEN, null)
+     }
+ }

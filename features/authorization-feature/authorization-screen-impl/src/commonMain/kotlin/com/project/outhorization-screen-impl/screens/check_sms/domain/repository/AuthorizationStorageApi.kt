@@ -5,4 +5,7 @@ interface AuthorizationStorageApi {
     suspend fun saveUserNumber(username: String)
 
     suspend fun getUserNumber(): String?
+
+    suspend fun saveToken(token:String)
+
 }

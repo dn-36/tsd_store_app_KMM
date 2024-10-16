@@ -70,7 +70,7 @@ class AuthorizationClient(
                 userToken = json["access_token"]?.jsonPrimitive?.contentOrNull
 
                 if (userToken != null) {
-                    println("User token: $userToken")  // Выводим токен для отладки
+                    println("User token1: $userToken")  // Выводим токен для отладки
                     Result.Success("Login successful")  // Возвращаем успешный результат
                 } else {
                     println("user token: null")
@@ -135,19 +135,50 @@ class AuthorizationClient(
                 userToken = json["access_token"]?.jsonPrimitive?.contentOrNull
 
                 if (userToken != null) {
-                    println("User token: $userToken")  // Выводим токен для отладки
+                    println("User token1: $userToken")  // Выводим токен для отладки
                     Result.Success("Login successful")  // Возвращаем успешный результат
                 } else {
                     println("user token: null")
                     Result.Error(NetworkError.UNKNOWN)  // Если токен не найден
                 }
-                return Result.Success("Login successful")
+                return Result.Success(userToken?:"")
             }
             401 -> Result.Error(NetworkError.UNAUTHORIZED)
             in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
             else -> Result.Error(NetworkError.UNKNOWN)
         }
     }
+
+    suspend fun getToken(phone:String,name:String,code:String,token:String):String  = try {
+        val response =
+            httpClient.post(
+                urlString = "https://delta.online/api/auth/phone-verify-code-register"
+            ) {
+                contentType(ContentType.Application.Json)
+                setBody(mapOf("phone" to phone, "code" to code, "name" to name, "token" to token))
+            }
+        val responseBody = response.bodyAsText()
+
+        println("${responseBody}")
+        val json = Json.parseToJsonElement(responseBody).jsonObject
+        println("/////////////))))${json["access_token"]?.jsonPrimitive?.contentOrNull?:""}")
+        // Пытаемся получить токен пользователя
+      json["access_token"]?.jsonPrimitive?.contentOrNull?:""
+
+    } catch (e: UnresolvedAddressException) {
+        println("//////+++++!!!!!${ e.message.toString()}")
+        Result.Error(NetworkError.NO_INTERNET).error.name
+    } catch (e: SerializationException) {
+        println("//////+++++!!!!!${ e.message.toString()}")
+         Result.Error(NetworkError.SERIALIZATION).error.name
+    }catch (e:Exception) {
+        println("//////+++++!!!!!${ e.message.toString()}")
+        e.message.toString()
+    }
+
+
+
+
 
     // 5. Выход
     suspend fun logout(): Result<String, NetworkError> {

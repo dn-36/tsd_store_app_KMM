@@ -6,6 +6,6 @@ import org.koin.dsl.module
 actual val localStorageModule: Module
     get() = module {
         single {
-            StorageAndroid(get()) as ProfileValueStorageApi
+            StorageAndroid(get()) as SharedPrefsApi
         }
     }

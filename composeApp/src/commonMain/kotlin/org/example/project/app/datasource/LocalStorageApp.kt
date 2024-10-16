@@ -1,10 +1,10 @@
-package com.project.core_app.app.datasource
+package org.example.project.app.datasource
 
 import org.example.project.app.domain.LocalStorageAppApi
-import com.project.`local-storage`.`profile-storage`.ProfileValueStorageApi
+import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 
 
-class LocalStorageApp (private val sharedPrefs: ProfileValueStorageApi ): LocalStorageAppApi {
+class LocalStorageApp (private val sharedPrefs: SharedPrefsApi ): LocalStorageAppApi {
 
     override suspend fun number(): String = sharedPrefs.getCurrentNumber()?:""
 
@@ -12,6 +12,10 @@ class LocalStorageApp (private val sharedPrefs: ProfileValueStorageApi ): LocalS
 
       sharedPrefs.saveCurrentNumber (number)
 
+    }
+
+    override suspend fun saveToken(token: String) {
+        sharedPrefs.saveToken(token)
     }
 
 }

@@ -22,8 +22,12 @@ interface AuthorizationClientAPI {
         token:String,
         number:String,
         name:String,
-        actionOnSuccess:suspend ()->Unit,
+        actionOnSuccess:suspend (String)->Unit,
         actionOnError:()->Unit
     )
+
+    suspend fun getToken(number:String,name:String,token:String,code:String):String
+
+
 
 }

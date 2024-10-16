@@ -5,7 +5,7 @@ import org.koin.dsl.module
 
 actual val localStorageModule: Module = module{
        factory {
-           StorageIos() as ProfileValueStorageApi
+           StorageIos() as SharedPrefsApi
        }
 
     }

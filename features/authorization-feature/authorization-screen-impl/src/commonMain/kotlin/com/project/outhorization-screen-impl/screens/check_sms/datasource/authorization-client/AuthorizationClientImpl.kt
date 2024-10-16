@@ -54,7 +54,7 @@ class AuthorizationClientImpl(
         token: String,
         number: String,
         name: String,
-        actionOnSuccess: suspend () -> Unit,
+        actionOnSuccess: suspend (String) -> Unit,
         actionOnError: () -> Unit
     ) {
 
@@ -62,7 +62,7 @@ class AuthorizationClientImpl(
             UserStatus.REGISTERED -> {
                 //
                 authorizationClient.loginVerifyCode(number, code, token).onSuccess {
-                    actionOnSuccess()
+                    actionOnSuccess(it)
                 }
                 authorizationClient.loginVerifyCode(number, code, token).onError {
                     actionOnError()
@@ -72,7 +72,7 @@ class AuthorizationClientImpl(
             UserStatus.NEW -> {
 
                 authorizationClient.registerVerifyCode(number, code, name, token).onSuccess {
-                    actionOnSuccess()
+                    actionOnSuccess(it)
                 }
                 authorizationClient.registerVerifyCode(number, code, name, token).onError {
                     actionOnError()
@@ -81,4 +81,7 @@ class AuthorizationClientImpl(
             }
         }
     }
+
+   override suspend fun getToken(number: String, name: String, token: String,code:String) =
+       authorizationClient.getToken(number,name,token,code)
 }

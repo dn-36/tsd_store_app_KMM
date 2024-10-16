@@ -4,12 +4,12 @@ import com.project.chats.core.Utils
 import com.project.chats.screens.dialog.domain.DialogRepositoryApi
 import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
-import com.project.`local-storage`.`profile-storage`.ProfileValueStorageApi
+import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.chats_network.ChatsApi
 
 class DialogRepositoryImpl(
     private val chatApi:ChatsApi,
-    private val profileSavedDate: ProfileValueStorageApi
+    private val profileSavedDate: SharedPrefsApi
 ):DialogRepositoryApi {
 
 

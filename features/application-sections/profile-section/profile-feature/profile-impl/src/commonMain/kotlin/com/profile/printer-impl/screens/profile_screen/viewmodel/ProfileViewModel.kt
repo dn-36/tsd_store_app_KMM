@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.project.chats.WarehouseScreensApi
 import com.project.core_app.ConstData
-import com.project.`local-storage`.`profile-storage`.ProfileValueStorageApi
+import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -40,7 +40,7 @@ class ProfileViewModel:ViewModel() {
 
     fun setScreen(coroutineScope: CoroutineScope){
 
-       val keyValueStorage: ProfileValueStorageApi = getKoin().get()
+       val keyValueStorage: SharedPrefsApi = getKoin().get()
 
         if(profileState.isUsed.value) {
 
