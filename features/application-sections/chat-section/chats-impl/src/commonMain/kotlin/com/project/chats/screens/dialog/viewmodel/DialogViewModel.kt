@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.project.chats.screens.chats.screen.ChatsScreen
 import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
 import com.project.chats.screens.dialog.domain.SendMessageUseCase
@@ -12,7 +13,9 @@ import com.project.network.Navigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.example.project.nika_screens_chats.history_files_feature.screen.HistoryFilesScreen
 
@@ -22,9 +25,11 @@ class DialogViewModel(
 ):ViewModel() {
     private var isSeted:Boolean = false
     var dialogState by mutableStateOf(DialogState())
-   // private set
-
-    fun processIntent(intent: DialogIntents){
+    private lateinit var job: Job
+    init {
+        println("init DialogViewModel")
+    }
+     fun processIntent(intent: DialogIntents){
         when(intent){
             is DialogIntents.Back -> {back()}
             is DialogIntents.HistoryFiles -> {historyFiles()}
@@ -46,13 +51,13 @@ class DialogViewModel(
 
     }
 
-    private fun setScreen(uiChats:String, scope:CoroutineScope){
-        scope.launch(Dispatchers.IO){
+    fun setScreen(uiChats:String, scope:CoroutineScope){
+       job =  viewModelScope.launch(Dispatchers.IO){
         if(isSeted){
             return@launch
         }
             isSeted = true
-            while (true){
+            while (isActive){
                 val listDate = mutableSetOf<String>()
                 val listMessages =  getListMessagesUseCase.execute(uiChats)
                 listMessages.fastForEachIndexed { i, message ->
@@ -71,10 +76,13 @@ class DialogViewModel(
 
     }
 
-    fun sendMessageUseCase(text:String,ui:String,scope: CoroutineScope){
-        scope.launch {
-            sendMessageUseCase.execute(text,ui)
-        }
+   fun sendMessageUseCase(text:String,ui:String,scope: CoroutineScope){
+       viewModelScope.launch(Dispatchers.IO) {
+           
+           sendMessageUseCase.execute(text, ui)
+
+    }
+
 
     }
 }

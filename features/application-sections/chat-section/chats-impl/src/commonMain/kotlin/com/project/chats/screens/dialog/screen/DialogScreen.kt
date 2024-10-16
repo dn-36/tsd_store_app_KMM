@@ -46,6 +46,7 @@ import com.project.chats.screens.dialog.components.MessageDataComponent
 import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.viewmodel.DialogIntents
 import com.project.chats.screens.dialog.viewmodel.DialogViewModel
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
@@ -59,12 +60,10 @@ import project.core.resources.user_chats
 
 class DialogScreen(private val uiChats:String) : Screen {
 
-    private val vm:DialogViewModel = getKoin().get()
-
+    val vm:DialogViewModel = getKoin().get()
     @Composable
     override fun Content() {
 
-        //
         val scope = rememberCoroutineScope()
 
         val images = remember { mutableStateListOf<ImageBitmap>() }
@@ -79,9 +78,9 @@ class DialogScreen(private val uiChats:String) : Screen {
             }
         )
 
-        val listState = rememberLazyListState() // Создаем состояние списка
+        val listState = rememberLazyListState()
 
-        // Прокручиваем до конца при добавлении новых сообщений
+
         LaunchedEffect(vm.dialogState.listMessage.size) {
             listState.scrollToItem(vm.dialogState.listMessage.size)
         }
@@ -236,7 +235,7 @@ class DialogScreen(private val uiChats:String) : Screen {
                                 contentDescription = null,
                                 modifier = Modifier.padding(bottom = 15.dp, top = 8.dp).size(25.dp)
                                     .graphicsLayer(rotationZ = 180f).clickable{
-                                        vm.sendMessageUseCase(vm.dialogState.titleChats,uiChats,scope)
+                                                vm.sendMessageUseCase(vm.dialogState.titleChats,uiChats,scope)
                                     }
                             )
                         }

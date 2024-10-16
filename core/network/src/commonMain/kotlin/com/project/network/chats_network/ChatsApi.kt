@@ -165,9 +165,9 @@ class ChatsApi {
         } catch (e: Exception) {
             println("<<<<<<<${"Error: ${e.message}"}>>>>>>>>")
             return "Error: ${e.message}"
-        } finally {
-            client.close()
-        }
+        } //finally {
+           // client.close()
+      // }
     }
 
 

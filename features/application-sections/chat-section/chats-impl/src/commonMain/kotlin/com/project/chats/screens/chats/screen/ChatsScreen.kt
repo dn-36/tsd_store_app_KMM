@@ -47,11 +47,6 @@ class ChatsScreen : Screen {
         val scope = rememberCoroutineScope()
         val state by vm.state.collectAsState()
         vm.processIntent(ChatsIntents.SetScreen(scope))
-/* LaunchedEffect(true){
-     print("-------list_chats-------")
-     println("list_chats: "+ChatsApi().getChats().toString())
-     println("-------list_chats-------")
- }*/
 
  Box(modifier = Modifier.fillMaxSize()) {
 

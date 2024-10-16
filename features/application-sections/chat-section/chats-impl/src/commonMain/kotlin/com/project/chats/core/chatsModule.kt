@@ -1,6 +1,7 @@
 package com.project.chats.core
 
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.project.chats.ChatScreensApi
 import com.project.chats.screens.chats.datasource.ChatRepositoryImpl
 import com.project.chats.screens.chats.domain.ChatsRepositoryApi

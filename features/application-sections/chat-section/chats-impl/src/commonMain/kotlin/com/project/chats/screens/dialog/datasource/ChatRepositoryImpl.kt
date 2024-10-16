@@ -11,7 +11,8 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 class DialogRepositoryImpl(
     private val chatApi:ChatsApi,
-    private val profileSavedDate: ProfileValueStorageApi
+    private val profileSavedDate: ProfileValueStorageApi,
+
 ):DialogRepositoryApi {
 
     override suspend fun getListMessages(uiChats: String): List<Message> {
@@ -48,6 +49,8 @@ class DialogRepositoryImpl(
             listOf()
         )*/
     }
+
+   // override suspend fun getToken(): String = chatApi
 
     override suspend fun readMessege(ui: String) {
 
