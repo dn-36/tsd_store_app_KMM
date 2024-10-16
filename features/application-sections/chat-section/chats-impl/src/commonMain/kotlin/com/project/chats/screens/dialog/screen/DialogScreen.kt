@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,18 +18,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
@@ -46,9 +44,9 @@ import com.preat.peekaboo.image.picker.toImageBitmap
 import com.project.chats.screens.dialog.components.MessageComponent
 import com.project.chats.screens.dialog.components.MessageDataComponent
 import com.project.chats.screens.dialog.domain.models.Message
-import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.project.chats.screens.dialog.viewmodel.DialogIntents
 import com.project.chats.screens.dialog.viewmodel.DialogViewModel
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
@@ -62,12 +60,10 @@ import project.core.resources.user_chats
 
 class DialogScreen(private val uiChats:String) : Screen {
 
-    private val vm:DialogViewModel = getKoin().get()
-
+    val vm:DialogViewModel = getKoin().get()
     @Composable
     override fun Content() {
 
-        //
         val scope = rememberCoroutineScope()
 
         val images = remember { mutableStateListOf<ImageBitmap>() }
@@ -81,6 +77,13 @@ class DialogScreen(private val uiChats:String) : Screen {
                 }
             }
         )
+
+        val listState = rememberLazyListState()
+
+
+        LaunchedEffect(vm.dialogState.listMessage.size) {
+            listState.scrollToItem(vm.dialogState.listMessage.size)
+        }
 
         vm.processIntent(DialogIntents.SetScreen(uiChats,scope))
 
@@ -126,26 +129,28 @@ class DialogScreen(private val uiChats:String) : Screen {
 
                 }
 
-
-
-
                 LazyColumn(
-                    modifier = Modifier.padding(10.dp).fillMaxWidth().fillMaxHeight(0.94f)
+                    state = listState,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.94f)
                 ) {
-                    var date = ""
+
+
                     items(vm.dialogState.listMessage) { item ->
-                        if(date!= item.date){
-                            date = item.date
-                            MessageDataComponent(item.date)
-                        }
-                      MessageComponent(
-                          Message(
-                          item.text,
-                          item.name,
-                          item.time,
-                          item.date,
-                          item.whoseMessage)
-                      )
+                            if(item.isShowDate) {
+                                MessageDataComponent(item.date)
+                            }
+
+                        MessageComponent(
+                            Message(
+                                item.text,
+                                item.name,
+                                item.time,
+                                item.date,
+                                item.whoseMessage)
+                        )
                     }
                 }
             }
@@ -193,9 +198,9 @@ class DialogScreen(private val uiChats:String) : Screen {
                             BasicTextField(
                                 value = vm.dialogState.titleChats,
                                 onValueChange = {
-                                   /* vm.dialogState = vm.dialogState.copy(
-                                        titleChats = it
-                                    )*/
+                                     vm.dialogState = vm.dialogState.copy(
+                                         titleChats = it
+                                     )
                                 },
                                 modifier = Modifier
                                     .fillMaxWidth(0.65f).heightIn(min = 33.dp, max = 150.dp),
@@ -229,7 +234,9 @@ class DialogScreen(private val uiChats:String) : Screen {
                                 painter = painterResource(Res.drawable.back),
                                 contentDescription = null,
                                 modifier = Modifier.padding(bottom = 15.dp, top = 8.dp).size(25.dp)
-                                    .graphicsLayer(rotationZ = 180f)
+                                    .graphicsLayer(rotationZ = 180f).clickable{
+                                                vm.sendMessageUseCase(vm.dialogState.titleChats,uiChats,scope)
+                                    }
                             )
                         }
                     }

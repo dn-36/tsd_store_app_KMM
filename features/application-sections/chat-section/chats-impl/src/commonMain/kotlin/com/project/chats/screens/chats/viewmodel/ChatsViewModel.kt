@@ -3,7 +3,6 @@ package com.project.chats.screens.chats.viewmodel
 import androidx.lifecycle.ViewModel
 import com.project.chats.screens.chats.domain.GetListChatsUseCase
 import com.project.network.Navigation
-import com.project.network.chats_network.ChatsApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -24,22 +23,20 @@ class ChatsViewModel(
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
             is ChatsIntents.DialogueSelection -> {
-                dialogueSelection(intent.userId,intent.scope)
+                dialogueSelection(intent.ui,intent.scope)
             }
             is ChatsIntents.AddChat -> {
                 addChat()
             }
             is ChatsIntents.SetScreen -> {
+                println("!!!!!!!!!!!!______!!!!!!!!!!!!")
                 setScreen(intent.scope)
             }
         }
     }
 
-    fun dialogueSelection(chatsUi:String, coroutineScope: CoroutineScope) {
-        coroutineScope.launch(Dispatchers.IO){
-            println("--------qqqqq-----------")
-            println("qqqqq: ${ChatsApi().getListMassengers(chatsUi)}")
-            println("--------qqqqq-----------")
+    fun dialogueSelection(chatsUi:String, scope: CoroutineScope) {
+        scope.launch(Dispatchers.IO){
             Navigation.navigator.push(DialogScreen(chatsUi))
         }
     }

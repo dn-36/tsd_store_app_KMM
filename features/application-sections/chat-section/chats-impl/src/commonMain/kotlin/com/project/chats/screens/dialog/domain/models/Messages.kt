@@ -7,6 +7,7 @@ data class Message(
    val time:String,
    val date:String,
    val whoseMessage: WhoseMessage,
+   var isShowDate:Boolean = false
 )
 
 enum class WhoseMessage{

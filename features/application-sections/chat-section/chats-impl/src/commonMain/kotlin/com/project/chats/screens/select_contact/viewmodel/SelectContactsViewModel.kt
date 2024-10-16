@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.project.chats.screen.ChatsScreen
+import com.project.chats.screens.chats.screen.ChatsScreen
 import com.project.network.Navigation
 import contact_provider.ContactProviderApi
 import model.Contact

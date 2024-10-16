@@ -6,7 +6,7 @@ sealed class ChatsIntents {
 
     data class DialogueSelection(
         val scope:CoroutineScope,
-        val userId:String)
+        val ui:String)
         : ChatsIntents()
 
     object AddChat : ChatsIntents()

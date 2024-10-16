@@ -43,7 +43,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-
+            //implementation("io.insert-koin:koin-androidx-viewmodel:3.4.0")
             // implementation(libs.koin.core)
             api(libs.koin.core)
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
