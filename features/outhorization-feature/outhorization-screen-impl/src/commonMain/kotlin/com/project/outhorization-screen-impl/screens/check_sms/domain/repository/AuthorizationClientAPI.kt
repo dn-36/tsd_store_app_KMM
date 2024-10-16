@@ -5,7 +5,9 @@ import com.project.`outhorization-screen-api`.UserStatus
 
 interface AuthorizationClientAPI {
     companion object{
+
         var userStatus: UserStatus = UserStatus.NEW
+
     }
 
     suspend fun sendNumber(
@@ -23,4 +25,5 @@ interface AuthorizationClientAPI {
         actionOnSuccess:suspend ()->Unit,
         actionOnError:()->Unit
     )
+
 }

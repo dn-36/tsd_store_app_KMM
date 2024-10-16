@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.project.component.CreateOrganization
 import com.project.core_app.ConstData
+import com.project.domain.CreateOrganizationUseCase
 import com.project.network.Navigation
 import com.project.network.organizations_network.OrganizationsApi
 import com.project.screen.OrganizationScreen
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 
-class OrganizationsViewModel:ViewModel() {
+class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationUseCase):ViewModel() {
 
     var organizationsState by mutableStateOf(OrganizationsState())
 
@@ -28,7 +29,14 @@ class OrganizationsViewModel:ViewModel() {
 
             is OrganizationsIntents.DeleteOrganization -> deleteOrganization(intent.coroutineScope,intent.ui)
 
-            is OrganizationsIntents.CreateOrganization -> createOrganization(intent.coroutineScope,intent.name,intent.url)
+            is OrganizationsIntents.CreateOrganization -> {
+
+                intent.coroutineScope.launch(Dispatchers.IO) {
+
+                    createOrganizationUseCase.execute(intent.name,intent.url)
+
+                }
+            }//createOrganization(intent.coroutineScope,intent.name,intent.url)
 
             is OrganizationsIntents.OpenWindowAddOrganization -> openWindowAddOrganization()
 
