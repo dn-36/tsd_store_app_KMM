@@ -40,6 +40,7 @@ import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.datasource.OrganizationClientImpl
 import com.project.domain.usecases.CreateOrganizationUseCase
 import com.project.domain.repository.OrganizationClientApi
+import com.project.domain.usecases.ChoosingActiveOrganizationUseCase
 import com.project.domain.usecases.DeleteOrganizationUseCase
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.menu.screen.TapeScreenApi
@@ -56,7 +57,10 @@ class OrganizationScreen(): Screen {
 
     val n:OrganizationClientApi = OrganizationClientImpl(OrganizationsApi)
 
-    val vm = OrganizationsViewModel(CreateOrganizationUseCase(n), DeleteOrganizationUseCase(n))//(getKoin().get())
+    val vm = OrganizationsViewModel(CreateOrganizationUseCase(n), DeleteOrganizationUseCase(n)
+    , ChoosingActiveOrganizationUseCase((n))
+
+    )//(getKoin().get())
     @Composable
     override fun Content() {
 
@@ -139,7 +143,7 @@ class OrganizationScreen(): Screen {
                         .clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-                        {vm.processIntent(OrganizationsIntents.OpenWindowAddOrganization)})
+                        { vm.processIntent(OrganizationsIntents.OpenWindowAddOrganization)})
 
                 Box(modifier = Modifier) {
                     MenuBottomBar().init(

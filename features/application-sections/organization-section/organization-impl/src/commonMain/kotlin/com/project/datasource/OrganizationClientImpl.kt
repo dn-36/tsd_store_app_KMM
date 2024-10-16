@@ -46,4 +46,17 @@ class OrganizationClientImpl (
 
     }
 
+    override suspend fun choosingActiveOrganization(ui:String, scope: CoroutineScope){
+
+        val token = ConstData.TOKEN
+
+        organizationClient.token = token
+
+        scope.launch(Dispatchers.IO) {
+
+            organizationClient.setActiveOrganization(ui)
+
+        }
+    }
+
 }

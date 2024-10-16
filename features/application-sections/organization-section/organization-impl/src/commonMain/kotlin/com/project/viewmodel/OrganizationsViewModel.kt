@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.project.component.CreateOrganization
 import com.project.core_app.ConstData
+import com.project.domain.usecases.ChoosingActiveOrganizationUseCase
 import com.project.domain.usecases.CreateOrganizationUseCase
 import com.project.domain.usecases.DeleteOrganizationUseCase
 import com.project.network.Navigation
@@ -21,6 +22,8 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
 
  , val deleteOrganizationUseCase: DeleteOrganizationUseCase
 
+, val choosingActiveOrganization: ChoosingActiveOrganizationUseCase
+
 ):ViewModel() {
 
     var organizationsState by mutableStateOf(OrganizationsState())
@@ -31,7 +34,21 @@ class OrganizationsViewModel (val createOrganizationUseCase: CreateOrganizationU
 
             is OrganizationsIntents.SetScreen -> setScreen(intent.coroutineScope)
 
-            is OrganizationsIntents.ChoosingActiveOrganization -> choosingActiveOrganization(intent.coroutineScope,intent.ui)
+            is OrganizationsIntents.ChoosingActiveOrganization -> {
+
+                intent.coroutineScope.launch(Dispatchers.IO) {
+
+                    choosingActiveOrganization.execute(intent.ui,intent.coroutineScope)
+
+                    organizationsState = organizationsState.copy(
+
+                        isUsed = mutableStateOf(true)
+
+                    )
+
+                }
+
+            }//choosingActiveOrganization(intent.coroutineScope,intent.ui)
 
             is OrganizationsIntents.DeleteOrganization -> {
 

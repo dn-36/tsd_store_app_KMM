@@ -8,5 +8,6 @@ interface OrganizationClientApi {
                                     onCreate: () -> Unit)
 
     suspend fun deleteOrganization (ui: String, scope: CoroutineScope)
+    suspend fun choosingActiveOrganization (ui: String, scope: CoroutineScope)
 
 }
