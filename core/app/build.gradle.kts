@@ -39,7 +39,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
-            implementation(project(":features:outhorization-feature:outhorization-screen-api"))
+            implementation(project(":features:authorization-feature:authorization-screen-api"))
 
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))

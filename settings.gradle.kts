@@ -109,9 +109,9 @@ include(":features:application-sections")
 /*----*/include(":features:application-sections:tape-section:tape-impl")
 
 /**outhorization-feature**/
-/*--*/include(":features:outhorization-feature:outhorization-feature")
+/*--*/include(":features:authorization-feature:authorization-feature")
 /** api and impl **/
-/*----*/include(":features:outhorization-feature:outhorization-screen-api")
-/*----*/include(":features:outhorization-feature:outhorization-screen-impl")
+/*----*/include(":features:authorization-feature:authorization-screen-api")
+/*----*/include(":features:authorization-feature:authorization-screen-impl")
 
 /*----*/include(":features:application-sections:tape-section:tape-api")
