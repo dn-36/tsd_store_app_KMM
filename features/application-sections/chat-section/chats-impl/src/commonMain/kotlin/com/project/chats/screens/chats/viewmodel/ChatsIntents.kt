@@ -7,6 +7,7 @@ sealed class ChatsIntents {
     data class DialogueSelection(
         val scope:CoroutineScope,
         val ui:String,
+        val urlIcon:String?,
         val titleChat:String)
         : ChatsIntents()
 

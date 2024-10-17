@@ -6,6 +6,7 @@ data class Message(
    val name:String,
    val time:String,
    val date:String,
+   val urlIcon:String?,
    val whoseMessage: WhoseMessage,
    var isShowDate:Boolean = false
 )

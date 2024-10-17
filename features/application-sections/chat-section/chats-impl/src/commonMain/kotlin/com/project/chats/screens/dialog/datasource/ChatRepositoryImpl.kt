@@ -23,7 +23,8 @@ class DialogRepositoryImpl(
                 it.user?.name?:"",
                 Utils.parseDateTimeManually (it?.created_at?:"").time ,
                 Utils.parseDateTimeManually (it?.created_at?:"").date ,
-                if(it?.user?.phone == profileSavedDate.getCurrentNumber()?:"")WhoseMessage.YOU
+                it.image,
+                if(it?.user?.phone == profileSavedDate.getCurrentNumber()?:"") WhoseMessage.YOU
                 else WhoseMessage.INTERLOCUTOR
             )
         }?: listOf()

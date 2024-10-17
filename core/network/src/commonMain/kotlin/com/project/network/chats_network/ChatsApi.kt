@@ -20,7 +20,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.util.InternalAPI
+import io.ktor.utils.io.InternalAPI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 

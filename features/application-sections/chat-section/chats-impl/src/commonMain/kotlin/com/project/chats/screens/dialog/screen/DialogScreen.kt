@@ -46,6 +46,7 @@ import com.project.chats.screens.dialog.components.MessageDataComponent
 import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.viewmodel.DialogIntents
 import com.project.chats.screens.dialog.viewmodel.DialogViewModel
+import com.skydoves.landscapist.coil3.CoilImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
@@ -58,7 +59,7 @@ import project.core.resources.paperclip
 import project.core.resources.user_chats
 
 
-class DialogScreen(private val uiChats:String,private val titleChat:String) : Screen {
+class DialogScreen(private val uiChats:String,private val titleChat:String, private val urlIcon:String?) : Screen {
 
     val vm:DialogViewModel = getKoin().get()
     @Composable
@@ -106,12 +107,18 @@ class DialogScreen(private val uiChats:String,private val titleChat:String) : Sc
                         )
 
                         Spacer(modifier = Modifier.width(15.dp))
-
+                        if(urlIcon.isNullOrBlank()){
                         Image(
                             painter = painterResource(Res.drawable.user_chats),
                             contentDescription = null,
                             modifier = Modifier.size(30.dp)
                         )
+                        }else{
+                            CoilImage(
+                                imageModel = { urlIcon },
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
 
                         Spacer(modifier = Modifier.width(20.dp))
 
@@ -149,6 +156,7 @@ class DialogScreen(private val uiChats:String,private val titleChat:String) : Sc
                                 item.name,
                                 item.time,
                                 item.date,
+                                item.urlIcon,
                                 item.whoseMessage)
                         )
                     }
