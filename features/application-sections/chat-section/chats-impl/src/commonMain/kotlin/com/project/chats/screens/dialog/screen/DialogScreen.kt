@@ -58,7 +58,7 @@ import project.core.resources.paperclip
 import project.core.resources.user_chats
 
 
-class DialogScreen(private val uiChats:String) : Screen {
+class DialogScreen(private val uiChats:String,private val titleChat:String) : Screen {
 
     val vm:DialogViewModel = getKoin().get()
     @Composable
@@ -115,7 +115,7 @@ class DialogScreen(private val uiChats:String) : Screen {
 
                         Spacer(modifier = Modifier.width(20.dp))
 
-                        Text("Название чата", fontSize = 20.sp)
+                        Text(titleChat, fontSize = 20.sp)
                     }
 
                     Image(
@@ -189,11 +189,7 @@ class DialogScreen(private val uiChats:String) : Screen {
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.Bottom
                         ) {
-                            /* Image(
-                            painter = painterResource(Res.drawable.smile),
-                            contentDescription = null,
-                            modifier = Modifier.padding(bottom = 15.dp,top = 8.dp).size(25.dp)
-                        )*/
+
 
                             BasicTextField(
                                 value = vm.dialogState.titleChats,
@@ -235,7 +231,11 @@ class DialogScreen(private val uiChats:String) : Screen {
                                 contentDescription = null,
                                 modifier = Modifier.padding(bottom = 15.dp, top = 8.dp).size(25.dp)
                                     .graphicsLayer(rotationZ = 180f).clickable{
+
                                                 vm.sendMessageUseCase(vm.dialogState.titleChats,uiChats,scope)
+                                        vm.dialogState = vm.dialogState.copy(
+                                            titleChats = ""
+                                        )
                                     }
                             )
                         }

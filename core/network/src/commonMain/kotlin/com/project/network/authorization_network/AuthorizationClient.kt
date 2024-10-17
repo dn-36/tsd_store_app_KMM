@@ -1,5 +1,6 @@
 package com.project.network.authorization_network
 
+import com.project.network.ConstData
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -44,13 +45,13 @@ class AuthorizationClient(
     }
 
     // 2. Регистрация: проверка кода и завершение
-    suspend fun registerVerifyCode(phone: String, code: String, name: String, token: String): Result<String, NetworkError> {
+    suspend fun registerVerifyCode(phone: String, code: String, name: String/*, token: String*/): Result<String, NetworkError> {
         val response = try {
             httpClient.post(
                 urlString = "https://delta.online/api/auth/phone-verify-code-register"
             ) {
                 contentType(ContentType.Application.Json)
-                setBody(mapOf("phone" to phone, "code" to code, "name" to name, "token" to token))
+                setBody(mapOf("phone" to phone, "code" to code, "name" to name, "token" to ConstData.TOKEN ))
             }
         } catch (e: UnresolvedAddressException) {
             return Result.Error(NetworkError.NO_INTERNET)
@@ -109,13 +110,13 @@ class AuthorizationClient(
     }
 
     // 4. Авторизация: проверка кода
-    suspend fun loginVerifyCode(phone: String, code: String, token: String): Result<String, NetworkError> {
+    suspend fun loginVerifyCode(phone: String, code: String/*, token*/): Result<String, NetworkError> {
         val response = try {
             httpClient.post(
                 urlString = "https://delta.online/api/auth/phone-verify-code"
             ) {
                 contentType(ContentType.Application.Json)
-                setBody(mapOf("phone" to phone, "code" to code, "token" to token))
+                setBody(mapOf("phone" to phone, "code" to code, "token" to "TOKEN"))
             }
         } catch (e: UnresolvedAddressException) {
             return Result.Error(NetworkError.NO_INTERNET)
@@ -135,11 +136,11 @@ class AuthorizationClient(
                 userToken = json["access_token"]?.jsonPrimitive?.contentOrNull
 
                 if (userToken != null) {
-                    println("User token1: $userToken")  // Выводим токен для отладки
-                    Result.Success("Login successful")  // Возвращаем успешный результат
+                    println("User token1: $userToken")
+                    Result.Success("Login successful")
                 } else {
                     println("user token: null")
-                    Result.Error(NetworkError.UNKNOWN)  // Если токен не найден
+                    Result.Error(NetworkError.UNKNOWN)
                 }
                 return Result.Success(userToken?:"")
             }
@@ -149,7 +150,7 @@ class AuthorizationClient(
         }
     }
 
-    suspend fun getToken(phone:String,name:String,code:String,token:String):String  = try {
+   /* suspend fun getToken(phone:String,name:String,code:String,token:String):String  = try {
         val response =
             httpClient.post(
                 urlString = "https://delta.online/api/auth/phone-verify-code-register"
@@ -175,7 +176,7 @@ class AuthorizationClient(
         println("//////+++++!!!!!${ e.message.toString()}")
         e.message.toString()
     }
-
+*/
 
 
 

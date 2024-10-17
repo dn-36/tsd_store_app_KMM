@@ -4,6 +4,7 @@ class SendMessageUseCase(
     private val dialogRepositoryApi:DialogRepositoryApi
 ) {
     suspend fun execute(text:String,ui:String){
-     dialogRepositoryApi.sendMessege(text,ui)
+        println("----AAAA___AAAAA_aaaaa___ssss")
+     dialogRepositoryApi.sendMessege(text,ui,dialogRepositoryApi.getToken())
     }
 }

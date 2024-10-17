@@ -26,7 +26,7 @@ val chatsModule = module{
           GetListChatsUseCase(get())
      }
      factory {
-         ChatRepositoryImpl(get()) as  ChatsRepositoryApi
+         ChatRepositoryImpl(get(),get()) as  ChatsRepositoryApi
      }
      factory {
           ChatsApi()

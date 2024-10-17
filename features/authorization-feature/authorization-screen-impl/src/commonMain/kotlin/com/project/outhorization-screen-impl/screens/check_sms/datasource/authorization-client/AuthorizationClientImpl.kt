@@ -37,7 +37,6 @@ class AuthorizationClientImpl(
                 scope.launch {
                     authorizationClient.loginCreateCode(number)
                         .onSuccess {
-                            println("////////////////////////////ANSWER REGISTERED////////////////////\n\n${number}")
                             println(it)
                             userStatus = UserStatus.REGISTERED
                             actionOnSuccess(true)
@@ -51,7 +50,7 @@ class AuthorizationClientImpl(
 
     override suspend fun checkSMS(
         code: String,
-        token: String,
+       // token: String,
         number: String,
         name: String,
         actionOnSuccess: suspend (String) -> Unit,
@@ -61,27 +60,28 @@ class AuthorizationClientImpl(
         when (userStatus) {
             UserStatus.REGISTERED -> {
                 //
-                authorizationClient.loginVerifyCode(number, code, token).onSuccess {
+                authorizationClient.loginVerifyCode(number, code/*, token*/).onSuccess {
                     actionOnSuccess(it)
                 }
-                authorizationClient.loginVerifyCode(number, code, token).onError {
+                authorizationClient.loginVerifyCode(number, code/*, token*/).onError {
                     actionOnError()
                 }
             }
 
             UserStatus.NEW -> {
 
-                authorizationClient.registerVerifyCode(number, code, name, token).onSuccess {
+                authorizationClient.registerVerifyCode(number, code, name/*, token*/).onSuccess {
                     actionOnSuccess(it)
                 }
-                authorizationClient.registerVerifyCode(number, code, name, token).onError {
+                authorizationClient.registerVerifyCode(number, code, name/*, token*/).onError {
                     actionOnError()
                 }
 
             }
         }
     }
-
-   override suspend fun getToken(number: String, name: String, token: String,code:String) =
-       authorizationClient.getToken(number,name,token,code)
 }
+
+ /*  override suspend fun getToken(number: String, name: String, token: String,code:String) =
+       authorizationClient.getToken(number,name,token,code)
+}*/

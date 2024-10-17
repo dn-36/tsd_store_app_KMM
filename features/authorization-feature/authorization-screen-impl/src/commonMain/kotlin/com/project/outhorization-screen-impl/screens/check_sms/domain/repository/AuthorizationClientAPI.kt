@@ -19,14 +19,14 @@ interface AuthorizationClientAPI {
 
     suspend fun checkSMS(
         code: String,
-        token:String,
+       // token:String,
         number:String,
         name:String,
         actionOnSuccess:suspend (String)->Unit,
         actionOnError:()->Unit
     )
 
-    suspend fun getToken(number:String,name:String,token:String,code:String):String
+  //  suspend fun getToken(number:String,name:String,token:String,code:String):String
 
 
 

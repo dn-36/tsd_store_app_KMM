@@ -51,8 +51,21 @@ kotlin {
 
             implementation(dependencyNotation = libs.peekaboo.ui)
             implementation(dependencyNotation = libs.peekaboo.imagepicker)
-        }
 
+           //для скачивония изображения с интернета kamel-image
+     //       implementation("media.kamel:kamel-image:1.0.0")
+
+
+       //     implementation("media.kamel:kamel-decoder-image-bitmap:1.0.0")
+
+
+
+        }
+     jvmMain{
+         dependencies {
+        //     implementation("media.kamel:kamel-fetcher-resources-jvm:1.0.0")
+         }
+     }
     }
 }
 
@@ -61,6 +74,9 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 24
+    }
+    dependencies{
+        implementation("media.kamel:kamel-fetcher-resources-android:1.0.0")
     }
 }
 

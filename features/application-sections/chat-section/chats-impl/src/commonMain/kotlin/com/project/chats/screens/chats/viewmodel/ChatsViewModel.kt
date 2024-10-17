@@ -23,7 +23,7 @@ class ChatsViewModel(
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
             is ChatsIntents.DialogueSelection -> {
-                dialogueSelection(intent.ui,intent.scope)
+                dialogueSelection(intent.ui,intent.titleChat,intent.scope)
             }
             is ChatsIntents.AddChat -> {
                 addChat()
@@ -35,9 +35,9 @@ class ChatsViewModel(
         }
     }
 
-    fun dialogueSelection(chatsUi:String, scope: CoroutineScope) {
+    fun dialogueSelection(chatsUi:String,titleChat:String, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO){
-            Navigation.navigator.push(DialogScreen(chatsUi))
+            Navigation.navigator.push(DialogScreen(uiChats  = chatsUi,titleChat))
         }
     }
 

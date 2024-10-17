@@ -66,10 +66,12 @@ class DialogViewModel(
                     }
                     listDate.add(message.date)
                 }
+                if(listMessages.size != 0){
+                    dialogState = dialogState.copy(
+                        listMessage = listMessages
+                    )
+                }
 
-                dialogState = dialogState.copy(
-                    listMessage = listMessages
-                )
             delay(1500L)
             }
         }

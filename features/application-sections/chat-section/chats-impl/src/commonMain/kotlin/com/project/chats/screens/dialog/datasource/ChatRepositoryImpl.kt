@@ -4,18 +4,19 @@ import com.project.chats.core.Utils
 import com.project.chats.screens.dialog.domain.DialogRepositoryApi
 import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
-import com.project.`local-storage`.`profile-storage`.ProfileValueStorageApi
+import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.chats_network.ChatsApi
+import product_network.model.LocalStore
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 class DialogRepositoryImpl(
     private val chatApi:ChatsApi,
-    private val profileSavedDate: ProfileValueStorageApi,
+    private val profileSavedDate: SharedPrefsApi,
 
-):DialogRepositoryApi {
+    ):DialogRepositoryApi {
 
-    override suspend fun getListMessages(uiChats: String): List<Message> {
+    override suspend fun getListMessages(uiChats: String,userToken:String): List<Message> {
         return chatApi.getListMassengers(uiChats).messages?.data?.map {
             Message(
                 it.text ?: "",
@@ -30,7 +31,8 @@ class DialogRepositoryImpl(
 
     override suspend fun sendMessege(
         text:String,
-        chat_ui:String
+        chat_ui:String,
+        userToken:String
     ) {
         chatApi.sendMessage(
             chat_ui,
@@ -40,15 +42,10 @@ class DialogRepositoryImpl(
             listOf(),
             listOf()
         )
-       /*chatApi.sendMessage(
-            "U5OG8ELF" ,
-            "",
-            "qqqqq_111_skksks",
-            null,
-            listOf(),
-            listOf()
-        )*/
+
     }
+
+
 
    // override suspend fun getToken(): String = chatApi
 
@@ -59,6 +56,9 @@ class DialogRepositoryImpl(
     override suspend fun deleteMeddege(ui: String) {
 
     }
+
+    override suspend fun getToken(): String = profileSavedDate.getToken()?:""
+
 
 
 }
