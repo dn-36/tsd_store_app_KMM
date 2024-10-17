@@ -24,11 +24,15 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
+import org.koin.mp.KoinPlatform.getKoin
 
 
 class ArrivalAndConsumptionScreen: Screen {
-    val vm = ArrivalAndConsumptionViewModel()
+
+    val vm : ArrivalAndConsumptionViewModel = getKoin().get()
+
     @Composable
+
     override fun Content() {
 
         val scope = rememberCoroutineScope()

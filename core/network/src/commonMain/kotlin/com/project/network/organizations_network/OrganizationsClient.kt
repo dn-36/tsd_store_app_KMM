@@ -24,7 +24,6 @@ import kotlinx.serialization.json.Json
 
 class  OrganizationsClient {
 
-
         private val client = HttpClient(httpClientEngine) {
             install(ContentNegotiation) {
                 json(Json {

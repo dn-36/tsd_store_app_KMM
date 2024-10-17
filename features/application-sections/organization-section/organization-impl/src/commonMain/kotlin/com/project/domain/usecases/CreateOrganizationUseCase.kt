@@ -11,13 +11,12 @@ class CreateOrganizationUseCase (
 
     suspend fun execute( name: String,
                           url:String,
-                         scope: CoroutineScope,
                          onCreate: () -> Unit
 
     ){
 
         client.createOrganization (
-            name, url, scope, onCreate
+            name, url, onCreate
         )
     }
 }

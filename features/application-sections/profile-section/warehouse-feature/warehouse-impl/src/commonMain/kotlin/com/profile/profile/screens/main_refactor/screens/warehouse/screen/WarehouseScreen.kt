@@ -33,7 +33,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.screen.ArrivalAndConsumptionScreen
 import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseIntents
 import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseViewModel
-
 import com.project.chats.ProfileScreensApi
 import com.project.chats.WarehouseScreensApi
 import com.project.`printer-api`.PrinterScreensApi
@@ -46,7 +45,8 @@ import project.core.resources.plus
 import project.core.resources.update_pencil
 
 class WarehouseScreen : Screen {
-    val vm = WarehouseViewModel()
+
+    val vm : WarehouseViewModel = getKoin().get()
 
     @Composable
     override fun Content() {

@@ -6,19 +6,32 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.AddProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ArrivalGoodsComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ListProductsComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetContagentsUseCase
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetProductsUseCase
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetWarehouseArrivalAndConsumptionUseCase
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.screen.ArrivalAndConsumptionScreen
 import com.project.core_app.ConstData
 import com.project.network.Navigation
-import com.project.network.contragent_network.ContragentApi
-import com.project.network.warehouse_network.WarehouseApi
+import com.project.network.contragent_network.ContragentClient
+import com.project.network.warehouse_network.WarehouseClient
 import com.project.network.warehouse_network.model.Warehouse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 
-class ArrivalAndConsumptionViewModel : ViewModel() {
+class ArrivalAndConsumptionViewModel (
+
+    val getContagentsUseCase: GetContagentsUseCase,
+
+    val getProductsUseCase: GetProductsUseCase,
+
+    val getWarehouseArrivalAndConsumptionUseCase: GetWarehouseArrivalAndConsumptionUseCase
+
+) : ViewModel() {
 
     var arrivalAndConsumptionState by mutableStateOf(ArrivalAndConsumptionState())
 
@@ -26,72 +39,92 @@ class ArrivalAndConsumptionViewModel : ViewModel() {
         when (intent) {
 
             is ArrivalAndConsumptionIntents.Arrival -> {
-                arrival(intent.coroutineScope)
+
+                intent.coroutineScope.launch (Dispatchers.IO) {
+
+                    getContagentsUseCase.execute ( onGet = { newListContragents ->
+
+                        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+
+                            listAllContragent = newListContragents,
+
+                        )
+
+                    })
+
+                    getWarehouseArrivalAndConsumptionUseCase.execute ( onGet = { listAllWarehouse ->
+
+                        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+
+                            listAllWarehouse = listAllWarehouse,
+
+                            )
+
+                    })
+
+                    Navigation.navigator.push(
+
+                        ArrivalGoodsComponent(
+
+                            listAllContragents = arrivalAndConsumptionState.listAllContragent,
+
+                            listAllWarehouse = arrivalAndConsumptionState.listAllWarehouse,
+
+                            onClickBack = { processIntent(ArrivalAndConsumptionIntents.Back) },
+
+                            onClickNext = { processIntent(ArrivalAndConsumptionIntents.Next(intent.coroutineScope)) }
+
+                        )
+                    )
+
+                }
+                //arrival(intent.coroutineScope)
             }
 
             is ArrivalAndConsumptionIntents.Back -> {
+
                 back()
             }
 
             is ArrivalAndConsumptionIntents.Next -> {
-                next()
+
+                next(intent.coroutineScope)
+            }
+
+            is ArrivalAndConsumptionIntents.ProductSelection -> {
+
+                productSelection()
             }
 
             is ArrivalAndConsumptionIntents.SelectFromList -> {
-                selectFromList()
-            }
-        }
-    }
 
-    fun arrival(coroutineScope: CoroutineScope) {
+                intent.coroutineScope.launch (Dispatchers.IO) {
 
-        val token = ConstData.TOKEN
+                    getProductsUseCase.execute ( onGet = { listAllProducts ->
 
-        ContragentApi.token = token
+                        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
 
-        WarehouseApi.token = token
+                            listAllProducts = listAllProducts
 
-        coroutineScope.launch(Dispatchers.IO) {
+                        )
 
-            val newListContragents = ContragentApi.getContragents()
+                    })
 
-            println("контраегнты: ${newListContragents}")
+                    Navigation.navigator.push(ListProductsComponent(arrivalAndConsumptionState.listAllProducts,
+                       onClickProduct =  { processIntent(ArrivalAndConsumptionIntents.ProductSelection )}))
 
-            val newListWarehouse = mutableListOf<Warehouse>()
+                    val newList = arrivalAndConsumptionState.selectedProducts.toMutableList()
 
-            WarehouseApi.getWarehouse().forEach {
+                    newList.add(ProductArrivalAndConsumption(ListProductsComponent(arrivalAndConsumptionState.listAllProducts,
+                        onClickProduct =  { processIntent(ArrivalAndConsumptionIntents.ProductSelection )}).selectedProduct!!.id!!,0))
 
-                if (it.stores.isNotEmpty()) {
+                    arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
 
-                    newListWarehouse.add(it)
+                        selectedProducts = newList
 
+                    )
                 }
-
             }
-
-            arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
-
-                listAllContragent = newListContragents,
-
-                listAllWarehouse = newListWarehouse
-
-            )
-
-            Navigation.navigator.push(
-
-                ArrivalGoodsComponent(
-
-                    listAllContragents = arrivalAndConsumptionState.listAllContragent,
-
-                    listAllWarehouse = arrivalAndConsumptionState.listAllWarehouse,
-
-                    onClickBack = { processIntent(ArrivalAndConsumptionIntents.Back) },
-
-                    onClickNext = { processIntent(ArrivalAndConsumptionIntents.Next) }
-
-                )
-            )
-
         }
     }
 
@@ -101,17 +134,29 @@ class ArrivalAndConsumptionViewModel : ViewModel() {
 
     }
 
-    fun next(){
+    fun ready(coroutineScope: CoroutineScope,count: String ){
 
-        Navigation.navigator.push( AddProductsComponent( onClickSelectFromList =
+        Navigation.navigator.push(AddProductsComponent(onClickSelectFromList =
 
-        { processIntent(ArrivalAndConsumptionIntents.SelectFromList) }))
+        { processIntent(ArrivalAndConsumptionIntents.SelectFromList(coroutineScope)) }))
+
+        var newList = arrivalAndConsumptionState.selectedProducts.toMutableList()
+
+        newList[newList.size - 1] = ProductArrivalAndConsumption(id = arrivalAndConsumptionState.selectedProducts[0].id,count.toInt())
 
     }
 
-    fun selectFromList(){
+    fun productSelection(){
 
-        Navigation.navigator.push(ListProductsComponent())
+        Navigation.navigator.push(CountProductComponent(arrivalAndConsumptionState.listAllProducts))
+
+    }
+
+    fun next(coroutineScope: CoroutineScope){
+
+        Navigation.navigator.push( AddProductsComponent( onClickSelectFromList =
+
+        { processIntent(ArrivalAndConsumptionIntents.SelectFromList(coroutineScope)) }))
 
     }
 

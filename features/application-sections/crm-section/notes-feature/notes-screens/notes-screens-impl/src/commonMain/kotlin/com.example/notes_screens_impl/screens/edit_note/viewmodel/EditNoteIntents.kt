@@ -8,8 +8,6 @@ import kotlinx.coroutines.CoroutineScope
 sealed class EditNoteIntents {
     data class SetScreen(val note: NoteResponse,val coroutineScope: CoroutineScope):EditNoteIntents()
     data class UpdateNoteBack(val note: NoteResponse, val coroutineScope: CoroutineScope):EditNoteIntents()
-
-   // object Back:EditNoteIntents()
     object Cancel:EditNoteIntents()
     data class ApplyNameUpdate(val note: NoteResponse, val coroutineScope: CoroutineScope):EditNoteIntents()
     data class ApplyStatusUpdate(val note: NoteResponse, val coroutineScope: CoroutineScope):EditNoteIntents()

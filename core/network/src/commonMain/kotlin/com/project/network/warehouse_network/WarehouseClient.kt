@@ -1,7 +1,7 @@
 package com.project.network.warehouse_network
 
+import com.project.network.ConstData
 import com.project.network.httpClientEngine
-import com.project.network.notes_network.model.NoteResponse
 import com.project.network.warehouse_network.model.Warehouse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -12,7 +12,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -23,9 +22,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 
-object WarehouseApi {
-
-    var token: String = ""
+class WarehouseClient {
 
     private val client = HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
@@ -40,7 +37,7 @@ object WarehouseApi {
             level = LogLevel.BODY // Включить логирование для отладки
         }
         defaultRequest {
-            header("Authorization", "Bearer $token")
+            header("Authorization", "Bearer ${ConstData.TOKEN}")
         }
     }
 

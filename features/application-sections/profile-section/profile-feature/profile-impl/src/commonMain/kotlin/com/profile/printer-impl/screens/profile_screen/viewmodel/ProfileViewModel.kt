@@ -12,7 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.project.network.Navigation
-import com.project.network.notes_network.NotesApi
+import com.project.network.notes_network.NotesClient
+import com.project.network.users_network.UsersClient
 import org.koin.mp.KoinPlatform.getKoin
 
 class ProfileViewModel:ViewModel() {
@@ -46,17 +47,11 @@ class ProfileViewModel:ViewModel() {
 
             profileState.isUsed.value = false
 
-            val token = ConstData.TOKEN
-
-            NotesApi.token = token
-
-            val notesApi = NotesApi
-
-
+            val usersApi = UsersClient()
 
             coroutineScope.launch(Dispatchers.IO) {
 
-               val user = notesApi.getUsers().find { it.phone == keyValueStorage.getCurrentNumber()!! }
+               val user = usersApi.getUsers().find { it.phone == keyValueStorage.getCurrentNumber()!! }
 
                 //println("${notesApi.getUsers()}")
 

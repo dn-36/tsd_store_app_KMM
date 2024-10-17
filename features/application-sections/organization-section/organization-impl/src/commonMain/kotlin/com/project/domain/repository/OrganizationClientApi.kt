@@ -1,13 +1,15 @@
 package com.project.domain.repository
 
-import kotlinx.coroutines.CoroutineScope
+import androidx.compose.ui.graphics.Color
+import com.project.network.organizations_network.model.Response
 
 interface OrganizationClientApi {
 
-    suspend fun createOrganization (name: String, url: String, scope: CoroutineScope,
-                                    onCreate: () -> Unit)
+    suspend fun createOrganization (name: String, url: String, onCreate: () -> Unit)
 
-    suspend fun deleteOrganization (ui: String, scope: CoroutineScope, onDelete: () -> Unit)
-    suspend fun choosingActiveOrganization (ui: String, scope: CoroutineScope, onChoosing: () -> Unit)
+    suspend fun deleteOrganization (ui: String, onDelete: () -> Unit)
+
+    suspend fun choosingActiveOrganization (ui: String, onChoosing: () -> Unit)
+    suspend fun getOrganizations (onSet: (listColor:MutableList<Color>, listOrganization:List<Response> ) -> Unit)
 
 }

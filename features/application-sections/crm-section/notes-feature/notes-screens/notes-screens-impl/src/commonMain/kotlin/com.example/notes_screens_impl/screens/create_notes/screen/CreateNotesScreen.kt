@@ -46,10 +46,12 @@ import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.down_arrow
+import org.koin.mp.KoinPlatform.getKoin
 
 
 class CreateNotesScreen : Screen {
-    val vm = CreateNotesViewModel()
+    
+    val vm : CreateNotesViewModel = getKoin().get()
 
     var usersNoteCreated = mutableStateListOf<User>()
 

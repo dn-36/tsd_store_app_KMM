@@ -10,13 +10,12 @@ class ChoosingActiveOrganizationUseCase (
     ) {
 
     suspend fun execute( ui:String,
-                         scope: CoroutineScope,
                          onChoosing: () -> Unit
 
     ){
 
         client.choosingActiveOrganization (
-            ui, scope, onChoosing
+            ui, onChoosing
         )
     }
 }

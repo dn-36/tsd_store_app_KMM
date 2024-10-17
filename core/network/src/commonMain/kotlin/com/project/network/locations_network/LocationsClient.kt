@@ -1,5 +1,6 @@
 package com.project.network.locations_network
 
+import com.project.network.ConstData
 import com.project.network.httpClientEngine
 import com.project.network.locations_network.model.ResponseItem
 import io.ktor.client.HttpClient
@@ -19,9 +20,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 
-object LocationsApi {
-
-    var token: String = ""
+class LocationsClient {
 
     private val client = HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
@@ -36,7 +35,7 @@ object LocationsApi {
             level = LogLevel.BODY // Включить логирование для отладки
         }
         defaultRequest {
-            header("Authorization", "Bearer $token")
+            header("Authorization", "Bearer ${ConstData.TOKEN}")
         }
     }
 
