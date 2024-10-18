@@ -1,17 +1,19 @@
 package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases
 
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.repository.ArrivalAndConsumptionClientApi
-import product_network.model.Product
+import com.project.network.arrival_goods.model.StoreResponse
+import com.project.network.contragent_network.model.ContragentResponse
 
-class GetProductsUseCase (
+class GetArrivalAndConsumptionUseCase (
 
     private val client: ArrivalAndConsumptionClientApi,
 
     ) {
 
-    suspend fun execute( onGet: (listAllProducts: List<Product>) -> Unit ) {
+    suspend fun execute( onGet: (listArrivalAndConsumption: List<StoreResponse>  ) -> Unit ) {
 
-        client.getProducts  (
+        client.getArrivalAndConsumption  (
+
             onGet
         )
     }

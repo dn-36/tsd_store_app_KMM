@@ -37,24 +37,26 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 import org.jetbrains.compose.resources.painterResource
 import product_network.model.Product
 import project.core.resources.Res
 import project.core.resources.back
 
-class CountProductComponent ( val listAllProducts: List<Product>)  :Screen {
+class CountProductComponent ( val listAllProducts: List<Product>, val onClickReady:( count: Int ) -> Unit ) {
 
     var count by mutableStateOf("")
 
     @Composable
 
-    override fun Content() {
+     fun Content() {
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
 
             Column(modifier = Modifier.padding(16.dp)) {
 
                 Row(modifier = Modifier.fillMaxWidth()) {
+
                     Image(
                         painter = painterResource(Res.drawable.back), contentDescription = null,
                         modifier = Modifier.size(20.dp).clickable(
@@ -85,7 +87,7 @@ class CountProductComponent ( val listAllProducts: List<Product>)  :Screen {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(30.dp))
-                    .fillMaxHeight(0.4f)
+                    .fillMaxHeight(0.3f)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .background(Color.White)
@@ -104,11 +106,11 @@ class CountProductComponent ( val listAllProducts: List<Product>)  :Screen {
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .heightIn(min = 40.dp) // Стандартная высота TextField
+                                .heightIn(min = 60.dp) // Стандартная высота TextField
                         )
 
                         Button(
-                            onClick = {},
+                            onClick = { onClickReady( count.toInt() ) },
                             modifier = Modifier
                                 .padding(bottom = 10.dp)
                                 .clip(RoundedCornerShape(70.dp))

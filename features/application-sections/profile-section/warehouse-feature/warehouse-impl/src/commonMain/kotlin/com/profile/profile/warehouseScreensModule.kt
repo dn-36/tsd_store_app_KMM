@@ -2,6 +2,8 @@ package com.profile.profile
 
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.datasource.ArrivalAndConsumptionClientImpl
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.repository.ArrivalAndConsumptionClientApi
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetContagentsUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetProductsUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetWarehouseArrivalAndConsumptionUseCase
@@ -16,6 +18,7 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecas
 import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseViewModel
 import com.project.chats.WarehouseScreensApi
 import com.project.network.ConstData
+import com.project.network.arrival_goods.ArrivalGoodsClient
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.locations_network.LocationsClient
 import com.project.network.warehouse_network.WarehouseClient
@@ -30,19 +33,25 @@ val warehouseScreensModule = module {
 
    factory { ContragentClient() }
 
+   factory { ArrivalGoodsClient() }
+
    factory { ProductApiClient(ConstData.TOKEN) }
 
    factory { LocationsClient() }
 
    factory { UpdateWarehouseUseCase( get()) }
 
-   factory { GetProductsUseCase( get()) }
-
    factory { DeleteWarehouseUseCase( get()) }
 
    factory { GetWarehouseUseCase( get()) }
 
+   factory { GetProductsUseCase( get()) }
+
    factory { CreateWarehouseUseCase( get()) }
+
+   factory { CreateArrivalOrConsumptionUseCase( get()) }
+
+   factory { GetArrivalAndConsumptionUseCase( get()) }
 
    factory { GetContagentsUseCase( get()) }
 
@@ -52,10 +61,10 @@ val warehouseScreensModule = module {
 
    factory { WarehouseViewModel( get(), get(), get(), get(), get()) }
 
-   factory { ArrivalAndConsumptionViewModel( get(), get(), get()) }
+   factory { ArrivalAndConsumptionViewModel( get(), get(), get(), get(), get()) }
 
     factory { WarehouseClientImpl(get(),get()) as WarehouseClientApi }
 
-    factory { ArrivalAndConsumptionClientImpl(get(),get(), get()) as ArrivalAndConsumptionClientApi }
+    factory { ArrivalAndConsumptionClientImpl(get(),get(), get(), get()) as ArrivalAndConsumptionClientApi }
 
 }

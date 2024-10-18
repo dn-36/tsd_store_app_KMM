@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,7 +38,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
 import com.project.network.contragent_network.model.ContragentResponse
 import com.project.network.contragent_network.model.Entity
 import com.project.network.warehouse_network.model.Warehouse
@@ -50,7 +47,7 @@ import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.down_arrow
 
-class ArrivalGoodsComponent(
+class DataEntryComponent(
 
     val listAllContragents: List<ContragentResponse>,
 
@@ -58,9 +55,21 @@ class ArrivalGoodsComponent(
 
     val onClickBack:() -> Unit,
 
-    val onClickNext:() -> Unit
+    val onClickNext: (
 
-) : Screen {
+        idLegalEntityParish: Int?,
+
+        idLegalEntityExpense: Int?,
+
+        idContragentExpense: Int?,
+
+        idContragentParish: Int?,
+
+        idWarehouse: Int?
+
+    ) -> Unit
+
+) {
 
     var counterpartyParish by mutableStateOf("")
 
@@ -93,7 +102,7 @@ class ArrivalGoodsComponent(
     var selectedWarehouse by mutableStateOf<Warehouse?>(null)
 
     @Composable
-    override fun Content() {
+    fun Content() {
 
         val scrollState = rememberScrollState() // Состояние прокрутки
 
@@ -113,7 +122,7 @@ class ArrivalGoodsComponent(
 
                     Spacer(modifier = Modifier.width(10.dp))
 
-                    Text("Приемка", color = Color.Black, fontSize = 20.sp)
+                    Text("Приход", color = Color.Black, fontSize = 20.sp)
 
                 }
 
@@ -621,7 +630,18 @@ class ArrivalGoodsComponent(
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Button(
-                    onClick = { onClickNext() },
+                    onClick = { onClickNext(
+
+                        selectedLegalEntityParish!!.id,
+
+                        selectedLegalEntityExpense!!.id,
+
+                        contragentExpense!!.id,
+
+                        contragentParish!!.id,
+
+                        selectedWarehouse!!.id ) },
+
                     modifier = Modifier
                         .clip(RoundedCornerShape(70.dp))
                         .height(40.dp)

@@ -4,20 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.AddProductsComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ArrivalGoodsComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ListProductsComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetContagentsUseCase
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetProductsUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetWarehouseArrivalAndConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.screen.ArrivalAndConsumptionScreen
-import com.project.core_app.ConstData
-import com.project.network.Navigation
-import com.project.network.contragent_network.ContragentClient
-import com.project.network.warehouse_network.WarehouseClient
-import com.project.network.warehouse_network.model.Warehouse
+import com.project.network.arrival_goods.ArrivalGoodsClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -29,7 +22,11 @@ class ArrivalAndConsumptionViewModel (
 
     val getProductsUseCase: GetProductsUseCase,
 
-    val getWarehouseArrivalAndConsumptionUseCase: GetWarehouseArrivalAndConsumptionUseCase
+    val getWarehouseArrivalAndConsumptionUseCase: GetWarehouseArrivalAndConsumptionUseCase,
+
+    val getArrivalAndConsumptionUseCase: GetArrivalAndConsumptionUseCase,
+
+    val createArrivalOrConsumptionUseCase: CreateArrivalOrConsumptionUseCase
 
 ) : ViewModel() {
 
@@ -58,43 +55,43 @@ class ArrivalAndConsumptionViewModel (
 
                             listAllWarehouse = listAllWarehouse,
 
+                            isVisibilityDataEntryComponent = mutableStateOf(1f),
+
+                            isPush = 1
+
                             )
 
                     })
 
-                    Navigation.navigator.push(
+                }
 
-                        ArrivalGoodsComponent(
+            }
 
-                            listAllContragents = arrivalAndConsumptionState.listAllContragent,
+            is ArrivalAndConsumptionIntents.BackAddProducts ->  backAddProducts()
 
-                            listAllWarehouse = arrivalAndConsumptionState.listAllWarehouse,
+            is ArrivalAndConsumptionIntents.CreateArrivalOrConsumption ->  {
 
-                            onClickBack = { processIntent(ArrivalAndConsumptionIntents.Back) },
+                intent.coroutineScope.launch (Dispatchers.IO) {
 
-                            onClickNext = { processIntent(ArrivalAndConsumptionIntents.Next(intent.coroutineScope)) }
-
-                        )
-                    )
+                    createArrivalOrConsumptionUseCase.execute (idLegalEntityParish = arrivalAndConsumptionState.idLegalEntityParish,
+                        idLegalEntityExpense = arrivalAndConsumptionState.idLegalEntityExpense,
+                        idContragentExpense = arrivalAndConsumptionState.idContragentExpense,
+                        idContragentParish = arrivalAndConsumptionState.idContragentParish,
+                        idWarehouse = arrivalAndConsumptionState.idWarehouse,
+                        isPush = arrivalAndConsumptionState.isPush,
+                        listProducts = arrivalAndConsumptionState.listSelectedProducts)
 
                 }
-                //arrival(intent.coroutineScope)
+
             }
 
-            is ArrivalAndConsumptionIntents.Back -> {
+            is ArrivalAndConsumptionIntents.BackListProducts ->  backListProducts()
 
-                back()
-            }
+            is ArrivalAndConsumptionIntents.Ready ->  ready( intent.count )
 
-            is ArrivalAndConsumptionIntents.Next -> {
+            is ArrivalAndConsumptionIntents.SelectProducts ->  selectProduct( intent.selectedProducts )
 
-                next(intent.coroutineScope)
-            }
-
-            is ArrivalAndConsumptionIntents.ProductSelection -> {
-
-                productSelection()
-            }
+            is ArrivalAndConsumptionIntents.Scanner ->  scanner()
 
             is ArrivalAndConsumptionIntents.SelectFromList -> {
 
@@ -104,59 +101,152 @@ class ArrivalAndConsumptionViewModel (
 
                         arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
 
-                            listAllProducts = listAllProducts
+                            listProducts = listAllProducts,
+
+                            isVisibilityListProducts = mutableStateOf(1f),
 
                         )
 
                     })
 
-                    Navigation.navigator.push(ListProductsComponent(arrivalAndConsumptionState.listAllProducts,
-                       onClickProduct =  { processIntent(ArrivalAndConsumptionIntents.ProductSelection )}))
+                }
 
-                    val newList = arrivalAndConsumptionState.selectedProducts.toMutableList()
+            }
 
-                    newList.add(ProductArrivalAndConsumption(ListProductsComponent(arrivalAndConsumptionState.listAllProducts,
-                        onClickProduct =  { processIntent(ArrivalAndConsumptionIntents.ProductSelection )}).selectedProduct!!.id!!,0))
+            is ArrivalAndConsumptionIntents.GetArrivalAndConsumptionGoods -> {
+
+            intent.coroutineScope.launch (Dispatchers.IO) {
+
+                getArrivalAndConsumptionUseCase.execute ( onGet = { listArrivalAndConsumption ->
 
                     arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
 
-                        selectedProducts = newList
+                        listAllArrivalOrConsumption = listArrivalAndConsumption
 
                     )
-                }
+
+                    println("11111....${listArrivalAndConsumption}....1111")
+
+                } )
+
             }
+
+            }
+
+            is ArrivalAndConsumptionIntents.BackDataEntry -> {
+
+                backDataEntry()
+            }
+
+            is ArrivalAndConsumptionIntents.Next -> {
+
+                next( intent.idLegalEntityParish, intent.idLegalEntityExpense, intent.idContragentExpense,
+
+                    intent.idContragentParish, intent.idWarehouse )
+
+            }
+
         }
     }
 
-    fun back(){
+    fun backAddProducts(){
 
-        Navigation.navigator.push(ArrivalAndConsumptionScreen())
+        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
 
-    }
+            isVisibilityAddProductsComponent = mutableStateOf(0f),
 
-    fun ready(coroutineScope: CoroutineScope,count: String ){
+            isVisibilityDataEntryComponent = mutableStateOf(1f),
 
-        Navigation.navigator.push(AddProductsComponent(onClickSelectFromList =
-
-        { processIntent(ArrivalAndConsumptionIntents.SelectFromList(coroutineScope)) }))
-
-        var newList = arrivalAndConsumptionState.selectedProducts.toMutableList()
-
-        newList[newList.size - 1] = ProductArrivalAndConsumption(id = arrivalAndConsumptionState.selectedProducts[0].id,count.toInt())
+        )
 
     }
 
-    fun productSelection(){
+    fun backListProducts(){
 
-        Navigation.navigator.push(CountProductComponent(arrivalAndConsumptionState.listAllProducts))
+        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+
+            isVisibilityListProducts = mutableStateOf(0f),
+
+            isVisibilityAddProductsComponent = mutableStateOf(1f)
+
+        )
 
     }
 
-    fun next(coroutineScope: CoroutineScope){
+    fun selectProduct(selectedProduct: ProductArrivalAndConsumption){
 
-        Navigation.navigator.push( AddProductsComponent( onClickSelectFromList =
+        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
 
-        { processIntent(ArrivalAndConsumptionIntents.SelectFromList(coroutineScope)) }))
+            isVisibilityCountProducts = mutableStateOf(1f),
+
+            isVisibilityListProducts = mutableStateOf(0f),
+
+            selectedProduct = selectedProduct
+
+        )
+
+    }
+
+    fun scanner() {
+
+        // Navigation.navigator.push()
+
+    }
+
+
+    fun ready ( count: Int ) {
+
+        val newProduct = arrivalAndConsumptionState.selectedProduct
+
+        newProduct!!.count = count
+
+        val newList = arrivalAndConsumptionState.listSelectedProducts.toMutableList()
+
+        newList.add(newProduct)
+
+        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+
+            selectedProduct = newProduct,
+
+            isVisibilityCountProducts = mutableStateOf(0f),
+
+            listSelectedProducts = newList
+
+        )
+
+    }
+
+    fun backDataEntry(){
+
+    arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+
+        isVisibilityDataEntryComponent = mutableStateOf(0f)
+
+    )
+
+    }
+
+    fun next( idLegalEntityParish: Int?, idLegalEntityExpense: Int?, idContragentExpense: Int? ,
+
+    idContragentParish: Int?, idWarehouse: Int? ){
+
+        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+
+            isVisibilityAddProductsComponent = mutableStateOf(1f),
+
+            isVisibilityDataEntryComponent = mutableStateOf(0f),
+
+            idContragentExpense = idContragentExpense,
+
+            idContragentParish = idContragentParish,
+
+            idLegalEntityExpense = idLegalEntityExpense,
+
+            idLegalEntityParish = idLegalEntityParish,
+
+            idWarehouse = idWarehouse
+
+        )
 
     }
 
