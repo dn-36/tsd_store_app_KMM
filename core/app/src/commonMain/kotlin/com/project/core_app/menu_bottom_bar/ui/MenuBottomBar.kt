@@ -26,6 +26,7 @@ import cafe.adriel.voyager.core.screen.Screen
 
 import com.project.core_app.menu_bottom_bar.viewmodel.MenuBottomBarIntents
 import com.project.core_app.menu_bottom_bar.viewmodel.MenuBottomBarViewModel
+import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 
 
 import org.jetbrains.compose.resources.painterResource
@@ -63,7 +64,8 @@ val vm = MenuBottomBarViewModel()
 
 
     @Composable
-     fun Content() {
+     fun Content(section: MenuBottomBarSection) {
+         vm.processIntent(MenuBottomBarIntents.SetScreen(section))
             Box(
                 modifier = Modifier
                     .padding(bottom = 16.dp)
@@ -74,7 +76,7 @@ val vm = MenuBottomBarViewModel()
                 Row(modifier = Modifier.align(Alignment.BottomCenter)
                     .fillMaxWidth(0.95f), horizontalArrangement = Arrangement.SpaceBetween){
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[0])
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.section.OrganizationButtonCollor)
                             .width(70.dp).height(40.dp).clickable { vm.processIntent(
                                 MenuBottomBarIntents.Home(_homeScreen!!)) }){
                         Image(painter = painterResource(Res.drawable.home),contentDescription = null,
@@ -84,7 +86,7 @@ val vm = MenuBottomBarViewModel()
 
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[1])
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.section.CrmButtonCollor)
                             .width(70.dp).height(40.dp).clickable { vm.processIntent(
                                 MenuBottomBarIntents.CRM(_crmScreen!!))}){
                             Image(painter = painterResource(Res.drawable.squares_stack),contentDescription = null,
@@ -94,7 +96,7 @@ val vm = MenuBottomBarViewModel()
 
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[2])
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.section.TapeButtonCollor)
                             .width(70.dp).height(40.dp).clickable { vm.processIntent(
                                 MenuBottomBarIntents.Tape(_tapeScreen!!)) }){
                             Image(painter = painterResource(Res.drawable.menu),contentDescription = null,
@@ -104,7 +106,7 @@ val vm = MenuBottomBarViewModel()
 
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[3])
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.section.ChutsButtonCollor)
                             .width(70.dp).height(40.dp).clickable { vm.processIntent(
                                 MenuBottomBarIntents.Chats(_chatsScreen!!)) }){
                             Image(painter = painterResource(Res.drawable.messenger),contentDescription = null,
@@ -114,7 +116,7 @@ val vm = MenuBottomBarViewModel()
 
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[4])
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.section.ProfileButtonCollor)
                             .width(70.dp).height(40.dp).clickable { vm.processIntent(
                                 MenuBottomBarIntents.Profile(_profileScreen!!)) }){
                             Image(painter = painterResource(Res.drawable.user),contentDescription = null,

@@ -31,6 +31,7 @@ import org.example.project.presentation.crm_feature.notes_screen.model.Notes
 import org.example.project.presentation.crm_feature.notes_screen.util.formatDateTime
 import org.example.project.presentation.crm_feature.notes_screen.viewmodel.NotesIntents
 import com.example.notes_screens_impl.screens.notes.viewmodel.NotesViewModel
+import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.plus
@@ -77,7 +78,7 @@ class NotesScreen:Screen{
                             interactionSource = remember { MutableInteractionSource() })
                         { vm.processIntent(NotesIntents.CreateBookmarks) })
                 Box(modifier = Modifier) {
-                    MenuBottomBar().Content()
+                    MenuBottomBar().Content(MenuBottomBarSection.CRM)
                 }
             }
 

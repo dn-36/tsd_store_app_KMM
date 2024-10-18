@@ -72,16 +72,16 @@ fun MessageComponent(message: Message) {
             else
                 Arrangement.Start
             ) {
-            if (message.whoseMessage == WhoseMessage.YOU) {
-                Text(
-                    message.time,
-                    modifier = Modifier
-                        .align(Alignment.Bottom)
-                        .padding(4.dp)
-                        .wrapContentWidth(), // используем wrapContentWidth для гибкости
-                    fontSize = 9.sp
-                )
-            }
+                if (message.whoseMessage == WhoseMessage.YOU) {
+                    Text(
+                        message.time,
+                        modifier = Modifier
+                            .align(Alignment.Bottom)
+                            .padding(4.dp)
+                            .wrapContentWidth(), // используем wrapContentWidth для гибкости
+                        fontSize = 9.sp
+                    )
+                }
 
                 // используем weight для распределения пространства
                 Box(
@@ -95,17 +95,18 @@ fun MessageComponent(message: Message) {
                         fontSize = 15.sp,
                     )
                 }
-            }
 
-            if (message.whoseMessage == WhoseMessage.INTERLOCUTOR) {
-                Text(
-                    message.time,
-                    modifier = Modifier
-                        .align(Alignment.Bottom)
-                        .padding(4.dp)
-                        .wrapContentWidth(), // используем wrapContentWidth для гибкости
-                    fontSize = 9.sp
-                )
+
+                if (message.whoseMessage == WhoseMessage.INTERLOCUTOR) {
+                    Text(
+                        message.time,
+                        modifier = Modifier
+                            .align(Alignment.Bottom)
+                            .padding(4.dp)
+                            .wrapContentWidth(), // используем wrapContentWidth для гибкости
+                        fontSize = 9.sp
+                    )
+                }
             }
             if (message.whoseMessage == WhoseMessage.YOU) {
                 Column(modifier = Modifier.padding(4.dp).align(Alignment.CenterVertically)) {
@@ -124,6 +125,7 @@ fun MessageComponent(message: Message) {
                     Text("You", fontSize = 10.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
                 }
             }
+
         }
     }
 }

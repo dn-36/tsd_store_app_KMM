@@ -29,6 +29,7 @@ import com.project.chats.screens.chats.component.ChatItem
 import com.project.chats.screens.chats.viewmodel.ChatsIntents
 import com.project.chats.screens.chats.viewmodel.ChatsViewModel
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
@@ -85,7 +86,7 @@ class ChatsScreen : Screen {
          )
 
          // Вызов нижнего меню
-         MenuBottomBar().Content()
+         MenuBottomBar().Content(MenuBottomBarSection.CHATS)
      }
  }
 }

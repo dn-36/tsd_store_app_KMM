@@ -46,6 +46,7 @@ import com.project.network.contragent_network.ContragentApi
 import com.project.network.organizations_network.OrganizationsApi
 import com.project.viewmodel.OrganizationsIntents
 import com.project.viewmodel.OrganizationsViewModel
+import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
@@ -148,7 +149,7 @@ class OrganizationScreen(): Screen {
                         organizationScreens.organization(),
                         chatsScreens.chatsScreen(),
                         tapeScreens.tape(),
-                    ).Content()
+                    ).Content(MenuBottomBarSection.ORGANIZATION)
                 }
             }
         }
