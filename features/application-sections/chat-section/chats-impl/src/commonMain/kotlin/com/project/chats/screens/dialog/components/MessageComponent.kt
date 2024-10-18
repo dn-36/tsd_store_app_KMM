@@ -65,6 +65,13 @@ fun MessageComponent(message: Message) {
                     )
                 }
             }
+            Row (
+                    modifier = Modifier.weight(1f),
+            horizontalArrangement =   if(message.whoseMessage == WhoseMessage.YOU)
+                Arrangement.End
+            else
+                Arrangement.Start
+            ) {
             if (message.whoseMessage == WhoseMessage.YOU) {
                 Text(
                     message.time,
@@ -75,13 +82,13 @@ fun MessageComponent(message: Message) {
                     fontSize = 9.sp
                 )
             }
-            Box(modifier = Modifier.weight(1f)) { // используем weight для распределения пространства
+
+                // используем weight для распределения пространства
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
                         .background(Color(0xFFD2F0B1))
                         .padding(10.dp), // Padding для внутреннего контента
-                    contentAlignment = Alignment.CenterEnd
                 ) {
                     Text(
                         message.text,
@@ -120,6 +127,3 @@ fun MessageComponent(message: Message) {
         }
     }
 }
-
-
-
