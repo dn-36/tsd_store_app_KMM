@@ -1,6 +1,7 @@
 package com.project.network.chats_network
 
 import com.project.network.httpClientEngine
+import com.project.network.util.NetworkError
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -23,12 +24,13 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.InternalAPI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import com.project.network.util.Result
 
 
 class ChatsApi() {
-   companion object{
-       private var _token: String = ""
-   }
+    companion object{
+        private var _token: String = ""
+    }
     fun init(token: String):ChatsApi{
         _token = token
         return this
@@ -80,7 +82,7 @@ class ChatsApi() {
             response.body()
         } catch (e: Exception) {
             println("UPDATE Note: Error - ${e.message}")
-          //  throw e // Или обработайте ошибку по-другому
+            //  throw e // Или обработайте ошибку по-другому
             return ChatResponseMessages(
                 0,
                 "",
@@ -95,7 +97,7 @@ class ChatsApi() {
                 listOf(),
                 null,
 
-            )
+                )
         }
     }
 
@@ -169,8 +171,8 @@ class ChatsApi() {
             println("<<<<<<<${"Error: ${e.message}"}>>>>>>>>")
             return "Error: ${e.message}"
         } //finally {
-           // client.close()
-      // }
+        // client.close()
+        // }
     }
 
 

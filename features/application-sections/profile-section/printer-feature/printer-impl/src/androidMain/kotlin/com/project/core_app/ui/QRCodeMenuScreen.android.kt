@@ -336,30 +336,10 @@ Row {
                     state.statusSearchBluetoothDevice
                 )
             }
-            //if(state.categoryPrinter == CategoryPrinter.TSC) {
 
-            //}
             }
         }
     }
-/*
-                val context = LocalContext.current
-                SettingsTicketsTSCprinterComponent(
-                    state.imgBitmap!!,
-                    state.titleProductQRcodeBiteMap!!,
-                    { x, y, height, widht ->
-                        PrintOnTscUseCase<Bitmap>(getKoin().get()).execute(
-                            state.imgBitmap!!,
-                            VKPUtils.setSizeBitMap(
-                                state.titleProductQRcodeBiteMap!!,
-                                state.titleProductQRcodeBiteMap!!.width / 13,
-                                state.titleProductQRcodeBiteMap!!.height / 13,
-                                context
-                            )!!,
-                            height, widht, x, y
-                        )
-                    }
-                )
- */
+
 
 

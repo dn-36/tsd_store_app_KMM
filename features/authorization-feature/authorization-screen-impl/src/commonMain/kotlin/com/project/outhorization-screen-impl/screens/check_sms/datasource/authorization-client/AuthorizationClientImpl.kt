@@ -1,10 +1,11 @@
 package com.project.`outhorization-screen-impl`.screens.check_sms.datasource.`authorization-client`
 
 import com.project.network.authorization_network.AuthorizationClient
+import com.project.network.util.onError
+import com.project.network.util.onSuccess
 import com.project.`outhorization-screen-impl`.screens.check_sms.domain.repository.AuthorizationClientAPI
 import com.project.`outhorization-screen-impl`.screens.check_sms.domain.repository.AuthorizationClientAPI.Companion.userStatus
-import util.onError
-import util.onSuccess
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import com.project.`outhorization-screen-api`.UserStatus
@@ -60,10 +61,10 @@ class AuthorizationClientImpl(
         when (userStatus) {
             UserStatus.REGISTERED -> {
                 //
-                authorizationClient.loginVerifyCode(number, code/*, token*/).onSuccess {
+                authorizationClient.loginVerifyCode(number, code).onSuccess {
                     actionOnSuccess(it)
                 }
-                authorizationClient.loginVerifyCode(number, code/*, token*/).onError {
+                authorizationClient.loginVerifyCode(number, code).onError {
                     actionOnError()
                 }
             }

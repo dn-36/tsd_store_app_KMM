@@ -37,6 +37,7 @@ import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
 import com.project.network.Navigation
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.menu_bottom_bar.ui.Section
 import com.project.datasource.OrganizationClientImpl
 import com.project.domain.CreateOrganizationUseCase
 import com.project.domain.repository.OrganizationClientApi
@@ -142,7 +143,7 @@ class OrganizationScreen(): Screen {
                         {vm.processIntent(OrganizationsIntents.OpenWindowAddOrganization)})
 
                 Box(modifier = Modifier) {
-                    MenuBottomBar().init(
+                    MenuBottomBar(Section.ORGANIZATION).init(
                         menuCrmScreens.MenuCrm(),
                         profileScreens.profile(),
                         organizationScreens.organization(),

@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.project.chats.screens.chats.screen.ChatsScreen
 import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
 import com.project.chats.screens.dialog.domain.SendMessageUseCase
+import com.project.chats.screens.dialog.domain.models.Message
+import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.project.network.Navigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +27,7 @@ class DialogViewModel(
 ):ViewModel() {
     private var isSeted:Boolean = false
     var dialogState by mutableStateOf(DialogState())
-    private lateinit var job: Job
+
     init {
         println("init DialogViewModel")
     }
@@ -52,10 +54,10 @@ class DialogViewModel(
     }
 
     fun setScreen(uiChats:String, scope:CoroutineScope){
-       job =  viewModelScope.launch(Dispatchers.IO){
-        if(isSeted){
-            return@launch
-        }
+        scope.launch(Dispatchers.IO){
+            if(isSeted){
+                return@launch
+            }
             isSeted = true
             while (isActive){
                 val listDate = mutableSetOf<String>()
@@ -72,16 +74,27 @@ class DialogViewModel(
                     )
                 }
 
-            delay(1500L)
+                delay(1500L)
             }
         }
 
     }
 
-   fun sendMessageUseCase(text:String,ui:String,scope: CoroutineScope){
-       viewModelScope.launch(Dispatchers.IO) {
+   fun sendMessage(text:String,ui:String,scope: CoroutineScope){
+       scope.launch(Dispatchers.IO) {
            
-           sendMessageUseCase.execute(text, ui)
+           sendMessageUseCase.execute(text, ui, onSeccuess = {
+
+           },
+             onError =   {
+                 val list = dialogState.listMessage.toMutableList()
+                 list.add(
+                     Message("error","","","",null,WhoseMessage.YOU,true)
+                 )
+                   dialogState = dialogState.copy(
+                       listMessage = list
+                      )
+               })
 
     }
 

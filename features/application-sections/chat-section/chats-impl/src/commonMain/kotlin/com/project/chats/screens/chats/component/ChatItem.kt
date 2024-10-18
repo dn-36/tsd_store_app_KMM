@@ -52,7 +52,8 @@ fun ChatItem(
             )
         }else{
             Image(painter = painterResource(Res.drawable.user_chats),contentDescription = null,
-                modifier = Modifier.size(50.dp))
+                modifier = Modifier.size(50.dp)
+            )
         }
         Spacer(modifier = Modifier.width(10.dp))
         Column(modifier = Modifier.height(60.dp), verticalArrangement = Arrangement.SpaceBetween) {

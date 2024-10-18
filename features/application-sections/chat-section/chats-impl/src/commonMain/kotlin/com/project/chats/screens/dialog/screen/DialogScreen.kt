@@ -240,7 +240,7 @@ class DialogScreen(private val uiChats:String,private val titleChat:String, priv
                                 modifier = Modifier.padding(bottom = 15.dp, top = 8.dp).size(25.dp)
                                     .graphicsLayer(rotationZ = 180f).clickable{
 
-                                                vm.sendMessageUseCase(vm.dialogState.titleChats,uiChats,scope)
+                                                vm.sendMessage(vm.dialogState.titleChats,uiChats,scope)
                                         vm.dialogState = vm.dialogState.copy(
                                             titleChats = ""
                                         )

@@ -36,7 +36,7 @@ import project.core.resources.messenger
 import project.core.resources.squares_stack
 import project.core.resources.user
 
-class MenuBottomBar {
+class MenuBottomBar(private val actualSection:Section) {
 val vm = MenuBottomBarViewModel()
     private companion object{
         var _crmScreen:Screen? = null
@@ -64,6 +64,9 @@ val vm = MenuBottomBarViewModel()
 
     @Composable
      fun Content() {
+
+     vm.processIntent(MenuBottomBarIntents.SetScreen(section = actualSection))
+
             Box(
                 modifier = Modifier
                     .padding(bottom = 16.dp)
@@ -71,54 +74,91 @@ val vm = MenuBottomBarViewModel()
                     .fillMaxWidth()
                     .background(Color.White)
             ) {
-                Row(modifier = Modifier.align(Alignment.BottomCenter)
-                    .fillMaxWidth(0.95f), horizontalArrangement = Arrangement.SpaceBetween){
+                Row(
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                        .fillMaxWidth(0.95f), horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[0])
-                            .width(70.dp).height(40.dp).clickable { vm.processIntent(
-                                MenuBottomBarIntents.Home(_homeScreen!!)) }){
-                        Image(painter = painterResource(Res.drawable.home),contentDescription = null,
-                            modifier =  Modifier.size(30.dp).align(Alignment.Center))
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
+                            .background(color = vm.menuBottomBarState.colorListBottomMenu[0])
+                            .width(70.dp).height(40.dp).clickable {
+                                vm.processIntent(
+                                    MenuBottomBarIntents.Home(_homeScreen!!)
+                                )
+                            }) {
+                            Image(
+                                painter = painterResource(Res.drawable.home),
+                                contentDescription = null,
+                                modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            )
                         }
                         Text("Организа...", color = Color.Black, fontSize = 12.sp)
 
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[1])
-                            .width(70.dp).height(40.dp).clickable { vm.processIntent(
-                                MenuBottomBarIntents.CRM(_crmScreen!!))}){
-                            Image(painter = painterResource(Res.drawable.squares_stack),contentDescription = null,
-                                modifier =  Modifier.size(30.dp).align(Alignment.Center))
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
+                            .background(color = vm.menuBottomBarState.colorListBottomMenu[1])
+                            .width(70.dp).height(40.dp).clickable {
+                                vm.processIntent(
+                                    MenuBottomBarIntents.CRM(_crmScreen!!)
+                                )
+                            }) {
+                            Image(
+                                painter = painterResource(Res.drawable.squares_stack),
+                                contentDescription = null,
+                                modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            )
                         }
                         Text("CRM", color = Color.Black, fontSize = 12.sp)
 
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[2])
-                            .width(70.dp).height(40.dp).clickable { vm.processIntent(
-                                MenuBottomBarIntents.Tape(_tapeScreen!!)) }){
-                            Image(painter = painterResource(Res.drawable.menu),contentDescription = null,
-                                modifier =  Modifier.size(30.dp).align(Alignment.Center))
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
+                            .background(color = vm.menuBottomBarState.colorListBottomMenu[2])
+                            .width(70.dp).height(40.dp).clickable {
+                                vm.processIntent(
+                                    MenuBottomBarIntents.Tape(_tapeScreen!!)
+                                )
+                            }) {
+                            Image(
+                                painter = painterResource(Res.drawable.menu),
+                                contentDescription = null,
+                                modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            )
                         }
                         Text("Лента", color = Color.Black, fontSize = 12.sp)
 
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[3])
-                            .width(70.dp).height(40.dp).clickable { vm.processIntent(
-                                MenuBottomBarIntents.Chats(_chatsScreen!!)) }){
-                            Image(painter = painterResource(Res.drawable.messenger),contentDescription = null,
-                                modifier =  Modifier.size(30.dp).align(Alignment.Center))
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
+                            .background(color = vm.menuBottomBarState.colorListBottomMenu[3])
+                            .width(70.dp).height(40.dp).clickable {
+                                vm.processIntent(
+                                    MenuBottomBarIntents.Chats(_chatsScreen!!)
+                                )
+                            }) {
+                            Image(
+                                painter = painterResource(Res.drawable.messenger),
+                                contentDescription = null,
+                                modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            )
                         }
                         Text("Чаты", color = Color.Black, fontSize = 12.sp)
 
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.menuBottomBarState.colorListBottomMenu[4])
-                            .width(70.dp).height(40.dp).clickable { vm.processIntent(
-                                MenuBottomBarIntents.Profile(_profileScreen!!)) }){
-                            Image(painter = painterResource(Res.drawable.user),contentDescription = null,
-                                modifier =  Modifier.size(30.dp).align(Alignment.Center))
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
+                            .background(color = vm.menuBottomBarState.colorListBottomMenu[4])
+                            .width(70.dp).height(40.dp).clickable {
+                                vm.processIntent(
+                                    MenuBottomBarIntents.Profile(_profileScreen!!)
+                                )
+                            }) {
+                            Image(
+                                painter = painterResource(Res.drawable.user),
+                                contentDescription = null,
+                                modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            )
 
                         }
                         Text("Профиль", color = Color.Black, fontSize = 12.sp)
@@ -126,5 +166,9 @@ val vm = MenuBottomBarViewModel()
                     }
                 }
             }
-    }
+        }
+}
+
+enum class Section{
+    CRM,ORGANIZATION,PROFILE,TAPE,CHATS
 }

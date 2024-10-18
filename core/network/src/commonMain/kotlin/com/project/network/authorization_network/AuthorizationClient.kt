@@ -13,8 +13,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import util.NetworkError
-import util.Result
+import com.project.network.util.NetworkError
+import com.project.network.util.Result
 
 class AuthorizationClient(
     private val httpClient: HttpClient
@@ -22,7 +22,7 @@ class AuthorizationClient(
     var userToken: String? = null  // Переменная для хранения токена
 
     // 1. Регистрация: создание кода
-    suspend fun registerCreateCode(phone: String): Result<String, NetworkError> {
+    suspend fun registerCreateCode(phone: String): Result<String,NetworkError> {
         val response = try {
             httpClient.post(
                 urlString = "https://delta.online/api/auth/phone-create-code"
@@ -45,13 +45,13 @@ class AuthorizationClient(
     }
 
     // 2. Регистрация: проверка кода и завершение
-    suspend fun registerVerifyCode(phone: String, code: String, name: String/*, token: String*/): Result<String, NetworkError> {
+    suspend fun registerVerifyCode(phone: String, code: String, name: String): Result<String, NetworkError> {
         val response = try {
             httpClient.post(
                 urlString = "https://delta.online/api/auth/phone-verify-code-register"
             ) {
                 contentType(ContentType.Application.Json)
-                setBody(mapOf("phone" to phone, "code" to code, "name" to name, "token" to ConstData.TOKEN ))
+                setBody(mapOf("phone" to phone, "code" to code, "name" to name, "token" to ConstData.TOKEN))
             }
         } catch (e: UnresolvedAddressException) {
             return Result.Error(NetworkError.NO_INTERNET)
@@ -110,13 +110,13 @@ class AuthorizationClient(
     }
 
     // 4. Авторизация: проверка кода
-    suspend fun loginVerifyCode(phone: String, code: String/*, token*/): Result<String, NetworkError> {
+    suspend fun loginVerifyCode(phone: String, code: String): Result<String, NetworkError> {
         val response = try {
             httpClient.post(
                 urlString = "https://delta.online/api/auth/phone-verify-code"
             ) {
                 contentType(ContentType.Application.Json)
-                setBody(mapOf("phone" to phone, "code" to code, "token" to "TOKEN"))
+                setBody(mapOf("phone" to phone, "code" to code, "token" to ConstData.TOKEN))
             }
         } catch (e: UnresolvedAddressException) {
             return Result.Error(NetworkError.NO_INTERNET)
@@ -136,11 +136,11 @@ class AuthorizationClient(
                 userToken = json["access_token"]?.jsonPrimitive?.contentOrNull
 
                 if (userToken != null) {
-                    println("User token1: $userToken")
-                    Result.Success("Login successful")
+                    println("User token1: $userToken")  // Выводим токен для отладки
+                    Result.Success("Login successful")  // Возвращаем успешный результат
                 } else {
                     println("user token: null")
-                    Result.Error(NetworkError.UNKNOWN)
+                    Result.Error(NetworkError.UNKNOWN)  // Если токен не найден
                 }
                 return Result.Success(userToken?:"")
             }
@@ -150,7 +150,7 @@ class AuthorizationClient(
         }
     }
 
-   /* suspend fun getToken(phone:String,name:String,code:String,token:String):String  = try {
+    suspend fun getToken(phone:String,name:String,code:String,token:String):String  = try {
         val response =
             httpClient.post(
                 urlString = "https://delta.online/api/auth/phone-verify-code-register"
@@ -164,19 +164,19 @@ class AuthorizationClient(
         val json = Json.parseToJsonElement(responseBody).jsonObject
         println("/////////////))))${json["access_token"]?.jsonPrimitive?.contentOrNull?:""}")
         // Пытаемся получить токен пользователя
-      json["access_token"]?.jsonPrimitive?.contentOrNull?:""
+        json["access_token"]?.jsonPrimitive?.contentOrNull?:""
 
     } catch (e: UnresolvedAddressException) {
         println("//////+++++!!!!!${ e.message.toString()}")
         Result.Error(NetworkError.NO_INTERNET).error.name
     } catch (e: SerializationException) {
         println("//////+++++!!!!!${ e.message.toString()}")
-         Result.Error(NetworkError.SERIALIZATION).error.name
+        Result.Error(NetworkError.SERIALIZATION).error.name
     }catch (e:Exception) {
         println("//////+++++!!!!!${ e.message.toString()}")
         e.message.toString()
     }
-*/
+
 
 
 

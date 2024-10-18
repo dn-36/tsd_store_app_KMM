@@ -1,6 +1,6 @@
-package util
+package com.project.network.util
 
-enum class NetworkError : Error {
+enum class NetworkError : ErrorRequest {
     REQUEST_TIMEOUT,
     UNAUTHORIZED,
     CONFLICT,

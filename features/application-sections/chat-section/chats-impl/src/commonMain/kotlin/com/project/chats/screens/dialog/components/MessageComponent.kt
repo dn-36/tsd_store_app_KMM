@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -31,18 +35,18 @@ fun MessageComponent(message: Message) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp)
+            .padding(vertical = 10.dp,)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 10.dp), // отступ от правого края
+                .padding(vertical = 10.dp), // отступ от правого края
             horizontalArrangement = when (message.whoseMessage) {
                 WhoseMessage.YOU -> Arrangement.End
                 WhoseMessage.INTERLOCUTOR -> Arrangement.Start
             }
         ) {
-            if(message.whoseMessage == WhoseMessage.INTERLOCUTOR) {
+            if (message.whoseMessage == WhoseMessage.INTERLOCUTOR) {
                 Column(modifier = Modifier.padding(4.dp).align(Alignment.CenterVertically)) {
                     if (!message.urlIcon.isNullOrBlank()) {
                         CoilImage(
@@ -56,7 +60,12 @@ fun MessageComponent(message: Message) {
                             modifier = Modifier.size(30.dp)
                         )
                     }
-                    Text(message.name, fontSize = 10.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
+                    Text(
+                        text = message.name,
+                        fontSize = 10.sp,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    )
                 }
             }
             if (message.whoseMessage == WhoseMessage.YOU) {
@@ -64,22 +73,24 @@ fun MessageComponent(message: Message) {
                     message.time,
                     modifier = Modifier
                         .align(Alignment.Bottom)
-                        .padding(4.dp),
+                        .padding(4.dp)
+                        .wrapContentWidth(), // используем wrapContentWidth для гибкости
                     fontSize = 9.sp
                 )
             }
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Color(0xFFD2F0B1))
-                    .padding(10.dp), // Padding для внутреннего контента
-                contentAlignment = Alignment.CenterEnd
-            ) {
+            Box(modifier = Modifier.weight(1f)) { // используем weight для распределения пространства
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFFD2F0B1))
+                        .padding(10.dp), // Padding для внутреннего контента
+                    contentAlignment = Alignment.CenterEnd
+                ) {
                     Text(
                         message.text,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
                     )
-
+                }
             }
 
             if (message.whoseMessage == WhoseMessage.INTERLOCUTOR) {
@@ -87,11 +98,12 @@ fun MessageComponent(message: Message) {
                     message.time,
                     modifier = Modifier
                         .align(Alignment.Bottom)
-                        .padding(4.dp),
+                        .padding(4.dp)
+                        .wrapContentWidth(), // используем wrapContentWidth для гибкости
                     fontSize = 9.sp
                 )
             }
-            if(message.whoseMessage == WhoseMessage.YOU) {
+            if (message.whoseMessage == WhoseMessage.YOU) {
                 Column(modifier = Modifier.padding(4.dp).align(Alignment.CenterVertically)) {
                     if (!message.urlIcon.isNullOrBlank()) {
                         CoilImage(
@@ -111,5 +123,7 @@ fun MessageComponent(message: Message) {
         }
     }
 }
+
+
 
 

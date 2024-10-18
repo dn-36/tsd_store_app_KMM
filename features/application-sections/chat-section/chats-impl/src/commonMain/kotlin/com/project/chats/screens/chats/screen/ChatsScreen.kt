@@ -1,6 +1,7 @@
 package com.project.chats.screens.chats.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -29,6 +31,7 @@ import com.project.chats.screens.chats.component.ChatItem
 import com.project.chats.screens.chats.viewmodel.ChatsIntents
 import com.project.chats.screens.chats.viewmodel.ChatsViewModel
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.menu_bottom_bar.ui.Section
 
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
@@ -45,7 +48,7 @@ class ChatsScreen : Screen {
         val state by vm.state.collectAsState()
         vm.processIntent(ChatsIntents.SetScreen(scope))
 
- Box(modifier = Modifier.fillMaxSize()) {
+ Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
 
      Column(modifier = Modifier.align(Alignment.TopCenter).padding(16.dp)) {
          Text("Чаты", fontSize = 20.sp)
@@ -83,9 +86,7 @@ class ChatsScreen : Screen {
                      interactionSource = remember { MutableInteractionSource() })
                  { vm.processIntent(ChatsIntents.AddChat) }
          )
-
-         // Вызов нижнего меню
-         MenuBottomBar().Content()
+         MenuBottomBar(Section.CHATS).Content()
      }
  }
 }

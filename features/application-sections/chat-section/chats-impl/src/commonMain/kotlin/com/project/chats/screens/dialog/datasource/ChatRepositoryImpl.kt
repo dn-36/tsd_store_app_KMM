@@ -1,14 +1,16 @@
 package com.project.chats.screens.dialog.datasource
 
+import androidx.compose.material.Text
 import com.project.chats.core.Utils
 import com.project.chats.screens.dialog.domain.DialogRepositoryApi
 import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.chats_network.ChatsApi
+import com.project.network.util.onError
+import com.project.network.util.onSuccess
 import product_network.model.LocalStore
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
+
 
 class DialogRepositoryImpl(
     private val chatApi:ChatsApi,
@@ -33,7 +35,9 @@ class DialogRepositoryImpl(
     override suspend fun sendMessege(
         text:String,
         chat_ui:String,
-        userToken:String
+        userToken:String,
+        onSeccuess:(String)->Unit,
+        onError:(String)->Unit,
     ) {
         chatApi.sendMessage(
             chat_ui,
@@ -43,6 +47,8 @@ class DialogRepositoryImpl(
             listOf(),
             listOf()
         )
+            // .onError { onError(text) }
+            //.onSuccess{onSeccuess(userToken)}
 
     }
 
@@ -60,6 +66,5 @@ class DialogRepositoryImpl(
 
     override suspend fun getToken(): String = profileSavedDate.getToken()?:""
 
-
-
 }
+

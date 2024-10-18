@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import cafe.adriel.voyager.core.screen.Screen
+import com.project.core_app.menu_bottom_bar.ui.Section
 import com.project.network.Navigation
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarState
 
@@ -21,79 +22,71 @@ class MenuBottomBarViewModel : ViewModel() {
             is MenuBottomBarIntents.Chats -> {chats(intent.screen)}
             is MenuBottomBarIntents.Tape -> {tape(intent.screen)}
             is MenuBottomBarIntents.Home -> {organizations(intent.screen)}
+            is MenuBottomBarIntents.SetScreen -> {setScreen(intent.section)}
         }
     }
-    fun crm(menuScreen:Screen) {
-        val newList = mutableListOf(
-            Color.Transparent,
-            Color(0xFFFF9800),
-            Color.Transparent,
-            Color.Transparent,
-            Color.Transparent)
 
+   private fun setScreen(section:Section ){
         menuBottomBarState = menuBottomBarState.copy(
-            colorListBottomMenu = newList
+       when(section){
+           Section.CHATS -> listOf(
+               Color.Transparent,
+               Color.Transparent,
+               Color.Transparent,
+               Color(0xFFFF9800),
+               Color.Transparent
+           )
+           Section.CRM  -> listOf(
+               Color.Transparent,
+               Color(0xFFFF9800),
+               Color.Transparent,
+               Color.Transparent,
+               Color.Transparent
+           )
+           Section.PROFILE  -> listOf(
+               Color.Transparent,
+               Color.Transparent,
+               Color.Transparent,
+               Color.Transparent,
+               Color(0xFFFF9800)
+           )
+           Section.ORGANIZATION  -> listOf(
+               Color(0xFFFF9800),
+               Color.Transparent,
+               Color.Transparent,
+               Color.Transparent,
+               Color.Transparent,
+           )
+           Section.TAPE -> listOf(
+               Color.Transparent,
+               Color.Transparent,
+               Color(0xFFFF9800),
+               Color.Transparent,
+               Color.Transparent
+           )
+       }
         )
-        Navigation.navigator.push(menuScreen)
+    }
 
+
+   private fun crm(menuScreen:Screen) {
+        Navigation.navigator.push(menuScreen)
     }
 
     fun profile(screen:Screen) {
-        val newList = mutableListOf(
-            Color.Transparent,
-            Color.Transparent,
-            Color.Transparent,
-            Color.Transparent,
-            Color(0xFFFF9800))
-
-        menuBottomBarState = menuBottomBarState.copy(
-            colorListBottomMenu = newList
-        )
         Navigation.navigator.push(screen)
 
     }
 
     fun organizations(screen: Screen) {
-        val newList = mutableListOf(
-            Color(0xFFFF9800),
-            Color.Transparent,
-            Color.Transparent,
-            Color.Transparent,
-            Color.Transparent)
-
-        menuBottomBarState = menuBottomBarState.copy(
-            colorListBottomMenu = newList
-        )
         Navigation.navigator.push(screen)
-
     }
 
     fun chats(screen: Screen) {
-        val newList = mutableListOf(
-            Color.Transparent,
-            Color.Transparent,
-            Color.Transparent,
-            Color(0xFFFF9800),
-            Color.Transparent)
-
-        menuBottomBarState = menuBottomBarState.copy(
-            colorListBottomMenu = newList
-        )
         Navigation.navigator.push(screen)
-
     }
 
     fun tape(screen: Screen) {
-        val newList = mutableListOf(
-            Color.Transparent,
-            Color.Transparent,
-            Color(0xFFFF9800),
-            Color.Transparent,
-            Color.Transparent)
-
-        menuBottomBarState = menuBottomBarState.copy(
-            colorListBottomMenu = newList
-        )
         Navigation.navigator.push(screen)
 
     }
