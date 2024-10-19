@@ -52,7 +52,7 @@ class DialogViewModel(
     }
 
     fun setScreen(uiChats:String, scope:CoroutineScope){
-       job =  viewModelScope.launch(Dispatchers.IO){
+       job =  scope.launch(Dispatchers.IO){
         if(isSeted){
             return@launch
         }
@@ -79,7 +79,7 @@ class DialogViewModel(
     }
 
    fun sendMessageUseCase(text:String,ui:String,scope: CoroutineScope){
-       viewModelScope.launch(Dispatchers.IO) {
+       scope.launch(Dispatchers.IO) {
            
            sendMessageUseCase.execute(text, ui)
 

@@ -13,14 +13,14 @@ enum class MenuBottomBarSection(
     val ChutsButtonCollor:Color,
     val ProfileButtonCollor:Color,
     ) {
-    ORGANIZATION(Color.Transparent, Color.White,
+    ORGANIZATION(Color.Yellow , Color.White,
         Color.White, Color.White, Color.White),
-    CRM(Color.White, Color.Transparent,
+    CRM(Color.White, Color.Yellow,
         Color.White, Color.White, Color.White),
     TAPE(Color.White, Color.White,
-        Color.Transparent, Color.White, Color.White),
+        Color.Yellow, Color.White, Color.White),
     CHATS(Color.White, Color.White,
-        Color.White, Color.Transparent, Color.White),
+        Color.White, Color.Yellow, Color.White),
     PROFILE(Color.White, Color.White,
-        Color.White, Color.White, Color.Transparent)
+        Color.White, Color.White, Color.Yellow)
 }
