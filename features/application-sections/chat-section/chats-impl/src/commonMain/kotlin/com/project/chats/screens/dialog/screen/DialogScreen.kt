@@ -47,7 +47,6 @@ import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.viewmodel.DialogIntents
 import com.project.chats.screens.dialog.viewmodel.DialogViewModel
 import com.skydoves.landscapist.coil3.CoilImage
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
@@ -59,7 +58,12 @@ import project.core.resources.paperclip
 import project.core.resources.user_chats
 
 
-class DialogScreen(private val uiChats:String,private val titleChat:String, private val urlIcon:String?) : Screen {
+class DialogScreen(
+    private val uiChats:String,
+    private val titleChat:String,
+    private val urlIcon:String?,
+    private val countNewMessage:Int
+) : Screen {
 
     val vm:DialogViewModel = getKoin().get()
     @Composable
@@ -82,11 +86,11 @@ class DialogScreen(private val uiChats:String,private val titleChat:String, priv
         val listState = rememberLazyListState()
 
 
-        LaunchedEffect(vm.dialogState.listMessage.size) {
-            listState.scrollToItem(vm.dialogState.listMessage.size)
+        LaunchedEffect(vm.state.listMessage.size) {
+            listState.scrollToItem(vm.state.listMessage.size)
         }
 
-        vm.processIntent(DialogIntents.SetScreen(uiChats,scope))
+        vm.processIntent(DialogIntents.SetScreen(uiChats,countNewMessage,scope))
 
         Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
 
@@ -145,19 +149,27 @@ class DialogScreen(private val uiChats:String,private val titleChat:String, priv
                 ) {
 
 
-                    items(vm.dialogState.listMessage) { item ->
+                    items(vm.state.listMessage) { item ->
                             if(item.isShowDate) {
-                                MessageDataComponent(item.date)
+                                MessageDataComponent(item.time)
                             }
 
                         MessageComponent(
                             Message(
                                 item.text,
                                 item.name,
-                                item.time,
                                 item.date,
+                                item.time,
                                 item.urlIcon,
-                                item.whoseMessage)
+                                item.whoseMessage,
+                                statusMessage = item.statusMessage),
+                            {
+                                    vm.sendMessageUseCase(
+                                        vm.state.listMessage.last().text,
+                                        uiChats,
+                                        scope
+                                    )
+                            }
                         )
                     }
                 }
@@ -200,9 +212,9 @@ class DialogScreen(private val uiChats:String,private val titleChat:String, priv
 
 
                             BasicTextField(
-                                value = vm.dialogState.titleChats,
+                                value = vm.state.titleChats,
                                 onValueChange = {
-                                     vm.dialogState = vm.dialogState.copy(
+                                     vm.state = vm.state.copy(
                                          titleChats = it
                                      )
                                 },
@@ -240,8 +252,12 @@ class DialogScreen(private val uiChats:String,private val titleChat:String, priv
                                 modifier = Modifier.padding(bottom = 15.dp, top = 8.dp).size(25.dp)
                                     .graphicsLayer(rotationZ = 180f).clickable{
 
-                                                vm.sendMessageUseCase(vm.dialogState.titleChats,uiChats,scope)
-                                        vm.dialogState = vm.dialogState.copy(
+                                        vm.sendMessageUseCase(
+                                            vm.state.titleChats,
+                                            uiChats,
+                                            scope
+                                        )
+                                        vm.state = vm.state.copy(
                                             titleChats = ""
                                         )
                                     }

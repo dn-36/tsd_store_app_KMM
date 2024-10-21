@@ -5,17 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.project.chats.screens.chats.screen.ChatsScreen
 import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
 import com.project.chats.screens.dialog.domain.SendMessageUseCase
+import com.project.chats.screens.dialog.domain.models.Message
+import com.project.chats.screens.dialog.domain.models.StatusMessage
+import com.project.chats.screens.dialog.domain.models.WhoseMessage
+import com.project.core_app.getFormattedDateTime
 import com.project.network.Navigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.example.project.nika_screens_chats.history_files_feature.screen.HistoryFilesScreen
 
@@ -24,8 +25,8 @@ class DialogViewModel(
    private val sendMessageUseCase: SendMessageUseCase
 ):ViewModel() {
     private var isSeted:Boolean = false
-    var dialogState by mutableStateOf(DialogState())
-    private lateinit var job: Job
+    var state by mutableStateOf(DialogState())
+
     init {
         println("init DialogViewModel")
     }
@@ -34,7 +35,7 @@ class DialogViewModel(
             is DialogIntents.Back -> {back()}
             is DialogIntents.HistoryFiles -> {historyFiles()}
             is DialogIntents.SetScreen -> {
-                setScreen(intent.uiChats,intent.scope)
+                setScreen(intent.uiChats,intent.countNewMessage,intent.scope)
             }
         }
     }
@@ -51,23 +52,35 @@ class DialogViewModel(
 
     }
 
-    fun setScreen(uiChats:String, scope:CoroutineScope){
-       job =  scope.launch(Dispatchers.IO){
+    fun setScreen(uiChats:String,countNewMessage:Int, scope:CoroutineScope){
+     scope.launch(Dispatchers.IO){
         if(isSeted){
             return@launch
         }
             isSeted = true
-            while (isActive){
+            while (
+                if( !state.listMessage.isEmpty()) {
+                    state.listMessage.last().statusMessage == StatusMessage.IS_LOADING
+                }else{
+                    true
+                }
+            ){
                 val listDate = mutableSetOf<String>()
                 val listMessages =  getListMessagesUseCase.execute(uiChats)
                 listMessages.fastForEachIndexed { i, message ->
-                    if(!listDate.contains(listMessages[i].date)){
+                    println(i.toString()+"   "+i)
+                    if((listMessages.size - countNewMessage)>i){
+                        println((listMessages.size - countNewMessage).toString())
+                        listMessages[i].statusMessage = StatusMessage.IS_READED
+                    }
+                    listMessages[i].statusMessage = message.statusMessage
+                    if(!listDate.contains(listMessages[i].time)){
                         listMessages[i].isShowDate = true
                     }
-                    listDate.add(message.date)
+                    listDate.add(message.time)
                 }
                 if(listMessages.size != 0){
-                    dialogState = dialogState.copy(
+                    state = state.copy(
                         listMessage = listMessages
                     )
                 }
@@ -80,8 +93,54 @@ class DialogViewModel(
 
    fun sendMessageUseCase(text:String,ui:String,scope: CoroutineScope){
        scope.launch(Dispatchers.IO) {
-           
-           sendMessageUseCase.execute(text, ui)
+
+
+           val list = state.listMessage.toMutableList()
+           list.add(
+               Message(
+                   text,
+                   "You",
+                   date = getFormattedDateTime().date,
+                   time = getFormattedDateTime().time,
+                   null,
+                   WhoseMessage.YOU,
+                   false,
+                   statusMessage = StatusMessage.IS_LOADING
+               )
+           )
+           state = state.copy(listMessage = list)
+
+           val result = sendMessageUseCase.execute(text, ui)
+
+
+           if(result != sendMessageUseCase.ERROR){
+               val removeIndex = mutableListOf<Int>()
+               val updatedList = list.mapIndexed { index, message ->
+                   if(message.statusMessage == StatusMessage.IS_ERROR){
+                       removeIndex.add(index)
+                   }
+                   if (index == list.size - 1) {
+                       message.copy(statusMessage = StatusMessage.IS_SECCUESS)
+                   } else {
+                       message
+                   }
+               }.toMutableList()
+
+               removeIndex.sortedDescending().forEach {
+                   updatedList.removeAt(it)
+               }
+
+               state = state.copy(listMessage = updatedList)
+           }else{
+               val updatedList = list.mapIndexed { index, message ->
+                   if (index == list.size - 1) {
+                       message.copy(statusMessage = StatusMessage.IS_ERROR)
+                   } else {
+                       message
+                   }
+               }
+               state = state.copy(listMessage = updatedList)
+           }
 
     }
 

@@ -23,6 +23,8 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.InternalAPI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import util.NetworkError
+import util.Result
 
 
 class ChatsApi() {
@@ -69,14 +71,13 @@ class ChatsApi() {
 
 
     // Обновление заметки
-    suspend fun getListMassengers(noteId: String): ChatResponseMessages {
+    suspend fun getListMassengers(chatId: String): ChatResponseMessages {
 
         return try {
-            val response = client.get("https://delta.online/api/chats/${noteId}?page=1") {
+            val response = client.get("https://delta.online/api/chats/${chatId}?page=1") {
                 parameter("active", 1)
 
             }
-            println("::::::::::::::::::::;${response.body<ChatResponseMessages>()}:::::::::::::::::::::::::")
             response.body()
         } catch (e: Exception) {
             println("UPDATE Note: Error - ${e.message}")
@@ -99,6 +100,25 @@ class ChatsApi() {
         }
     }
 
+
+    suspend fun readAllMessanger(uiChat: String): Result<String,NetworkError> {
+
+        return try {
+            val list = getListMassengers(uiChat).messages?.data?: listOf()
+
+            list.forEach {
+                client.post("https://delta.online/api/view-message/${it.ui?:""}")
+            }
+
+           Result.Success("Result")
+
+        } catch (e: Exception) {
+
+            println("UPDATE Note: Error - ${e.message}")
+            return Result.Error(NetworkError.SERVER_ERROR)
+        }
+    }
+
     @Serializable
     data class FileData(
         val data: String,
@@ -115,7 +135,7 @@ class ChatsApi() {
         imageBase64: String?,
         filesMobile: List<FileData>,
         filesData: List<ByteArray>?
-    ): String {
+    ): Result<String, NetworkError> {
 
 
         try {
@@ -162,15 +182,11 @@ class ChatsApi() {
                 )
             }
 
-            println("<<<<<<<${response.body<HttpResponse>().status}>>>>>>>>")
-            return response.bodyAsText()
+            return Result.Success(response.bodyAsText())
 
         } catch (e: Exception) {
-            println("<<<<<<<${"Error: ${e.message}"}>>>>>>>>")
-            return "Error: ${e.message}"
-        } //finally {
-           // client.close()
-      // }
+            return Result.Error(NetworkError.SERVER_ERROR)
+        }
     }
 
 

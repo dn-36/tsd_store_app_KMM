@@ -20,18 +20,18 @@ data class ChatResponseMessages(
 
 @Serializable
 data class ChatResponseMessages(
-    val id: Int,                    // Обязательное поле
-    val name: String,                // Обязательное поле
-    val ui: String?,                 // Может быть nullable
-    val image: String?,              // Может быть nullable
-    val text: String?,               // Может быть nullable
-    val creater_id: Int,             // Обязательное поле
-    val created_at: String,          // Обязательное поле
-    val updated_at: String?,         // Может быть nullable
-    val project_id: Int?,            // Может быть nullable
-    val messages:Messages?, // Список объектов MessageData nullable
-    val users: List<UserMessages>?,  // Список объектов UserMessages nullable
-    val project: ProjectMessages?    // Может быть nullable
+    val id: Int,
+    val name: String,
+    val ui: String?,
+    val image: String?,
+    val text: String?,
+    val creater_id: Int,
+    val created_at: String,
+    val updated_at: String?,
+    val project_id: Int?,
+    val messages:Messages?,
+    val users: List<UserMessages>?,
+    val project: ProjectMessages?
 )
 
 @Serializable
