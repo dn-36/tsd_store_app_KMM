@@ -2,18 +2,20 @@ package com.project.chats.screens.dialog.datasource
 
 import com.project.chats.core.Utils
 import com.project.chats.screens.dialog.domain.DialogRepositoryApi
+import com.project.chats.screens.dialog.domain.DialogRepositoryApi.Companion.ERROR
 import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.chats_network.ChatsApi
 import product_network.model.LocalStore
+import util.NetworkError
+import util.Result
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 class DialogRepositoryImpl(
     private val chatApi:ChatsApi,
     private val profileSavedDate: SharedPrefsApi,
-
     ):DialogRepositoryApi {
 
     override suspend fun getListMessages(uiChats: String,userToken:String): List<Message> {
@@ -34,16 +36,20 @@ class DialogRepositoryImpl(
         text:String,
         chat_ui:String,
         userToken:String
-    ) {
-        chatApi.sendMessage(
-            chat_ui,
-            "",
-            text,
-            null,
-            listOf(),
-            listOf()
-        )
-
+    ):String {
+       val result:Result<String,NetworkError> = chatApi.sendMessage(
+           chat_ui,
+           "",
+           text,
+           null,
+           listOf(),
+           listOf()
+       )
+       return if(result is Result.Success){
+          result.data
+       }else{
+         ERROR
+       }
     }
 
 

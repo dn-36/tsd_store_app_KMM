@@ -2,6 +2,7 @@ package com.project.chats.screens.dialog.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,15 +21,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.chats.screens.dialog.domain.models.Message
+import com.project.chats.screens.dialog.domain.models.StatusMessage
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.skydoves.landscapist.coil3.CoilImage
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
+import project.core.resources.error
+import project.core.resources.is_loading
+import project.core.resources.is_readed
+import project.core.resources.is_seccuess
 import project.core.resources.user_chats
 
 
 @Composable
-fun MessageComponent(message: Message) {
+fun MessageComponent(message: Message,resendMessage:()->Unit ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,7 +54,7 @@ fun MessageComponent(message: Message) {
                     if (!message.urlIcon.isNullOrBlank()) {
                         CoilImage(
                             imageModel = { message.urlIcon },
-                            modifier = Modifier.padding(3.dp).size(30.dp)
+                            modifier = Modifier.padding(3.dp).size(20.dp)
                         )
                     } else {
                         Image(
@@ -74,13 +80,28 @@ fun MessageComponent(message: Message) {
             ) {
                 if (message.whoseMessage == WhoseMessage.YOU) {
                     Text(
-                        message.time,
+                        message.date,
                         modifier = Modifier
                             .align(Alignment.Bottom)
                             .padding(4.dp)
                             .wrapContentWidth(), // используем wrapContentWidth для гибкости
                         fontSize = 9.sp
                     )
+                    when(message.statusMessage){
+
+                        StatusMessage.IS_ERROR ->  Image(
+                             painter = painterResource(Res.drawable.error),
+                             modifier = Modifier
+                                 .padding(5.dp)
+                                 .size(20.dp)
+                                 .align(Alignment.CenterVertically)
+                                 .clickable {
+                                     resendMessage()
+                                 },
+                            contentDescription =  null
+                         )
+                         else -> {}
+                    }
                 }
 
                 // используем weight для распределения пространства
@@ -88,18 +109,56 @@ fun MessageComponent(message: Message) {
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
                         .background(Color(0xFFD2F0B1))
-                        .padding(10.dp), // Padding для внутреннего контента
+                        .padding(10.dp),
                 ) {
                     Text(
+
                         message.text,
                         fontSize = 15.sp,
+                        modifier = Modifier.padding(end = 15.dp)
                     )
+                    when (message.statusMessage) {
+                            StatusMessage.IS_LOADING -> {
+                                Image(
+                                    modifier = Modifier
+                                        .padding(start = 5.dp)
+                                        .align(Alignment.BottomEnd)
+                                        .size(10.dp),
+                                    painter = painterResource(
+                                             Res.drawable.is_loading
+                                    ),
+                                    contentDescription = null)
+                        }
+                        StatusMessage.IS_SECCUESS-> {
+                            Image(
+                                modifier = Modifier
+                                    .padding(start = 5.dp)
+                                    .align(Alignment.BottomEnd)
+                                    .size(10.dp),
+                                painter = painterResource(
+                                    Res.drawable.is_seccuess
+                                ),
+                                contentDescription = null)
+                        }
+                        StatusMessage.IS_READED ->{
+                            Image(
+                                modifier = Modifier
+                                    .padding(start = 5.dp)
+                                    .align(Alignment.BottomEnd)
+                                    .size(10.dp),
+                                painter = painterResource(
+                                    Res.drawable.is_readed
+                                ),
+                                contentDescription = null)
+                        }
+                        else -> {}
+                    }
                 }
 
 
                 if (message.whoseMessage == WhoseMessage.INTERLOCUTOR) {
                     Text(
-                        message.time,
+                        message.date,
                         modifier = Modifier
                             .align(Alignment.Bottom)
                             .padding(4.dp)

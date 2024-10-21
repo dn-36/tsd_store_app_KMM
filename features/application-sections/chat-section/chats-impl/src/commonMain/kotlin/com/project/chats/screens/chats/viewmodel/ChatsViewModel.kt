@@ -23,7 +23,8 @@ class ChatsViewModel(
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
             is ChatsIntents.DialogueSelection -> {
-                dialogueSelection(intent.ui,intent.titleChat,intent.urlIcon,intent.scope)
+                println("<<<<<<<<<)()()()_    ${intent.countNewMessage}   >>>>>>>>>>>>")
+                dialogueSelection(intent.ui,intent.titleChat,intent.urlIcon,intent.countNewMessage,intent.scope)
             }
             is ChatsIntents.AddChat -> {
                 addChat()
@@ -35,9 +36,9 @@ class ChatsViewModel(
         }
     }
 
-    fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?, scope: CoroutineScope) {
+    fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?,countNewMessage:Int, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO){
-            Navigation.navigator.push(DialogScreen(uiChats  = chatsUi,titleChat,urlIcon))
+            Navigation.navigator.push(DialogScreen(uiChats  = chatsUi,titleChat,urlIcon,countNewMessage))
         }
     }
 

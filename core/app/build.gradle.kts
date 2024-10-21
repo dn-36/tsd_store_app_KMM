@@ -40,7 +40,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(project(":features:authorization-feature:authorization-screen-api"))
-
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
 

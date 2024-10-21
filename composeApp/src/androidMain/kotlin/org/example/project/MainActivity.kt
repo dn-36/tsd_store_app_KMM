@@ -28,7 +28,9 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            App.Content()
+
+                App.Content()
+
         }
     }
 }
