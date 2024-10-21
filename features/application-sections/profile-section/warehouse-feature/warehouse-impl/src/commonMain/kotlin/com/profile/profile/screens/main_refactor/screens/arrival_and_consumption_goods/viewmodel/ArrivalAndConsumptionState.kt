@@ -34,6 +34,8 @@ data class ArrivalAndConsumptionState (
 
     val isVisibilityCountProducts: MutableState<Float> = mutableStateOf(0f),
 
+    val isVisibilityAddProductsUpdate: MutableState<Float> = mutableStateOf(0f),
+
     val isVisibilityDataEntryComponent: MutableState<Float> = mutableStateOf(0f),
 
     val isVisibilityAddProductsComponent: MutableState<Float> = mutableStateOf(0f),
@@ -44,7 +46,18 @@ data class ArrivalAndConsumptionState (
 
     val selectedProduct: ProductArrivalAndConsumption? = null,
 
-    val listSelectedProducts:List<ProductArrivalAndConsumption> = emptyList()
+    val listSelectedProducts:List<ProductArrivalAndConsumption> = emptyList(),
+
+
+    val newContragentExpense : ContragentResponse? = null,
+
+    val newContragentParish : ContragentResponse? = null,
+
+    val newContragentEntityExpense : ContragentResponse? = null,
+
+    val newContragentEntityParish: ContragentResponse? = null,
+
+    val newWarehouse : Warehouse? = null,
 
 
     )

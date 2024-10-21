@@ -2,7 +2,7 @@ package com.project.network.arrival_goods
 
 import com.project.network.ConstData
 import com.project.network.arrival_goods.model.CreateRequest
-import com.project.network.arrival_goods.model.ProductArrival
+import com.project.network.arrival_goods.model.Product
 import com.project.network.arrival_goods.model.StoreResponse
 import com.project.network.httpClientEngine
 import io.ktor.client.HttpClient
@@ -21,9 +21,13 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.InternalAPI
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 class ArrivalGoodsClient {
+
+    /*CreateInExData(contragentId=8, contragentPushId=7, entityId=8, entityPushId=7, storeId=39, isPush=1, products=[ProductCreteWrapper(product=ProductCreateCounter(id=189, count=15))])*/
 
         private val client = HttpClient(httpClientEngine) {
             install(ContentNegotiation) {
@@ -51,37 +55,49 @@ class ArrivalGoodsClient {
     }
 
     // Добавление нового товара (приход/расход)
-    suspend fun createProduct (text: String, contragent_expense_id: Int, contragent_push_id: Int,
-
-                               entity_expense_id: Int, entity_push_id: Int, store_id: Int,
-
-                               is_push: Int, products: List<ProductArrival>): HttpResponse {
+    // POST запрос для создания записи о приходе товаров
+    @OptIn(InternalAPI::class)
+    suspend fun createProduct(
+        text: String,
+        contragentId: Int,
+        contragentPushId: Int,
+        entityId: Int,
+        entityPushId: Int,
+        storeId: Int,
+        isPush: Int,
+        products: List<Product>
+    ): String {
         return try {
+            val requestBody = CreateRequest(
+                text = text,
+                contragent_id = contragentId,
+                contragent_push_id = contragentPushId,
+                entity_id = entityId,
+                entity_push_id = entityPushId,
+                store_id = storeId,
+                is_push = isPush,
+                products = products
+            )
 
-            val response = client.post("https://delta.online/api/local-store-push-or-pull") {
-
-                contentType(ContentType.Application.Json)  // Установка типа контента
-
-                setBody( CreateRequest ( text = text, contragent_expense_id = contragent_expense_id,
-
-                    contragent_push_id = contragent_push_id, entity_expense_id = entity_expense_id,
-
-                    entity_push_id = entity_push_id, store_id = store_id,
-
-                    is_push = is_push, products = products))
+            val response: HttpResponse = client.post("https://delta.online/api/local-store-push-or-pull") {
+                contentType(ContentType.Application.Json)
+                setBody(requestBody) // Используем setBody для передачи сериализованного объекта
             }
 
-            println("Товар успешно добавлен: ${response.toString()}")
+            println("333")
+            println("333")
+            println("${requestBody}")
+            println("333")
+            println("333")
 
-            response
-
+            response.body() // Возвращаем статус ответа
         } catch (e: Exception) {
-
-            println("CREATE Product: Error - ${e.message}")
-
-            throw e
+            e.message.toString() // Возвращаем сообщение об ошибке
         }
     }
+
+    @Serializable
+    data class Product(val id: Int, val count: Int)
 
     // Обновление товара
     suspend fun updateProduct(productId: Int, updatedData: CreateRequest): HttpResponse {
@@ -99,9 +115,9 @@ class ArrivalGoodsClient {
     }
 
     // Удаление товара
-    suspend fun deleteProduct(productId: Int): HttpResponse {
+    suspend fun deleteProduct(ui: String): HttpResponse {
         return try {
-            val response = client.delete("https://delta.online/api/local-store-push-or-pull/ui/$productId")
+            val response = client.delete("https://delta.online/api/local-store-push-or-pull/$ui")
             println("Товар успешно удален: ${response.toString()}")
             response
         } catch (e: Exception) {

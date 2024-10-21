@@ -25,6 +25,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
@@ -32,6 +33,8 @@ import org.jetbrains.compose.resources.painterResource
 import product_network.model.Product
 import project.core.resources.Res
 import project.core.resources.back
+import project.core.resources.ca
+import project.core.resources.cancel
 
 class ListProductsComponent ( val listAllProducts: List<Product>, val onClickBack:() -> Unit,
 
@@ -66,16 +69,20 @@ class ListProductsComponent ( val listAllProducts: List<Product>, val onClickBac
 
                 LazyColumn { items( listAllProducts ){ item ->
 
-                    Text(text = item.name!!, fontSize = 20.sp, modifier = Modifier.padding(10.dp)
-                        .clickable (
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
+                        Text(text = item.name!!,
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(10.dp)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
 
-                        {   selectedProduct = ProductArrivalAndConsumption(product = item, count = 0)
+                                {
+                                    selectedProduct =
+                                        ProductArrivalAndConsumption(product = item, count = 0)
 
-                            onClickProduct( selectedProduct!! )
+                                    onClickProduct(selectedProduct!!)
 
-                        })
+                                })
 
                 }
                 }

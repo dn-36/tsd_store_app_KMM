@@ -3,7 +3,6 @@ package com.profile.profile.screens.main_refactor.screens.arrival_and_consumptio
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.repository.ArrivalAndConsumptionClientApi
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 import com.project.network.arrival_goods.ArrivalGoodsClient
-import com.project.network.arrival_goods.model.ProductArrival
 import com.project.network.arrival_goods.model.StoreResponse
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.contragent_network.model.ContragentResponse
@@ -27,6 +26,12 @@ class ArrivalAndConsumptionClientImpl (
     override suspend fun getContragents( onGet: (newListContragents: List<ContragentResponse> ) -> Unit) {
 
         onGet(contragentsClient.getContragents())
+
+    }
+
+    override suspend fun deleteArrivalOrConsumption(ui:String) {
+
+        arrivalAndConsumptionClient.deleteProduct(ui)
 
     }
 
@@ -73,24 +78,23 @@ class ArrivalAndConsumptionClientImpl (
 
                                                      listProducts:List<ProductArrivalAndConsumption> ) {
 
-       var newList = mutableListOf<ProductArrival>()
+        println("asasasasasasasaas "+arrivalAndConsumptionClient.createProduct(
+            text = "Text",
+            idContragentExpense?:0,
+            idContragentParish?:0,
+            idLegalEntityExpense?:0,
+            idLegalEntityExpense?:0,
+            idWarehouse?:0,
+            isPush,
+            listProducts.map {
+              ArrivalGoodsClient.Product(
+                  it.product.id?:0,
+                  it.count
+              )
+            }
 
-        listProducts.forEach { item ->
-
-            newList.add(ProductArrival( id = item.product.id!!, count = item.count))
-
-        }
-
-        arrivalAndConsumptionClient.createProduct(text = "", contragent_expense_id = idContragentExpense!!,
-
-            contragent_push_id = idContragentParish!!, entity_expense_id = idLegalEntityExpense!!,
-
-            entity_push_id = idLegalEntityParish!!, store_id = idWarehouse!!,
-
-            is_push = isPush, products = newList)
-
-
-
+        )
+        )
     }
 
 }

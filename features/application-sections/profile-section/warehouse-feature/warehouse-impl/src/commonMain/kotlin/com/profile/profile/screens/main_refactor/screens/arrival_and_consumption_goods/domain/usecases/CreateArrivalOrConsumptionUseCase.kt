@@ -2,7 +2,6 @@ package com.profile.profile.screens.main_refactor.screens.arrival_and_consumptio
 
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.repository.ArrivalAndConsumptionClientApi
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
-import com.project.network.arrival_goods.model.ProductArrival
 import com.project.network.contragent_network.model.ContragentResponse
 
 class CreateArrivalOrConsumptionUseCase (

@@ -43,6 +43,12 @@ class WarehouseClientImpl (
 
        val allWarehouse = warehouseClient.getWarehouse()
 
+        println("gg")
+        println("gg")
+        println("${allWarehouse}")
+        println("gg")
+        println("gg")
+
         onGet( allWarehouse )
 
     }

@@ -85,6 +85,7 @@ class AddProductsComponent (val listSelectedProducts:List<ProductArrivalAndConsu
                 Spacer(modifier = Modifier.height(20.dp))
 
                 if(listSelectedProducts.size != 0) {
+
                     LazyColumn {
                         items(listSelectedProducts) { item ->
 
@@ -111,9 +112,9 @@ class AddProductsComponent (val listSelectedProducts:List<ProductArrivalAndConsu
                                     modifier = Modifier.size(15.dp)
                                 )
 
-                                Spacer(modifier = Modifier.height(10.dp))
-
                             }
+
+                            Spacer(modifier = Modifier.height(10.dp))
 
                         }
                     }

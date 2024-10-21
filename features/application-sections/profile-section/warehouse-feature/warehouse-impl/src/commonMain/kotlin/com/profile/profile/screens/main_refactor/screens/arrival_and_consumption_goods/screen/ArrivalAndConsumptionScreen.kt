@@ -27,6 +27,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.AddProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.DataEntryComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.DataEntryComponentUpdate
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.Item
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ListProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
@@ -55,7 +56,11 @@ class ArrivalAndConsumptionScreen: Screen {
 
                 LazyColumn { items( vm.arrivalAndConsumptionState.listAllArrivalOrConsumption ){ item ->
 
-                 Item(item)
+                 Item(item, onDelete = { ui ->
+
+                     vm.processIntent(ArrivalAndConsumptionIntents.DeleteArrivalOrConsumption(scope,ui)) },
+
+                     onUpdate = { item -> vm.processIntent(ArrivalAndConsumptionIntents.Update(scope,item)) })
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -139,6 +144,25 @@ class ArrivalAndConsumptionScreen: Screen {
                     vm.processIntent(ArrivalAndConsumptionIntents.SelectFromList( scope ))
                 }, onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackAddProducts ) },
                 onClickCreate = { scope ->  vm.processIntent( ArrivalAndConsumptionIntents.CreateArrivalOrConsumption(scope)) }).Content()
+
+        }
+
+        else if(vm.arrivalAndConsumptionState.isVisibilityAddProductsUpdate.value == 1f) {
+
+            DataEntryComponentUpdate(vm.arrivalAndConsumptionState.newContragentExpense!!,
+                vm.arrivalAndConsumptionState.newContragentParish!!,
+                vm.arrivalAndConsumptionState.newContragentEntityExpense!!,
+                vm.arrivalAndConsumptionState.newContragentParish!!,
+                vm.arrivalAndConsumptionState.newWarehouse!!,
+                listAllContragents = vm.arrivalAndConsumptionState.listAllContragent,
+
+                listAllWarehouse = vm.arrivalAndConsumptionState.listAllWarehouse,
+
+                onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackDataEntry) },
+
+                onClickNext = { idLegalEntityParish: Int?, idLegalEntityExpense: Int?, idContragentExpense: Int?, idContragentParish: Int?, idWarehouse: Int? ->
+
+                    vm.processIntent(ArrivalAndConsumptionIntents.Next(idLegalEntityParish, idLegalEntityExpense, idContragentExpense, idContragentParish, idWarehouse)) }).Content()
 
         }
 
