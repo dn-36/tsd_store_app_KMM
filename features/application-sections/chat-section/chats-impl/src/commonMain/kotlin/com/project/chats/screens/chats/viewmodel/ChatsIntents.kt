@@ -8,7 +8,9 @@ sealed class ChatsIntents {
         val scope:CoroutineScope,
         val ui:String,
         val urlIcon:String?,
-        val titleChat:String)
+        val titleChat:String,
+        val countNewMessage:Int
+        )
         : ChatsIntents()
 
     object AddChat : ChatsIntents()

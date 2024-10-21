@@ -60,7 +60,7 @@ class ChatsScreen : Screen {
                      item.title,
                      item.lastMassage,
                      "${item.timeEndDate.time} ${item.timeEndDate.date}",
-                     { vm.processIntent(ChatsIntents.DialogueSelection(scope, item.uiChat,item.urlIconChat,item.title)) }
+                     { vm.processIntent(ChatsIntents.DialogueSelection(scope, item.uiChat,item.urlIconChat, item.title,item.countNewMessage)) }
                  )
              }
          }
