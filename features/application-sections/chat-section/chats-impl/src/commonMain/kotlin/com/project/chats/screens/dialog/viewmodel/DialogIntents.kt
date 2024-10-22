@@ -7,7 +7,6 @@ sealed class DialogIntents {
     object HistoryFiles : DialogIntents()
     data class SetScreen(
         val uiChats:String,
-        val countNewMessage:Int,
         val scope:CoroutineScope
     ) : DialogIntents()
 }

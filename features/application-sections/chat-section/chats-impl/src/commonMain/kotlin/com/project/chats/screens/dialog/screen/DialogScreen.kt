@@ -90,7 +90,7 @@ class DialogScreen(
             listState.scrollToItem(vm.state.listMessage.size)
         }
 
-        vm.processIntent(DialogIntents.SetScreen(uiChats,countNewMessage,scope))
+        vm.processIntent(DialogIntents.SetScreen(uiChats,scope))
 
         Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
 
@@ -160,7 +160,7 @@ class DialogScreen(
                                 item.name,
                                 item.date,
                                 item.time,
-                                item.urlIcon,
+                                item.url_icon,
                                 item.whoseMessage,
                                 statusMessage = item.statusMessage),
                             {

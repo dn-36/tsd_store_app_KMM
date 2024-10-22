@@ -11,6 +11,7 @@ import com.project.chats.screens.chats.viewmodel.ChatsViewModel
 import com.project.chats.screens.dialog.datasource.DialogRepositoryImpl
 import com.project.chats.screens.dialog.domain.DialogRepositoryApi
 import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
+import com.project.chats.screens.dialog.domain.ReadMessegeUseCase
 import com.project.chats.screens.dialog.domain.SendMessageUseCase
 import com.project.chats.screens.dialog.viewmodel.DialogViewModel
 import org.koin.dsl.module
@@ -32,7 +33,10 @@ val chatsModule = module{
           ChatsApi()
      }
      factory {
-          DialogViewModel(get(),get())
+          DialogViewModel(get(),get(),get())
+     }
+     factory {
+          ReadMessegeUseCase(get())
      }
      factory {
           SendMessageUseCase(get())
@@ -44,4 +48,5 @@ val chatsModule = module{
      factory {
          DialogRepositoryImpl(get(),get()) as DialogRepositoryApi
      }
+
 }

@@ -101,20 +101,41 @@ class ChatsApi() {
     }
 
 
-    suspend fun readAllMessanger(uiChat: String): Result<String,NetworkError> {
+    suspend fun readAllMesanger(uiChat: String,myNumber:String): Result<String,NetworkError> {
 
         return try {
-            val list = getListMassengers(uiChat).messages?.data?: listOf()
+            val listMassengers = (getListMassengers(uiChat).messages?.data?: listOf())
 
-            list.forEach {
-                client.post("https://delta.online/api/view-message/${it.ui?:""}")
+              val cutList:MutableList<MessageData?> =  mutableListOf()
+
+            listMassengers.forEachIndexed { index, messageData ->
+                if(
+                  listMassengers.size <= 12
+                ) cutList.add(messageData)
+                  else
+                  if(index in (listMassengers.size - 12)..listMassengers.size){
+                      cutList.add(messageData)
+                  }
+            }
+
+            cutList.forEach {
+                if(myNumber!= it?.user?.phone?:"") {
+
+                  println("!!!!\n" +
+                          "${it?.user?.phone}"+
+                          "\n\n " + client
+                      .post("https://delta.online/api/view-message/${it?.ui?: ""}")
+                      .status +
+                          "\n" +
+                          "\n !!!!"
+                  )
+                }
             }
 
            Result.Success("Result")
 
         } catch (e: Exception) {
 
-            println("UPDATE Note: Error - ${e.message}")
             return Result.Error(NetworkError.SERVER_ERROR)
         }
     }

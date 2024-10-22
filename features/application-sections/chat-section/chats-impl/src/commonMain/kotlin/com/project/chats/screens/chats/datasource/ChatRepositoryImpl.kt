@@ -13,15 +13,14 @@ class ChatRepositoryImpl(
     override suspend fun getListChats():List<ChatsModel>{
         chatApi.init(sharedPrefsApi.getToken()?:"")
        val listChats = chatApi.getChats().map {
-          println(">>>>>>>${it}>>>>>>>>>")
            //https://delta.online/storage/message/7a67620ebd38f20f67161ebe5cdebfa7.jpeg
            ChatsModel(
-               if(!it.image.isNullOrBlank()){
+               if(!it.image.isNullOrBlank())
                 "https://delta.online/storage/"+
-               it.image}
-               else{
+               it.image
+               else
                    null
-               },
+               ,
                it?.name?:"",
                it?.message?:"",
                Utils.parseDateTimeManually(it.created_at?:""),

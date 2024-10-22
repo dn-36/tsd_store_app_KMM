@@ -2,6 +2,7 @@ package com.project.chats.screens.chats.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.project.chats.screens.chats.domain.GetListChatsUseCase
+import com.project.chats.screens.dialog.domain.ReadMessegeUseCase
 import com.project.network.Navigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,7 @@ import org.example.project.nika_screens_chats.add_chat_feature.screen.SelectCont
 import com.project.chats.screens.dialog.screen.DialogScreen
 
 class ChatsViewModel(
-    val getListChatsUseCase: GetListChatsUseCase
+    val getListChatsUseCase: GetListChatsUseCase,
 ) : ViewModel() {
 
     private var isSeted = false

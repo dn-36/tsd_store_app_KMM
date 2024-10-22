@@ -51,9 +51,9 @@ fun MessageComponent(message: Message,resendMessage:()->Unit ) {
         ) {
             if (message.whoseMessage == WhoseMessage.INTERLOCUTOR) {
                 Column(modifier = Modifier.padding(4.dp).align(Alignment.CenterVertically)) {
-                    if (!message.urlIcon.isNullOrBlank()) {
+                    if (!message.url_icon.isNullOrBlank()) {
                         CoilImage(
-                            imageModel = { message.urlIcon },
+                            imageModel = { message.url_icon },
                             modifier = Modifier.padding(3.dp).size(20.dp)
                         )
                     } else {
@@ -84,7 +84,7 @@ fun MessageComponent(message: Message,resendMessage:()->Unit ) {
                         modifier = Modifier
                             .align(Alignment.Bottom)
                             .padding(4.dp)
-                            .wrapContentWidth(), // используем wrapContentWidth для гибкости
+                            .wrapContentWidth(),
                         fontSize = 9.sp
                     )
                     when(message.statusMessage){
@@ -104,7 +104,6 @@ fun MessageComponent(message: Message,resendMessage:()->Unit ) {
                     }
                 }
 
-                // используем weight для распределения пространства
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
@@ -117,19 +116,22 @@ fun MessageComponent(message: Message,resendMessage:()->Unit ) {
                         fontSize = 15.sp,
                         modifier = Modifier.padding(end = 15.dp)
                     )
+                    if(message.whoseMessage == WhoseMessage.YOU){
                     when (message.statusMessage) {
-                            StatusMessage.IS_LOADING -> {
-                                Image(
-                                    modifier = Modifier
-                                        .padding(start = 5.dp)
-                                        .align(Alignment.BottomEnd)
-                                        .size(10.dp),
-                                    painter = painterResource(
-                                             Res.drawable.is_loading
-                                    ),
-                                    contentDescription = null)
+                        StatusMessage.IS_LOADING -> {
+                            Image(
+                                modifier = Modifier
+                                    .padding(start = 5.dp)
+                                    .align(Alignment.BottomEnd)
+                                    .size(10.dp),
+                                painter = painterResource(
+                                    Res.drawable.is_loading
+                                ),
+                                contentDescription = null
+                            )
                         }
-                        StatusMessage.IS_SECCUESS-> {
+
+                        StatusMessage.IS_SECCUESS -> {
                             Image(
                                 modifier = Modifier
                                     .padding(start = 5.dp)
@@ -138,9 +140,11 @@ fun MessageComponent(message: Message,resendMessage:()->Unit ) {
                                 painter = painterResource(
                                     Res.drawable.is_seccuess
                                 ),
-                                contentDescription = null)
+                                contentDescription = null
+                            )
                         }
-                        StatusMessage.IS_READED ->{
+
+                        StatusMessage.IS_READED -> {
                             Image(
                                 modifier = Modifier
                                     .padding(start = 5.dp)
@@ -149,9 +153,12 @@ fun MessageComponent(message: Message,resendMessage:()->Unit ) {
                                 painter = painterResource(
                                     Res.drawable.is_readed
                                 ),
-                                contentDescription = null)
+                                contentDescription = null
+                            )
                         }
+
                         else -> {}
+                    }
                     }
                 }
 
@@ -162,16 +169,16 @@ fun MessageComponent(message: Message,resendMessage:()->Unit ) {
                         modifier = Modifier
                             .align(Alignment.Bottom)
                             .padding(4.dp)
-                            .wrapContentWidth(), // используем wrapContentWidth для гибкости
+                            .wrapContentWidth(),
                         fontSize = 9.sp
                     )
                 }
             }
             if (message.whoseMessage == WhoseMessage.YOU) {
                 Column(modifier = Modifier.padding(4.dp).align(Alignment.CenterVertically)) {
-                    if (!message.urlIcon.isNullOrBlank()) {
+                    if (!message.url_icon.isNullOrBlank()) {
                         CoilImage(
-                            imageModel = { message.urlIcon },
+                            imageModel = { message.url_icon },
                             modifier = Modifier.padding(3.dp).size(30.dp)
                         )
                     } else {
@@ -181,7 +188,9 @@ fun MessageComponent(message: Message,resendMessage:()->Unit ) {
                             modifier = Modifier.size(30.dp)
                         )
                     }
-                    Text("You", fontSize = 10.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
+                    Text("You", fontSize = 10.sp, modifier =
+                    Modifier
+                        .align(Alignment.CenterHorizontally))
                 }
             }
 

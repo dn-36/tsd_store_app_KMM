@@ -7,6 +7,7 @@ import androidx.compose.ui.util.fastForEachIndexed
 import androidx.lifecycle.ViewModel
 import com.project.chats.screens.chats.screen.ChatsScreen
 import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
+import com.project.chats.screens.dialog.domain.ReadMessegeUseCase
 import com.project.chats.screens.dialog.domain.SendMessageUseCase
 import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.domain.models.StatusMessage
@@ -22,7 +23,8 @@ import org.example.project.nika_screens_chats.history_files_feature.screen.Histo
 
 class DialogViewModel(
    private val getListMessagesUseCase : GetListMessagesUseCase,
-   private val sendMessageUseCase: SendMessageUseCase
+   private val sendMessageUseCase: SendMessageUseCase,
+   private val readMessageUseCase: ReadMessegeUseCase
 ):ViewModel() {
     private var isSeted:Boolean = false
     var state by mutableStateOf(DialogState())
@@ -35,7 +37,7 @@ class DialogViewModel(
             is DialogIntents.Back -> {back()}
             is DialogIntents.HistoryFiles -> {historyFiles()}
             is DialogIntents.SetScreen -> {
-                setScreen(intent.uiChats,intent.countNewMessage,intent.scope)
+                setScreen(intent.uiChats,intent.scope)
             }
         }
     }
@@ -52,34 +54,43 @@ class DialogViewModel(
 
     }
 
-    fun setScreen(uiChats:String,countNewMessage:Int, scope:CoroutineScope){
+    fun setScreen(uiChats:String, scope:CoroutineScope){
+
      scope.launch(Dispatchers.IO){
         if(isSeted){
             return@launch
         }
+
             isSeted = true
+
+             this.launch {
+                 while (
+                     true
+                 ){
+                 readMessageUseCase.execute(uiChats)
+                 delay(1500L)
+                 }
+                 }
+
             while (
-                if( !state.listMessage.isEmpty()) {
-                    state.listMessage.last().statusMessage == StatusMessage.IS_LOADING
-                }else{
-                    true
-                }
+               true
             ){
                 val listDate = mutableSetOf<String>()
                 val listMessages =  getListMessagesUseCase.execute(uiChats)
                 listMessages.fastForEachIndexed { i, message ->
-                    println(i.toString()+"   "+i)
-                    if((listMessages.size - countNewMessage)>i){
-                        println((listMessages.size - countNewMessage).toString())
+
+                    if(message.isReaded){
                         listMessages[i].statusMessage = StatusMessage.IS_READED
                     }
-                    listMessages[i].statusMessage = message.statusMessage
+
+
                     if(!listDate.contains(listMessages[i].time)){
                         listMessages[i].isShowDate = true
                     }
                     listDate.add(message.time)
                 }
-                if(listMessages.size != 0){
+                if((listMessages.size != 0)  && (state.listMessage.lastOrNull()?.statusMessage?:StatusMessage.IS_SECCUESS)
+                    != StatusMessage.IS_ERROR){
                     state = state.copy(
                         listMessage = listMessages
                     )

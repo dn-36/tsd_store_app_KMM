@@ -6,9 +6,10 @@ data class Message(
     val name:String,
     val date:String,
     val time:String,
-    val urlIcon:String?,
+    val url_icon:String?,
     val whoseMessage: WhoseMessage,
     var isShowDate:Boolean = false,
+    val isReaded:Boolean = false,
     var statusMessage:StatusMessage = StatusMessage.IS_SECCUESS
 )
 
