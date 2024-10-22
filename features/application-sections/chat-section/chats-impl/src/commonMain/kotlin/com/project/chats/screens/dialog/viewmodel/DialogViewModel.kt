@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastForEachIndexed
-import androidx.lifecycle.ViewModel
 import com.project.chats.screens.chats.screen.ChatsScreen
 import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
 import com.project.chats.screens.dialog.domain.ReadMessegeUseCase
@@ -13,6 +12,8 @@ import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.domain.models.StatusMessage
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.project.core_app.getFormattedDateTime
+import com.project.core_app.network_base_screen.NetworkViewModel
+import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,7 @@ class DialogViewModel(
    private val getListMessagesUseCase : GetListMessagesUseCase,
    private val sendMessageUseCase: SendMessageUseCase,
    private val readMessageUseCase: ReadMessegeUseCase
-):ViewModel() {
+): NetworkViewModel() {
     private var isSeted:Boolean = false
     var state by mutableStateOf(DialogState())
 
@@ -55,13 +56,12 @@ class DialogViewModel(
     }
 
     fun setScreen(uiChats:String, scope:CoroutineScope){
-
      scope.launch(Dispatchers.IO){
         if(isSeted){
             return@launch
         }
 
-            isSeted = true
+
 
              this.launch {
                  while (
@@ -69,6 +69,7 @@ class DialogViewModel(
                  ){
                  readMessageUseCase.execute(uiChats)
                  delay(1500L)
+
                  }
                  }
 
@@ -76,7 +77,10 @@ class DialogViewModel(
                true
             ){
                 val listDate = mutableSetOf<String>()
-                val listMessages =  getListMessagesUseCase.execute(uiChats)
+
+                val listMessages = getListMessagesUseCase.execute(uiChats)?: emptyList()
+
+
                 listMessages.fastForEachIndexed { i, message ->
 
                     if(message.isReaded){
@@ -95,7 +99,15 @@ class DialogViewModel(
                         listMessage = listMessages
                     )
                 }
-
+            if(!isSeted){
+               if(listMessages.isNullOrEmpty()){
+                        setStatus(StatusNetworkScreen.ERROR)
+                        return@launch
+                    }
+                delay(200L)
+                setStatus(StatusNetworkScreen.SECCUESS)
+                isSeted = true
+            }
             delay(1500L)
             }
         }

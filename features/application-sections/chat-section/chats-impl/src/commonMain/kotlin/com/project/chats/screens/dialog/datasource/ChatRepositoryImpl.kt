@@ -15,7 +15,7 @@ class DialogRepositoryImpl(
     private val profileSavedDate: SharedPrefsApi,
     ):DialogRepositoryApi {
 
-    override suspend fun getListMessages(uiChats: String,userToken:String): List<Message> {
+    override suspend fun getListMessages(uiChats: String,userToken:String): List<Message>? {
         return chatApi.getListMassengers(uiChats).messages?.data?.map {
 
             Message(
@@ -28,7 +28,7 @@ class DialogRepositoryImpl(
                 else WhoseMessage.INTERLOCUTOR,
                 isReaded = it.status_view == 1
             )
-        }?: listOf()
+        }
     }
 
     override suspend fun sendMessege(

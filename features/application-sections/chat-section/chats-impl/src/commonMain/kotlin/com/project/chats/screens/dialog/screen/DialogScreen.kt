@@ -41,11 +41,13 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import com.preat.peekaboo.image.picker.toImageBitmap
+import com.project.chats.screens.dialog.components.DialogComponentScreen
 import com.project.chats.screens.dialog.components.MessageComponent
 import com.project.chats.screens.dialog.components.MessageDataComponent
 import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.viewmodel.DialogIntents
-import com.project.chats.screens.dialog.viewmodel.DialogViewModel
+import com.project.core_app.network_base_screen.NetworkScreen
+import com.project.core_app.network_base_screen.NetworkViewModel
 import com.skydoves.landscapist.coil3.CoilImage
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
@@ -63,211 +65,13 @@ class DialogScreen(
     private val titleChat:String,
     private val urlIcon:String?,
     private val countNewMessage:Int
-) : Screen {
+) : NetworkScreen(
 
-    val vm:DialogViewModel = getKoin().get()
-    @Composable
-    override fun Content() {
-
-        val scope = rememberCoroutineScope()
-
-        val images = remember { mutableStateListOf<ImageBitmap>() }
-
-        val multipleImagePicker = rememberImagePickerLauncher(
-            scope = scope,
-            selectionMode = SelectionMode.Multiple(),
-            onResult = { byteArrays ->
-                images += byteArrays.map {
-                    it.toImageBitmap()
-                }
-            }
-        )
-
-        val listState = rememberLazyListState()
+    DialogComponentScreen(
+        uiChats,titleChat,urlIcon,countNewMessage, getKoin().get()
+    ),
+)
 
 
-        LaunchedEffect(vm.state.listMessage.size) {
-            listState.scrollToItem(vm.state.listMessage.size)
-        }
-
-        vm.processIntent(DialogIntents.SetScreen(uiChats,scope))
-
-        Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
-
-            Column(modifier = Modifier.align(Alignment.TopCenter)) {
-                Row(
-                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(Res.drawable.back),
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp).clickable(
-                                indication = null, // Отключение эффекта затемнения
-                                interactionSource = remember { MutableInteractionSource() })
-                            { vm.processIntent(DialogIntents.Back) }
-                        )
-
-                        Spacer(modifier = Modifier.width(15.dp))
-                        if(urlIcon.isNullOrBlank()){
-                        Image(
-                            painter = painterResource(Res.drawable.user_chats),
-                            contentDescription = null,
-                            modifier = Modifier.size(30.dp)
-                        )
-                        }else{
-                            CoilImage(
-                                imageModel = { urlIcon },
-                                modifier = Modifier.size(30.dp)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(20.dp))
-
-                        Text(titleChat, fontSize = 20.sp)
-                    }
-
-                    Image(
-                        painter = painterResource(Res.drawable.dots),
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp).clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { vm.processIntent(DialogIntents.HistoryFiles) }
-                    )
-
-                }
-
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.94f)
-                ) {
-
-
-                    items(vm.state.listMessage) { item ->
-                            if(item.isShowDate) {
-                                MessageDataComponent(item.time)
-                            }
-
-                        MessageComponent(
-                            Message(
-                                item.text,
-                                item.name,
-                                item.date,
-                                item.time,
-                                item.url_icon,
-                                item.whoseMessage,
-                                statusMessage = item.statusMessage),
-                            {
-                                    vm.sendMessageUseCase(
-                                        vm.state.listMessage.last().text,
-                                        uiChats,
-                                        scope
-                                    )
-                            }
-                        )
-                    }
-                }
-            }
-            Column(modifier = Modifier.align(Alignment.BottomCenter)) {
-                if (images.size != 0) {
-                    LazyRow(modifier = Modifier.fillMaxWidth()) {
-                        items(images) { item ->
-                            Box(modifier = Modifier.size(95.dp)) {
-                                Image(
-                                    modifier = Modifier.padding(10.dp)
-                                        .size(90.dp),
-                                    bitmap = item,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop
-                                )
-                                Image(painterResource(Res.drawable.cancel),contentDescription = null,
-                                    modifier = Modifier.size(10.dp).align(Alignment.TopEnd).clickable(
-                                        indication = null, // Отключение эффекта затемнения
-                                        interactionSource = remember { MutableInteractionSource() })
-                                    { images.remove(item)})
-                            }
-                        }
-                    }
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth()
-                            .background(Color.LightGray), contentAlignment = Alignment.Center
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.Bottom
-                        ) {
-
-
-                            BasicTextField(
-                                value = vm.state.titleChats,
-                                onValueChange = {
-                                     vm.state = vm.state.copy(
-                                         titleChats = it
-                                     )
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth(0.65f).heightIn(min = 33.dp, max = 150.dp),
-                                textStyle = TextStyle(fontSize = 18.sp),
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                            )
-
-                            Image(
-                                painter = painterResource(Res.drawable.add_photo),
-                                contentDescription = null,
-                                modifier = Modifier.padding(bottom = 15.dp, top = 8.dp).size(22.dp)
-                                    .clickable(
-                                        indication = null, // Отключение эффекта затемнения
-                                        interactionSource = remember { MutableInteractionSource() })
-                                    { multipleImagePicker.launch() }
-                            )
-
-                            Spacer(modifier = Modifier.width(7.dp))
-
-                            Image(
-                                painter = painterResource(Res.drawable.paperclip),
-                                contentDescription = null,
-                                modifier = Modifier.padding(bottom = 15.dp, top = 8.dp).size(22.dp)
-                                    .clickable(
-                                        indication = null, // Отключение эффекта затемнения
-                                        interactionSource = remember { MutableInteractionSource() })
-                                    { }
-                            )
-                            Spacer(modifier = Modifier.width(7.dp))
-                            Image(
-                                painter = painterResource(Res.drawable.back),
-                                contentDescription = null,
-                                modifier = Modifier.padding(bottom = 15.dp, top = 8.dp).size(25.dp)
-                                    .graphicsLayer(rotationZ = 180f).clickable{
-
-                                        vm.sendMessageUseCase(
-                                            vm.state.titleChats,
-                                            uiChats,
-                                            scope
-                                        )
-                                        vm.state = vm.state.copy(
-                                            titleChats = ""
-                                        )
-                                    }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 
 

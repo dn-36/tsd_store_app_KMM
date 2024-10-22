@@ -24,14 +24,12 @@ class ChatsViewModel(
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
             is ChatsIntents.DialogueSelection -> {
-                println("<<<<<<<<<)()()()_    ${intent.countNewMessage}   >>>>>>>>>>>>")
                 dialogueSelection(intent.ui,intent.titleChat,intent.urlIcon,intent.countNewMessage,intent.scope)
             }
             is ChatsIntents.AddChat -> {
                 addChat()
             }
             is ChatsIntents.SetScreen -> {
-                println("!!!!!!!!!!!!______!!!!!!!!!!!!")
                 setScreen(intent.scope)
             }
         }
