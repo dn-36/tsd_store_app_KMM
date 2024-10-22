@@ -6,4 +6,17 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class Product(val id: Int, val count: Int)
+data class Product(
+
+    val product:ProductInfo
+
+)
+
+@Serializable
+data class ProductInfo(
+
+    val id: Int,
+
+    val count: Int
+
+)

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,8 +27,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.AddProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.DataEntryComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.DataEntryComponentUpdate
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry_component.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.Item
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ListProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
@@ -35,10 +35,9 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.koin.mp.KoinPlatform.getKoin
 
+class ArrivalAndConsumptionScreen : Screen {
 
-class ArrivalAndConsumptionScreen: Screen {
-
-    val vm : ArrivalAndConsumptionViewModel = getKoin().get()
+    val vm: ArrivalAndConsumptionViewModel = getKoin().get()
 
     @Composable
 
@@ -48,31 +47,48 @@ class ArrivalAndConsumptionScreen: Screen {
 
         vm.processIntent(ArrivalAndConsumptionIntents.GetArrivalAndConsumptionGoods(scope))
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.White)){
-            Column(modifier = Modifier.padding(16.dp),) {
+        Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Text("Приход Расход", color = Color.Black, fontSize = 20.sp)
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                LazyColumn { items( vm.arrivalAndConsumptionState.listAllArrivalOrConsumption ){ item ->
+                LazyColumn (modifier = Modifier.fillMaxHeight(0.8f)) {
+                    items(vm.arrivalAndConsumptionState.listAllArrivalOrConsumption) { item ->
 
-                 Item(item, onDelete = { ui ->
+                        Item(item, onDelete = { ui ->
 
-                     vm.processIntent(ArrivalAndConsumptionIntents.DeleteArrivalOrConsumption(scope,ui)) },
+                            vm.processIntent(
+                                ArrivalAndConsumptionIntents.DeleteArrivalOrConsumption(
+                                    scope,
+                                    ui
+                                )
+                            )
+                        },
 
-                     onUpdate = { item -> vm.processIntent(ArrivalAndConsumptionIntents.Update(scope,item)) })
+                            onUpdate = { item ->
+                                vm.processIntent(
+                                    ArrivalAndConsumptionIntents.UpdateButton(
+                                        scope,
+                                        item
+                                    )
+                                )
+                            })
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
 
-                } }
+                    }
+                }
 
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
 
                 Column {
 
-                    Row(modifier = Modifier.padding(10.dp).fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(
+                        modifier = Modifier.padding(10.dp).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
                         Button(
                             onClick = { vm.processIntent(ArrivalAndConsumptionIntents.Arrival(scope)) },
                             modifier = Modifier
@@ -96,9 +112,19 @@ class ArrivalAndConsumptionScreen: Screen {
                 }
             }
         }
-        if(vm.arrivalAndConsumptionState.isVisibilityDataEntryComponent.value == 1f){
+        if (vm.arrivalAndConsumptionState.isVisibilityDataEntryComponent.value == 1f) {
 
             DataEntryComponent(
+
+                vm.arrivalAndConsumptionState.updatedContragentExpense,
+
+                vm.arrivalAndConsumptionState.updatedContragentParish,
+
+                vm.arrivalAndConsumptionState.updatedContragentEntityExpense,
+
+                vm.arrivalAndConsumptionState.updatedContragentParish,
+
+                vm.arrivalAndConsumptionState.updatedWarehouse,
 
                 listAllContragents = vm.arrivalAndConsumptionState.listAllContragent,
 
@@ -108,12 +134,20 @@ class ArrivalAndConsumptionScreen: Screen {
 
                 onClickNext = { idLegalEntityParish: Int?, idLegalEntityExpense: Int?, idContragentExpense: Int?, idContragentParish: Int?, idWarehouse: Int? ->
 
-                    vm.processIntent(ArrivalAndConsumptionIntents.Next(idLegalEntityParish, idLegalEntityExpense, idContragentExpense, idContragentParish, idWarehouse)) }
+                    vm.processIntent(
+                        ArrivalAndConsumptionIntents.Next(
+                            idLegalEntityParish,
+                            idLegalEntityExpense,
+                            idContragentExpense,
+                            idContragentParish,
+                            idWarehouse
+                        )
+                    )
+                }
 
             ).Content()
 
-        }
-        else if( vm.arrivalAndConsumptionState.isVisibilityListProducts.value == 1f ) {
+        } else if (vm.arrivalAndConsumptionState.isVisibilityListProducts.value == 1f) {
 
             ListProductsComponent(vm.arrivalAndConsumptionState.listProducts, onClickBack = {
 
@@ -121,48 +155,51 @@ class ArrivalAndConsumptionScreen: Screen {
 
             }, onClickProduct = { selectedProducts ->
 
-                vm.processIntent(ArrivalAndConsumptionIntents.SelectProducts( selectedProducts ))
+                vm.processIntent(ArrivalAndConsumptionIntents.SelectProducts(selectedProducts))
 
             }).Content()
 
-        }
+        } else if (vm.arrivalAndConsumptionState.isVisibilityCountProducts.value == 1f) {
 
-        else if (vm.arrivalAndConsumptionState.isVisibilityCountProducts.value == 1f){
+            CountProductComponent(
 
-            CountProductComponent( vm.arrivalAndConsumptionState.listProducts, onClickReady = { count ->
+                vm.arrivalAndConsumptionState.listProducts,
 
-                vm.processIntent(ArrivalAndConsumptionIntents.Ready( count ))
+                onClickReady = { count ->
 
-            } ).Content()
+                    vm.processIntent(ArrivalAndConsumptionIntents.Ready(count))
 
-        }
+                }).Content()
 
-        else if(vm.arrivalAndConsumptionState.isVisibilityAddProductsComponent.value == 1f) {
+        } else if (vm.arrivalAndConsumptionState.isVisibilityAddProductsComponent.value == 1f) {
 
-            AddProductsComponent(vm.arrivalAndConsumptionState.listSelectedProducts,
+            AddProductsComponent(
+
+                isUpdate = vm.arrivalAndConsumptionState.isUpdate,
+
+                vm.arrivalAndConsumptionState.listSelectedProducts,
+
                 onClickSelectFromList = { scope ->
-                    vm.processIntent(ArrivalAndConsumptionIntents.SelectFromList( scope ))
-                }, onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackAddProducts ) },
-                onClickCreate = { scope ->  vm.processIntent( ArrivalAndConsumptionIntents.CreateArrivalOrConsumption(scope)) }).Content()
 
-        }
+                    vm.processIntent(ArrivalAndConsumptionIntents.SelectFromList(scope))
 
-        else if(vm.arrivalAndConsumptionState.isVisibilityAddProductsUpdate.value == 1f) {
+                },
 
-            DataEntryComponentUpdate(vm.arrivalAndConsumptionState.newContragentExpense!!,
-                vm.arrivalAndConsumptionState.newContragentParish!!,
-                vm.arrivalAndConsumptionState.newContragentEntityExpense!!,
-                vm.arrivalAndConsumptionState.newContragentParish!!,
-                vm.arrivalAndConsumptionState.newWarehouse!!,
-                listAllContragents = vm.arrivalAndConsumptionState.listAllContragent,
+                onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackAddProducts) },
 
-                listAllWarehouse = vm.arrivalAndConsumptionState.listAllWarehouse,
+                onClickCreate = { scope ->
+                    vm.processIntent(
+                        ArrivalAndConsumptionIntents.CreateArrivalOrConsumption(
+                            scope
+                        )
+                    )
+                },
 
-                onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackDataEntry) },
+                onClickUpdate = { scope ->
 
-                onClickNext = { idLegalEntityParish: Int?, idLegalEntityExpense: Int?, idContragentExpense: Int?, idContragentParish: Int?, idWarehouse: Int? ->
+                    vm.processIntent( ArrivalAndConsumptionIntents.Update( scope ) )
 
-                    vm.processIntent(ArrivalAndConsumptionIntents.Next(idLegalEntityParish, idLegalEntityExpense, idContragentExpense, idContragentParish, idWarehouse)) }).Content()
+                }).Content()
 
         }
 

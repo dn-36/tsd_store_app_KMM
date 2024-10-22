@@ -36,14 +36,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import org.jetbrains.compose.resources.painterResource
-import product_network.model.Product
 import project.core.resources.Res
 import project.core.resources.back
 
-class CountProductComponent ( val listAllProducts: List<Product>, val onClickReady:( count: Int ) -> Unit ) {
+class CountProductComponent ( val listAllProducts: List<AllProductArrivalAndConsumption>, val onClickReady:( count: Int ) -> Unit ) {
 
     var count by mutableStateOf("")
 

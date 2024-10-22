@@ -2,7 +2,6 @@ package com.project.network.arrival_goods
 
 import com.project.network.ConstData
 import com.project.network.arrival_goods.model.CreateRequest
-import com.project.network.arrival_goods.model.Product
 import com.project.network.arrival_goods.model.StoreResponse
 import com.project.network.httpClientEngine
 import io.ktor.client.HttpClient
@@ -28,6 +27,8 @@ import kotlinx.serialization.json.Json
 class ArrivalGoodsClient {
 
     /*CreateInExData(contragentId=8, contragentPushId=7, entityId=8, entityPushId=7, storeId=39, isPush=1, products=[ProductCreteWrapper(product=ProductCreateCounter(id=189, count=15))])*/
+
+    /*CreateRequest(text=Text, contragent_id=93, contragent_push_id=103, entity_id=86, entity_push_id=86, store_id=39, is_push=1, products=[Product(id=169, count=50)])*/
 
         private val client = HttpClient(httpClientEngine) {
             install(ContentNegotiation) {
@@ -97,12 +98,25 @@ class ArrivalGoodsClient {
     }
 
     @Serializable
-    data class Product(val id: Int, val count: Int)
+    data class Product(
+
+        val product:ProductInfo
+
+    )
+
+    @Serializable
+    data class ProductInfo(
+
+        val id: Int,
+
+        val count: Int
+
+    )
 
     // Обновление товара
-    suspend fun updateProduct(productId: Int, updatedData: CreateRequest): HttpResponse {
+    suspend fun updateProduct(productUi: String, updatedData: CreateRequest): HttpResponse {
         return try {
-            val response = client.put("https://delta.online/api/local-store-push-or-pull/ui/$productId") {
+            val response = client.put("https://delta.online/api/local-store-push-or-pull/$productUi") {
                 contentType(ContentType.Application.Json) // Установка типа контента
                 setBody(updatedData)
             }

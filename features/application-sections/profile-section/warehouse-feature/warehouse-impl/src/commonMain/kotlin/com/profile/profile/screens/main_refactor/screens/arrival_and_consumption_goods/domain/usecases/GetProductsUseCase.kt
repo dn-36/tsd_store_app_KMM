@@ -1,7 +1,7 @@
 package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases
 
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.repository.ArrivalAndConsumptionClientApi
-import product_network.model.Product
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 
 class GetProductsUseCase (
 
@@ -9,7 +9,7 @@ class GetProductsUseCase (
 
     ) {
 
-    suspend fun execute( onGet: (listAllProducts: List<Product>) -> Unit ) {
+    suspend fun execute( onGet: (listAllProducts: List<AllProductArrivalAndConsumption>) -> Unit ) {
 
         client.getProducts  (
             onGet

@@ -2,21 +2,17 @@ package com.profile.profile.screens.main_refactor.screens.arrival_and_consumptio
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
-import com.project.network.arrival_goods.model.StoreResponse
-import com.project.network.contragent_network.model.ContragentResponse
-import com.project.network.warehouse_network.model.Warehouse
-import product_network.model.Product
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 
 data class ArrivalAndConsumptionState (
 
-    val listAllWarehouse: List<Warehouse> = emptyList(),
+    val listAllWarehouse: List<WarehouseArrivalAndConsumption> = emptyList(),
 
-    val listAllContragent: List<ContragentResponse> = emptyList(),
-
-    val filteredContragentParish: List<ContragentResponse> = emptyList(),
-
-    val filteredContragentExpense: List<ContragentResponse> = emptyList(),
+    val listAllContragent: List<ContragentResponseArrivalAndConsumption> = emptyList(),
 
     val idLegalEntityParish: Int? = null,
 
@@ -34,30 +30,30 @@ data class ArrivalAndConsumptionState (
 
     val isVisibilityCountProducts: MutableState<Float> = mutableStateOf(0f),
 
-    val isVisibilityAddProductsUpdate: MutableState<Float> = mutableStateOf(0f),
-
     val isVisibilityDataEntryComponent: MutableState<Float> = mutableStateOf(0f),
 
     val isVisibilityAddProductsComponent: MutableState<Float> = mutableStateOf(0f),
 
-    val listProducts:List<Product> = emptyList(),
+    val listProducts:List<AllProductArrivalAndConsumption> = emptyList(),
 
-    val listAllArrivalOrConsumption: List<StoreResponse> = emptyList(),
+    val listAllArrivalOrConsumption: List<StoreResponseArrivalAndConsumption> = emptyList(),
 
     val selectedProduct: ProductArrivalAndConsumption? = null,
 
+    val updatedItem: StoreResponseArrivalAndConsumption? = null,
+
     val listSelectedProducts:List<ProductArrivalAndConsumption> = emptyList(),
 
+    val updatedContragentExpense : ContragentResponseArrivalAndConsumption? = null,
 
-    val newContragentExpense : ContragentResponse? = null,
+    val updatedContragentParish : ContragentResponseArrivalAndConsumption? = null,
 
-    val newContragentParish : ContragentResponse? = null,
+    val updatedContragentEntityExpense : ContragentResponseArrivalAndConsumption? = null,
 
-    val newContragentEntityExpense : ContragentResponse? = null,
+    val updatedContragentEntityParish: ContragentResponseArrivalAndConsumption? = null,
 
-    val newContragentEntityParish: ContragentResponse? = null,
+    val updatedWarehouse : WarehouseArrivalAndConsumption? = null,
 
-    val newWarehouse : Warehouse? = null,
-
+    val isUpdate: Boolean = false
 
     )

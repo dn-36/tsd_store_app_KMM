@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.material.Text
@@ -18,15 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.util.formatDateTime
-import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseIntents
-import com.project.network.arrival_goods.model.StoreResponse
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.cancel
+import project.core.resources.update_pencil
 
 @Composable
-fun Item (item: StoreResponse, onDelete:( ui:String ) -> Unit, onUpdate:(item:StoreResponse) -> Unit) {
+fun Item (item: StoreResponseArrivalAndConsumption, onDelete:( ui:String ) -> Unit, onUpdate:(item:StoreResponseArrivalAndConsumption) -> Unit) {
 
     Box() {
 
@@ -65,13 +66,29 @@ fun Item (item: StoreResponse, onDelete:( ui:String ) -> Unit, onUpdate:(item:St
 
         Text( formatDateTime(item.created_at!!), fontSize = 13.sp, modifier = Modifier.align(Alignment.BottomEnd))
 
-        Image( painter = painterResource(Res.drawable.cancel),contentDescription = null,
+        Row (modifier = Modifier.align(Alignment.TopEnd)){
 
-            modifier = Modifier.size(15.dp).clickable(
-                indication = null, // Отключение эффекта затемнения
-                interactionSource = remember { MutableInteractionSource() })
+            Image(painter = painterResource(Res.drawable.update_pencil), contentDescription = null,
 
-            { onUpdate(item) }.align(Alignment.TopEnd) )
+                modifier = Modifier.size(15.dp).clickable(
+                    indication = null, // Отключение эффекта затемнения
+                    interactionSource = remember { MutableInteractionSource() })
+
+                { onUpdate(item) }
+            )
+
+            Spacer(modifier = Modifier.width(15.dp))
+
+            Image(painter = painterResource(Res.drawable.cancel), contentDescription = null,
+
+                modifier = Modifier.size(15.dp).clickable(
+                    indication = null, // Отключение эффекта затемнения
+                    interactionSource = remember { MutableInteractionSource() })
+
+                { onDelete(item.ui!!) }
+            )
+
+        }
 
     }
 

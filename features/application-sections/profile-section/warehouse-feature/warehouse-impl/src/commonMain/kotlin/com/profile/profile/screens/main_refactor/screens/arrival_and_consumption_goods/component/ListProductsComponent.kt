@@ -25,18 +25,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 import org.jetbrains.compose.resources.painterResource
-import product_network.model.Product
 import project.core.resources.Res
 import project.core.resources.back
-import project.core.resources.ca
-import project.core.resources.cancel
 
-class ListProductsComponent ( val listAllProducts: List<Product>, val onClickBack:() -> Unit,
+
+class ListProductsComponent ( val listAllProducts: List<AllProductArrivalAndConsumption>, val onClickBack:() -> Unit,
 
      val onClickProduct:( selectedProducts: ProductArrivalAndConsumption) -> Unit)  {
 

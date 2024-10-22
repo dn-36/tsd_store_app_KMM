@@ -45,15 +45,21 @@ import project.core.resources.cancel
 import project.core.resources.dots
 
 
-class AddProductsComponent (val listSelectedProducts:List<ProductArrivalAndConsumption>,
+class AddProductsComponent(
 
-                            val onClickSelectFromList : (scope:CoroutineScope) -> Unit,
+    val isUpdate: Boolean,
 
-                            val onClickCreate : (scope:CoroutineScope) -> Unit,
+    val listSelectedProducts: List<ProductArrivalAndConsumption>,
 
-    val onClickBack: () -> Unit
+    val onClickSelectFromList: (scope: CoroutineScope) -> Unit,
 
-    ): Screen {
+    val onClickCreate: (scope: CoroutineScope) -> Unit,
+
+    val onClickBack: () -> Unit,
+
+    val onClickUpdate: (scope: CoroutineScope) -> Unit
+
+) : Screen {
 
     var expendedMenu by mutableStateOf(false)
 
@@ -87,6 +93,7 @@ class AddProductsComponent (val listSelectedProducts:List<ProductArrivalAndConsu
                 if(listSelectedProducts.size != 0) {
 
                     LazyColumn {
+
                         items(listSelectedProducts) { item ->
 
                             Row(
@@ -165,14 +172,32 @@ class AddProductsComponent (val listSelectedProducts:List<ProductArrivalAndConsu
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 
-                    Button(
-                        onClick = { onClickCreate(scope) },
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(70.dp))
-                            .height(40.dp)
-                            .fillMaxWidth(0.8f)
-                    ) {
-                        Text(text = "Создать")
+                    if ( !isUpdate ) {
+
+                        Button(
+                            onClick = { onClickCreate(scope) },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(70.dp))
+                                .height(40.dp)
+                                .fillMaxWidth(0.8f)
+                        ) {
+                            Text(text = "Создать")
+                        }
+
+                    }
+
+                    else {
+
+                        Button(
+                            onClick = { onClickUpdate(scope) },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(70.dp))
+                                .height(40.dp)
+                                .fillMaxWidth(0.8f)
+                        ) {
+                            Text(text = "Редактировать")
+                        }
+
                     }
 
                     Image(
