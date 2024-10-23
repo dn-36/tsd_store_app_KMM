@@ -221,9 +221,9 @@ class ArrivalAndConsumptionClientImpl (
 
                 contragent = ContragentInfoArrivalAndConsumption(
 
-                    id = it.contragent!!.id ,
+                    id = if(it.is_push == 0) it.contragent_id else it.contragent_push_id,
 
-                    name = it.contragent!!.name
+                    name = if(it.is_push == 0) it.contragent!!.name else it.contragent_push!!.name
 
                 )
 
@@ -256,7 +256,7 @@ class ArrivalAndConsumptionClientImpl (
             idContragentExpense?:0,
             idContragentParish?:0,
             idLegalEntityExpense?:0,
-            idLegalEntityExpense?:0,
+            idLegalEntityParish?:0,
             idWarehouse?:0,
             isPush,
             listProducts.map {

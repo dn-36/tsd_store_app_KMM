@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -35,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +60,9 @@ class AddProductsComponent(
 
     val onClickBack: () -> Unit,
 
-    val onClickUpdate: (scope: CoroutineScope) -> Unit
+    val onClickUpdate: (scope: CoroutineScope) -> Unit,
+
+    val onClickCansel: ( index:Int ) -> Unit
 
 ) : Screen {
 
@@ -92,9 +97,9 @@ class AddProductsComponent(
 
                 if(listSelectedProducts.size != 0) {
 
-                    LazyColumn {
+                    LazyColumn (modifier = Modifier.fillMaxHeight(0.9f)) {
 
-                        items(listSelectedProducts) { item ->
+                        itemsIndexed(listSelectedProducts) {index, item ->
 
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -104,7 +109,7 @@ class AddProductsComponent(
 
                                 Text(
                                     item.product.name!!,
-                                    fontSize = 17.sp,
+                                    fontSize = 19.sp,
                                     modifier = Modifier.fillMaxWidth(0.75f)
                                 )
 
@@ -116,12 +121,15 @@ class AddProductsComponent(
 
                                 Image(
                                     painterResource(Res.drawable.cancel), contentDescription = null,
-                                    modifier = Modifier.size(15.dp)
+                                    modifier = Modifier.size(15.dp).clickable(
+                                        indication = null, // Отключение эффекта затемнения
+                                        interactionSource = remember { MutableInteractionSource() })
+                                    { onClickCansel( index ) }
                                 )
 
                             }
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
 
                         }
                     }
@@ -131,7 +139,7 @@ class AddProductsComponent(
                     Spacer(modifier = Modifier.height(40.dp))
 
                     Text(
-                        "Пока что нет выбранных товаров",
+                        "Добавьте товар",
                         fontSize = 20.sp
                     )
 
@@ -152,14 +160,22 @@ class AddProductsComponent(
 
                             Spacer(modifier = Modifier.height(10.dp))
 
+                            Box(modifier = Modifier.weight(0.5f)) {
+
                             Text("Сканировать", fontSize = 15.sp)
+                        }
 
                             Spacer(modifier = Modifier.height(25.dp))
 
-                            Text("Выбрать из списка", fontSize = 15.sp, modifier = Modifier.clickable(
-                                indication = null, // Отключение эффекта затемнения
-                                interactionSource = remember { MutableInteractionSource() })
-                            { onClickSelectFromList(scope) })
+                            Box(modifier = Modifier.weight(1f)) {
+
+                                Text("Выбрать из списка",
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.clickable(
+                                        indication = null, // Отключение эффекта затемнения
+                                        interactionSource = remember { MutableInteractionSource() })
+                                    { onClickSelectFromList(scope) })
+                            }
 
                             Spacer(modifier = Modifier.height(10.dp))
 
@@ -200,17 +216,25 @@ class AddProductsComponent(
 
                     }
 
-                    Image(
-                        painterResource(Res.drawable.dots), contentDescription = null,
-                        modifier = Modifier.size(30.dp).clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { expendedMenu = !expendedMenu }
-                    )
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Box( modifier = Modifier.weight(1f).clickable(
+
+                        indication = null, // Отключение эффекта затемнения
+
+                        interactionSource = remember { MutableInteractionSource() })
+
+                    { expendedMenu = !expendedMenu }, contentAlignment = Alignment.Center
+
+                    ) {
+                        Image(
+                            painterResource(Res.drawable.dots), contentDescription = null,
+
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
 
                 }
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
 

@@ -100,7 +100,7 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>,val onCl
                             label = { Text("Название") },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .heightIn(min = 40.dp) // Стандартная высота TextField
+                                .heightIn(min = 50.dp) // Стандартная высота TextField
                         )
 
                         Spacer(modifier = Modifier.height(10.dp))
@@ -131,7 +131,7 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>,val onCl
                             label = { Text("Локация") },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .heightIn(min = 40.dp) // Стандартная высота TextField
+                                .heightIn(min = 50.dp) // Стандартная высота TextField
                         )
                         if (expandedLocation) {
                             Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.7f)) {

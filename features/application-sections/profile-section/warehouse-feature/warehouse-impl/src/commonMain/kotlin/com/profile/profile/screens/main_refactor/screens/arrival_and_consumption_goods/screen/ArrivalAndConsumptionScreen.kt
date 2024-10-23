@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.AddProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry_component.DataEntryComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.Item
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ListProductsComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
@@ -108,7 +108,13 @@ class ArrivalAndConsumptionScreen : Screen {
                             Text(text = "Расход")
                         }
                     }
-                    MenuBottomBarWarehouse().Content()
+
+                    if( vm.arrivalAndConsumptionState.isVisibilityAddProductsComponent.value != 1f ) {
+
+                        MenuBottomBarWarehouse().Content()
+
+                    }
+
                 }
             }
         }
@@ -120,9 +126,9 @@ class ArrivalAndConsumptionScreen : Screen {
 
                 vm.arrivalAndConsumptionState.updatedContragentParish,
 
-                vm.arrivalAndConsumptionState.updatedContragentEntityExpense,
+                vm.arrivalAndConsumptionState.updatedEntityExpense,
 
-                vm.arrivalAndConsumptionState.updatedContragentParish,
+                vm.arrivalAndConsumptionState.updatedEntityParish,
 
                 vm.arrivalAndConsumptionState.updatedWarehouse,
 
@@ -169,7 +175,11 @@ class ArrivalAndConsumptionScreen : Screen {
 
                     vm.processIntent(ArrivalAndConsumptionIntents.Ready(count))
 
-                }).Content()
+                },
+
+                colorBorderCountTF = vm.arrivalAndConsumptionState.colorBorderCountTF
+
+                ).Content()
 
         } else if (vm.arrivalAndConsumptionState.isVisibilityAddProductsComponent.value == 1f) {
 
@@ -199,7 +209,13 @@ class ArrivalAndConsumptionScreen : Screen {
 
                     vm.processIntent( ArrivalAndConsumptionIntents.Update( scope ) )
 
-                }).Content()
+                },
+
+                onClickCansel = { index ->
+
+                    vm.processIntent(ArrivalAndConsumptionIntents.CanselSelectedProduct( index )) }
+
+                ).Content()
 
         }
 

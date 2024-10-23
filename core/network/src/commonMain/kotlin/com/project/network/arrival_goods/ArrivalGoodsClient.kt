@@ -20,7 +20,6 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.util.InternalAPI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -57,7 +56,7 @@ class ArrivalGoodsClient {
 
     // Добавление нового товара (приход/расход)
     // POST запрос для создания записи о приходе товаров
-    @OptIn(InternalAPI::class)
+
     suspend fun createProduct(
         text: String,
         contragentId: Int,

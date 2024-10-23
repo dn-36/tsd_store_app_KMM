@@ -16,6 +16,7 @@ class MenuBottomBarViewModel : ViewModel() {
     private var setUsed:Boolean = false
     fun processIntent(intent: MenuBottomBarIntents){
         when(intent){
+
             is MenuBottomBarIntents.CRM -> {crm(intent.screen)}
             is MenuBottomBarIntents.Profile -> {profile(intent.screen)}
             is MenuBottomBarIntents.Chats -> {chats(intent.screen)}
@@ -54,9 +55,13 @@ class MenuBottomBarViewModel : ViewModel() {
     }
 
     fun tape(screen: Screen) {
+
         Navigation.navigator.push(screen)
+
     }
     fun setScreen(section: MenuBottomBarSection){
+
         menuBottomBarState  = menuBottomBarState.copy(section)
+
     }
 }

@@ -1,4 +1,4 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry_component.viewmodel
+package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.viewmodel
 
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
@@ -63,5 +63,8 @@ sealed class DataEntryIntents {
     data class TextInputLegalEntityExpense ( val text: String ): DataEntryIntents()
 
     data class TextInputWarehouse ( val text: String, val newList: List<WarehouseArrivalAndConsumption> ): DataEntryIntents()
+
+
+    object CheckNullTF : DataEntryIntents()
 
 }

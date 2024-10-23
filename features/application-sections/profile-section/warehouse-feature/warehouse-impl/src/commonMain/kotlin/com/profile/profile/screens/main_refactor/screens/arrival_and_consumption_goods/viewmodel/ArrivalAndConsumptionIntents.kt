@@ -31,7 +31,7 @@ sealed class ArrivalAndConsumptionIntents {
 
         ArrivalAndConsumptionIntents()
 
-    data class Ready(val count: Int) : ArrivalAndConsumptionIntents()
+    data class Ready( val count: String ) : ArrivalAndConsumptionIntents()
 
     data class UpdateButton(
 
@@ -56,5 +56,7 @@ sealed class ArrivalAndConsumptionIntents {
         ArrivalAndConsumptionIntents()
 
     object Scanner : ArrivalAndConsumptionIntents()
+
+    data class CanselSelectedProduct ( val index: Int) : ArrivalAndConsumptionIntents()
 
 }
