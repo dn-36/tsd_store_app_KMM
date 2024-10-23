@@ -2,7 +2,6 @@ package com.project.chats.screens.chats.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.project.chats.screens.chats.domain.GetListChatsUseCase
-import com.project.chats.screens.dialog.domain.ReadMessegeUseCase
 import com.project.network.Navigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +9,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.example.project.nika_screens_chats.add_chat_feature.screen.SelectContactsScreen
+import com.project.chats.screens.select_contact.screen.SelectContactsScreen
 import com.project.chats.screens.dialog.screen.DialogScreen
 
 class ChatsViewModel(

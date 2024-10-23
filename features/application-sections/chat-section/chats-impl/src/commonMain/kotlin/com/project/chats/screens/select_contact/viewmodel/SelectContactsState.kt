@@ -9,7 +9,9 @@ data class SelectContactsState(
 
     val filteredContacts: List<Contact> = emptyList(),
 
-    val listContacts: List<Contact> = emptyList(),
+    val listContactsPhone: List<Contact> = emptyList(),
+
+    val listContactsOrhanization: List<Contact> = emptyList(),
 
     val isUsed: MutableState<Boolean> = mutableStateOf(true),
 

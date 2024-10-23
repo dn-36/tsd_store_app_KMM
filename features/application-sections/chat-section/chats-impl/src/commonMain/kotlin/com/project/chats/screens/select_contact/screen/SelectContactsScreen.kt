@@ -1,4 +1,4 @@
-package org.example.project.nika_screens_chats.add_chat_feature.screen
+package com.project.chats.screens.select_contact.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,13 +42,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import org.example.project.nika_screens_chats.add_chat_feature.viewmodel.SelectContactsIntents
-import org.example.project.nika_screens_chats.add_chat_feature.viewmodel.SelectContactsViewModel
+import com.project.chats.screens.select_contact.viewmodel.SelectContactsViewModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.ready
-import project.core.resources.user
 import project.core.resources.user_chats
 
 
@@ -67,11 +66,11 @@ class SelectContactsScreen : Screen {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                 TextField(
-                    value = vm.selectContactsState.text,
+                    value = vm.state.text,
                     onValueChange = { textInput ->
-                                    vm.selectContactsState = vm.selectContactsState.copy(
+                                    vm.state = vm.state.copy(
                                         text = textInput,
-                                        filteredContacts = vm.selectContactsState.listContacts.filter {
+                                        filteredContacts = vm.state.listContactsPhone.filter {
                                             it.name.contains(textInput, ignoreCase = true)
                                         }
                                     )},
@@ -123,7 +122,7 @@ class SelectContactsScreen : Screen {
                             .height(40.dp)
                             .fillMaxWidth(0.45f),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = vm.selectContactsState.colorButtonAll
+                            backgroundColor = vm.state.colorButtonAll
                         )
                     ) {
                         Text(text = "Все")
@@ -137,7 +136,7 @@ class SelectContactsScreen : Screen {
                             .height(40.dp)
                             .fillMaxWidth(0.9f),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = vm.selectContactsState.colorButtonOrganization,
+                            backgroundColor = vm.state.colorButtonOrganization,
                         )
                     ) {
                         Text(text = "Организация")
@@ -146,9 +145,9 @@ class SelectContactsScreen : Screen {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                if(vm.selectContactsState.listSelectedContacts.size != 0) {
+                if(vm.state.listSelectedContacts.size != 0) {
                     LazyRow(modifier = Modifier.fillMaxWidth()) {
-                        items(vm.selectContactsState.listSelectedContacts) { item ->
+                        items(vm.state.listSelectedContacts) { item ->
                             Box(modifier = Modifier.padding(horizontal = 10.dp)) {
                                     Image(
                                         painter = painterResource(Res.drawable.cancel),
@@ -192,7 +191,7 @@ class SelectContactsScreen : Screen {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 LazyColumn {
-                    items(vm.selectContactsState.filteredContacts) { item ->
+                    items(vm.state.filteredContacts) { item ->
                         Row(
                             modifier = Modifier.padding(top = 10.dp).fillMaxWidth(0.95f).clickable(
                                 indication = null, // Отключение эффекта затемнения
@@ -210,7 +209,7 @@ class SelectContactsScreen : Screen {
                                     contentDescription = null,
                                     modifier = Modifier.size(40.dp).align(Alignment.Center)
                                 )
-                                if(vm.selectContactsState.listSelectedContacts.find { it == item } != null) {
+                                if(vm.state.listSelectedContacts.find { it == item } != null) {
                                     Image(
                                         painter = painterResource(Res.drawable.ready),
                                         contentDescription = null,
