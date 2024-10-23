@@ -3,18 +3,17 @@ package com.project.chats.screens.chats.viewmodel
 import androidx.lifecycle.ViewModel
 import com.project.chats.screens.chats.domain.GetListChatsUseCase
 import com.project.network.Navigation
-import com.project.network.chats_network.ChatsApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.example.project.nika_screens_chats.add_chat_feature.screen.SelectContactsScreen
+import com.project.chats.screens.select_contact.screen.SelectContactsScreen
 import com.project.chats.screens.dialog.screen.DialogScreen
 
 class ChatsViewModel(
-    val getListChatsUseCase: GetListChatsUseCase
+    val getListChatsUseCase: GetListChatsUseCase,
 ) : ViewModel() {
 
     private var isSeted = false
@@ -24,7 +23,7 @@ class ChatsViewModel(
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
             is ChatsIntents.DialogueSelection -> {
-                dialogueSelection(intent.userId,intent.scope)
+                dialogueSelection(intent.ui,intent.titleChat,intent.urlIcon,intent.countNewMessage,intent.scope)
             }
             is ChatsIntents.AddChat -> {
                 addChat()
@@ -35,12 +34,9 @@ class ChatsViewModel(
         }
     }
 
-    fun dialogueSelection(chatsUi:String, coroutineScope: CoroutineScope) {
-        coroutineScope.launch(Dispatchers.IO){
-            println("--------qqqqq-----------")
-            println("qqqqq: ${ChatsApi().getListMassengers(chatsUi)}")
-            println("--------qqqqq-----------")
-            Navigation.navigator.push(DialogScreen(chatsUi))
+    fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?,countNewMessage:Int, scope: CoroutineScope) {
+        scope.launch(Dispatchers.IO){
+            Navigation.navigator.push(DialogScreen(uiChats  = chatsUi,titleChat,urlIcon,countNewMessage))
         }
     }
 

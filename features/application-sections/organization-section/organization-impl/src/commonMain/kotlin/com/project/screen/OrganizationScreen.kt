@@ -41,6 +41,7 @@ import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.menu.screen.TapeScreenApi
 import com.project.viewmodel.OrganizationsIntents
 import com.project.viewmodel.OrganizationsViewModel
+import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
@@ -145,7 +146,7 @@ class OrganizationScreen(): Screen {
                         organizationScreens.organization(),
                         chatsScreens.chatsScreen(),
                         tapeScreens.tape(),
-                    ).Content()
+                    ).Content(MenuBottomBarSection.ORGANIZATION)
                 }
             }
         }

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 
 class TapeScreen: Screen {
     @Composable
@@ -23,7 +24,7 @@ class TapeScreen: Screen {
                 Text("Лента", color = Color.Black, fontSize = 20.sp)
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                MenuBottomBar().Content()
+                MenuBottomBar().Content(MenuBottomBarSection.TAPE)
             }
         }
     }

@@ -22,30 +22,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.skydoves.landscapist.coil3.CoilImage
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.user_chats
 
 
 @Composable
-fun DialogItem(
+fun ChatItem(
+    urlIconChat:String?,
     titleChat:String,
     lastMassage:String,
     timeLastMessage:String,
-    userId:String,
-    //vm : ChatsViewModel
-    onClickDialogue:(String)->Unit
+    onClickDialogue:()->Unit
 ){
 
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp).clickable(
         indication = null, // Отключение эффекта затемнения
         interactionSource = remember { MutableInteractionSource() })
-        {onClickDialogue(userId)},
-    //{ vm.processIntent(ChatsIntents.DialogueSelection) },
+        {
+        onClickDialogue()
+        },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically){
-        Image(painter = painterResource(Res.drawable.user_chats),contentDescription = null,
-            modifier = Modifier.size(50.dp))
+        if(!urlIconChat.isNullOrBlank()) {
+            CoilImage(
+                imageModel = { urlIconChat },
+                modifier = Modifier.size(50.dp)
+            )
+        }else{
+            Image(painter = painterResource(Res.drawable.user_chats),contentDescription = null,
+                modifier = Modifier.size(50.dp))
+        }
         Spacer(modifier = Modifier.width(10.dp))
         Column(modifier = Modifier.height(60.dp), verticalArrangement = Arrangement.SpaceBetween) {
             Text(titleChat, fontSize = 18.sp)

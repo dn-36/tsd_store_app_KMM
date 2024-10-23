@@ -56,7 +56,7 @@ class ProfileViewModel:ViewModel() {
                 //println("${notesApi.getUsers()}")
 
                 profileState = profileState.copy(
-                    name = user!!.name!!,
+                    name = user?.name?:"",
                     numberPhone = keyValueStorage.getCurrentNumber()!!
                 )
 

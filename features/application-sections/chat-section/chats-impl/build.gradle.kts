@@ -43,7 +43,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-
+            //implementation("io.insert-koin:koin-androidx-viewmodel:3.4.0")
             // implementation(libs.koin.core)
             api(libs.koin.core)
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
@@ -51,6 +51,15 @@ kotlin {
 
             implementation(dependencyNotation = libs.peekaboo.ui)
             implementation(dependencyNotation = libs.peekaboo.imagepicker)
+            implementation("com.github.skydoves:landscapist-coil3:2.4.1")
+           //для скачивония изображения с интернета kamel-image
+     //       implementation("media.kamel:kamel-image:1.0.0")
+
+
+       //     implementation("media.kamel:kamel-decoder-image-bitmap:1.0.0")
+
+
+
         }
 
     }
@@ -61,6 +70,9 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 24
+    }
+    dependencies{
+   //     implementation("media.kamel:kamel-fetcher-resources-android:1.0.0")
     }
 }
 
