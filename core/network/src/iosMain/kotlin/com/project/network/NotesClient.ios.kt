@@ -1,6 +1,6 @@
 package com.project.network
-import io.ktor.client.engine.ios.Ios
 import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.darwin.Darwin
 
 actual val httpClientEngine: HttpClientEngine
-    get() = Ios.create()
+    get() = Darwin.create()

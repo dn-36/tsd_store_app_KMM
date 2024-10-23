@@ -24,6 +24,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.project.network.Navigation
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.`menu-crm-api`.viewmodel.MenuViewModel
+import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 
 import org.example.project.presentation.menu_feature.viewmodel.MenuIntents
 
@@ -103,7 +104,7 @@ class MenuCrmScreen:Screen{
 
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                MenuBottomBar().Content()
+                MenuBottomBar().Content(MenuBottomBarSection.CRM)
             }
         }
     }

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.example.project.presentation.profile_feature.main_feature.viewmodel.ProfileIntents
 import org.example.project.presentation.profile_feature.main_feature.viewmodel.ProfileViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -130,7 +131,7 @@ object ProfileScreen:Screen{
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Box() {
-                    MenuBottomBar().Content()
+                    MenuBottomBar().Content(MenuBottomBarSection.PROFILE)
                 }
             }
 

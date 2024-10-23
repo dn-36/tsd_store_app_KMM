@@ -21,17 +21,17 @@ object App {
 
     @Composable
     @Preview
-    fun Content() {
+    fun Content(){
         val state by viewModel.state.collectAsState()
-        val authorization:AuthorizationScreensApi = getKoin().get()
+        val authorization: AuthorizationScreensApi = getKoin().get()
         val organizationScreen: OrganizationScreenApi = getKoin().get()
-        val scope:CoroutineScope = rememberCoroutineScope()
+        val scope: CoroutineScope = rememberCoroutineScope()
         viewModel.proccesIntent(AppIntent.SetScreenIntent(scope))
         when (state.authorizationStatus) {
             AuthorizationStatus.LOADING -> {
                 Box(modifier = Modifier.fillMaxSize()) {
 
-                   // CircularProgressIndicator(modifier = Modifier.size(40.dp).align(Alignment.Center))
+                    // CircularProgressIndicator(modifier = Modifier.size(40.dp).align(Alignment.Center))
                 }
             }
 
@@ -40,7 +40,7 @@ object App {
             }
 
             AuthorizationStatus.WAS_AUTHORIZATION -> {
-                Navigation.navigator( organizationScreen.organization())
+                Navigation.navigator(organizationScreen.organization())
             }
 
         }

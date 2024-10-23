@@ -9,11 +9,11 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.example.project.nika_screens_chats.add_chat_feature.screen.SelectContactsScreen
+import com.project.chats.screens.select_contact.screen.SelectContactsScreen
 import com.project.chats.screens.dialog.screen.DialogScreen
 
 class ChatsViewModel(
-    val getListChatsUseCase: GetListChatsUseCase
+    val getListChatsUseCase: GetListChatsUseCase,
 ) : ViewModel() {
 
     private var isSeted = false
@@ -23,21 +23,20 @@ class ChatsViewModel(
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
             is ChatsIntents.DialogueSelection -> {
-                dialogueSelection(intent.ui,intent.scope)
+                dialogueSelection(intent.ui,intent.titleChat,intent.urlIcon,intent.countNewMessage,intent.scope)
             }
             is ChatsIntents.AddChat -> {
                 addChat()
             }
             is ChatsIntents.SetScreen -> {
-                println("!!!!!!!!!!!!______!!!!!!!!!!!!")
                 setScreen(intent.scope)
             }
         }
     }
 
-    fun dialogueSelection(chatsUi:String, scope: CoroutineScope) {
+    fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?,countNewMessage:Int, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO){
-            Navigation.navigator.push(DialogScreen(chatsUi))
+            Navigation.navigator.push(DialogScreen(uiChats  = chatsUi,titleChat,urlIcon,countNewMessage))
         }
     }
 

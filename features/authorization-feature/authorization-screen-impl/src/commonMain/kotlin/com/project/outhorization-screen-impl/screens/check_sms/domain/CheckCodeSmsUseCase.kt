@@ -13,7 +13,7 @@ class CheckCodeSmsUseCase  (
     ) {
 
     suspend fun excecute( code: String,
-                          token:String,
+                          //token:String,
                           number:String,
                           name:String,
                           actionOnSuccess:()->Unit,
@@ -22,12 +22,12 @@ class CheckCodeSmsUseCase  (
 
         client.checkSMS (
             code,
-            token,
+          //  token,
             number,
             name,
-            {
-                val userToken = client.getToken(number,name,token,code)
-                sharedPrefs.saveToken(userToken)
+            { token ->
+                //val userToken = client.getToken(number,name,token,code)
+                sharedPrefs.saveToken(token)
                 sharedPrefs.saveUserNumber(number)
                     actionOnSuccess()
             },

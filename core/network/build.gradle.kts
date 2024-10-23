@@ -30,6 +30,8 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.bundles.ktor)
 
+
+
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)

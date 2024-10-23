@@ -1,6 +1,5 @@
 package com.project.network.chats_network
 
-import com.project.network.ConstData
 import com.project.network.httpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -10,7 +9,6 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
@@ -18,20 +16,27 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
-import io.ktor.client.utils.EmptyContent.headers
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import io.ktor.http.headers
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.util.InternalAPI
+import io.ktor.utils.io.InternalAPI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import util.NetworkError
+import util.Result
 
 
-class ChatsApi {
+class ChatsApi() {
+   companion object{
+       private var _token: String = ""
+   }
+    fun init(token: String):ChatsApi{
+        _token = token
+        return this
+    }
 
-    var token: String = ConstData.TOKEN
+
 
     private val client = HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
@@ -45,7 +50,7 @@ class ChatsApi {
             level = LogLevel.BODY // Включить логирование для отладки
         }
         defaultRequest {
-            header("Authorization", "Bearer $token")
+            header("Authorization", "Bearer $_token")
         }
     }
 
@@ -66,14 +71,13 @@ class ChatsApi {
 
 
     // Обновление заметки
-    suspend fun getListMassengers(noteId: String): ChatResponseMessages {
+    suspend fun getListMassengers(chatId: String): ChatResponseMessages {
 
         return try {
-            val response = client.get("https://delta.online/api/chats/${noteId}?page=1") {
+            val response = client.get("https://delta.online/api/chats/${chatId}?page=1") {
                 parameter("active", 1)
 
             }
-            println("::::::::::::::::::::;${response.body<ChatResponseMessages>()}:::::::::::::::::::::::::")
             response.body()
         } catch (e: Exception) {
             println("UPDATE Note: Error - ${e.message}")
@@ -96,6 +100,46 @@ class ChatsApi {
         }
     }
 
+
+    suspend fun readAllMesanger(uiChat: String,myNumber:String): Result<String,NetworkError> {
+
+        return try {
+            val listMassengers = (getListMassengers(uiChat).messages?.data?: listOf())
+
+              val cutList:MutableList<MessageData?> =  mutableListOf()
+
+            listMassengers.forEachIndexed { index, messageData ->
+                if(
+                  listMassengers.size <= 12
+                ) cutList.add(messageData)
+                  else
+                  if(index in (listMassengers.size - 12)..listMassengers.size){
+                      cutList.add(messageData)
+                  }
+            }
+
+            cutList.forEach {
+                if(myNumber!= it?.user?.phone?:"") {
+
+                  println("!!!!\n" +
+                          "${it?.user?.phone}"+
+                          "\n\n " + client
+                      .post("https://delta.online/api/view-message/${it?.ui?: ""}")
+                      .status +
+                          "\n" +
+                          "\n !!!!"
+                  )
+                }
+            }
+
+           Result.Success("Result")
+
+        } catch (e: Exception) {
+
+            return Result.Error(NetworkError.SERVER_ERROR)
+        }
+    }
+
     @Serializable
     data class FileData(
         val data: String,
@@ -112,7 +156,7 @@ class ChatsApi {
         imageBase64: String?,
         filesMobile: List<FileData>,
         filesData: List<ByteArray>?
-    ): String {
+    ): Result<String, NetworkError> {
 
 
         try {
@@ -159,15 +203,11 @@ class ChatsApi {
                 )
             }
 
-            println("<<<<<<<${response.body<HttpResponse>().status}>>>>>>>>")
-            return response.bodyAsText()
+            return Result.Success(response.bodyAsText())
 
         } catch (e: Exception) {
-            println("<<<<<<<${"Error: ${e.message}"}>>>>>>>>")
-            return "Error: ${e.message}"
-        } //finally {
-           // client.close()
-      // }
+            return Result.Error(NetworkError.SERVER_ERROR)
+        }
     }
 
 

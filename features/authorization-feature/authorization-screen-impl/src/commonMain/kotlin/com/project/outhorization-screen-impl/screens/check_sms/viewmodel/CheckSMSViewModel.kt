@@ -107,7 +107,7 @@ class CheckSMSViewModel(val checkCodeSmsUseCase: CheckCodeSmsUseCase):ViewModel(
              intent.coroutineScope.launch {
                  checkCodeSmsUseCase.excecute(
                      state.value.fullSmsCode,
-                     "192221",
+                     //"192221",
                      intent.number,
                      state.value.name,
                       actionOnSuccess = { Navigation.navigator!!.push(organizationScreen.organization())},

@@ -4,7 +4,7 @@ import com.project.chats.screens.chats.domain.models.ChatsModel
 import com.project.chats.screens.dialog.domain.models.DataEndTime
 
  object Utils {
-     fun parseDateTimeManually(dateTimeString: String): DataEndTime {
+     fun parseDateTimeManually(dateTimeString: String): DataEndTime = try {
          // Разделяем строку на дату и время
          val dateTimeParts = dateTimeString.split("T")
 
@@ -17,12 +17,14 @@ import com.project.chats.screens.dialog.domain.models.DataEndTime
          // Оставляем только часы и минуты (до первой двоеточия и после второй двоеточия)
          val time = timeWithMilliseconds.split(":").let { "${it[0]}:${it[1]}" }
 
-         return DataEndTime(date = date, time = time)
+          DataEndTime(date = date, time = time)
+     }catch (e:Exception){
+         DataEndTime(dateTimeString,"")
      }
 
 
-     fun sortByNearestDate(list: List<ChatsModel>): List<ChatsModel> {
-         return list.sortedWith { a, b ->
+     fun sortByNearestDate(list: List<ChatsModel>): List<ChatsModel>  = try {
+         list.sortedWith { a, b ->
              val (aDay, aMonth, aYear) = a.timeEndDate.date.split("-").map { it.toInt() }
              val (bDay, bMonth, bYear) = b.timeEndDate.date.split("-").map { it.toInt() }
 
@@ -38,5 +40,7 @@ import com.project.chats.screens.dialog.domain.models.DataEndTime
                  else -> bMinute - aMinute
              }
          }
+     }catch (e:Exception){
+        list
      }
  }
