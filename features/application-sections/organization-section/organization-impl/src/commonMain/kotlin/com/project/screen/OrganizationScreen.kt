@@ -37,13 +37,8 @@ import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
 import com.project.network.Navigation
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
-import com.project.datasource.OrganizationClientImpl
-import com.project.domain.CreateOrganizationUseCase
-import com.project.domain.repository.OrganizationClientApi
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.menu.screen.TapeScreenApi
-import com.project.network.contragent_network.ContragentApi
-import com.project.network.organizations_network.OrganizationsApi
 import com.project.viewmodel.OrganizationsIntents
 import com.project.viewmodel.OrganizationsViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -54,9 +49,11 @@ import project.core.resources.plus
 
 class OrganizationScreen(): Screen {
 
-    val n:OrganizationClientApi = OrganizationClientImpl(OrganizationsApi)
+ //   val n:OrganizationClientApi = OrganizationClientImpl(OrganizationsApi)
 
-    val vm = OrganizationsViewModel(CreateOrganizationUseCase(n))//(getKoin().get())
+    val vm:OrganizationsViewModel = getKoin().get()
+
+
     @Composable
     override fun Content() {
 
@@ -125,7 +122,7 @@ class OrganizationScreen(): Screen {
                                 modifier = Modifier.size(10.dp).align(Alignment.TopEnd).clickable(
                                     indication = null, // Отключение эффекта затемнения
                                     interactionSource = remember { MutableInteractionSource() })
-                                { //vm.processIntent(OrganizationsIntents.DeleteOrganization(scope, item.company!!.ui!!))
+                                { vm.processIntent(OrganizationsIntents.DeleteOrganization(scope, item.company!!.ui!!))
                                 })
                     }
                 }
@@ -139,7 +136,7 @@ class OrganizationScreen(): Screen {
                         .clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-                        {vm.processIntent(OrganizationsIntents.OpenWindowAddOrganization)})
+                        { vm.processIntent(OrganizationsIntents.OpenWindowAddOrganization)})
 
                 Box(modifier = Modifier) {
                     MenuBottomBar().init(

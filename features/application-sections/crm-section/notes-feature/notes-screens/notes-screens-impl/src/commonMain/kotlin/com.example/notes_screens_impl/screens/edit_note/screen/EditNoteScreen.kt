@@ -38,9 +38,12 @@ import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.dots
+import org.koin.mp.KoinPlatform.getKoin
+
 
 data class EditNoteScreen(val noteResponse: NoteResponse) : Screen {
-    val vm = EditNoteViewModel()
+
+    val vm : EditNoteViewModel = getKoin().get()
     @Composable
     override fun Content(){
 

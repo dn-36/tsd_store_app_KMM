@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -21,21 +24,48 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.AddProductsComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.DataEntryComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.DataEntryComponentUpdate
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.Item
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ListProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
+import org.koin.mp.KoinPlatform.getKoin
 
 
 class ArrivalAndConsumptionScreen: Screen {
-    val vm = ArrivalAndConsumptionViewModel()
+
+    val vm : ArrivalAndConsumptionViewModel = getKoin().get()
+
     @Composable
+
     override fun Content() {
 
         val scope = rememberCoroutineScope()
 
+        vm.processIntent(ArrivalAndConsumptionIntents.GetArrivalAndConsumptionGoods(scope))
+
         Box(modifier = Modifier.fillMaxSize().background(Color.White)){
             Column(modifier = Modifier.padding(16.dp),) {
                 Text("Приход Расход", color = Color.Black, fontSize = 20.sp)
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                LazyColumn { items( vm.arrivalAndConsumptionState.listAllArrivalOrConsumption ){ item ->
+
+                 Item(item, onDelete = { ui ->
+
+                     vm.processIntent(ArrivalAndConsumptionIntents.DeleteArrivalOrConsumption(scope,ui)) },
+
+                     onUpdate = { item -> vm.processIntent(ArrivalAndConsumptionIntents.Update(scope,item)) })
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                } }
+
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
 
@@ -66,5 +96,75 @@ class ArrivalAndConsumptionScreen: Screen {
                 }
             }
         }
+        if(vm.arrivalAndConsumptionState.isVisibilityDataEntryComponent.value == 1f){
+
+            DataEntryComponent(
+
+                listAllContragents = vm.arrivalAndConsumptionState.listAllContragent,
+
+                listAllWarehouse = vm.arrivalAndConsumptionState.listAllWarehouse,
+
+                onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackDataEntry) },
+
+                onClickNext = { idLegalEntityParish: Int?, idLegalEntityExpense: Int?, idContragentExpense: Int?, idContragentParish: Int?, idWarehouse: Int? ->
+
+                    vm.processIntent(ArrivalAndConsumptionIntents.Next(idLegalEntityParish, idLegalEntityExpense, idContragentExpense, idContragentParish, idWarehouse)) }
+
+            ).Content()
+
+        }
+        else if( vm.arrivalAndConsumptionState.isVisibilityListProducts.value == 1f ) {
+
+            ListProductsComponent(vm.arrivalAndConsumptionState.listProducts, onClickBack = {
+
+                vm.processIntent(ArrivalAndConsumptionIntents.BackListProducts)
+
+            }, onClickProduct = { selectedProducts ->
+
+                vm.processIntent(ArrivalAndConsumptionIntents.SelectProducts( selectedProducts ))
+
+            }).Content()
+
+        }
+
+        else if (vm.arrivalAndConsumptionState.isVisibilityCountProducts.value == 1f){
+
+            CountProductComponent( vm.arrivalAndConsumptionState.listProducts, onClickReady = { count ->
+
+                vm.processIntent(ArrivalAndConsumptionIntents.Ready( count ))
+
+            } ).Content()
+
+        }
+
+        else if(vm.arrivalAndConsumptionState.isVisibilityAddProductsComponent.value == 1f) {
+
+            AddProductsComponent(vm.arrivalAndConsumptionState.listSelectedProducts,
+                onClickSelectFromList = { scope ->
+                    vm.processIntent(ArrivalAndConsumptionIntents.SelectFromList( scope ))
+                }, onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackAddProducts ) },
+                onClickCreate = { scope ->  vm.processIntent( ArrivalAndConsumptionIntents.CreateArrivalOrConsumption(scope)) }).Content()
+
+        }
+
+        else if(vm.arrivalAndConsumptionState.isVisibilityAddProductsUpdate.value == 1f) {
+
+            DataEntryComponentUpdate(vm.arrivalAndConsumptionState.newContragentExpense!!,
+                vm.arrivalAndConsumptionState.newContragentParish!!,
+                vm.arrivalAndConsumptionState.newContragentEntityExpense!!,
+                vm.arrivalAndConsumptionState.newContragentParish!!,
+                vm.arrivalAndConsumptionState.newWarehouse!!,
+                listAllContragents = vm.arrivalAndConsumptionState.listAllContragent,
+
+                listAllWarehouse = vm.arrivalAndConsumptionState.listAllWarehouse,
+
+                onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackDataEntry) },
+
+                onClickNext = { idLegalEntityParish: Int?, idLegalEntityExpense: Int?, idContragentExpense: Int?, idContragentParish: Int?, idWarehouse: Int? ->
+
+                    vm.processIntent(ArrivalAndConsumptionIntents.Next(idLegalEntityParish, idLegalEntityExpense, idContragentExpense, idContragentParish, idWarehouse)) }).Content()
+
+        }
+
     }
 }

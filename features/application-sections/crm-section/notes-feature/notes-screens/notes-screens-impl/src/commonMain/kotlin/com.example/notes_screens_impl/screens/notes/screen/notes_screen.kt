@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
-
 import org.example.project.presentation.crm_feature.notes_screen.model.Notes
 import org.example.project.presentation.crm_feature.notes_screen.util.formatDateTime
 import org.example.project.presentation.crm_feature.notes_screen.viewmodel.NotesIntents
@@ -34,9 +33,12 @@ import com.example.notes_screens_impl.screens.notes.viewmodel.NotesViewModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.plus
+import org.koin.mp.KoinPlatform.getKoin
 
 class NotesScreen:Screen{
-    val vm = NotesViewModel()
+
+    val vm : NotesViewModel = getKoin().get()
+
     @Composable
     override fun Content() {
 

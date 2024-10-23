@@ -1,5 +1,6 @@
 package com.project.network.notes_network
 
+import com.project.network.ConstData
 import com.project.network.httpClientEngine
 import com.project.network.notes_network.model.BodyNoteDto
 import com.project.network.notes_network.model.Note
@@ -25,9 +26,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 
-object NotesApi {
-
-    var token: String = ""
+class NotesClient {
 
     private val client = HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
@@ -40,7 +39,7 @@ object NotesApi {
             level = LogLevel.BODY // Включить логирование для отладки
         }
         defaultRequest {
-            header("Authorization", "Bearer $token")
+            header("Authorization", "Bearer ${ConstData.TOKEN}")
         }
     }
 

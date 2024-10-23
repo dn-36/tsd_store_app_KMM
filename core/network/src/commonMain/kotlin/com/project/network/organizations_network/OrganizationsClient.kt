@@ -1,5 +1,6 @@
 package com.project.network.organizations_network
 
+import com.project.network.ConstData
 import com.project.network.httpClientEngine
 import com.project.network.organizations_network.model.ActiveOrganizationRequest
 import com.project.network.organizations_network.model.CreateOrganizationRequest
@@ -15,16 +16,13 @@ import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-object OrganizationsApi {
-
-        var token: String = ""
+class  OrganizationsClient {
 
         private val client = HttpClient(httpClientEngine) {
             install(ContentNegotiation) {
@@ -37,7 +35,7 @@ object OrganizationsApi {
                 level = LogLevel.BODY // Включить логирование для отладки
             }
             defaultRequest {
-                header("Authorization", "Bearer $token")
+                header("Authorization", "Bearer ${ConstData.TOKEN}")
             }
         }
 

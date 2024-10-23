@@ -1,5 +1,6 @@
 package com.project.network.contragent_network
 
+import com.project.network.ConstData
 import com.project.network.contragent_network.model.ContragentResponse
 import com.project.network.httpClientEngine
 import io.ktor.client.HttpClient
@@ -13,8 +14,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-object ContragentApi {
-        var token: String = ""
+class ContragentClient {
 
         private val client = HttpClient(httpClientEngine) {
             install(ContentNegotiation) {
@@ -27,24 +27,9 @@ object ContragentApi {
                 level = LogLevel.BODY // Включить логирование для отладки
             }
             defaultRequest {
-                header("Authorization", "Bearer $token")
+                header("Authorization", "Bearer ${ConstData.TOKEN}")
             }
         }
-        /* object StringOrIntSerializer : KSerializer<String> {
-             override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("StringOrInt", PrimitiveKind.STRING)
-
-             override fun deserialize(decoder: Decoder): String {
-                 return try {
-                     decoder.decodeString()  // Попробуем десериализовать как строку
-                 } catch (e: Exception) {
-                     decoder.decodeInt().toString()  // Если это число, преобразуем его в строку
-                 }
-             }
-
-             override fun serialize(encoder: Encoder, value: String) {
-                 encoder.encodeString(value)  // Всегда сериализуем как строку
-             }
-         }*/
 
          // получение всех контрагентов
          suspend fun getContragents(): List<ContragentResponse> {
