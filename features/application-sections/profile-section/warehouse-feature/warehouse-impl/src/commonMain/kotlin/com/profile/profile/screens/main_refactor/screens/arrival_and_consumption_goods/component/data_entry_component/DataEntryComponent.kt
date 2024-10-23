@@ -263,6 +263,7 @@ class DataEntryComponent(
 
                             LazyColumn {
 
+
                                 val validEntities =
                                     vm.state.selectedContragentParish!!.entits!!.filter { it.name != null }
 

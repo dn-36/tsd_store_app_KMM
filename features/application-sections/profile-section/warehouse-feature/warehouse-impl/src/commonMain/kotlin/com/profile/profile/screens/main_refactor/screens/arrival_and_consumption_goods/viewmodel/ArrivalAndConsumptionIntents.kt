@@ -6,8 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 
 sealed class ArrivalAndConsumptionIntents {
 
-    data class Arrival(val coroutineScope: CoroutineScope) : ArrivalAndConsumptionIntents()
-
+    data class ArrivalOrConsumption (val coroutineScope: CoroutineScope, val isPush: Int ) : ArrivalAndConsumptionIntents()
     object BackDataEntry : ArrivalAndConsumptionIntents()
 
     object BackAddProducts : ArrivalAndConsumptionIntents()
@@ -28,23 +27,31 @@ sealed class ArrivalAndConsumptionIntents {
 
     object BackListProducts : ArrivalAndConsumptionIntents()
 
-    data class SelectProducts ( val selectedProducts: ProductArrivalAndConsumption ) :
+    data class SelectProducts(val selectedProducts: ProductArrivalAndConsumption) :
 
         ArrivalAndConsumptionIntents()
 
     data class Ready(val count: Int) : ArrivalAndConsumptionIntents()
 
-    data class UpdateButton(val coroutineScope: CoroutineScope, val item: StoreResponseArrivalAndConsumption ) : ArrivalAndConsumptionIntents()
+    data class UpdateButton(
 
-    data class Update( val coroutineScope: CoroutineScope ) : ArrivalAndConsumptionIntents()
+        val coroutineScope: CoroutineScope,
+
+        val item: StoreResponseArrivalAndConsumption
+
+    ) : ArrivalAndConsumptionIntents()
+
+    data class Update(val coroutineScope: CoroutineScope) : ArrivalAndConsumptionIntents()
 
     data class SelectFromList(val coroutineScope: CoroutineScope) : ArrivalAndConsumptionIntents()
 
-    data class CreateArrivalOrConsumption (val coroutineScope: CoroutineScope) : ArrivalAndConsumptionIntents()
+    data class CreateArrivalOrConsumption(val coroutineScope: CoroutineScope) :
+        ArrivalAndConsumptionIntents()
 
-    data class DeleteArrivalOrConsumption (val coroutineScope: CoroutineScope, val ui: String) : ArrivalAndConsumptionIntents()
+    data class DeleteArrivalOrConsumption(val coroutineScope: CoroutineScope, val ui: String) :
+        ArrivalAndConsumptionIntents()
 
-    data class GetArrivalAndConsumptionGoods ( val coroutineScope: CoroutineScope ) :
+    data class GetArrivalAndConsumptionGoods(val coroutineScope: CoroutineScope) :
 
         ArrivalAndConsumptionIntents()
 

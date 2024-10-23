@@ -56,10 +56,6 @@ fun Item (item: StoreResponseArrivalAndConsumption, onDelete:( ui:String ) -> Un
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-               // Text("ID: ${item.products!![0]!!.id!!}", fontSize = 15.sp)
-
-               // Text("COUNT: ${item.products!![0]!!.count!!}", fontSize = 15.sp)
-
             }
 
         }

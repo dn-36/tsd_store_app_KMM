@@ -43,7 +43,7 @@ class ArrivalAndConsumptionViewModel (
 
         when (intent) {
 
-            is ArrivalAndConsumptionIntents.Arrival -> {
+            is ArrivalAndConsumptionIntents.ArrivalOrConsumption -> {
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
@@ -110,7 +110,7 @@ class ArrivalAndConsumptionViewModel (
 
                             isVisibilityDataEntryComponent = mutableStateOf(1f),
 
-                            isPush = 1
+                            isPush = intent.isPush
 
                             )
 
@@ -180,7 +180,7 @@ class ArrivalAndConsumptionViewModel (
 
                         if(it.entits != null) {
 
-                            it.entits!!.forEach { entity ->
+                            it.entits.forEach { entity ->
 
                                 newListEntity.add(EntityArrivalAndConsumption(
 
@@ -245,7 +245,7 @@ class ArrivalAndConsumptionViewModel (
 
                             if(item.entits != null ){
 
-                                if(item.entits!!.isNotEmpty()){
+                                if(item.entits.isNotEmpty()){
 
                                     newListContragents.add(
 

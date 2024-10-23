@@ -90,7 +90,7 @@ class ArrivalAndConsumptionScreen : Screen {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Button(
-                            onClick = { vm.processIntent(ArrivalAndConsumptionIntents.Arrival(scope)) },
+                            onClick = { vm.processIntent(ArrivalAndConsumptionIntents.ArrivalOrConsumption( scope, 1 )) },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(70.dp))
                                 .height(40.dp)
@@ -99,7 +99,7 @@ class ArrivalAndConsumptionScreen : Screen {
                             Text(text = "Приход")
                         }
                         Button(
-                            onClick = {},
+                            onClick = { vm.processIntent(ArrivalAndConsumptionIntents.ArrivalOrConsumption( scope, 0 )) },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(70.dp))
                                 .height(40.dp)
