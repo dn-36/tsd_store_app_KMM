@@ -1,6 +1,7 @@
 package com.project.`local-storage`.`profile-storage`
 
 interface  SharedPrefsApi {
+
     suspend fun saveCurrentNumber( value: String)
     suspend fun getCurrentNumber(): String?
     suspend fun saveCurrentName( value: String)

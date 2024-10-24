@@ -5,20 +5,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.project.chats.screens.chats.screen.ChatsScreen
+import com.project.chats.screens.select_contact.domain.GetUsersOrganizationUseCase
+import com.project.chats.screens.select_contact.domain.User
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.network.Navigation
 import contact_provider.ContactProviderApi
-import model.Contact
-import org.example.project.nika_screens_chats.add_chat_feature.viewmodel.SelectContactsIntents
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
 
-import org.example.project.nika_screens_chats.title_group_feature.screen.TitleGroupScreen
-import org.example.project.presentation.nika_screens_chats.add_chat_feature.select_contacts_screen.viewmodel.SelectContactsState
+import com.project.chats.screens.titile_chat.components.TitleChatComponent
+import com.project.chats.screens.titile_chat.screen.TitleChatScreen
 import org.koin.mp.KoinPlatform
 
-class SelectContactsViewModel:NetworkViewModel() {
+class SelectContactsViewModel(
+    private val getUsersUseCase: GetUsersOrganizationUseCase
+):NetworkViewModel() {
 
     var state by mutableStateOf(SelectContactsState())
-
+    private var setedScreen = false
     fun processIntent(intent: SelectContactsIntents){
 
         when(intent){
@@ -27,13 +33,18 @@ class SelectContactsViewModel:NetworkViewModel() {
 
             is SelectContactsIntents.Back -> {back()}
 
-            is SelectContactsIntents.SetScreen -> {setScreen()}
+            is SelectContactsIntents.SetScreen -> {
+                if(!setedScreen) {
+                    setedScreen = true
+                    showContactsOrganization(intent.scope)
+                }
+            }
 
-            is SelectContactsIntents.ColorButtonAll -> {colorButtonAll()}
+            is SelectContactsIntents.ColorButtonAll -> {colorButtonAll(intent.scope)}
 
-            is SelectContactsIntents.ColorButtonOrganization -> {colorButtonOrganization()}
+            is SelectContactsIntents.ColorButtonOrganization -> {colorButtonOrganization(intent.scope)}
 
-            is SelectContactsIntents.SelectContact -> {selectContact(intent.selectedContact)}
+            is SelectContactsIntents.SelectContact -> { selectContact(intent.selectedContact)}
 
             is SelectContactsIntents.CanselContact -> {cancelContact(intent.contact)}
 
@@ -42,8 +53,8 @@ class SelectContactsViewModel:NetworkViewModel() {
     }
 
     fun next() {
-
-        Navigation.navigator.push(TitleGroupScreen())
+      println("LLLLL\n\n"+state.selectedListContacts+"\n\nLLLL")
+        Navigation.navigator.push(TitleChatScreen(state.selectedListContacts))
 
     }
 
@@ -53,12 +64,17 @@ class SelectContactsViewModel:NetworkViewModel() {
 
     }
 
-    fun colorButtonAll(){
+    fun colorButtonAll(scope: CoroutineScope){
 
-        state = state.copy(
-            colorButtonAll = Color(0xFF60BCE6),
-            colorButtonOrganization = Color.LightGray
-        )
+          showContactsOrganization(scope)
+
+          state = state.copy(
+              colorButtonAll = Color(0xFF60BCE6),
+              colorButtonOrganization = Color.LightGray
+          )
+
+
+
 
     }
 
@@ -70,62 +86,59 @@ class SelectContactsViewModel:NetworkViewModel() {
 
     }
 
-    fun selectContact(selectedContact: Contact){
+    fun selectContact(selectedContact: User){
 
-        var newList = state.listSelectedContacts.toMutableList()
+        var newList = state.selectedListContacts.toMutableList()
 
         newList.add(selectedContact)
 
         state = state.copy(
-            listSelectedContacts = newList
+            selectedListContacts = newList.toSet()
         )
 
     }
 
-    fun cancelContact(contact:Contact){
+    fun cancelContact(contact:User){
 
-        var newList = state.listSelectedContacts.toMutableList()
+        var newList = state.selectedListContacts.toMutableList()
 
        newList.remove(contact)
 
         state = state.copy(
-            listSelectedContacts = newList
+            selectedListContacts = newList.toSet()
         )
 
     }
 
-    fun colorButtonOrganization(){
-
-        state = state.copy(
-            colorButtonAll = Color.LightGray,
-            colorButtonOrganization = Color(0xFF60BCE6)
-        )
-
-    }
-
-    fun setScreen(){
-
-        if(state.isUsed.value) {
-
-            state.isUsed.value = false
-
-            val contactProvider: ContactProviderApi = KoinPlatform.getKoin().get()
-
-
-
-            println("2")
-            println("2")
-            println("${contactProvider.getAllContacts()}")
-            println("2")
-            println("2")
-
+  private  fun colorButtonOrganization(scope: CoroutineScope){
+        scope.launch(Dispatchers.IO) {
             state = state.copy(
-
-               listContactsPhone = contactProvider.getAllContacts(),
-
-                filteredContacts = contactProvider.getAllContacts()
-
+                colorButtonAll = Color.LightGray,
+                colorButtonOrganization = Color(0xFF60BCE6),
+                listContacts = getUsersUseCase.execute()
             )
         }
+
+
     }
-}
+
+   private fun showContactsOrganization(scope: CoroutineScope){
+
+
+
+       val contactProvider: ContactProviderApi = KoinPlatform.getKoin().get()
+
+       scope.launch {
+
+           state = state.copy(
+               listContacts = contactProvider.getAllContacts().map {
+                   User(it.name, it.phoneNumber)
+               }
+           )
+       }
+
+
+        }
+    }
+
+

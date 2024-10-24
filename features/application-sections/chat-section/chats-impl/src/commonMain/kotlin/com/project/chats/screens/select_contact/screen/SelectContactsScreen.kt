@@ -30,6 +30,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,9 +42,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import org.example.project.nika_screens_chats.add_chat_feature.viewmodel.SelectContactsIntents
+import com.project.chats.screens.select_contact.viewmodel.SelectContactsIntents
 import com.project.chats.screens.select_contact.viewmodel.SelectContactsViewModel
 import org.jetbrains.compose.resources.painterResource
+import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.cancel
@@ -53,12 +55,12 @@ import project.core.resources.user_chats
 
 class SelectContactsScreen : Screen {
 
-    private val vm = SelectContactsViewModel()
+    private val vm:SelectContactsViewModel = getKoin().get()
 
     @Composable
     override fun Content() {
-
-       vm.processIntent(SelectContactsIntents.SetScreen)
+    val scope = rememberCoroutineScope()
+       vm.processIntent(SelectContactsIntents.SetScreen(scope))
 
         Box(modifier = Modifier.fillMaxSize())
         {
@@ -70,9 +72,9 @@ class SelectContactsScreen : Screen {
                     onValueChange = { textInput ->
                                     vm.state = vm.state.copy(
                                         text = textInput,
-                                        filteredContacts = vm.state.listContactsPhone.filter {
+                                        selectedListContacts = vm.state.selectedListContacts.filter {
                                             it.name.contains(textInput, ignoreCase = true)
-                                        }
+                                        }.toSet()
                                     )},
                     trailingIcon = {
                         IconButton(
@@ -115,7 +117,7 @@ class SelectContactsScreen : Screen {
                 ) {
                     Button(
                         onClick = {
-                            vm.processIntent(SelectContactsIntents.ColorButtonAll)
+                            vm.processIntent(SelectContactsIntents.ColorButtonAll(scope))
                         },
                         modifier = Modifier
                             .clip(RoundedCornerShape(70.dp))
@@ -125,11 +127,11 @@ class SelectContactsScreen : Screen {
                             backgroundColor = vm.state.colorButtonAll
                         )
                     ) {
-                        Text(text = "Все")
+                        Text(text = "Телефон")
                     }
                     Button(
                         onClick = {
-                           vm.processIntent(SelectContactsIntents.ColorButtonOrganization)
+                           vm.processIntent(SelectContactsIntents.ColorButtonOrganization(scope))
                         },
                         modifier = Modifier
                             .clip(RoundedCornerShape(70.dp))
@@ -145,9 +147,9 @@ class SelectContactsScreen : Screen {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                if(vm.state.listSelectedContacts.size != 0) {
+                if(vm.state.selectedListContacts.size != 0) {
                     LazyRow(modifier = Modifier.fillMaxWidth()) {
-                        items(vm.state.listSelectedContacts) { item ->
+                        items(vm.state.selectedListContacts.toList()) { item ->
                             Box(modifier = Modifier.padding(horizontal = 10.dp)) {
                                     Image(
                                         painter = painterResource(Res.drawable.cancel),
@@ -191,7 +193,7 @@ class SelectContactsScreen : Screen {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 LazyColumn {
-                    items(vm.state.filteredContacts) { item ->
+                    items(vm.state.listContacts  ) { item ->
                         Row(
                             modifier = Modifier.padding(top = 10.dp).fillMaxWidth(0.95f).clickable(
                                 indication = null, // Отключение эффекта затемнения
@@ -209,7 +211,7 @@ class SelectContactsScreen : Screen {
                                     contentDescription = null,
                                     modifier = Modifier.size(40.dp).align(Alignment.Center)
                                 )
-                                if(vm.state.listSelectedContacts.find { it == item } != null) {
+                                if(vm.state.selectedListContacts.find { it == item } != null) {
                                     Image(
                                         painter = painterResource(Res.drawable.ready),
                                         contentDescription = null,
@@ -224,7 +226,7 @@ class SelectContactsScreen : Screen {
                             ) {
                                 Text("${item.name}", fontSize = 17.sp)
                                 Text(
-                                    "${item.phoneNumber}",
+                                    "${item.number }",
                                     fontSize = 12.sp,
                                     color = Color.LightGray
                                 )

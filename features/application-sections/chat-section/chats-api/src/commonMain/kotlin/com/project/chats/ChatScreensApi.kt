@@ -7,5 +7,4 @@ interface ChatScreensApi {
     //fun dialogScreen():Screen
     fun historyFilesScreen():Screen
     fun selectContactsScreen():Screen
-    fun titleGroupScreen():Screen
 }

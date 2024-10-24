@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.project.chats.screens.chats.component.ChatItem
+import com.project.chats.screens.chats.component.ConfirmDeleteChatDialog
 import com.project.chats.screens.chats.viewmodel.ChatsIntents
 import com.project.chats.screens.chats.viewmodel.ChatsViewModel
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
@@ -46,7 +47,7 @@ class ChatsScreen : Screen {
         val state by vm.state.collectAsState()
         vm.processIntent(ChatsIntents.SetScreen(scope))
 
- Box(modifier = Modifier.fillMaxSize()) {
+     Box(modifier = Modifier.fillMaxSize()) {
 
      Column(modifier = Modifier.align(Alignment.TopCenter).padding(16.dp)) {
          Text("Чаты", fontSize = 20.sp)
@@ -54,19 +55,19 @@ class ChatsScreen : Screen {
          LazyColumn(
              modifier = Modifier.fillMaxWidth()
          ) {
-             items(state.Listchats) { item ->
+             items(state.listchats) { item ->
                  ChatItem(
                      item.urlIconChat,
                      item.title,
                      item.lastMassage,
                      "${item.timeEndDate.time} ${item.timeEndDate.date}",
-                     { vm.processIntent(ChatsIntents.DialogueSelection(scope, item.uiChat,item.urlIconChat, item.title,item.countNewMessage)) }
+                     { vm.processIntent(ChatsIntents.DialogueSelection(scope, item.uiChat,item.urlIconChat, item.title,item.countNewMessage)) },
+                     { vm.processIntent(ChatsIntents.ShowDeleteDialog)}
                  )
              }
          }
      }
 
-     // Изменения касаются расположения элементов внизу
      Column(
          modifier = Modifier
              .align(Alignment.BottomCenter)  // Размещаем по центру снизу
@@ -89,5 +90,9 @@ class ChatsScreen : Screen {
          MenuBottomBar().Content(MenuBottomBarSection.CHATS)
      }
  }
+        if(state.isShowDeleteDialog) {
+            ConfirmDeleteChatDialog({}, {vm.processIntent(ChatsIntents.CancelDeleteDialog)})
+        }
+
 }
 }

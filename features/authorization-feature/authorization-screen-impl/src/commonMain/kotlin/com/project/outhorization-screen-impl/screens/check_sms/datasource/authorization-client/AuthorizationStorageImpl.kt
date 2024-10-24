@@ -13,6 +13,7 @@ class AuthorizationStorageImpl(private val sharedPrefsApi: SharedPrefsApi):Autho
 
 
     override suspend fun saveToken(token: String) {
+
        sharedPrefsApi.saveToken(token)
     }
 

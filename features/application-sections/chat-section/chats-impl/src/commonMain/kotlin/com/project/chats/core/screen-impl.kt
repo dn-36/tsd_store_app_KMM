@@ -5,7 +5,6 @@ import com.project.chats.ChatScreensApi
 import com.project.chats.screens.chats.screen.ChatsScreen
 import com.project.chats.screens.select_contact.screen.SelectContactsScreen
 import org.example.project.nika_screens_chats.history_files_feature.screen.HistoryFilesScreen
-import org.example.project.nika_screens_chats.title_group_feature.screen.TitleGroupScreen
 
 class ChatScreensImpl: ChatScreensApi {
     override fun chatsScreen(): Screen {
@@ -17,10 +16,6 @@ class ChatScreensImpl: ChatScreensApi {
     override fun selectContactsScreen(): Screen {
         return SelectContactsScreen()
     }
-   /* override fun dialogScreen(): Screen {
-        return DialogScreen()
-    }*/
-    override fun titleGroupScreen(): Screen {
-        return TitleGroupScreen()
-    }
+
+
 }

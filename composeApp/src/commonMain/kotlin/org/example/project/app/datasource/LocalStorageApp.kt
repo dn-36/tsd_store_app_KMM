@@ -15,7 +15,9 @@ class LocalStorageApp (private val sharedPrefs: SharedPrefsApi ): LocalStorageAp
     }
 
     override suspend fun saveToken(token: String) {
+
         sharedPrefs.saveToken(token)
+
     }
 
 }

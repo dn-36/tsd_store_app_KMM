@@ -14,14 +14,22 @@ import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-class UsersClient {
+class UsersApi {
+    companion object {
+        private var _token: String? = null
+    }
+
+    fun init(token:String?):UsersApi{
+        _token = token
+        return this
+    }
 
     private val client = HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
             json(Json {
-                ignoreUnknownKeys = true // Игнорировать неизвестные поля
-                isLenient = true // Быть гибким с форматом JSON
-                coerceInputValues = true // Принудительно преобразовывает несовпадающие типы, например, null к правильному типу
+                ignoreUnknownKeys = true
+                isLenient = true
+                coerceInputValues = true
 
             })
         }
@@ -29,7 +37,7 @@ class UsersClient {
             level = LogLevel.BODY // Включить логирование для отладки
         }
         defaultRequest {
-            header("Authorization", "Bearer ${ConstData.TOKEN}")
+            header("Authorization", "Bearer $_token")
         }
     }
 
@@ -37,11 +45,8 @@ class UsersClient {
     suspend fun getUsers(): List<User> {
 
         val response = client.get("https://delta.online/api/users-company") {
-
         }
-        println(" ////////////////////++++++++++")
         println(" ${response}")
-        println(" ////////////////////++++++++++")
         return response.body<List<User>>()
     }
 

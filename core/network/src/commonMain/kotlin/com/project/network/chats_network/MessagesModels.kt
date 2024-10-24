@@ -1,22 +1,7 @@
 package com.project.network.chats_network
 
 import kotlinx.serialization.Serializable
-/*
-@Serializable
-data class ChatResponseMessages(
-    val id: Int?,
-    val name: String?,
-    val ui: String?,
-    val image: String?,
-    val text: String?,
-    val creater_id: Int?,
-    val created_at: String?,
-    val updated_at: String?,
-    val project_id: Int?,
-    val messages: Messages?,
-    val users: List<UserMessages>?,
-    val project: ProjectMessages? // Сделал поле nullable
-)*/
+
 
 @Serializable
 data class ChatResponseMessages(

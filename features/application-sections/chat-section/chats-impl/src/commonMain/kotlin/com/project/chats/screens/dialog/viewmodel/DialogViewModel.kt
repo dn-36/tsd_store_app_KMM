@@ -15,6 +15,7 @@ import com.project.core_app.getFormattedDateTime
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
+import com.project.network.chats_network.Messages
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -61,24 +62,29 @@ class DialogViewModel(
             return@launch
         }
 
-
-
              this.launch {
                  while (
                      true
                  ){
                  readMessageUseCase.execute(uiChats)
                  delay(1500L)
-
                  }
                  }
 
             while (
                true
             ){
+                var listMessages = listOf<Message>()
                 val listDate = mutableSetOf<String>()
+                try {
+                    listMessages = getListMessagesUseCase.execute(uiChats)?: emptyList()
+                    delay(200L)
+                    setStatus(StatusNetworkScreen.SECCUESS)
+                    isSeted = true
+                }catch (e:Exception){
+                    setStatus(StatusNetworkScreen.ERROR)
+                }
 
-                val listMessages = getListMessagesUseCase.execute(uiChats)?: emptyList()
 
 
                 listMessages.fastForEachIndexed { i, message ->
@@ -99,15 +105,7 @@ class DialogViewModel(
                         listMessage = listMessages
                     )
                 }
-            if(!isSeted){
-               if(listMessages.isNullOrEmpty()){
-                        setStatus(StatusNetworkScreen.ERROR)
-                        return@launch
-                    }
-                delay(200L)
-                setStatus(StatusNetworkScreen.SECCUESS)
-                isSeted = true
-            }
+
             delay(1500L)
             }
         }

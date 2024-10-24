@@ -1,7 +1,5 @@
 package com.project.chats.core
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.project.chats.ChatScreensApi
 import com.project.chats.screens.chats.datasource.ChatRepositoryImpl
 import com.project.chats.screens.chats.domain.ChatsRepositoryApi
@@ -14,6 +12,15 @@ import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
 import com.project.chats.screens.dialog.domain.ReadMessegeUseCase
 import com.project.chats.screens.dialog.domain.SendMessageUseCase
 import com.project.chats.screens.dialog.viewmodel.DialogViewModel
+import com.project.chats.screens.select_contact.datasource.SelectContactRepositoryImpl
+import com.project.chats.screens.select_contact.domain.GetUsersOrganizationUseCase
+import com.project.chats.screens.select_contact.domain.SelectContactRepositoryApi
+import com.project.chats.screens.select_contact.viewmodel.SelectContactsViewModel
+import com.project.chats.screens.titile_chat.datasource.TitleChatRepositoryImpl
+import com.project.chats.screens.titile_chat.domain.CreateChatUseCase
+import com.project.chats.screens.titile_chat.domain.TitleChatRepositoryApi
+import com.project.chats.screens.titile_chat.viewmodel.TitleChatViewModel
+import com.project.network.users_network.UsersApi
 import org.koin.dsl.module
 
 val chatsModule = module{
@@ -48,5 +55,22 @@ val chatsModule = module{
      factory {
          DialogRepositoryImpl(get(),get()) as DialogRepositoryApi
      }
+     factory {
+          SelectContactsViewModel(get())
+     }
+     factory {
+          GetUsersOrganizationUseCase(get())
+     }
+     factory {
+         SelectContactRepositoryImpl(get(),get()) as SelectContactRepositoryApi
+     }
+     factory {
+          UsersApi()
+     }
+     factory {
+          TitleChatViewModel(get())
+     }
+     factory { CreateChatUseCase(get()) }
+     factory {  TitleChatRepositoryImpl(get(),get()) as TitleChatRepositoryApi}
 
 }

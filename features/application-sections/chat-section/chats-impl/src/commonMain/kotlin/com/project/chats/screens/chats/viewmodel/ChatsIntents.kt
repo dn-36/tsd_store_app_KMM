@@ -15,4 +15,6 @@ sealed class ChatsIntents {
 
     object AddChat : ChatsIntents()
     data class SetScreen(val scope:CoroutineScope) : ChatsIntents()
+    object ShowDeleteDialog : ChatsIntents()
+    object CancelDeleteDialog : ChatsIntents()
 }

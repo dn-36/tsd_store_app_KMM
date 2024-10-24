@@ -8,19 +8,16 @@ import com.example.notes_screens_impl.screens.edit_note.domain.usecases.DeleteNo
 import com.example.notes_screens_impl.screens.edit_note.domain.usecases.GetNotesEditUseCase
 import com.example.notes_screens_impl.screens.edit_note.domain.usecases.GetUsersUseCase
 import com.example.notes_screens_impl.screens.edit_note.domain.usecases.UpdateNoteUseCase
-import kotlinx.coroutines.CoroutineScope
+import com.example.notes_screens_impl.screens.edit_note.viewmodel.EditNoteState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import org.example.project.presentation.crm_feature.edit_note_screen.screen.EditNoteScreen
 import com.example.notes_screens_impl.screens.notes.screen.NotesScreen
 import com.project.network.Navigation
-import com.project.network.notes_network.NotesClient
 import com.project.network.notes_network.model.BodyNoteDto
 import com.project.network.notes_network.model.Note
-import com.project.network.notes_network.model.NoteResponse
 import com.project.network.notes_network.model.User
-import com.project.network.notes_network.model.removeHtmlTags
 
 class EditNoteViewModel (
 
@@ -323,6 +320,8 @@ class EditNoteViewModel (
 
 
     fun selectingEditableCategory(index: Int) {
+
+
 
         editNoteState = editNoteState.copy(
 

@@ -1,23 +1,24 @@
-package org.example.project.nika_screens_chats.add_chat_feature.viewmodel
+package com.project.chats.screens.select_contact.viewmodel
 
-import model.Contact
+import com.project.chats.screens.select_contact.domain.User
+import kotlinx.coroutines.CoroutineScope
 
 
 sealed class SelectContactsIntents {
 
-    object Next:SelectContactsIntents()
+    object Next: SelectContactsIntents()
 
-    object Back:SelectContactsIntents()
+    object Back: SelectContactsIntents()
 
-    object SetScreen:SelectContactsIntents()
+    data class SetScreen( val scope: CoroutineScope): SelectContactsIntents()
 
-     object ColorButtonAll:SelectContactsIntents()
+    data class ColorButtonAll(val scope: CoroutineScope): SelectContactsIntents()
 
-     object ColorButtonOrganization:SelectContactsIntents()
+    data class  ColorButtonOrganization(val scope: CoroutineScope): SelectContactsIntents()
 
-   data class SelectContact(val selectedContact: Contact):SelectContactsIntents()
+   data class SelectContact(val selectedContact: User): SelectContactsIntents()
 
-    data class CanselContact(val contact: Contact):SelectContactsIntents()
+    data class CanselContact(val contact: User): SelectContactsIntents()
 
-    object ClearingTypedText:SelectContactsIntents()
+    object ClearingTypedText: SelectContactsIntents()
 }

@@ -34,7 +34,6 @@ kotlin {
             implementation(project(":core:recources"))
             implementation(project(":core:app"))
             implementation(project(":core:contact-provider"))
-
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

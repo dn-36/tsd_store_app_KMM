@@ -1,3 +1,4 @@
+
 package com.project.network.chats_network
 
 import com.project.network.httpClientEngine
@@ -19,8 +20,8 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.utils.io.InternalAPI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import util.NetworkError
@@ -28,6 +29,7 @@ import util.Result
 
 
 class ChatsApi() {
+    private val baseUrl:String = "https://delta.online/"
    companion object{
        private var _token: String = ""
    }
@@ -56,12 +58,11 @@ class ChatsApi() {
 
     // Получение списка заметок
     suspend fun getChats(): List<ChatsResponse> {
-        //sendMessage(ConstData.TOKEN,)
 
-        val response = client.get("https://delta.online/api/chats") {
+        val response = client.get(baseUrl+"api/chats") {
             parameter("active", 1)
         }
-        println("!!!!!!!!!!${response.body<String>()}!!!!!!!!!!!!!!!")
+        println("!!!!!!!!!! ${response.body<List<ChatsResponse>>()[0].project?.id} !!!!!!!!!!!!!!!")
         return try{
             response.body()
         }catch (e:Exception){
@@ -73,31 +74,13 @@ class ChatsApi() {
     // Обновление заметки
     suspend fun getListMassengers(chatId: String): ChatResponseMessages {
 
-        return try {
-            val response = client.get("https://delta.online/api/chats/${chatId}?page=1") {
+
+            val response = client.get(baseUrl+"api/chats/${chatId}?page=1") {
                 parameter("active", 1)
 
             }
-            response.body()
-        } catch (e: Exception) {
-            println("UPDATE Note: Error - ${e.message}")
-          //  throw e // Или обработайте ошибку по-другому
-            return ChatResponseMessages(
-                0,
-                "",
-                "",
-                "",
-                "",
-                0,
-                "",
-                "",
-                0,
-                null,
-                listOf(),
-                null,
+            return response.body()
 
-            )
-        }
     }
 
 
@@ -124,7 +107,7 @@ class ChatsApi() {
                   println("!!!!\n" +
                           "${it?.user?.phone}"+
                           "\n\n " + client
-                      .post("https://delta.online/api/view-message/${it?.ui?: ""}")
+                      .post(baseUrl+"view-message/${it?.ui?: ""}")
                       .status +
                           "\n" +
                           "\n !!!!"
@@ -147,8 +130,10 @@ class ChatsApi() {
         val filename: String
     )
 
+
+
     // Функция для отправки POST-запроса
-    @OptIn(InternalAPI::class)
+
     suspend fun sendMessage(
         chatUI: String,
         feedbackUI: String,
@@ -158,10 +143,9 @@ class ChatsApi() {
         filesData: List<ByteArray>?
     ): Result<String, NetworkError> {
 
-
         try {
             // Отправляем POST-запрос с multipart/form-data
-            val response: HttpResponse = client.post("https://delta.online/api/message/") {
+            val response: HttpResponse = client.post(baseUrl+"api/message/") {
 
                 setBody(
                     MultiPartFormDataContent(
@@ -181,7 +165,7 @@ class ChatsApi() {
                                     "filesmobile",
                                     file.data,
                                     Headers.build {
-                                        append(HttpHeaders.ContentType, ContentType.Text.Plain)
+                                      //  append(HttpHeaders.ContentType, ContentType.Text.Plain)
                                         append(HttpHeaders.ContentDisposition, "filename=\"${file.filename}\"")
                                     }
                                 )
@@ -210,7 +194,35 @@ class ChatsApi() {
         }
     }
 
+    suspend fun createChat(
+        name: String,
+        imageBase64: String?,
+        userPhones: List<String>,
+        projectId: Int?
+    ): String {
 
+        val response = client.post(baseUrl + "api/chats") {
+            contentType(ContentType.Application.Json)
+            setBody(
+                MultiPartFormDataContent(
+                    formData {
+                        append("name", name)
+                        append("image", imageBase64 ?: "")
+                        userPhones.forEach { phone ->
+                            append("users[]", phone)
+                        }
+                            append("project_id", projectId?:0)
+                    }
+                )
+            )
+        }.body<HttpResponse>().bodyAsText()
 
+        println("ASASASAS" + response)
+        return response
+    }
+
+  suspend fun getProjects():String{
+       return client.get(baseUrl+"api/project").body<HttpResponse>().bodyAsText()
+   }
 
 }

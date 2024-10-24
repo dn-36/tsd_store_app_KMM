@@ -23,7 +23,7 @@ class ChatsViewModel(
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
             is ChatsIntents.DialogueSelection -> {
-                dialogueSelection(intent.ui,intent.titleChat,intent.urlIcon,intent.countNewMessage,intent.scope)
+                dialogueSelection(intent.ui,intent.titleChat,intent.urlIcon,intent.countNewMessage)
             }
             is ChatsIntents.AddChat -> {
                 addChat()
@@ -31,30 +31,53 @@ class ChatsViewModel(
             is ChatsIntents.SetScreen -> {
                 setScreen(intent.scope)
             }
+            is ChatsIntents.ShowDeleteDialog -> {
+                deleteDealog()
+            }
+            is ChatsIntents.CancelDeleteDialog -> {
+                cancelDeleteDialog()
+            }
         }
     }
 
-    fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?,countNewMessage:Int, scope: CoroutineScope) {
-        scope.launch(Dispatchers.IO){
+    private fun cancelDeleteDialog(){
+        state.update {
+            it.copy(
+                isShowDeleteDialog = false
+            )
+        }
+    }
+
+   private fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?,countNewMessage:Int) {
+        //scope.launch(Dispatchers.IO){
             Navigation.navigator.push(DialogScreen(uiChats  = chatsUi,titleChat,urlIcon,countNewMessage))
-        }
+       // }
     }
 
-    fun addChat() {
+   private fun addChat() {
         Navigation.navigator.push(SelectContactsScreen())
     }
 
-    fun setScreen( scope: CoroutineScope) {
+   private fun setScreen( scope: CoroutineScope) {
         if (!isSeted) {
             scope.launch(Dispatchers.IO) {
                 isSeted = true
                 state.update {
                     it.copy(
-                        getListChatsUseCase.execute()
+                      listchats =   getListChatsUseCase.execute()
                     )
                 }
             }
 
         }
     }
+
+   private fun deleteDealog(){
+        state.update {
+           it.copy(
+                isShowDeleteDialog = true
+            )
+        }
+    }
+
 }

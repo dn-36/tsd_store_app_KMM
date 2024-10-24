@@ -15,6 +15,7 @@ compose-plugin = "1.6.11"
 junit = "4.13.2"
 kotlin = "2.0.20"
 kotlinxDatetime = "0.4.0"
+kotlinxIo = "0.1.16"
 voyager = "1.1.0-alpha03"
 ktor = "3.0.0"
 multiplatformSettings = "1.0.0"
@@ -44,6 +45,7 @@ cafe-adriel-voyager-voyager-transitions = {group = "cafe.adriel.voyager",name = 
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io", version.ref = "kotlinxIo" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }

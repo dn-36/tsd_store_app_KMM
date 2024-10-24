@@ -43,8 +43,8 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
-
-
+            implementation(libs.kotlinx.io)
+            implementation("io.ktor:ktor-utils:2.0.0")
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

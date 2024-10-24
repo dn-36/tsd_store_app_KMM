@@ -31,12 +31,12 @@ class NotesClient {
     private val client = HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
             json(Json {
-                ignoreUnknownKeys = true // Игнорировать неизвестные поля
-                isLenient = true // Быть гибким с форматом JSON
+                ignoreUnknownKeys = true
+                isLenient = true
             })
         }
         install(Logging) {
-            level = LogLevel.BODY // Включить логирование для отладки
+            level = LogLevel.BODY
         }
         defaultRequest {
             header("Authorization", "Bearer ${ConstData.TOKEN}")
