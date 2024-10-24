@@ -38,7 +38,7 @@ class ArrivalAndConsumptionViewModel (
 
 ) : ViewModel() {
 
-    var arrivalAndConsumptionState by mutableStateOf(ArrivalAndConsumptionState())
+    var state by mutableStateOf(ArrivalAndConsumptionState())
 
     fun processIntent (intent: ArrivalAndConsumptionIntents) {
 
@@ -93,7 +93,7 @@ class ArrivalAndConsumptionViewModel (
 
                         }
 
-                        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+                        state = state.copy(
 
                             listAllContragent = newList,
 
@@ -103,7 +103,7 @@ class ArrivalAndConsumptionViewModel (
 
                     getWarehouseArrivalAndConsumptionUseCase.execute ( onGet = { listAllWarehouse ->
 
-                        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+                        state = state.copy(
 
                             listAllWarehouse = listAllWarehouse,
 
@@ -137,30 +137,30 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.Update -> {
 
-                if ( arrivalAndConsumptionState.listSelectedProducts.size != 0 ) {
+                if ( state.listSelectedProducts.size != 0 ) {
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
                         updateArrivalOrConsumptionUseCase.execute(
 
-                            productUi = arrivalAndConsumptionState.updatedItem!!.ui!!,
+                            productUi = state.updatedItem!!.ui!!,
 
-                            idLegalEntityParish = arrivalAndConsumptionState.idLegalEntityParish,
+                            idLegalEntityParish = state.idLegalEntityParish,
 
-                            idLegalEntityExpense = arrivalAndConsumptionState.idLegalEntityExpense,
+                            idLegalEntityExpense = state.idLegalEntityExpense,
 
-                            idContragentExpense = arrivalAndConsumptionState.idContragentExpense,
+                            idContragentExpense = state.idContragentExpense,
 
-                            idContragentParish = arrivalAndConsumptionState.idContragentParish,
+                            idContragentParish = state.idContragentParish,
 
-                            idWarehouse = arrivalAndConsumptionState.idWarehouse,
+                            idWarehouse = state.idWarehouse,
 
-                            isPush = arrivalAndConsumptionState.isPush,
+                            isPush = state.isPush,
 
-                            listProducts = arrivalAndConsumptionState.listSelectedProducts
+                            listProducts = state.listSelectedProducts
                         )
 
-                        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+                        state = state.copy(
 
                             isVisibilityAddProductsComponent = mutableStateOf(0f),
 
@@ -233,7 +233,7 @@ class ArrivalAndConsumptionViewModel (
 
                     }
 
-                    arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+                    state = state.copy(
 
                         listAllContragent = newList,
 
@@ -243,7 +243,7 @@ class ArrivalAndConsumptionViewModel (
 
                 getWarehouseArrivalAndConsumptionUseCase.execute ( onGet = { listAllWarehouse ->
 
-                    arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+                    state = state.copy(
 
                         listAllWarehouse = listAllWarehouse,
 
@@ -259,7 +259,7 @@ class ArrivalAndConsumptionViewModel (
 
                         val newListContragents = mutableListOf<ContragentResponseArrivalAndConsumption>()
 
-                        arrivalAndConsumptionState.listAllContragent.forEach { item ->
+                        state.listAllContragent.forEach { item ->
 
                             if(item.entits != null ){
 
@@ -290,7 +290,7 @@ class ArrivalAndConsumptionViewModel (
 
                         val newListWarehouse = mutableListOf<WarehouseArrivalAndConsumption>()
 
-                        arrivalAndConsumptionState.listAllWarehouse.forEach { item ->
+                        state.listAllWarehouse.forEach { item ->
 
                             if(item.stores != null ){
 
@@ -331,7 +331,7 @@ class ArrivalAndConsumptionViewModel (
                         val newWarehouse =  newListWarehouse.find { it.stores[0]!!.id == intent.item.store_id}
 
 
-                        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+                        state = state.copy(
 
                             updatedEntityExpense = newEntityExpense,
 
@@ -363,28 +363,28 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.CreateArrivalOrConsumption ->  {
 
-                if ( arrivalAndConsumptionState.listSelectedProducts.size != 0) {
+                if ( state.listSelectedProducts.size != 0) {
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
                         createArrivalOrConsumptionUseCase.execute(
 
-                            idLegalEntityParish = arrivalAndConsumptionState.idLegalEntityParish,
+                            idLegalEntityParish = state.idLegalEntityParish,
 
-                            idLegalEntityExpense = arrivalAndConsumptionState.idLegalEntityExpense,
+                            idLegalEntityExpense = state.idLegalEntityExpense,
 
-                            idContragentExpense = arrivalAndConsumptionState.idContragentExpense,
+                            idContragentExpense = state.idContragentExpense,
 
-                            idContragentParish = arrivalAndConsumptionState.idContragentParish,
+                            idContragentParish = state.idContragentParish,
 
-                            idWarehouse = arrivalAndConsumptionState.idWarehouse,
+                            idWarehouse = state.idWarehouse,
 
-                            isPush = arrivalAndConsumptionState.isPush,
+                            isPush = state.isPush,
 
-                            listProducts = arrivalAndConsumptionState.listSelectedProducts
+                            listProducts = state.listSelectedProducts
                         )
 
-                        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+                        state = state.copy(
 
                             isVisibilityAddProductsComponent = mutableStateOf(0f),
 
@@ -412,7 +412,7 @@ class ArrivalAndConsumptionViewModel (
 
                     getProductsUseCase.execute ( onGet = { listAllProducts ->
 
-                        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+                        state = state.copy(
 
                             listProducts = listAllProducts,
 
@@ -432,7 +432,7 @@ class ArrivalAndConsumptionViewModel (
 
                 getArrivalAndConsumptionUseCase.execute ( onGet = { listArrivalAndConsumption ->
 
-                    arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+                    state = state.copy(
 
                         listAllArrivalOrConsumption = listArrivalAndConsumption
 
@@ -464,7 +464,7 @@ class ArrivalAndConsumptionViewModel (
 
     fun backAddProducts(){
 
-        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+        state = state.copy(
 
             isVisibilityAddProductsComponent = mutableStateOf(0f),
 
@@ -476,7 +476,7 @@ class ArrivalAndConsumptionViewModel (
 
     fun backListProducts(){
 
-        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+        state = state.copy(
 
             isVisibilityListProducts = mutableStateOf(0f),
 
@@ -488,7 +488,7 @@ class ArrivalAndConsumptionViewModel (
 
     fun selectProduct(selectedProduct: ProductArrivalAndConsumption){
 
-        arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+        state = state.copy(
 
             isVisibilityCountProducts = mutableStateOf(1f),
 
@@ -502,7 +502,13 @@ class ArrivalAndConsumptionViewModel (
 
     fun scanner() {
 
-        // Navigation.navigator.push()
+    state = state.copy(
+
+        isVisibilityScannerComponent = mutableStateOf(1f),
+
+        isVisibilityAddProductsComponent = mutableStateOf(0f)
+
+    )
 
     }
 
@@ -511,15 +517,15 @@ class ArrivalAndConsumptionViewModel (
 
         if ( count.isNotBlank() && count.toInt() > 0 ) {
 
-            val newProduct = arrivalAndConsumptionState.selectedProduct
+            val newProduct = state.selectedProduct
 
             newProduct!!.count = count.toInt()
 
-            val newList = arrivalAndConsumptionState.listSelectedProducts.toMutableList()
+            val newList = state.listSelectedProducts.toMutableList()
 
             newList.add(newProduct)
 
-            arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+            state = state.copy(
 
                 selectedProduct = newProduct,
 
@@ -535,7 +541,7 @@ class ArrivalAndConsumptionViewModel (
 
         else {
 
-            arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+            state = state.copy(
 
                 colorBorderCountTF = Color.Red
 
@@ -547,7 +553,7 @@ class ArrivalAndConsumptionViewModel (
 
     fun backDataEntry(){
 
-    arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+    state = state.copy(
 
         isVisibilityDataEntryComponent = mutableStateOf(0f),
 
@@ -573,7 +579,7 @@ class ArrivalAndConsumptionViewModel (
 
             idContragentExpense != null && idContragentParish != null && idWarehouse != null ) {
 
-            arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+            state = state.copy(
 
                 isVisibilityAddProductsComponent = mutableStateOf(1f),
 
@@ -597,11 +603,11 @@ class ArrivalAndConsumptionViewModel (
 
     fun canselSelectedProduct ( index: Int ) {
 
-        val newList = arrivalAndConsumptionState.listSelectedProducts.toMutableList()
+        val newList = state.listSelectedProducts.toMutableList()
 
         newList.removeAt(index)
 
-    arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
+    state = state.copy(
 
         listSelectedProducts = newList
 

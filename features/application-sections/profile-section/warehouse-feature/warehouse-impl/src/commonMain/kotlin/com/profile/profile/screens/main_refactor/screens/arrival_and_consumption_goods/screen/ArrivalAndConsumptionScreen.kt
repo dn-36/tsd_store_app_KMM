@@ -29,6 +29,7 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.Item
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ScannerComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
@@ -54,7 +55,7 @@ class ArrivalAndConsumptionScreen : Screen {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn (modifier = Modifier.fillMaxHeight(0.8f)) {
-                    items(vm.arrivalAndConsumptionState.listAllArrivalOrConsumption) { item ->
+                    items(vm.state.listAllArrivalOrConsumption) { item ->
 
                         Item(item, onDelete = { ui ->
 
@@ -109,7 +110,7 @@ class ArrivalAndConsumptionScreen : Screen {
                         }
                     }
 
-                    if( vm.arrivalAndConsumptionState.isVisibilityAddProductsComponent.value != 1f ) {
+                    if( vm.state.isVisibilityAddProductsComponent.value != 1f ) {
 
                         MenuBottomBarWarehouse().Content()
 
@@ -118,23 +119,23 @@ class ArrivalAndConsumptionScreen : Screen {
                 }
             }
         }
-        if (vm.arrivalAndConsumptionState.isVisibilityDataEntryComponent.value == 1f) {
+        if (vm.state.isVisibilityDataEntryComponent.value == 1f) {
 
             DataEntryComponent(
 
-                vm.arrivalAndConsumptionState.updatedContragentExpense,
+                vm.state.updatedContragentExpense,
 
-                vm.arrivalAndConsumptionState.updatedContragentParish,
+                vm.state.updatedContragentParish,
 
-                vm.arrivalAndConsumptionState.updatedEntityExpense,
+                vm.state.updatedEntityExpense,
 
-                vm.arrivalAndConsumptionState.updatedEntityParish,
+                vm.state.updatedEntityParish,
 
-                vm.arrivalAndConsumptionState.updatedWarehouse,
+                vm.state.updatedWarehouse,
 
-                listAllContragents = vm.arrivalAndConsumptionState.listAllContragent,
+                listAllContragents = vm.state.listAllContragent,
 
-                listAllWarehouse = vm.arrivalAndConsumptionState.listAllWarehouse,
+                listAllWarehouse = vm.state.listAllWarehouse,
 
                 onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackDataEntry) },
 
@@ -153,9 +154,9 @@ class ArrivalAndConsumptionScreen : Screen {
 
             ).Content()
 
-        } else if (vm.arrivalAndConsumptionState.isVisibilityListProducts.value == 1f) {
+        } else if (vm.state.isVisibilityListProducts.value == 1f) {
 
-            ListProductsComponent(vm.arrivalAndConsumptionState.listProducts, onClickBack = {
+            ListProductsComponent(vm.state.listProducts, onClickBack = {
 
                 vm.processIntent(ArrivalAndConsumptionIntents.BackListProducts)
 
@@ -165,11 +166,11 @@ class ArrivalAndConsumptionScreen : Screen {
 
             }).Content()
 
-        } else if (vm.arrivalAndConsumptionState.isVisibilityCountProducts.value == 1f) {
+        } else if (vm.state.isVisibilityCountProducts.value == 1f) {
 
             CountProductComponent(
 
-                vm.arrivalAndConsumptionState.listProducts,
+                vm.state.listProducts,
 
                 onClickReady = { count ->
 
@@ -177,17 +178,17 @@ class ArrivalAndConsumptionScreen : Screen {
 
                 },
 
-                colorBorderCountTF = vm.arrivalAndConsumptionState.colorBorderCountTF
+                colorBorderCountTF = vm.state.colorBorderCountTF
 
                 ).Content()
 
-        } else if (vm.arrivalAndConsumptionState.isVisibilityAddProductsComponent.value == 1f) {
+        } else if (vm.state.isVisibilityAddProductsComponent.value == 1f) {
 
             AddProductsComponent(
 
-                isUpdate = vm.arrivalAndConsumptionState.isUpdate,
+                isUpdate = vm.state.isUpdate,
 
-                vm.arrivalAndConsumptionState.listSelectedProducts,
+                vm.state.listSelectedProducts,
 
                 onClickSelectFromList = { scope ->
 
@@ -211,11 +212,19 @@ class ArrivalAndConsumptionScreen : Screen {
 
                 },
 
+                onClickScanner = { vm.processIntent(ArrivalAndConsumptionIntents.Scanner) },
+
                 onClickCansel = { index ->
 
                     vm.processIntent(ArrivalAndConsumptionIntents.CanselSelectedProduct( index )) }
 
                 ).Content()
+
+        }
+
+        else if ( vm.state.isVisibilityScannerComponent.value == 1f ) {
+
+            ScannerComponent().QrScannerView()
 
         }
 

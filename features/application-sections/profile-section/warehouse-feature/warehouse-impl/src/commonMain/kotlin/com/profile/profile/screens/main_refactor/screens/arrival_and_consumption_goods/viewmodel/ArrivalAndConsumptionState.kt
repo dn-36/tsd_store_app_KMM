@@ -33,6 +33,8 @@ data class ArrivalAndConsumptionState (
 
     val isVisibilityDataEntryComponent: MutableState<Float> = mutableStateOf(0f),
 
+    val isVisibilityScannerComponent: MutableState<Float> = mutableStateOf(0f),
+
     val isVisibilityAddProductsComponent: MutableState<Float> = mutableStateOf(0f),
 
     val listProducts:List<AllProductArrivalAndConsumption> = emptyList(),

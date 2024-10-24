@@ -54,6 +54,8 @@ class AddProductsComponent(
 
     val listSelectedProducts: List<ProductArrivalAndConsumption>,
 
+    val onClickScanner: () -> Unit,
+
     val onClickSelectFromList: (scope: CoroutineScope) -> Unit,
 
     val onClickCreate: (scope: CoroutineScope) -> Unit,
@@ -162,7 +164,10 @@ class AddProductsComponent(
 
                             Box(modifier = Modifier.weight(0.5f)) {
 
-                            Text("Сканировать", fontSize = 15.sp)
+                            Text("Сканировать", fontSize = 15.sp, modifier = Modifier.clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                interactionSource = remember { MutableInteractionSource() })
+                            { onClickScanner() })
                         }
 
                             Spacer(modifier = Modifier.height(25.dp))
