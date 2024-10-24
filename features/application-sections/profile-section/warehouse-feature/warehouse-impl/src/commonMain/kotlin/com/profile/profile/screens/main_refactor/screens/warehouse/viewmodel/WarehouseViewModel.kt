@@ -144,15 +144,18 @@ class WarehouseViewModel (
 
             is WarehouseIntents.CreateWarehouse -> {
 
-                intent.coroutineScope.launch (Dispatchers.IO) {
+                if ( intent.name.isBlank() && intent.localId.isNotBlank() ) {
 
-                    createWarehouseUseCase.execute(intent.name, intent.localId, onCreate = {
+                    intent.coroutineScope.launch(Dispatchers.IO) {
 
-                        Navigation.navigator.push(WarehouseScreen())
+                        createWarehouseUseCase.execute(intent.name, intent.localId, onCreate = {
 
-                    })
+                            Navigation.navigator.push(WarehouseScreen())
+
+                        })
+                    }
+                    //createWarehouse(intent.coroutineScope, intent.name, intent.localId)
                 }
-                //createWarehouse(intent.coroutineScope, intent.name, intent.localId)
 
             }
 
@@ -176,15 +179,18 @@ class WarehouseViewModel (
 
             is WarehouseIntents.UpdateWarehouse -> {
 
-                intent.coroutineScope.launch (Dispatchers.IO) {
+                if (intent.name.isNotBlank() && intent.localId.isNotBlank()) {
 
-                    updateWarehouseUseCase.execute( intent.ui, intent.name, intent.localId ,
+                    intent.coroutineScope.launch(Dispatchers.IO) {
 
-                        onUpdate = { Navigation.navigator.push(WarehouseScreen()) })
+                        updateWarehouseUseCase.execute(intent.ui, intent.name, intent.localId,
+
+                            onUpdate = { Navigation.navigator.push(WarehouseScreen()) })
+                    }
+
+                    //updateWarehouse(intent.coroutineScope, intent.ui, intent.name, intent.localId)
+
                 }
-
-                //updateWarehouse(intent.coroutineScope, intent.ui, intent.name, intent.localId)
-
             }
 
         }

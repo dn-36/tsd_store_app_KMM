@@ -47,6 +47,7 @@ import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.cancel
 import project.core.resources.plus
+import project.core.resources.update_pencil
 
 class OrganizationScreen(): Screen {
 
@@ -74,60 +75,108 @@ class OrganizationScreen(): Screen {
             Column(modifier = Modifier.padding(16.dp),) {
                 Text("Организации", color = Color.Black, fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn { itemsIndexed(vm.organizationsState.allOrganizations){index,item ->
 
-                    Box() {
-                        Row(verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(vertical = 8.dp).clickable(
-                                indication = null, // Отключение эффекта затемнения
-                                interactionSource = remember { MutableInteractionSource() })
-                            {
-                                vm.processIntent(
-                                    OrganizationsIntents.ChoosingActiveOrganization(
-                                        scope,
-                                        item.company!!.ui!!
+                    LazyColumn {
+                        itemsIndexed( vm.state.allOrganizations ) { index, item ->
+
+                            Box() {
+                                Row(verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                        .padding(vertical = 8.dp).clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+                                        {
+                                            vm.processIntent(
+                                                OrganizationsIntents.ChoosingActiveOrganization(
+                                                    scope,
+                                                    item.company?.ui?:""
+                                                )
+                                            )
+                                        }) {
+
+                                    Box(
+                                        modifier = Modifier.size(30.dp).clip(CircleShape)
+                                            .background(vm.state.listColorActiveOrganizations[index])
                                     )
-                                )
-                            }) {
 
-                            Box(
-                                modifier = Modifier.size(30.dp).clip(CircleShape)
-                                    .background(vm.organizationsState.listColorActiveOrganizations[index])
-                            )
+                                    Spacer(modifier = Modifier.width(10.dp))
 
-                            Spacer(modifier = Modifier.width(10.dp))
+                                    Column(
+                                        modifier = Modifier.height(60.dp),
+                                        verticalArrangement = Arrangement.SpaceBetween
+                                    ) {
 
-                            Column(
-                                modifier = Modifier.height(60.dp),
-                                verticalArrangement = Arrangement.SpaceBetween
-                            ) {
+                                        Text(
+                                            item.company?.name?:"",
+                                            fontSize = 17.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
 
-                                Text(
-                                    item.company!!.name!!,
-                                    fontSize = 17.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
+                                        if ( item.company?.url == null || item.company?.url!!.isBlank() ){
 
-                                Text("${item.company!!.url}", fontSize = 12.sp, color = Color.Blue)
+                                            Text(
+                                                "https://delta.online/${item.company?.ui}",
+                                                fontSize = 12.sp,
+                                                color = Color.Blue
+                                            )
 
-                                Box(
-                                    modifier = Modifier.height(1.dp).fillMaxWidth(0.9f)
-                                        .background(Color.LightGray)
-                                )
+                                        }
 
+                                        else {
+
+                                            Text(
+                                                "https://delta.online/${item.company?.url}",
+                                                fontSize = 12.sp,
+                                                color = Color.Blue
+                                            )
+
+                                        }
+
+                                        Box(
+                                            modifier = Modifier.height(1.dp).fillMaxWidth()
+                                                .background(Color.LightGray)
+                                        )
+
+                                    }
+                                }
+
+                                if ( item.company?.name != "Личный профиль" && item.company?.name != "c17" ) {
+
+                                    Row(modifier = Modifier.align(Alignment.TopEnd)) {
+
+                                        Image(painter = painterResource(Res.drawable.update_pencil),
+                                            contentDescription = null,
+                                            modifier = Modifier.size(17.dp)
+                                                .clickable(
+                                                    indication = null, // Отключение эффекта затемнения
+                                                    interactionSource = remember { MutableInteractionSource() })
+                                                {
+
+                                                   vm.processIntent(OrganizationsIntents.SelectItemUpdate(item))
+
+                                                })
+
+                                        Spacer(modifier = Modifier.width(20.dp))
+
+                                        Image(painter = painterResource(Res.drawable.cancel),
+                                            contentDescription = null,
+                                            modifier = Modifier.size(15.dp)
+                                                .clickable(
+                                                    indication = null, // Отключение эффекта затемнения
+                                                    interactionSource = remember { MutableInteractionSource() })
+                                                {
+                                                    vm.processIntent(
+                                                        OrganizationsIntents.DeleteOrganization(
+                                                            scope,
+                                                            item.company!!.ui!!
+                                                        )
+                                                    )
+                                                })
+                                    }
+                                }
                             }
                         }
-                            Image(painter = painterResource(Res.drawable.cancel),
-                                contentDescription = null,
-                                modifier = Modifier.size(10.dp).align(Alignment.TopEnd).clickable(
-                                    indication = null, // Отключение эффекта затемнения
-                                    interactionSource = remember { MutableInteractionSource() })
-                                { vm.processIntent(OrganizationsIntents.DeleteOrganization(scope, item.company!!.ui!!))
-                                })
                     }
-                }
-              }
             }
 
             Column(horizontalAlignment = Alignment.End, modifier = Modifier.align(Alignment.BottomCenter)) {

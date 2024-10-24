@@ -172,7 +172,9 @@ class ArrivalAndConsumptionViewModel (
 
                             updatedContragentParish = null,
 
-                            updatedContragentExpense = null
+                            updatedContragentExpense = null,
+
+                            listSelectedProducts = emptyList()
 
                         )
 
@@ -384,7 +386,9 @@ class ArrivalAndConsumptionViewModel (
 
                         arrivalAndConsumptionState = arrivalAndConsumptionState.copy(
 
-                            isVisibilityAddProductsComponent = mutableStateOf(0f)
+                            isVisibilityAddProductsComponent = mutableStateOf(0f),
+
+                            listSelectedProducts = emptyList()
 
                         )
 
@@ -521,7 +525,9 @@ class ArrivalAndConsumptionViewModel (
 
                 isVisibilityCountProducts = mutableStateOf(0f),
 
-                listSelectedProducts = newList
+                listSelectedProducts = newList,
+
+                colorBorderCountTF = Color.LightGray
 
             )
 

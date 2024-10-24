@@ -49,9 +49,17 @@ import project.core.resources.Res
 import project.core.resources.cancel
 import project.core.resources.down_arrow
 
-class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>,val onClickUpdate:(scope:CoroutineScope,name:String,localId:String,ui:String) -> Unit
-,val warehouse:Warehouse?,val onClickCreate:(scope:CoroutineScope,name:String,localId:String) -> Unit,val index:Int
-                                ,val locationUpdated:ResponseItem?): Screen {
+class CreateWarehouseComponent (
+
+    val listAllLocations:List<ResponseItem>,
+
+    val onClickUpdate:(scope:CoroutineScope,name:String,localId:String,ui:String) -> Unit,
+
+    val warehouse:Warehouse?,
+
+    val onClickCreate:(scope:CoroutineScope, name:String,localId:String) -> Unit,val index:Int,
+
+                                val locationUpdated:ResponseItem?): Screen {
 
     var location by mutableStateOf(if (warehouse != null) warehouse.stores[0]!!.local!!.name else "")
 
@@ -60,7 +68,9 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>,val onCl
     var expandedLocation by mutableStateOf(false)
 
     var selectedLocation = mutableStateListOf<ResponseItem>().apply {
+
         if (warehouse != null && locationUpdated != null) {
+
             add(locationUpdated)
         }
     }
@@ -193,9 +203,12 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>,val onCl
                         Button(
                             onClick = {
                                 onClickCreate(
+
                                     scope,
+
                                     title,
-                                    selectedLocation[0].id.toString()
+
+                                    if (selectedLocation.size != 0) selectedLocation[0].id.toString() else ""
                                 )
                             },
                             modifier = Modifier
@@ -212,9 +225,13 @@ class CreateWarehouseComponent (val listAllLocations:List<ResponseItem>,val onCl
                         Button(
                             onClick = {
                                 onClickUpdate(
+
                                     scope,
+
                                     title,
-                                    selectedLocation[0].id.toString(),
+
+                                    if (selectedLocation.size != 0) selectedLocation[0].id.toString() else "" ,
+
                                     warehouse!!.stores[0]!!.ui.toString()
                                 )
                             },
