@@ -47,7 +47,7 @@ import project.core.resources.user_chats
 
 class TitleChatComponent(val listUser:Set<User>) : NetworkComponent {
 
-     override val viewmodel:TitleChatViewModel = getKoin().get()
+     override val viewModel:TitleChatViewModel = getKoin().get()
 
     @Composable
     override fun Component() {
@@ -59,7 +59,7 @@ class TitleChatComponent(val listUser:Set<User>) : NetworkComponent {
             selectionMode = SelectionMode.Multiple(),
             onResult = { byteArrays ->
 
-                viewmodel.state = viewmodel.state.copy(
+                viewModel.state = viewModel.state.copy(
                     image = byteArrays.map {
                         it.toImageBitmap()
                     }.get(0)
@@ -74,7 +74,7 @@ class TitleChatComponent(val listUser:Set<User>) : NetworkComponent {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(viewmodel.state.image == null) {
+                if(viewModel.state.image == null) {
                     Image(
                         painter = painterResource(Res.drawable.user_chats),
                         contentDescription = null,
@@ -93,15 +93,15 @@ class TitleChatComponent(val listUser:Set<User>) : NetworkComponent {
                         modifier = Modifier
                             .size(60.dp)
                             .clip(CircleShape),
-                        bitmap = viewmodel.state.image!!,
+                        bitmap = viewModel.state.image!!,
                         contentDescription = null,
                         contentScale = ContentScale.Crop
                     )
                 }
                 Column {
                     TextField(
-                        value = viewmodel.state.text,
-                        onValueChange = { viewmodel.state = viewmodel.state.copy(
+                        value = viewModel.state.text,
+                        onValueChange = { viewModel.state = viewModel.state.copy(
                             text = it
                         )
                                         },
@@ -137,7 +137,7 @@ class TitleChatComponent(val listUser:Set<User>) : NetworkComponent {
                 modifier = Modifier.padding(25.dp).size(60.dp).align(Alignment.BottomEnd).clickable(
                     indication = null, // Отключение эффекта затемнения
                     interactionSource = remember { MutableInteractionSource() })
-                { viewmodel.processIntent(TitleGroupIntents.Ready(listUser,scope)) }
+                { viewModel.processIntent(TitleGroupIntents.Ready(listUser,scope)) }
             )
         }
     }

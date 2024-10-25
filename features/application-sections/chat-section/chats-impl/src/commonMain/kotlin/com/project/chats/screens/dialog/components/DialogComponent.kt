@@ -143,7 +143,8 @@ class DialogComponentScreen(
                     modifier = Modifier
                         .padding(10.dp)
                         .fillMaxWidth()
-                        .fillMaxHeight(0.94f)
+                        .fillMaxHeight(0.94f),
+                    verticalArrangement = Arrangement.Bottom
                 ) {
 
 

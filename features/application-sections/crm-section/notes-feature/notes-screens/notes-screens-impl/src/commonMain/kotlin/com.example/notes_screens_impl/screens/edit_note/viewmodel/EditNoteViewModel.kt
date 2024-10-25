@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.example.notes_screens_impl.screens.edit_note.screen.EditNoteScreen
+import com.example.notes_screens_impl.screens.edit_note.viewmodel.EditNoteState
 import com.example.notes_screens_impl.screens.notes.screen.NotesScreen
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen

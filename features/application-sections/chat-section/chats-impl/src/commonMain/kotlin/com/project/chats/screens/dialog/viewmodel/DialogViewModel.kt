@@ -61,7 +61,7 @@ class DialogViewModel(
             return@launch
         }
 
-
+try{
 
              this.launch {
                  while (
@@ -99,74 +99,75 @@ class DialogViewModel(
                         listMessage = listMessages
                     )
                 }
-            if(!isSeted){
-               if(listMessages.isNullOrEmpty()){
-                        setStatusNetworkScreen(StatusNetworkScreen.ERROR)
-                        return@launch
-                    }
-                delay(200L)
-                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
-                isSeted = true
-            }
-            delay(1500L)
-            }
-        }
 
-    }
+if(!isSeted){
+      delay(200L)
+      setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+      isSeted = true
+  }
 
-   fun sendMessageUseCase(text:String,ui:String,scope: CoroutineScope){
-       scope.launch(Dispatchers.IO) {
+  delay(1500L)
+  }
+}catch (e:Exception){
+    setStatusNetworkScreen(StatusNetworkScreen.ERROR)
 
+}}
 
-           val list = state.listMessage.toMutableList()
-           list.add(
-               Message(
-                   text,
-                   "You",
-                   date = getFormattedDateTime().date,
-                   time = getFormattedDateTime().time,
-                   null,
-                   WhoseMessage.YOU,
-                   false,
-                   statusMessage = StatusMessage.IS_LOADING
-               )
-           )
-           state = state.copy(listMessage = list)
+}
 
-           val result = sendMessageUseCase.execute(text, ui)
+fun sendMessageUseCase(text:String,ui:String,scope: CoroutineScope){
+scope.launch(Dispatchers.IO) {
 
 
-           if(result != sendMessageUseCase.ERROR){
-               val removeIndex = mutableListOf<Int>()
-               val updatedList = list.mapIndexed { index, message ->
-                   if(message.statusMessage == StatusMessage.IS_ERROR){
-                       removeIndex.add(index)
-                   }
-                   if (index == list.size - 1) {
-                       message.copy(statusMessage = StatusMessage.IS_SECCUESS)
-                   } else {
-                       message
-                   }
-               }.toMutableList()
+ val list = state.listMessage.toMutableList()
+ list.add(
+     Message(
+         text,
+         "You",
+         date = getFormattedDateTime().date,
+         time = getFormattedDateTime().time,
+         null,
+         WhoseMessage.YOU,
+         false,
+         statusMessage = StatusMessage.IS_LOADING
+     )
+ )
+ state = state.copy(listMessage = list)
 
-               removeIndex.sortedDescending().forEach {
-                   updatedList.removeAt(it)
-               }
-
-               state = state.copy(listMessage = updatedList)
-           }else{
-               val updatedList = list.mapIndexed { index, message ->
-                   if (index == list.size - 1) {
-                       message.copy(statusMessage = StatusMessage.IS_ERROR)
-                   } else {
-                       message
-                   }
-               }
-               state = state.copy(listMessage = updatedList)
-           }
-
-    }
+ val result = sendMessageUseCase.execute(text, ui)
 
 
-    }
+ if(result != sendMessageUseCase.ERROR){
+     val removeIndex = mutableListOf<Int>()
+     val updatedList = list.mapIndexed { index, message ->
+         if(message.statusMessage == StatusMessage.IS_ERROR){
+             removeIndex.add(index)
+         }
+         if (index == list.size - 1) {
+             message.copy(statusMessage = StatusMessage.IS_SECCUESS)
+         } else {
+             message
+         }
+     }.toMutableList()
+
+     removeIndex.sortedDescending().forEach {
+         updatedList.removeAt(it)
+     }
+
+     state = state.copy(listMessage = updatedList)
+ }else{
+     val updatedList = list.mapIndexed { index, message ->
+         if (index == list.size - 1) {
+             message.copy(statusMessage = StatusMessage.IS_ERROR)
+         } else {
+             message
+         }
+     }
+     state = state.copy(listMessage = updatedList)
+ }
+
+}
+
+
+}
 }

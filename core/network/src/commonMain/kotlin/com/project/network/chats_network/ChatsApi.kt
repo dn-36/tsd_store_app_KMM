@@ -63,12 +63,9 @@ class ChatsApi() {
         val response = client.get(baseUrl+"api/chats") {
             parameter("active", 1)
         }
-        println("!!!!!!!!!! ${response.body<List<ChatsResponse>>()[0].project?.id} !!!!!!!!!!!!!!!")
-        return try{
-            response.body()
-        }catch (e:Exception){
-            listOf()
-        }
+
+        return response.body()
+
     }
 
 

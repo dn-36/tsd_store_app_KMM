@@ -30,19 +30,18 @@ import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.jetbrains.compose.resources.painterResource
-import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.plus
 
-class ChatComponent(override val viewmodel: ChatsViewModel) : NetworkComponent {
+class ChatComponent(override val viewModel: ChatsViewModel) : NetworkComponent {
 
 
     @Composable
     override fun Component() {
 //dscdscd
         val scope = rememberCoroutineScope()
-        val state by this.viewmodel.state.collectAsState()
-        this.viewmodel.processIntent(ChatsIntents.SetScreen(scope))
+        val state by this.viewModel.state.collectAsState()
+        this.viewModel.processIntent(ChatsIntents.SetScreen(scope))
 
         Box(modifier = Modifier.fillMaxSize()) {
 
@@ -59,12 +58,12 @@ class ChatComponent(override val viewmodel: ChatsViewModel) : NetworkComponent {
                             item.lastMassage,
                             "${item.timeEndDate.time} ${item.timeEndDate.date}",
                             {
-                                this@ChatComponent.viewmodel.processIntent(
+                                this@ChatComponent.viewModel.processIntent(
                                     ChatsIntents.DialogueSelection(scope, item.uiChat,
                                         item.urlIconChat, item.title,item.countNewMessage)
                                 )
                             },
-                            { this@ChatComponent.viewmodel.processIntent(ChatsIntents.ShowDeleteDialog(item.uiChat)) }
+                            { this@ChatComponent.viewModel.processIntent(ChatsIntents.ShowDeleteDialog(item.uiChat)) }
                         )
                     }
                 }
@@ -85,7 +84,7 @@ class ChatComponent(override val viewmodel: ChatsViewModel) : NetworkComponent {
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() })
-                        { this@ChatComponent.viewmodel.processIntent(ChatsIntents.AddChat) }
+                        { this@ChatComponent.viewModel.processIntent(ChatsIntents.AddChat) }
                 )
 
                 MenuBottomBar().Content(MenuBottomBarSection.CHATS)
@@ -93,8 +92,8 @@ class ChatComponent(override val viewmodel: ChatsViewModel) : NetworkComponent {
         }
         if(state.isShowDeleteDialog) {
             ConfirmDeleteChatDialog(
-                { this.viewmodel.processIntent(ChatsIntents.DeleteChat(scope))},
-                { this.viewmodel.processIntent(ChatsIntents.CancelDeleteDialog)})
+                { this.viewModel.processIntent(ChatsIntents.DeleteChat(scope))},
+                { this.viewModel.processIntent(ChatsIntents.CancelDeleteDialog)})
         }
 
     }
