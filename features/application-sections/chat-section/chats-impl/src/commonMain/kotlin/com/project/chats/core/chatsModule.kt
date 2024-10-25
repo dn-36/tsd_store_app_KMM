@@ -3,6 +3,7 @@ package com.project.chats.core
 import com.project.chats.ChatScreensApi
 import com.project.chats.screens.chats.datasource.ChatRepositoryImpl
 import com.project.chats.screens.chats.domain.ChatsRepositoryApi
+import com.project.chats.screens.chats.domain.DeleteChatUseCase
 import com.project.chats.screens.chats.domain.GetListChatsUseCase
 import com.project.network.chats_network.ChatsApi
 import com.project.chats.screens.chats.viewmodel.ChatsViewModel
@@ -28,7 +29,10 @@ val chatsModule = module{
           ChatScreensImpl() as ChatScreensApi
      }
      factory {
-          ChatsViewModel(get())
+          ChatsViewModel(get(),get())
+     }
+     factory {
+          DeleteChatUseCase(get())
      }
      factory {
           GetListChatsUseCase(get())

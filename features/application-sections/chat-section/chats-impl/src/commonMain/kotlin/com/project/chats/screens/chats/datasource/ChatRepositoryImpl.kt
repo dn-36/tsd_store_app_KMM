@@ -31,5 +31,9 @@ class ChatRepositoryImpl(
         return Utils.sortByNearestDate(listChats)
     }
 
-
+    override suspend fun deleteChat(ui: String):String {
+        return chatApi.deleteChat(ui)
     }
+
+
+}

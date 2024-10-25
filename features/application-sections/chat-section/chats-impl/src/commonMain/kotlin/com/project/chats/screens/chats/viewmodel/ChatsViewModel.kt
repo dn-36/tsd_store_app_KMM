@@ -1,6 +1,6 @@
 package com.project.chats.screens.chats.viewmodel
 
-import androidx.lifecycle.ViewModel
+import com.project.chats.screens.chats.domain.DeleteChatUseCase
 import com.project.chats.screens.chats.domain.GetListChatsUseCase
 import com.project.network.Navigation
 import kotlinx.coroutines.CoroutineScope
@@ -11,14 +11,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.project.chats.screens.select_contact.screen.SelectContactsScreen
 import com.project.chats.screens.dialog.screen.DialogScreen
+import com.project.core_app.network_base_screen.NetworkViewModel
+import com.project.core_app.network_base_screen.StatusNetworkScreen
 
 class ChatsViewModel(
     val getListChatsUseCase: GetListChatsUseCase,
-) : ViewModel() {
+    val deleteChat : DeleteChatUseCase
+) : NetworkViewModel() {
 
     private var isSeted = false
     var state = MutableStateFlow(ChatsState())
         private set
+    private lateinit var selectedUiChat:String
 
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
@@ -32,10 +36,15 @@ class ChatsViewModel(
                 setScreen(intent.scope)
             }
             is ChatsIntents.ShowDeleteDialog -> {
-                deleteDealog()
+                println("&&&&&&&&&&& "+intent.uiChat)
+                showDeleteDealog(intent.uiChat)
             }
             is ChatsIntents.CancelDeleteDialog -> {
                 cancelDeleteDialog()
+            }
+            is ChatsIntents.DeleteChat -> {
+
+                deleteChat(selectedUiChat ,intent.scope)
             }
         }
     }
@@ -48,10 +57,32 @@ class ChatsViewModel(
         }
     }
 
+    private fun deleteChat(ui:String,scope: CoroutineScope){
+        scope.launch {
+            try {
+                setStatusNetwork(StatusNetworkScreen.LOADING)
+                deleteChat.execute(ui)
+                println("+++++++++-----" + deleteChat.execute(ui))
+                state.update {
+                    it.copy(
+                        isShowDeleteDialog = false,
+                        listchats = getListChatsUseCase.execute()
+                    )
+                }
+                setStatusNetwork(StatusNetworkScreen.SECCUESS)
+            } catch (e: Exception) {
+                setStatusNetwork(StatusNetworkScreen.ERROR)
+            }
+
+        }
+    }
+
+
+
    private fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?,countNewMessage:Int) {
-        //scope.launch(Dispatchers.IO){
+
             Navigation.navigator.push(DialogScreen(uiChats  = chatsUi,titleChat,urlIcon,countNewMessage))
-       // }
+
     }
 
    private fun addChat() {
@@ -67,15 +98,17 @@ class ChatsViewModel(
                       listchats =   getListChatsUseCase.execute()
                     )
                 }
+                setStatusNetwork(StatusNetworkScreen.SECCUESS)
             }
 
         }
     }
 
-   private fun deleteDealog(){
+   private fun showDeleteDealog(ui:String){
+       selectedUiChat = ui
         state.update {
            it.copy(
-                isShowDeleteDialog = true
+                isShowDeleteDialog = true,
             )
         }
     }

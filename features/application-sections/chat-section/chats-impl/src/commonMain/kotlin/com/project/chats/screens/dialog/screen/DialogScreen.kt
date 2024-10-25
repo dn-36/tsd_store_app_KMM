@@ -1,7 +1,7 @@
 package com.project.chats.screens.dialog.screen
 
 
-import com.project.chats.screens.dialog.components.DialogComponentScreen
+import com.project.chats.screens.dialog.components.DialogComponent
 import com.project.core_app.network_base_screen.NetworkScreen
 
 
@@ -11,8 +11,11 @@ class DialogScreen(
     private val urlIcon:String?,
     private val countNewMessage:Int
 ) : NetworkScreen(
-    DialogComponentScreen(
-        uiChats,titleChat,urlIcon,countNewMessage
+    DialogComponent(
+        uiChats,
+        titleChat,
+        urlIcon,
+        countNewMessage
     )
 )
 

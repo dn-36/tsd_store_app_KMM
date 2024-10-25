@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.lifecycle.ViewModel
 import com.project.chats.screens.chats.screen.ChatsScreen
 import com.project.chats.screens.select_contact.domain.User
 import com.project.chats.screens.titile_chat.domain.CreateChatUseCase
@@ -22,7 +21,7 @@ class TitleChatViewModel(
 
     var state by mutableStateOf(TitleGroupState())
    init{
-       setStatus(StatusNetworkScreen.SECCUESS)
+       setStatusNetwork(StatusNetworkScreen.SECCUESS)
    }
 
 
@@ -39,7 +38,7 @@ class TitleChatViewModel(
         scope: CoroutineScope
     ) {
         scope.launch(Dispatchers.IO) {
-            setStatus(StatusNetworkScreen.LOADING)
+            setStatusNetwork(StatusNetworkScreen.LOADING)
             createChatUseCase.execute(titleChat,image,12,list)
             Navigation.navigator.push(ChatsScreen())
         }

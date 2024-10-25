@@ -25,11 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import com.project.chats.screens.chats.component.ChatItem
-import com.project.chats.screens.chats.component.ConfirmDeleteChatDialog
+import com.project.chats.screens.chats.components.ChatComponent
+import com.project.chats.screens.chats.components.ChatItem
+import com.project.chats.screens.chats.components.ConfirmDeleteChatDialog
 import com.project.chats.screens.chats.viewmodel.ChatsIntents
 import com.project.chats.screens.chats.viewmodel.ChatsViewModel
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.network_base_screen.NetworkScreen
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 
 import org.jetbrains.compose.resources.painterResource
@@ -37,7 +39,9 @@ import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.plus
 
-class ChatsScreen : Screen {
+class ChatsScreen : NetworkScreen(
+    ChatComponent(getKoin().get())
+) /*{
 
     private val vm: ChatsViewModel = getKoin().get()
 
@@ -62,7 +66,7 @@ class ChatsScreen : Screen {
                      item.lastMassage,
                      "${item.timeEndDate.time} ${item.timeEndDate.date}",
                      { vm.processIntent(ChatsIntents.DialogueSelection(scope, item.uiChat,item.urlIconChat, item.title,item.countNewMessage)) },
-                     { vm.processIntent(ChatsIntents.ShowDeleteDialog)}
+                     { vm.processIntent(ChatsIntents.ShowDeleteDialog(item.uiChat)) }
                  )
              }
          }
@@ -70,7 +74,7 @@ class ChatsScreen : Screen {
 
      Column(
          modifier = Modifier
-             .align(Alignment.BottomCenter)  // Размещаем по центру снизу
+             .align(Alignment.BottomCenter)
              .fillMaxWidth(),
          verticalArrangement = Arrangement.Bottom
      ) {
@@ -81,7 +85,7 @@ class ChatsScreen : Screen {
                  .size(60.dp)
                  .align(Alignment.End)
                  .clickable(
-                     indication = null,  // Отключение эффекта затемнения
+                     indication = null,
                      interactionSource = remember { MutableInteractionSource() })
                  { vm.processIntent(ChatsIntents.AddChat) }
          )
@@ -91,8 +95,10 @@ class ChatsScreen : Screen {
      }
  }
         if(state.isShowDeleteDialog) {
-            ConfirmDeleteChatDialog({}, {vm.processIntent(ChatsIntents.CancelDeleteDialog)})
+            ConfirmDeleteChatDialog(
+                {vm.processIntent(ChatsIntents.DeleteChat(scope))},
+                {vm.processIntent(ChatsIntents.CancelDeleteDialog)})
         }
 
 }
-}
+}*/

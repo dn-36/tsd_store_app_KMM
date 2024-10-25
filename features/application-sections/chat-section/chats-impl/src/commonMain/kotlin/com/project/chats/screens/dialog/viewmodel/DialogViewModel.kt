@@ -15,7 +15,6 @@ import com.project.core_app.getFormattedDateTime
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
-import com.project.network.chats_network.Messages
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -79,10 +78,10 @@ class DialogViewModel(
                 try {
                     listMessages = getListMessagesUseCase.execute(uiChats)?: emptyList()
                     delay(200L)
-                    setStatus(StatusNetworkScreen.SECCUESS)
+                    setStatusNetwork(StatusNetworkScreen.SECCUESS)
                     isSeted = true
                 }catch (e:Exception){
-                    setStatus(StatusNetworkScreen.ERROR)
+                    setStatusNetwork(StatusNetworkScreen.ERROR)
                 }
 
 

@@ -35,7 +35,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             printerPlatformModule,
             printerScreenModule,
             warehouseScreensModule,
-            contactProviderModule
+            contactProviderModule,
+
         )
     }
 }

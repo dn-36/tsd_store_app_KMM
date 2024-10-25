@@ -8,6 +8,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
@@ -130,10 +131,6 @@ class ChatsApi() {
         val filename: String
     )
 
-
-
-    // Функция для отправки POST-запроса
-
     suspend fun sendMessage(
         chatUI: String,
         feedbackUI: String,
@@ -144,7 +141,7 @@ class ChatsApi() {
     ): Result<String, NetworkError> {
 
         try {
-            // Отправляем POST-запрос с multipart/form-data
+
             val response: HttpResponse = client.post(baseUrl+"api/message/") {
 
                 setBody(
@@ -211,15 +208,19 @@ class ChatsApi() {
                         userPhones.forEach { phone ->
                             append("users[]", phone)
                         }
-                            append("project_id", projectId?:0)
+                            append("project_id",projectId?:0)
                     }
                 )
             )
         }.body<HttpResponse>().bodyAsText()
 
-        println("ASASASAS" + response)
         return response
+
     }
+
+  suspend fun deleteChat(uiChat: String) : String {
+      return client.delete(baseUrl+"api/chats/${uiChat}").body<HttpResponse>().bodyAsText()
+  }
 
   suspend fun getProjects():String{
        return client.get(baseUrl+"api/project").body<HttpResponse>().bodyAsText()

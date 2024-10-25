@@ -55,7 +55,7 @@ import project.core.resources.dots
 import project.core.resources.paperclip
 import project.core.resources.user_chats
 
-class DialogComponentScreen(
+class DialogComponent(
     private val uiChats:String,
     private val titleChat:String,
     private val urlIcon:String?,
@@ -142,7 +142,8 @@ class DialogComponentScreen(
                     modifier = Modifier
                         .padding(10.dp)
                         .fillMaxWidth()
-                        .fillMaxHeight(0.94f)
+                        .fillMaxHeight(0.94f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Bottom)
                 ) {
 
 

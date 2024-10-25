@@ -18,7 +18,7 @@ class TitleChatRepositoryImpl(
         token:String
     ) {
 
-       client.createChat(titleChat,image,list.map{ it.number },null)
+       client.createChat(titleChat,image,list.map{ it.number },projectId)
     }
 
     override suspend fun getToken(): String = sharedPrefs.getToken()?:""

@@ -1,4 +1,4 @@
-package com.project.chats.screens.chats.component
+package com.project.chats.screens.chats.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
