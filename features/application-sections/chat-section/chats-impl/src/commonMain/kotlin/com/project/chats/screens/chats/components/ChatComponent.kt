@@ -39,7 +39,7 @@ class ChatComponent(override val viewmodel: ChatsViewModel) : NetworkComponent {
 
     @Composable
     override fun Component() {
-
+//dscdscd
         val scope = rememberCoroutineScope()
         val state by this.viewmodel.state.collectAsState()
         this.viewmodel.processIntent(ChatsIntents.SetScreen(scope))
