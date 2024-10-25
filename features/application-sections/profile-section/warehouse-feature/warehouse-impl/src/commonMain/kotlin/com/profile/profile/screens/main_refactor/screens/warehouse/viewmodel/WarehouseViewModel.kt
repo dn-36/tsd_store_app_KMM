@@ -12,6 +12,8 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecas
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecases.UpdateWarehouseUseCase
 import com.profile.profile.screens.main_refactor.screens.warehouse.screen.WarehouseScreen
 import com.project.core_app.ConstData
+import com.project.core_app.network_base_screen.NetworkViewModel
+import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
 import com.project.network.locations_network.LocationsClient
 import com.project.network.warehouse_network.WarehouseClient
@@ -33,7 +35,7 @@ class WarehouseViewModel (
 
     val getLocationsUseCase: GetLocationsUseCase,
 
-    ) : ViewModel() {
+    ) : NetworkViewModel() {
 
     var warehouseState by mutableStateOf(WarehouseState())
 
@@ -69,6 +71,8 @@ class WarehouseViewModel (
                         )
 
                     } )
+
+                    setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                 }
 
@@ -109,6 +113,7 @@ class WarehouseViewModel (
                     },
                     )
 
+                    setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                 }
 
@@ -135,6 +140,8 @@ class WarehouseViewModel (
                         }
                         )
 
+                        setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
+
                     }
                 }
 
@@ -144,7 +151,7 @@ class WarehouseViewModel (
 
             is WarehouseIntents.CreateWarehouse -> {
 
-                if ( intent.name.isBlank() && intent.localId.isNotBlank() ) {
+                if ( intent.name.isNotBlank() && intent.localId.isNotBlank() ) {
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
@@ -153,6 +160,9 @@ class WarehouseViewModel (
                             Navigation.navigator.push(WarehouseScreen())
 
                         })
+
+                        setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
+
                     }
                     //createWarehouse(intent.coroutineScope, intent.name, intent.localId)
                 }
@@ -172,6 +182,9 @@ class WarehouseViewModel (
                             )
 
                     })
+
+                    setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
+
                 }
                 //deleteWarehouse(intent.coroutineScope, intent.ui)
 
@@ -186,6 +199,9 @@ class WarehouseViewModel (
                         updateWarehouseUseCase.execute(intent.ui, intent.name, intent.localId,
 
                             onUpdate = { Navigation.navigator.push(WarehouseScreen()) })
+
+                        setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
+
                     }
 
                     //updateWarehouse(intent.coroutineScope, intent.ui, intent.name, intent.localId)

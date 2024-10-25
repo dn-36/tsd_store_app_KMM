@@ -57,9 +57,9 @@ class CreateWarehouseComponent (
 
     val warehouse:Warehouse?,
 
-    val onClickCreate:(scope:CoroutineScope, name:String,localId:String) -> Unit,val index:Int,
+    val onClickCreate:( scope:CoroutineScope, name:String, localId:String) -> Unit, val index: Int,
 
-                                val locationUpdated:ResponseItem?): Screen {
+                                val locationUpdated:ResponseItem?) : Screen {
 
     var location by mutableStateOf(if (warehouse != null) warehouse.stores[0]!!.local!!.name else "")
 

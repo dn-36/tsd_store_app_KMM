@@ -27,7 +27,7 @@ class NotesViewModel (
 
         when(intents){
 
-            is NotesIntents.CreateBookmarks -> {createNotesIntent()}
+            is NotesIntents.CreateBookmarks -> { createNotesIntent() }
 
             is NotesIntents.SetNotes -> {
 

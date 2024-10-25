@@ -60,7 +60,7 @@ class ChatsViewModel(
     private fun deleteChat(ui:String,scope: CoroutineScope){
         scope.launch {
             try {
-                setStatusNetwork(StatusNetworkScreen.LOADING)
+                setStatusNetworkScreen (StatusNetworkScreen.LOADING)
                 deleteChat.execute(ui)
                 println("+++++++++-----" + deleteChat.execute(ui))
                 state.update {
@@ -69,9 +69,9 @@ class ChatsViewModel(
                         listchats = getListChatsUseCase.execute()
                     )
                 }
-                setStatusNetwork(StatusNetworkScreen.SECCUESS)
+                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
             } catch (e: Exception) {
-                setStatusNetwork(StatusNetworkScreen.ERROR)
+                setStatusNetworkScreen(StatusNetworkScreen.ERROR)
             }
 
         }
@@ -98,7 +98,7 @@ class ChatsViewModel(
                       listchats =   getListChatsUseCase.execute()
                     )
                 }
-                setStatusNetwork(StatusNetworkScreen.SECCUESS)
+                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
             }
 
         }

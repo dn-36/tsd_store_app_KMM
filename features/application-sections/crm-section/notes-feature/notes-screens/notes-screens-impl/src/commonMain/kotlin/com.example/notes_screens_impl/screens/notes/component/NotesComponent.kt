@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,7 +36,7 @@ import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.plus
 
-class NotesComponent(override val viewModel: NotesViewModel) :NetworkComponent {
+class NotesComponent ( override val viewModel: NotesViewModel ) :NetworkComponent {
     @Composable
     override fun Component() {
 
@@ -43,10 +44,10 @@ class NotesComponent(override val viewModel: NotesViewModel) :NetworkComponent {
 
         viewModel.processIntent(NotesIntents.SetNotes(scope) )
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
                 Text("Заметки", color = Color.Black, fontSize = 20.sp)
                 // Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn {
+                LazyColumn ( modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f) ){
                     if(viewModel.notesState.listNotes.size != 0) {
                         itemsIndexed(viewModel.notesState.listNotes.chunked(2)) { index, items ->
                             Row(

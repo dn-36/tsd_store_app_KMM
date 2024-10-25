@@ -13,6 +13,8 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.example.notes_screens_impl.screens.notes.screen.NotesScreen
 import com.project.core_app.ConstData
+import com.project.core_app.network_base_screen.NetworkViewModel
+import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
 import com.project.network.notes_network.NotesClient
 import com.project.network.notes_network.model.Note
@@ -24,12 +26,14 @@ class CreateNotesViewModel (
 
     val getUsersCreateUseCase: GetUsersCreateUseCase,
 
-) :ViewModel() {
+) : NetworkViewModel() {
 
     var createNotesState by mutableStateOf(CreateNotesState())
 
     fun processIntent(intents: CreateNotesIntents){
+
         when(intents){
+
             is CreateNotesIntents.Next -> {
 
                 val statusInt = when(createNotesState.status){
@@ -71,6 +75,8 @@ class CreateNotesViewModel (
                         usersNoteCreated = mutableListOf(),
                         isUsed = mutableStateOf(true)
                     )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
                 }
             //next(intents.coroutineScope)
             }
@@ -78,7 +84,7 @@ class CreateNotesViewModel (
 
             is CreateNotesIntents.Back -> {back()}
 
-            is CreateNotesIntents.DeleteUserNote -> {deleteUsersNote(intents.user)}
+            is CreateNotesIntents.DeleteUserNote -> { deleteUsersNote(intents.user) }
 
             is CreateNotesIntents.GetAllUsersList -> {
 
@@ -95,6 +101,8 @@ class CreateNotesViewModel (
                                 filteredUsers = allUsers
                             )
                         })
+
+                        setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                     }
 

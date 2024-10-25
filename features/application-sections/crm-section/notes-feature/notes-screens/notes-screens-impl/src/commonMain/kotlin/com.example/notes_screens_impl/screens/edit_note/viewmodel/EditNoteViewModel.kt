@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.example.notes_screens_impl.screens.edit_note.screen.EditNoteScreen
+import com.example.notes_screens_impl.screens.edit_note.viewmodel.EditNoteState
 import com.example.notes_screens_impl.screens.notes.screen.NotesScreen
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
@@ -34,6 +35,7 @@ class EditNoteViewModel (
     var editNoteState by mutableStateOf(EditNoteState())
 
     fun processIntent(intent: EditNoteIntents) {
+
         when (intent) {
 
             is EditNoteIntents.SetScreen -> {
@@ -53,7 +55,7 @@ class EditNoteViewModel (
 
                     var creator = false
 
-                    var heightBox = 0.2f
+                    var heightBox = 0.17f
 
                     intent.coroutineScope.launch (Dispatchers.IO) {
 
@@ -64,13 +66,16 @@ class EditNoteViewModel (
 
                                 creator = true
 
-                                heightBox = 0.25f
+                                heightBox = 0.22f
 
                             }
 
                             val status = when (intent.note.status) {
+
                                 1 -> "Активна"
+
                                 0 -> "Скрыта"
+
                                 else -> {
                                     ""
                                 }
@@ -100,7 +105,6 @@ class EditNoteViewModel (
                         })
 
                         setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
-
 
                     }
 
@@ -133,6 +137,8 @@ class EditNoteViewModel (
 
                         Navigation.navigator.push(NotesScreen())
                     } )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                 }
                 //updateNoteBack(intent.note, intent.coroutineScope)
@@ -174,6 +180,8 @@ class EditNoteViewModel (
                         )
                     })
 
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
                 }
                 //applyNameUpdate(intent.note, intent.coroutineScope)
             }
@@ -195,6 +203,8 @@ class EditNoteViewModel (
                         Navigation.navigator.push(NotesScreen())
 
                     })
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                 }
                 //deleteNote(intent.note, intent.coroutineScope)
@@ -271,6 +281,8 @@ class EditNoteViewModel (
 
                     }
 
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
                 }
                 //applyStatusUpdate(intent.note, intent.coroutineScope)
             }
@@ -310,6 +322,8 @@ class EditNoteViewModel (
                             isUsed = mutableStateOf(true)
                         )
                     })
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                 }
                 //applyUsersUpdate(intent.note, intent.coroutineScope)

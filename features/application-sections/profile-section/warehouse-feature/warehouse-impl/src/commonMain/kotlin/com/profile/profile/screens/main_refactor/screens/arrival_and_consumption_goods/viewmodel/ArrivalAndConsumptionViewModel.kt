@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.ViewModel
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.DeleteArrivalOrConsumptionUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
@@ -16,6 +15,8 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
+import com.project.core_app.network_base_screen.NetworkViewModel
+import com.project.core_app.network_base_screen.StatusNetworkScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ class ArrivalAndConsumptionViewModel (
 
     val updateArrivalOrConsumptionUseCase: UpdateArrivalOrConsumptionUseCase
 
-) : ViewModel() {
+) : NetworkViewModel() {
 
     var state by mutableStateOf(ArrivalAndConsumptionState())
 
@@ -58,7 +59,7 @@ class ArrivalAndConsumptionViewModel (
 
                                 if(it.entits != null) {
 
-                                    it.entits!!.forEach { entity ->
+                                    it.entits.forEach { entity ->
 
                                         newListEntity.add(EntityArrivalAndConsumption(
 
@@ -127,6 +128,8 @@ class ArrivalAndConsumptionViewModel (
 
                     })
 
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
                 }
 
             }
@@ -138,6 +141,8 @@ class ArrivalAndConsumptionViewModel (
                     deleteArrivalOrConsumptionUseCase.execute( ui = intent.ui )
 
                     processIntent(ArrivalAndConsumptionIntents.GetArrivalAndConsumptionGoods(intent.coroutineScope))
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                 }
 
@@ -187,6 +192,8 @@ class ArrivalAndConsumptionViewModel (
                             listSelectedProducts = emptyList()
 
                         )
+
+                        setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                     }
 
@@ -367,6 +374,9 @@ class ArrivalAndConsumptionViewModel (
                         )
 
                     })
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
             }
 
             }
@@ -402,6 +412,8 @@ class ArrivalAndConsumptionViewModel (
 
                         )
 
+                        setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
                     }
 
                 }
@@ -433,6 +445,8 @@ class ArrivalAndConsumptionViewModel (
                     )
 
                 } )
+
+                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
             }
 

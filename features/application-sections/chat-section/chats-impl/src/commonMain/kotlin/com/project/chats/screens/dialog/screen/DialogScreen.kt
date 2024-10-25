@@ -1,8 +1,9 @@
 package com.project.chats.screens.dialog.screen
 
 
-import com.project.chats.screens.dialog.components.DialogComponent
+import com.project.chats.screens.dialog.components.DialogComponentScreen
 import com.project.core_app.network_base_screen.NetworkScreen
+import org.koin.mp.KoinPlatform.getKoin
 
 
 class DialogScreen(
@@ -11,11 +12,12 @@ class DialogScreen(
     private val urlIcon:String?,
     private val countNewMessage:Int
 ) : NetworkScreen(
-    DialogComponent(
+    DialogComponentScreen(
         uiChats,
         titleChat,
         urlIcon,
-        countNewMessage
+        countNewMessage,
+        getKoin().get()
     )
 )
 

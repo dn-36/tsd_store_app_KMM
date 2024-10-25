@@ -21,7 +21,7 @@ class TitleChatViewModel(
 
     var state by mutableStateOf(TitleGroupState())
    init{
-       setStatusNetwork(StatusNetworkScreen.SECCUESS)
+       setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
    }
 
 
@@ -38,7 +38,7 @@ class TitleChatViewModel(
         scope: CoroutineScope
     ) {
         scope.launch(Dispatchers.IO) {
-            setStatusNetwork(StatusNetworkScreen.LOADING)
+            setStatusNetworkScreen(StatusNetworkScreen.LOADING)
             createChatUseCase.execute(titleChat,image,12,list)
             Navigation.navigator.push(ChatsScreen())
         }

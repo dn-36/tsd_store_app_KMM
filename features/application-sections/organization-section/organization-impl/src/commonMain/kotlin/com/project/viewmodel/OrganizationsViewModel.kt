@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.project.component.CreateOrUpdateOrganization
+import com.project.core_app.network_base_screen.NetworkViewModel
+import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.domain.usecases.ChoosingActiveOrganizationUseCase
 import com.project.domain.usecases.CreateOrganizationUseCase
 import com.project.domain.usecases.DeleteOrganizationUseCase
@@ -30,7 +32,7 @@ class OrganizationsViewModel(
 
     val updateOrganization: UpdateOrganizationUseCase
 
-) : ViewModel() {
+) : NetworkViewModel() {
 
     var state by mutableStateOf(OrganizationsState())
 
@@ -56,6 +58,9 @@ class OrganizationsViewModel(
                             )
 
                         })
+
+                        setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
+
                     }
 
                 }
@@ -76,6 +81,8 @@ class OrganizationsViewModel(
                             )
                         })
 
+                    setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
+
                 }
 
             }//choosingActiveOrganization(intent.coroutineScope,intent.ui)
@@ -92,6 +99,8 @@ class OrganizationsViewModel(
 
                             )
                         })
+
+                    setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                 }
             }//deleteOrganization(intent.coroutineScope,intent.ui)
@@ -114,6 +123,8 @@ class OrganizationsViewModel(
 
                                 )
                             })
+
+                        setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                     }
 
@@ -143,31 +154,8 @@ class OrganizationsViewModel(
                                 }
 
                             )
-                       // }
 
-                        /*else {
-
-                        if ( intent.name.isBlank() ) {
-
-                            state = state.copy(
-
-                                listColorBorderTf = listOf ( Color.Red, Color.LightGray )
-
-                            )
-
-                        }
-
-                        if ( intent.url.isBlank() ) {
-
-                            state = state.copy(
-
-                                listColorBorderTf = listOf ( Color.LightGray, Color.Red )
-
-                            )
-
-                        }
-
-                    }*/
+                        setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                 }
 

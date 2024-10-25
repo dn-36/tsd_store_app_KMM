@@ -1,4 +1,4 @@
-package com.profile.profile.screens.profile_screen.screen
+package com.profile.printer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,8 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.network_base_screen.NetworkComponent
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.example.project.presentation.profile_feature.main_feature.viewmodel.ProfileIntents
 import org.example.project.presentation.profile_feature.main_feature.viewmodel.ProfileViewModel
@@ -38,20 +38,20 @@ import project.core.resources.Res
 import project.core.resources.down_arrow
 import project.core.resources.photo_profie
 
-object ProfileScreen:Screen{
 
-    val vm = ProfileViewModel()
+class ProfileComponent ( override val viewModel: ProfileViewModel ) : NetworkComponent {
+
     @Composable
-    override fun Content() {
+    override fun Component () {
 
         val scope = rememberCoroutineScope()
 
-        vm.processIntent(ProfileIntents.SetScreen(scope))
+        viewModel.processIntent(ProfileIntents.SetScreen(scope))
 
         Box(modifier = Modifier.fillMaxSize().background(Color.LightGray)){
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                        .fillMaxHeight(0.2f).background(Color.White))
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .fillMaxHeight(0.2f).background(Color.White))
             Column {
                 Box(
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(0.45f)
@@ -64,11 +64,11 @@ object ProfileScreen:Screen{
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.fillMaxWidth()) {
-                            Text(vm.profileState.name, fontSize = 20.sp)
+                            Text(viewModel.profileState.name, fontSize = 20.sp)
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            Text(vm.profileState.numberPhone, fontSize = 15.sp, color = Color.LightGray)
+                            Text(viewModel.profileState.numberPhone, fontSize = 15.sp, color = Color.LightGray)
 
                             Spacer(modifier = Modifier.height(15.dp))
 
@@ -88,7 +88,7 @@ object ProfileScreen:Screen{
                     Column(modifier = Modifier.padding(16.dp).align(Alignment.TopCenter)
                         , horizontalAlignment = Alignment.CenterHorizontally) {
                         Row(modifier = Modifier.fillMaxWidth(0.9f)
-                        , horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+                            , horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
                             Text("Контроль проектов", fontSize = 15.sp)
                             Image(painter = painterResource(Res.drawable.down_arrow),contentDescription = null,
                                 modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f))
@@ -98,7 +98,7 @@ object ProfileScreen:Screen{
                         Row(modifier = Modifier.fillMaxWidth(0.9f).clickable (
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-                        { vm.processIntent(ProfileIntents.Warehouse) }
+                        { viewModel.processIntent(ProfileIntents.Warehouse) }
                             , horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
                             Text("Склад", fontSize = 15.sp)
                             Image(painter = painterResource(Res.drawable.down_arrow),contentDescription = null,
@@ -137,4 +137,5 @@ object ProfileScreen:Screen{
 
         }
     }
+
 }

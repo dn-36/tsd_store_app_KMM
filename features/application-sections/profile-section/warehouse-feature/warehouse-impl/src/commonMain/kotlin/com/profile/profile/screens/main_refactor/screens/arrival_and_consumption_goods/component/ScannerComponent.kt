@@ -158,9 +158,20 @@ class ScannerComponent (
                                 }
                             ) {
 
-                                Image(painterResource(Res.drawable.ready), contentDescription = null,
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(70.dp))
+                                        .height(30.dp)
+                                        .fillMaxWidth(0.5f)
+                                        .background(Color.LightGray),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(text = "Готово")
+                                }
 
-                                    modifier = Modifier.size(20.dp))
+                                /*Image(painterResource(Res.drawable.ready), contentDescription = null,
+
+                                    modifier = Modifier.size(20.dp))*/
 
                                 /*Icon(
                                     imageVector = Icons.Filled.Done,

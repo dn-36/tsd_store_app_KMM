@@ -35,8 +35,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.project.menu.screen.OrganizationScreenApi
 import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
+import com.project.component.OrganizationComponent
 import com.project.network.Navigation
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.network_base_screen.NetworkScreen
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.menu.screen.TapeScreenApi
 import com.project.viewmodel.OrganizationsIntents
@@ -49,155 +51,8 @@ import project.core.resources.cancel
 import project.core.resources.plus
 import project.core.resources.update_pencil
 
-class OrganizationScreen(): Screen {
+class OrganizationScreen : NetworkScreen(
 
- //   val n:OrganizationClientApi = OrganizationClientImpl(OrganizationsApi)
+    OrganizationComponent ( getKoin().get() )
 
-    val vm:OrganizationsViewModel = getKoin().get()
-
-
-    @Composable
-    override fun Content() {
-
-        val organizationScreens : OrganizationScreenApi = getKoin().get()
-        val chatsScreens : ChatScreensApi = getKoin().get()
-        val menuCrmScreens : MenuCrmScreenApi = getKoin().get()
-        val tapeScreens : TapeScreenApi = getKoin().get()
-        val profileScreens : ProfileScreensApi = getKoin().get()
-
-        Navigation.navigator = LocalNavigator.currentOrThrow
-
-        val scope = rememberCoroutineScope()
-
-        vm.processIntent(OrganizationsIntents.SetScreen(scope))
-
-        Box(modifier = Modifier.fillMaxSize().background(Color.White)){
-            Column(modifier = Modifier.padding(16.dp),) {
-                Text("Организации", color = Color.Black, fontSize = 20.sp)
-                Spacer(modifier = Modifier.height(20.dp))
-
-                    LazyColumn {
-                        itemsIndexed( vm.state.allOrganizations ) { index, item ->
-
-                            Box() {
-                                Row(verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.fillMaxWidth()
-                                        .padding(vertical = 8.dp).clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
-                                        {
-                                            vm.processIntent(
-                                                OrganizationsIntents.ChoosingActiveOrganization(
-                                                    scope,
-                                                    item.company?.ui?:""
-                                                )
-                                            )
-                                        }) {
-
-                                    Box(
-                                        modifier = Modifier.size(30.dp).clip(CircleShape)
-                                            .background(vm.state.listColorActiveOrganizations[index])
-                                    )
-
-                                    Spacer(modifier = Modifier.width(10.dp))
-
-                                    Column(
-                                        modifier = Modifier.height(60.dp),
-                                        verticalArrangement = Arrangement.SpaceBetween
-                                    ) {
-
-                                        Text(
-                                            item.company?.name?:"",
-                                            fontSize = 17.sp,
-                                            fontWeight = FontWeight.Bold
-                                        )
-
-                                        if ( item.company?.url == null || item.company?.url!!.isBlank() ){
-
-                                            Text(
-                                                "https://delta.online/${item.company?.ui}",
-                                                fontSize = 12.sp,
-                                                color = Color.Blue
-                                            )
-
-                                        }
-
-                                        else {
-
-                                            Text(
-                                                "https://delta.online/${item.company?.url}",
-                                                fontSize = 12.sp,
-                                                color = Color.Blue
-                                            )
-
-                                        }
-
-                                        Box(
-                                            modifier = Modifier.height(1.dp).fillMaxWidth()
-                                                .background(Color.LightGray)
-                                        )
-
-                                    }
-                                }
-
-                                if ( item.company?.name != "Личный профиль" && item.company?.name != "c17" ) {
-
-                                    Row(modifier = Modifier.align(Alignment.TopEnd)) {
-
-                                        Image(painter = painterResource(Res.drawable.update_pencil),
-                                            contentDescription = null,
-                                            modifier = Modifier.size(17.dp)
-                                                .clickable(
-                                                    indication = null, // Отключение эффекта затемнения
-                                                    interactionSource = remember { MutableInteractionSource() })
-                                                {
-
-                                                   vm.processIntent(OrganizationsIntents.SelectItemUpdate(item))
-
-                                                })
-
-                                        Spacer(modifier = Modifier.width(20.dp))
-
-                                        Image(painter = painterResource(Res.drawable.cancel),
-                                            contentDescription = null,
-                                            modifier = Modifier.size(15.dp)
-                                                .clickable(
-                                                    indication = null, // Отключение эффекта затемнения
-                                                    interactionSource = remember { MutableInteractionSource() })
-                                                {
-                                                    vm.processIntent(
-                                                        OrganizationsIntents.DeleteOrganization(
-                                                            scope,
-                                                            item.company!!.ui!!
-                                                        )
-                                                    )
-                                                })
-                                    }
-                                }
-                            }
-                        }
-                    }
-            }
-
-            Column(horizontalAlignment = Alignment.End, modifier = Modifier.align(Alignment.BottomCenter)) {
-
-                Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
-                    modifier = Modifier.padding(16.dp).size(70.dp)
-                        .clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { vm.processIntent(OrganizationsIntents.OpenWindowAddOrganization)})
-
-                Box(modifier = Modifier) {
-                    MenuBottomBar().init(
-                        menuCrmScreens.MenuCrm(),
-                        profileScreens.profile(),
-                        organizationScreens.organization(),
-                        chatsScreens.chatsScreen(),
-                        tapeScreens.tape(),
-                    ).Content(MenuBottomBarSection.ORGANIZATION)
-                }
-            }
-        }
-    }
-}
+)

@@ -101,6 +101,7 @@ class EditNoteComponent(val noteResponse: NoteResponse, override val viewModel: 
                     }
                 }*/
                 Spacer(modifier = Modifier.height(30.dp))
+
                 BasicTextField(value = viewModel.editNoteState.noteText!!,
                    onValueChange = {
                        viewModel.editNoteState = viewModel.editNoteState.copy(
