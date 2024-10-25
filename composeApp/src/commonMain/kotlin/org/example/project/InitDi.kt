@@ -1,5 +1,6 @@
 package org.example.project
 
+import camera_provider.cameraProviderModule
 import com.example.notes_screens_impl.notesModule
 import com.profile.`printer-impl`.profileScreensModule
 import com.profile.profile.qr_code.printerPlatformModule
@@ -35,7 +36,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             printerPlatformModule,
             printerScreenModule,
             warehouseScreensModule,
-            contactProviderModule
+            contactProviderModule,
+            cameraProviderModule
         )
     }
 }

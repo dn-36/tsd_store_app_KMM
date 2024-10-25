@@ -146,20 +146,26 @@ class ArrivalAndConsumptionClientImpl (
         productsClient.getProductNames().forEach {
 
             newList.add(
+
                 AllProductArrivalAndConsumption(
 
                 id = it.id,
+
+                sku = it.sku,
 
                 name = it.name,
 
                 ui = it.ui
 
             )
+
             )
 
         }
 
         onGet ( newList )
+
+       // println("ALL PRODUCTS: ${ newList }")
 
     }
 

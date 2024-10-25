@@ -4,10 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -55,6 +58,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import com.preat.peekaboo.image.picker.toImageBitmap
 import com.preat.peekaboo.ui.camera.PeekabooCamera
 import com.preat.peekaboo.ui.camera.rememberPeekabooCameraState
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -62,18 +66,26 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import project.core.resources.Res
 import project.core.resources.add_photo
+import project.core.resources.back
+import project.core.resources.cancel
+import project.core.resources.ready
+import qrscanner.QrCodeScanner
 import qrscanner.QrScanner
 import qrscanner.scanImage
 
 
-class ScannerComponent {
+class ScannerComponent (
+
+    val onClickAdd: ( name: String ) -> Unit,
+
+    val onClickCansel: ( ) -> Unit,
+
+    ) {
 
     @Composable
     fun QrScannerView() {
 
         var qrCodeURL by remember { mutableStateOf("") }
-
-        var openImagePicker by remember { mutableStateOf(value = false) }
 
         val coroutineScope = rememberCoroutineScope()
 
@@ -88,13 +100,9 @@ class ScannerComponent {
         val cameraState = rememberPeekabooCameraState(
             onCapture = { bytes ->
                 bytes?.toImageBitmap()?.let {
-
                     images.value = it
-
                     ready.value = true
-
                     showCamera = false
-
                 }
             }
         )
@@ -103,32 +111,29 @@ class ScannerComponent {
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
 
-                        text = "Сканер", color = Color.Black, fontSize = 20.sp
-                    )
+            Row( modifier = Modifier.padding(16.dp)
+                .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(Res.drawable.back), contentDescription = null,
+                    modifier = Modifier.size(20.dp).clickable(
+                        indication = null, // Отключение эффекта затемнения
+                        interactionSource = remember { MutableInteractionSource() })
+                    { onClickCansel() }
+                )
 
-                    Icon(
-                        Icons.Filled.Close,
-                        "close",
-                        modifier = Modifier.size(20.dp).clickable {
-                            // onNavigate(AppConstants.BACK_CLICK_ROUTE)
-                        },
-                        tint = Color.Black
-                    )
-                }
+                Spacer(modifier = Modifier.width(10.dp))
+
+                Text("Приход", color = Color.Black, fontSize = 20.sp)
+
+            }
 
                 Box(
-                    modifier =
-                    Modifier.align(Alignment.Center)
-                        .fillMaxWidth()
-                        .height(350.dp)
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .width(300.dp)
+                        .height(300.dp)
                         .clipToBounds()
                         .border(2.dp, Color.Gray, RoundedCornerShape(size = 0.dp)),
                     contentAlignment = Alignment.Center
@@ -136,26 +141,31 @@ class ScannerComponent {
 
                     if (showCamera) {
 
-                        Box {
+                        Box  {
                             PeekabooCamera(
                                 modifier = Modifier.width(300.dp)
-                                    .height(250.dp),
+                                    .height(300.dp),
                                 state = cameraState
                             )
                             IconButton(
                                 modifier = Modifier
                                     .align(alignment = Alignment.BottomCenter)
-                                    .padding(bottom = 100.dp),
+                                    .padding(bottom = 10.dp),
                                 onClick = {
 
                                     cameraState.capture()
 
                                 }
                             ) {
-                                Icon(
+
+                                Image(painterResource(Res.drawable.ready), contentDescription = null,
+
+                                    modifier = Modifier.size(20.dp))
+
+                                /*Icon(
                                     imageVector = Icons.Filled.Done,
                                     contentDescription = null
-                                )
+                                )*/
                             }
                         }
 
@@ -164,21 +174,24 @@ class ScannerComponent {
 
                         if(ready.value) {
 
+                            showCamera = true
+
                             coroutineScope.launch {
+
                                 scanImage(
                                     images.value,
                                     onCompletion = { answer ->
 
                                         qrCodeURL = answer
 
-                                        //showCamera = false // Скрыть камеру после обработки изображения
                                     },
+
                                     onFailure = { error ->
+
                                         coroutineScope.launch {
-                                            /*snackBarHostState.showSnackbar(
-                                                if (error.isEmpty()) "Invalid QR code" else error
-                                            )*/
+
                                             qrCodeURL = "ошибка"
+
                                         }
                                     }
                                 )
@@ -189,24 +202,35 @@ class ScannerComponent {
 
                 if (qrCodeURL.isNotEmpty()) {
 
-                    Row(
-                        modifier = Modifier.padding(horizontal = 14.dp).padding(bottom = 22.dp)
-                            .fillMaxWidth()
-                            , verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Column ( modifier = Modifier.align(Alignment.BottomCenter)
+                        .padding( 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally){
+
                         Text(
-                            text = qrCodeURL,
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .weight(1f),
+                            text = "Результат : ${qrCodeURL} ",
                             fontSize = 20.sp,
                             color = Color.Black,
-                            fontWeight = FontWeight.Bold,
                             maxLines = 4,
                             overflow = TextOverflow.Ellipsis
                         )
 
+                        Spacer(modifier = Modifier.height(25.dp))
+
+
+                        if ( qrCodeURL != "ошибка" ) {
+                            Button(
+                                onClick = { onClickAdd( qrCodeURL ) },
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(70.dp))
+                                    .height(40.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                Text(text = "Добавить")
+                            }
+                        }
+
                     }
+
                 }
         }
     }

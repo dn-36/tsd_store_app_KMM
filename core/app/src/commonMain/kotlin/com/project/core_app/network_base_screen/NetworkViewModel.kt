@@ -9,7 +9,7 @@ open class NetworkViewModel:ViewModel(){
    var stateNetwork by mutableStateOf(StatusNetworkScreen.LOADING)
    private set
 
-   fun setStatus(status:StatusNetworkScreen){
+   fun setStatusNetworkScreen(status:StatusNetworkScreen){
        stateNetwork = status
    }
 

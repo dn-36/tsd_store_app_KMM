@@ -156,6 +156,8 @@ class ArrivalAndConsumptionScreen : Screen {
 
         } else if (vm.state.isVisibilityListProducts.value == 1f) {
 
+            println("AAAA: ${vm.state.listProducts}")
+
             ListProductsComponent(vm.state.listProducts, onClickBack = {
 
                 vm.processIntent(ArrivalAndConsumptionIntents.BackListProducts)
@@ -192,7 +194,7 @@ class ArrivalAndConsumptionScreen : Screen {
 
                 onClickSelectFromList = { scope ->
 
-                    vm.processIntent(ArrivalAndConsumptionIntents.SelectFromList(scope))
+                    vm.processIntent(ArrivalAndConsumptionIntents.SelectFromList)
 
                 },
 
@@ -224,7 +226,13 @@ class ArrivalAndConsumptionScreen : Screen {
 
         else if ( vm.state.isVisibilityScannerComponent.value == 1f ) {
 
-            ScannerComponent().QrScannerView()
+            ScannerComponent( onClickAdd = { name ->
+
+                vm.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( name ))
+
+            }, onClickCansel = { vm.processIntent(ArrivalAndConsumptionIntents.CanselScanner) } )
+
+                .QrScannerView()
 
         }
 

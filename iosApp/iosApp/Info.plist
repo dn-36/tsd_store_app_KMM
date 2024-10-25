@@ -6,6 +6,8 @@
 <string>$(PRODUCT_NAME) camera description.</string>
 <key>NSPhotoLibraryUsageDescription</key>
 <string>$(PRODUCT_NAME) photos description.</string>
+<key>NSCameraUsageDescription</key>
+<string>Мы хотим получить доступ к вашей камере для сканирования QR-кодов.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

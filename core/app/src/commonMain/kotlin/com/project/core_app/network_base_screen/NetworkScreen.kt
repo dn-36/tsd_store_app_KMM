@@ -12,7 +12,7 @@ open class NetworkScreen(
 
     @Composable
    override fun Content() {
-        val state = networkComponent.networkViewModel.stateNetwork
+        val state = networkComponent.viewModel.stateNetwork
 
               networkComponent.Component()
                if(state==StatusNetworkScreen.LOADING) {

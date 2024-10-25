@@ -24,9 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.viewmodel.ListProductsIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.viewmodel.ListProductsViewModel
@@ -100,7 +97,7 @@ class ListProductsComponent (
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                LazyColumn { items( vm.state.filteredWarehouse ){ item ->
+                LazyColumn { items( vm.state.filteredProducts ){ item ->
 
                         Text(text = item.name!!,
                             fontSize = 20.sp,

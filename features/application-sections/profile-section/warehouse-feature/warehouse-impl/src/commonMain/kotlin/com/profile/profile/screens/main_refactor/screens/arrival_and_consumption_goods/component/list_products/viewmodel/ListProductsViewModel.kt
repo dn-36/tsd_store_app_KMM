@@ -30,7 +30,7 @@ class ListProductsViewModel {
 
             state = state.copy(
 
-                filteredWarehouse = listAllProducts,
+                filteredProducts = listAllProducts,
 
                 isSeted = false
 
@@ -44,7 +44,7 @@ class ListProductsViewModel {
 
     state = state.copy(
 
-        filteredWarehouse = list,
+        filteredProducts = list,
 
         nameProductTF = text
 

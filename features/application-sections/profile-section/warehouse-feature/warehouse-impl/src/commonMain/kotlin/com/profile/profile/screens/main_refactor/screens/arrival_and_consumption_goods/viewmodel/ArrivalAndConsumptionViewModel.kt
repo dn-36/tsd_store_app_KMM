@@ -117,6 +117,16 @@ class ArrivalAndConsumptionViewModel (
 
                     })
 
+                    getProductsUseCase.execute ( onGet = { listAllProducts ->
+
+                        state = state.copy(
+
+                            listProducts = listAllProducts
+
+                            )
+
+                    })
+
                 }
 
             }
@@ -406,25 +416,9 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.Scanner ->  scanner()
 
-            is ArrivalAndConsumptionIntents.SelectFromList -> {
+            is ArrivalAndConsumptionIntents.CanselScanner ->  canselScanner()
 
-                intent.coroutineScope.launch (Dispatchers.IO) {
-
-                    getProductsUseCase.execute ( onGet = { listAllProducts ->
-
-                        state = state.copy(
-
-                            listProducts = listAllProducts,
-
-                            isVisibilityListProducts = mutableStateOf(1f),
-
-                        )
-
-                    })
-
-                }
-
-            }
+            is ArrivalAndConsumptionIntents.SelectFromList -> selectFromList()
 
             is ArrivalAndConsumptionIntents.GetArrivalAndConsumptionGoods -> {
 
@@ -458,6 +452,8 @@ class ArrivalAndConsumptionViewModel (
             }
 
             is ArrivalAndConsumptionIntents.CanselSelectedProduct -> { canselSelectedProduct( intent.index ) }
+
+            is ArrivalAndConsumptionIntents.AddProductScanner -> { addProductScanner( intent.name ) }
 
         }
     }
@@ -530,6 +526,8 @@ class ArrivalAndConsumptionViewModel (
                 selectedProduct = newProduct,
 
                 isVisibilityCountProducts = mutableStateOf(0f),
+
+                isVisibilityAddProductsComponent = mutableStateOf(1f),
 
                 listSelectedProducts = newList,
 
@@ -612,6 +610,54 @@ class ArrivalAndConsumptionViewModel (
         listSelectedProducts = newList
 
     )
+
+    }
+
+    fun addProductScanner(sku: String ) {
+
+    val selectedProduct = state.listProducts.find { it.sku == sku }
+
+        println("AllProduct : ${ state.listProducts }")
+
+        println("SelectedProduct : ${ selectedProduct }")
+
+        if ( selectedProduct != null ) {
+
+            state = state.copy(
+
+                isVisibilityCountProducts = mutableStateOf(1f),
+
+                isVisibilityScannerComponent = mutableStateOf(0f),
+
+                selectedProduct = ProductArrivalAndConsumption( product = selectedProduct, count = 0 )
+
+            )
+
+        }
+
+    }
+
+    fun selectFromList () {
+
+        state = state.copy(
+
+            isVisibilityListProducts = mutableStateOf(1f),
+
+            isVisibilityAddProductsComponent = mutableStateOf(0f)
+
+            )
+
+    }
+
+    fun canselScanner () {
+
+        state = state.copy(
+
+            isVisibilityScannerComponent = mutableStateOf(0f),
+
+            isVisibilityAddProductsComponent = mutableStateOf(1f)
+
+        )
 
     }
 

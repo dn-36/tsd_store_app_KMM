@@ -25,65 +25,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.example.notes_screens_impl.screens.notes.component.NotesComponent
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import org.example.project.presentation.crm_feature.notes_screen.model.Notes
 import org.example.project.presentation.crm_feature.notes_screen.util.formatDateTime
 import org.example.project.presentation.crm_feature.notes_screen.viewmodel.NotesIntents
 import com.example.notes_screens_impl.screens.notes.viewmodel.NotesViewModel
+import com.project.core_app.network_base_screen.NetworkScreen
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.plus
 import org.koin.mp.KoinPlatform.getKoin
 
-class NotesScreen:Screen{
-
-    val vm : NotesViewModel = getKoin().get()
-
-    @Composable
-    override fun Content() {
-
-        val scope = rememberCoroutineScope()
-
-        vm.processIntent(NotesIntents.SetNotes(scope) )
-        Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Заметки", color = Color.Black, fontSize = 20.sp)
-               // Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn {
-                    if(vm.notesState.listNotes.size != 0) {
-                        itemsIndexed(vm.notesState.listNotes.chunked(2)) { index, items ->
-                            Row(
-                                modifier = Modifier.padding(top = 10.dp)
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                items.forEachIndexed { index, item ->
-                                    Notes.Content(item.name!!,{ vm.processIntent(NotesIntents.EditNote(item))},
-                                        formatDateTime( item.updatedAt!!))
-                                }
-                                if (items.size == 1) {
-                                    Spacer(modifier = Modifier.weight(1f))
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            Column(horizontalAlignment = Alignment.End, modifier = Modifier.align(Alignment.BottomCenter)) {
-                Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
-                    modifier = Modifier.padding(16.dp).size(70.dp)
-                        .clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { vm.processIntent(NotesIntents.CreateBookmarks) })
-                Box(modifier = Modifier) {
-                    MenuBottomBar().Content(MenuBottomBarSection.CRM)
-                }
-            }
-
-        }
-    }
-}
+class NotesScreen:NetworkScreen(
+    NotesComponent(getKoin().get())
+)

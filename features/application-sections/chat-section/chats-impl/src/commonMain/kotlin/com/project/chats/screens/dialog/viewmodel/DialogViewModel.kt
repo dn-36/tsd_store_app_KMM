@@ -101,11 +101,11 @@ class DialogViewModel(
                 }
             if(!isSeted){
                if(listMessages.isNullOrEmpty()){
-                        setStatus(StatusNetworkScreen.ERROR)
+                        setStatusNetworkScreen(StatusNetworkScreen.ERROR)
                         return@launch
                     }
                 delay(200L)
-                setStatus(StatusNetworkScreen.SECCUESS)
+                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
                 isSeted = true
             }
             delay(1500L)
