@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,16 +28,29 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import com.project.network.organizations_network.model.Response
 import kotlinx.coroutines.CoroutineScope
 
-class CreateOrganization (val onClick:(scope:CoroutineScope,name:String,url:String) -> Unit) :Screen{
+class CreateOrUpdateOrganization(
 
-    var name by mutableStateOf("")
+    val onClickCreate: (scope: CoroutineScope, name: String, url: String) -> Unit,
 
-    var url by mutableStateOf("")
+    val onClickUpdate: (scope: CoroutineScope, name: String, url: String) -> Unit,
+
+    val isUpdate: Boolean,
+
+    val listBorderColor: List<Color>,
+
+    val item: Response?
+
+    ) : Screen {
+
+    var name by mutableStateOf( if ( item != null ) item.company?.name else "" )
+
+    var url by mutableStateOf( if ( item != null ) item.company?.url else "" )
 
     @Composable
-     override fun Content() {
+    override fun Content() {
 
         val scope = rememberCoroutineScope()
 
@@ -57,14 +71,24 @@ class CreateOrganization (val onClick:(scope:CoroutineScope,name:String,url:Stri
                     .align(Alignment.BottomCenter)
                     .background(Color.White)
             ) {
-                Column(modifier = Modifier.padding(16.dp).fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+                Column(
+                    modifier = Modifier.padding(16.dp).fillMaxHeight(),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
 
                     Column {
                         OutlinedTextField(
-                            value = name,
+                            value = name!!,
                             onValueChange = {
                                 name = it
                             },
+
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = listBorderColor[0], // Цвет границы при фокусе
+                                unfocusedBorderColor = listBorderColor[0], // Цвет границы в неактивном состоянии
+                                backgroundColor = listBorderColor[0].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                            ),
+
                             label = { Text("Название") },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -74,10 +98,17 @@ class CreateOrganization (val onClick:(scope:CoroutineScope,name:String,url:Stri
                         Spacer(modifier = Modifier.height(10.dp))
 
                         OutlinedTextField(
-                            value = url,
+                            value = url!!,
                             onValueChange = {
                                 url = it
                             },
+
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = listBorderColor[1], // Цвет границы при фокусе
+                                unfocusedBorderColor = listBorderColor[1], // Цвет границы в неактивном состоянии
+                                backgroundColor = listBorderColor[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                            ),
+
                             label = { Text("Url") },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -85,15 +116,31 @@ class CreateOrganization (val onClick:(scope:CoroutineScope,name:String,url:Stri
                         )
                     }
 
-                    Button(
-                        onClick = {onClick(scope,name,url)},
-                        modifier = Modifier
-                            .padding(bottom = 10.dp)
-                            .clip(RoundedCornerShape(70.dp))
-                            .height(40.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(text = "Создать")
+                    if (!isUpdate) {
+
+                        Button(
+                            onClick = { onClickCreate(scope, name!!, url!!) },
+                            modifier = Modifier
+                                .padding(bottom = 10.dp)
+                                .clip(RoundedCornerShape(70.dp))
+                                .height(40.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(text = "Создать")
+                        }
+                    } else {
+
+                        Button(
+                            onClick = { onClickUpdate(scope, name!!, url!!) },
+                            modifier = Modifier
+                                .padding(bottom = 10.dp)
+                                .clip(RoundedCornerShape(70.dp))
+                                .height(40.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(text = "Редактировать")
+                        }
+
                     }
                 }
             }
@@ -103,7 +150,7 @@ class CreateOrganization (val onClick:(scope:CoroutineScope,name:String,url:Stri
                     .fillMaxHeight(0.03f)
                     .background(Color.White)
                     .align(Alignment.BottomCenter)
-            ){
+            ) {
 
             }
 

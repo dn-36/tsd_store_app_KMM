@@ -2,6 +2,7 @@ package com.project.network.organizations_network
 
 import com.project.network.ConstData
 import com.project.network.httpClientEngine
+import com.project.network.notes_network.model.BodyNoteDto
 import com.project.network.organizations_network.model.ActiveOrganizationRequest
 import com.project.network.organizations_network.model.CreateOrganizationRequest
 import com.project.network.organizations_network.model.Response
@@ -14,6 +15,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
@@ -107,4 +109,21 @@ class  OrganizationsClient {
             false
         }
     }
+
+    // Обновление организации
+    suspend fun updateOrganization ( ui: String, updatedOrganization: CreateOrganizationRequest): HttpResponse {
+        println("////////////////////////////////////////")
+        return try {
+            val response = client.put("https://delta.online/api/company/$ui") {
+                contentType(ContentType.Application.Json) // Установка типа контента
+                setBody(updatedOrganization)
+            }
+            println(" ${response.toString()} ")
+            response
+        } catch (e: Exception) {
+            println("UPDATE Oragnization: Error - ${e.message}")
+            throw e // Или обработайте ошибку по-другому
+        }
+    }
+
 }

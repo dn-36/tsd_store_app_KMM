@@ -5,6 +5,7 @@ import com.project.core_app.ConstData
 import com.project.domain.repository.OrganizationClientApi
 import com.project.network.locations_network.LocationsClient
 import com.project.network.organizations_network.OrganizationsClient
+import com.project.network.organizations_network.model.CreateOrganizationRequest
 import com.project.network.organizations_network.model.Response
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,13 +59,37 @@ class OrganizationClientImpl (
             }
             else {
 
-                newListColor.add(Color.Green)
+                newListColor.add(Color(0xFFA6D172))
 
             }
 
         }
 
         onGet ( newListColor, allOrganizations )
+
+    }
+
+    override suspend fun updateOrganization(
+
+        name: String,
+
+        url: String,
+
+        ui: String,
+
+        onUpdate: () -> Unit
+
+    ) {
+
+    organizationClient.updateOrganization( ui = ui, updatedOrganization = CreateOrganizationRequest(
+
+        name = name,
+
+        url = url
+
+    ) )
+
+    onUpdate()
 
     }
 

@@ -27,9 +27,10 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.AddProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry_component.DataEntryComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.Item
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ListProductsComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.ScannerComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
@@ -54,7 +55,7 @@ class ArrivalAndConsumptionScreen : Screen {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn (modifier = Modifier.fillMaxHeight(0.8f)) {
-                    items(vm.arrivalAndConsumptionState.listAllArrivalOrConsumption) { item ->
+                    items(vm.state.listAllArrivalOrConsumption) { item ->
 
                         Item(item, onDelete = { ui ->
 
@@ -108,27 +109,33 @@ class ArrivalAndConsumptionScreen : Screen {
                             Text(text = "Расход")
                         }
                     }
-                    MenuBottomBarWarehouse().Content()
+
+                    if( vm.state.isVisibilityAddProductsComponent.value != 1f ) {
+
+                        MenuBottomBarWarehouse().Content()
+
+                    }
+
                 }
             }
         }
-        if (vm.arrivalAndConsumptionState.isVisibilityDataEntryComponent.value == 1f) {
+        if (vm.state.isVisibilityDataEntryComponent.value == 1f) {
 
             DataEntryComponent(
 
-                vm.arrivalAndConsumptionState.updatedContragentExpense,
+                vm.state.updatedContragentExpense,
 
-                vm.arrivalAndConsumptionState.updatedContragentParish,
+                vm.state.updatedContragentParish,
 
-                vm.arrivalAndConsumptionState.updatedContragentEntityExpense,
+                vm.state.updatedEntityExpense,
 
-                vm.arrivalAndConsumptionState.updatedContragentParish,
+                vm.state.updatedEntityParish,
 
-                vm.arrivalAndConsumptionState.updatedWarehouse,
+                vm.state.updatedWarehouse,
 
-                listAllContragents = vm.arrivalAndConsumptionState.listAllContragent,
+                listAllContragents = vm.state.listAllContragent,
 
-                listAllWarehouse = vm.arrivalAndConsumptionState.listAllWarehouse,
+                listAllWarehouse = vm.state.listAllWarehouse,
 
                 onClickBack = { vm.processIntent(ArrivalAndConsumptionIntents.BackDataEntry) },
 
@@ -147,9 +154,11 @@ class ArrivalAndConsumptionScreen : Screen {
 
             ).Content()
 
-        } else if (vm.arrivalAndConsumptionState.isVisibilityListProducts.value == 1f) {
+        } else if (vm.state.isVisibilityListProducts.value == 1f) {
 
-            ListProductsComponent(vm.arrivalAndConsumptionState.listProducts, onClickBack = {
+            println("AAAA: ${vm.state.listProducts}")
+
+            ListProductsComponent(vm.state.listProducts, onClickBack = {
 
                 vm.processIntent(ArrivalAndConsumptionIntents.BackListProducts)
 
@@ -159,29 +168,33 @@ class ArrivalAndConsumptionScreen : Screen {
 
             }).Content()
 
-        } else if (vm.arrivalAndConsumptionState.isVisibilityCountProducts.value == 1f) {
+        } else if (vm.state.isVisibilityCountProducts.value == 1f) {
 
             CountProductComponent(
 
-                vm.arrivalAndConsumptionState.listProducts,
+                vm.state.listProducts,
 
                 onClickReady = { count ->
 
                     vm.processIntent(ArrivalAndConsumptionIntents.Ready(count))
 
-                }).Content()
+                },
 
-        } else if (vm.arrivalAndConsumptionState.isVisibilityAddProductsComponent.value == 1f) {
+                colorBorderCountTF = vm.state.colorBorderCountTF
+
+                ).Content()
+
+        } else if (vm.state.isVisibilityAddProductsComponent.value == 1f) {
 
             AddProductsComponent(
 
-                isUpdate = vm.arrivalAndConsumptionState.isUpdate,
+                isUpdate = vm.state.isUpdate,
 
-                vm.arrivalAndConsumptionState.listSelectedProducts,
+                vm.state.listSelectedProducts,
 
                 onClickSelectFromList = { scope ->
 
-                    vm.processIntent(ArrivalAndConsumptionIntents.SelectFromList(scope))
+                    vm.processIntent(ArrivalAndConsumptionIntents.SelectFromList)
 
                 },
 
@@ -199,7 +212,27 @@ class ArrivalAndConsumptionScreen : Screen {
 
                     vm.processIntent( ArrivalAndConsumptionIntents.Update( scope ) )
 
-                }).Content()
+                },
+
+                onClickScanner = { vm.processIntent(ArrivalAndConsumptionIntents.Scanner) },
+
+                onClickCansel = { index ->
+
+                    vm.processIntent(ArrivalAndConsumptionIntents.CanselSelectedProduct( index )) }
+
+                ).Content()
+
+        }
+
+        else if ( vm.state.isVisibilityScannerComponent.value == 1f ) {
+
+            ScannerComponent( onClickAdd = { name ->
+
+                vm.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( name ))
+
+            }, onClickCansel = { vm.processIntent(ArrivalAndConsumptionIntents.CanselScanner) } )
+
+                .QrScannerView()
 
         }
 

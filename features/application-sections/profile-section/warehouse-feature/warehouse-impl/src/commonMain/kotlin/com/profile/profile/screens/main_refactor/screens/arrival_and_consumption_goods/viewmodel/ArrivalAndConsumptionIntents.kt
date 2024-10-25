@@ -31,7 +31,9 @@ sealed class ArrivalAndConsumptionIntents {
 
         ArrivalAndConsumptionIntents()
 
-    data class Ready(val count: Int) : ArrivalAndConsumptionIntents()
+    data class Ready( val count: String ) : ArrivalAndConsumptionIntents()
+    object  CanselScanner : ArrivalAndConsumptionIntents()
+    data class AddProductScanner( val name: String ) : ArrivalAndConsumptionIntents()
 
     data class UpdateButton(
 
@@ -43,7 +45,7 @@ sealed class ArrivalAndConsumptionIntents {
 
     data class Update(val coroutineScope: CoroutineScope) : ArrivalAndConsumptionIntents()
 
-    data class SelectFromList(val coroutineScope: CoroutineScope) : ArrivalAndConsumptionIntents()
+    object SelectFromList : ArrivalAndConsumptionIntents()
 
     data class CreateArrivalOrConsumption(val coroutineScope: CoroutineScope) :
         ArrivalAndConsumptionIntents()
@@ -56,5 +58,7 @@ sealed class ArrivalAndConsumptionIntents {
         ArrivalAndConsumptionIntents()
 
     object Scanner : ArrivalAndConsumptionIntents()
+
+    data class CanselSelectedProduct ( val index: Int) : ArrivalAndConsumptionIntents()
 
 }

@@ -1,8 +1,9 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry_component.viewmodel
+package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
@@ -64,6 +65,8 @@ class DataEntryViewModel: ViewModel() {
             is DataEntryIntents.TextInputLegalEntityExpense -> { inputTextLegalEntityExpense ( intent.text ) }
 
             is DataEntryIntents.TextInputWarehouse -> { inputTextWarehouse ( intent.text, intent.newList ) }
+
+            is DataEntryIntents.CheckNullTF -> { checkNullTF () }
 
         }
 
@@ -336,7 +339,7 @@ class DataEntryViewModel: ViewModel() {
 
             val selectedWarehouse = if( updatedWarehouse != null ) updatedWarehouse else null
 
-            state = state.copy(
+            state = state.copy (
 
                 isUsed = false,
 
@@ -360,6 +363,46 @@ class DataEntryViewModel: ViewModel() {
             )
 
         }
+
+    }
+
+    fun checkNullTF () {
+
+        val selectedFields = listOf(
+
+            state.selectedContragentParish,
+
+            state.selectedLegalEntityParish,
+
+            state.selectedContragentExpense,
+
+            state.selectedLegalEntityExpense,
+
+            state.selectedWarehouse
+        )
+
+        val newList = state.listColorBorderTF.toMutableList()
+
+        var hasNull = true
+
+        // Итерируемся по полям и обновляем цвета, если поле равно null
+
+        selectedFields.forEachIndexed { index, field ->
+
+            if (field == null) {
+
+                newList[index] = Color.Red
+
+                hasNull = false
+            }
+        }
+
+        // Обновляем состояние
+
+        state = state.copy(
+            listColorBorderTF = newList,
+            onCheck = hasNull
+        )
 
     }
 

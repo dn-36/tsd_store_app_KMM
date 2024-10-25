@@ -5,21 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.project.component.CreateOrganization
-import com.project.core_app.ConstData
+import com.project.component.CreateOrUpdateOrganization
 import com.project.domain.usecases.ChoosingActiveOrganizationUseCase
 import com.project.domain.usecases.CreateOrganizationUseCase
 import com.project.domain.usecases.DeleteOrganizationUseCase
 import com.project.domain.usecases.GetOrganizationUseCase
+import com.project.domain.usecases.UpdateOrganizationUseCase
 import com.project.network.Navigation
-import com.project.network.organizations_network.OrganizationsClient
+import com.project.network.organizations_network.model.Response
 import com.project.screen.OrganizationScreen
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 
-class OrganizationsViewModel (
+class OrganizationsViewModel(
 
     val createOrganizationUseCase: CreateOrganizationUseCase,
 
@@ -27,27 +26,29 @@ class OrganizationsViewModel (
 
     val choosingActiveOrganization: ChoosingActiveOrganizationUseCase,
 
-    val getOrganization: GetOrganizationUseCase
+    val getOrganization: GetOrganizationUseCase,
 
-) :ViewModel() {
+    val updateOrganization: UpdateOrganizationUseCase
 
-    var organizationsState by mutableStateOf(OrganizationsState())
+) : ViewModel() {
 
-    fun processIntent(intent: OrganizationsIntents){
+    var state by mutableStateOf(OrganizationsState())
 
-        when(intent){
+    fun processIntent(intent: OrganizationsIntents) {
+
+        when (intent) {
 
             is OrganizationsIntents.SetScreen -> {
 
-                if(organizationsState.isUsed.value) {
+                if (state.isUsed.value) {
 
-                    organizationsState.isUsed.value = false
+                    state.isUsed.value = false
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
-                        getOrganization.execute(onGet = { listColor, listOrganization ->
+                        getOrganization.execute ( onGet = { listColor, listOrganization ->
 
-                            organizationsState = organizationsState.copy(
+                            state = state.copy(
 
                                 allOrganizations = listOrganization,
 
@@ -56,6 +57,7 @@ class OrganizationsViewModel (
 
                         })
                     }
+
                 }
 
             }//setScreen(intent.coroutineScope)
@@ -66,12 +68,13 @@ class OrganizationsViewModel (
 
                     choosingActiveOrganization.execute(intent.ui,
 
-                        onChoosing = {organizationsState = organizationsState.copy(
+                        onChoosing = {
+                            state = state.copy(
 
-                            isUsed = mutableStateOf(true)
+                                isUsed = mutableStateOf(true)
 
-                        )
-                    })
+                            )
+                        })
 
                 }
 
@@ -79,45 +82,141 @@ class OrganizationsViewModel (
 
             is OrganizationsIntents.DeleteOrganization -> {
 
-                intent.coroutineScope.launch (Dispatchers.IO) {
+                intent.coroutineScope.launch(Dispatchers.IO) {
 
                     deleteOrganizationUseCase.execute(intent.ui,
-                        onDelete = { organizationsState = organizationsState.copy(
+                        onDelete = {
+                            state = state.copy(
 
-                            isUsed = mutableStateOf(true)
+                                isUsed = mutableStateOf(true)
 
-                        ) } )
+                            )
+                        })
 
                 }
             }//deleteOrganization(intent.coroutineScope,intent.ui)
 
             is OrganizationsIntents.CreateOrganization -> {
 
-                intent.coroutineScope.launch(Dispatchers.IO) {
+                if( intent.name.isNotBlank() && intent.url.isNotBlank() ) {
 
-                    createOrganizationUseCase.execute(intent.name,intent.url,
+                    intent.coroutineScope.launch(Dispatchers.IO) {
 
-                        onCreate = { Navigation.navigator.push(OrganizationScreen())
+                        createOrganizationUseCase.execute(intent.name, intent.url,
 
-                        organizationsState = organizationsState.copy(
+                            onCreate = {
 
-                            isUsed = mutableStateOf(true)
+                                Navigation.navigator.push(OrganizationScreen())
 
-                        )})
+                                state = state.copy(
+
+                                    isUsed = mutableStateOf(true)
+
+                                )
+                            })
+
+                    }
 
                 }
             }//createOrganization(intent.coroutineScope,intent.name,intent.url)
 
             is OrganizationsIntents.OpenWindowAddOrganization -> openWindowAddOrganization()
 
+            is OrganizationsIntents.UpdateOrganization -> {
+
+                    intent.coroutineScope.launch(Dispatchers.IO) {
+
+                       // if ( intent.name.isNotBlank() && intent.url.isNotBlank() ) {
+
+                            updateOrganization.execute(name = intent.name, url = intent.url,
+
+                                ui = intent.ui, onUpdate = {
+
+                                    Navigation.navigator.push(OrganizationScreen())
+
+                                    state = state.copy(
+
+                                        isUsed = mutableStateOf(true)
+
+                                    )
+
+                                }
+
+                            )
+                       // }
+
+                        /*else {
+
+                        if ( intent.name.isBlank() ) {
+
+                            state = state.copy(
+
+                                listColorBorderTf = listOf ( Color.Red, Color.LightGray )
+
+                            )
+
+                        }
+
+                        if ( intent.url.isBlank() ) {
+
+                            state = state.copy(
+
+                                listColorBorderTf = listOf ( Color.LightGray, Color.Red )
+
+                            )
+
+                        }
+
+                    }*/
+
+                }
+
+            }
+
+            is OrganizationsIntents.SelectItemUpdate -> { selectItemUpdate( intent.item ) }
+
         }
     }
 
-    fun openWindowAddOrganization(){
+    fun openWindowAddOrganization() {
 
-    Navigation.navigator.push(CreateOrganization(onClick = {scope, name, url ->
-        processIntent(OrganizationsIntents.CreateOrganization(scope,name,url))
-    }))
+        Navigation.navigator.push(CreateOrUpdateOrganization(onClickCreate = { scope, name, url ->
+
+            processIntent(OrganizationsIntents.CreateOrganization(scope, name, url))
+
+        }, onClickUpdate = { scope, name, url -> } ,
+
+            isUpdate = state.isUpdateOrganization, listBorderColor = state.listColorBorderTf, item = null ))
+
+        state = state.copy(
+
+            isUpdateOrganization = false
+
+        )
 
     }
+
+    fun selectItemUpdate ( item: Response ) {
+
+    state = state.copy(
+
+        updateOrganization = item,
+
+        isUpdateOrganization = true
+
+    )
+        Navigation.navigator.push(CreateOrUpdateOrganization(onClickCreate = { scope, name, url ->
+
+            processIntent(OrganizationsIntents.CreateOrganization(scope, name, url))
+
+        }, onClickUpdate = { scope, name, url ->
+
+        processIntent(OrganizationsIntents.UpdateOrganization( coroutineScope = scope,
+
+            name = name, url = url, ui = state.updateOrganization!!.company?.ui?:"" ))}
+
+            , isUpdate = state.isUpdateOrganization, listBorderColor = state.listColorBorderTf, item = state.updateOrganization ))
+
+    }
+
 }

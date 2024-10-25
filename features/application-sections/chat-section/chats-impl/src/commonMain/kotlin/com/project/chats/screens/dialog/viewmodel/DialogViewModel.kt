@@ -61,29 +61,24 @@ class DialogViewModel(
             return@launch
         }
 
+
+
              this.launch {
                  while (
                      true
                  ){
                  readMessageUseCase.execute(uiChats)
                  delay(1500L)
+
                  }
                  }
 
             while (
                true
             ){
-                var listMessages = listOf<Message>()
                 val listDate = mutableSetOf<String>()
-                try {
-                    listMessages = getListMessagesUseCase.execute(uiChats)?: emptyList()
-                    delay(200L)
-                    setStatusNetwork(StatusNetworkScreen.SECCUESS)
-                    isSeted = true
-                }catch (e:Exception){
-                    setStatusNetwork(StatusNetworkScreen.ERROR)
-                }
 
+                val listMessages = getListMessagesUseCase.execute(uiChats)?: emptyList()
 
 
                 listMessages.fastForEachIndexed { i, message ->
@@ -104,7 +99,15 @@ class DialogViewModel(
                         listMessage = listMessages
                     )
                 }
-
+            if(!isSeted){
+               if(listMessages.isNullOrEmpty()){
+                        setStatusNetworkScreen(StatusNetworkScreen.ERROR)
+                        return@launch
+                    }
+                delay(200L)
+                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+                isSeted = true
+            }
             delay(1500L)
             }
         }

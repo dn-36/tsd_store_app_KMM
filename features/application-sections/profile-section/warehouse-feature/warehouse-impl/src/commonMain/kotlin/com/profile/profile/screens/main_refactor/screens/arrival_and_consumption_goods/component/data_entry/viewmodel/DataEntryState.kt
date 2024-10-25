@@ -1,5 +1,6 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry_component.viewmodel
+package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.viewmodel
 
+import androidx.compose.ui.graphics.Color
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
@@ -45,6 +46,13 @@ data class DataEntryState(
 
     val filteredWarehouse: List<WarehouseArrivalAndConsumption> = listOf(),
 
-    val isUsed: Boolean = true
+    val isUsed: Boolean = true,
+
+
+    val listColorBorderTF : List <Color> = listOf ( Color.LightGray, Color.LightGray,
+
+        Color.LightGray, Color.LightGray, Color.LightGray ),
+
+    val onCheck: Boolean = false
 
 )

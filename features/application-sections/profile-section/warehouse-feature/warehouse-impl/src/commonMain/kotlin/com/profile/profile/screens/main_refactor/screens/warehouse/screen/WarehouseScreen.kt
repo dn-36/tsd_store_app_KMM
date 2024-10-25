@@ -79,10 +79,10 @@ class WarehouseScreen : Screen {
                                             interactionSource = remember { MutableInteractionSource() })
                                         {}) {
 
-                                        Box(
+                                        /*Box(
                                             modifier = Modifier.size(30.dp).clip(CircleShape)
                                                 .background(Color.Gray)
-                                        )
+                                        )*/
 
                                         Spacer(modifier = Modifier.width(10.dp))
 
@@ -103,16 +103,28 @@ class WarehouseScreen : Screen {
                                             )
 
                                             Box(
-                                                modifier = Modifier.height(1.dp).fillMaxWidth(0.9f)
+                                                modifier = Modifier.height(1.dp).fillMaxWidth()
                                                     .background(Color.LightGray)
                                             )
 
                                         }
                                     }
                                     Row(modifier = Modifier.align(Alignment.TopEnd)) {
+
+                                        Image(painter = painterResource(Res.drawable.update_pencil),
+                                            contentDescription = null,
+                                            modifier = Modifier.size(17.dp)
+                                                .clickable(
+                                                    indication = null, // Отключение эффекта затемнения
+                                                    interactionSource = remember { MutableInteractionSource() })
+                                                {vm.processIntents(WarehouseIntents.OpenWindowUpdateWarehouse(scope,item))})
+
+
+                                        Spacer(modifier = Modifier.width(20.dp))
+
                                         Image(painter = painterResource(Res.drawable.cancel),
                                             contentDescription = null,
-                                            modifier = Modifier.size(10.dp)
+                                            modifier = Modifier.size(15.dp)
                                                 .clickable(
                                                     indication = null, // Отключение эффекта затемнения
                                                     interactionSource = remember { MutableInteractionSource() })
@@ -124,15 +136,7 @@ class WarehouseScreen : Screen {
                                                         )
                                                     )
                                                 })
-                                        Spacer(modifier = Modifier.width(20.dp))
 
-                                        Image(painter = painterResource(Res.drawable.update_pencil),
-                                            contentDescription = null,
-                                            modifier = Modifier.size(12.dp)
-                                                .clickable(
-                                                    indication = null, // Отключение эффекта затемнения
-                                                    interactionSource = remember { MutableInteractionSource() })
-                                                {vm.processIntents(WarehouseIntents.OpenWindowUpdateWarehouse(scope,item))})
                                     }
                                 }
                             }

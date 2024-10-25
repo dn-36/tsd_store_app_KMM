@@ -23,6 +23,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +42,15 @@ import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
 
-class CountProductComponent ( val listAllProducts: List<AllProductArrivalAndConsumption>, val onClickReady:( count: Int ) -> Unit ) {
+class CountProductComponent (
+
+    val listAllProducts: List<AllProductArrivalAndConsumption>,
+
+    val onClickReady:( count: String ) -> Unit ,
+
+    val colorBorderCountTF: Color
+
+  ) {
 
     var count by mutableStateOf("")
 
@@ -96,19 +105,38 @@ class CountProductComponent ( val listAllProducts: List<AllProductArrivalAndCons
                 ) {
 
                         OutlinedTextField(
+
                             value = count,
+
                             onValueChange = {
+
                                 count = it
+
                             },
+
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+                                focusedBorderColor = colorBorderCountTF, // Цвет границы при фокусе
+
+                                unfocusedBorderColor = colorBorderCountTF, // Цвет границы в неактивном состоянии
+
+                                backgroundColor = colorBorderCountTF.copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+
+                            ),
+
                             label = { Text("Количество") },
+
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
                             modifier = Modifier
+
                                 .fillMaxWidth()
+
                                 .heightIn(min = 60.dp) // Стандартная высота TextField
                         )
 
                         Button(
-                            onClick = { onClickReady( count.toInt() ) },
+                            onClick = { onClickReady( count ) },
                             modifier = Modifier
                                 .padding(bottom = 10.dp)
                                 .clip(RoundedCornerShape(70.dp))

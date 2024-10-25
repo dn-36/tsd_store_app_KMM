@@ -51,6 +51,10 @@ kotlin {
 
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
+            implementation("network.chaintech:qr-kit:2.0.0")
+
+            implementation(dependencyNotation = libs.peekaboo.ui)
+            implementation(dependencyNotation = libs.peekaboo.imagepicker)
         }
 
     }

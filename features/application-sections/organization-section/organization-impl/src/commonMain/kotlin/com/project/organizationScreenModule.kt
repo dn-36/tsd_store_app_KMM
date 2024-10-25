@@ -6,6 +6,7 @@ import com.project.domain.repository.OrganizationClientApi
 import com.project.domain.usecases.ChoosingActiveOrganizationUseCase
 import com.project.domain.usecases.DeleteOrganizationUseCase
 import com.project.domain.usecases.GetOrganizationUseCase
+import com.project.domain.usecases.UpdateOrganizationUseCase
 import com.project.menu.screen.OrganizationScreenApi
 import com.project.network.organizations_network.OrganizationsClient
 import com.project.viewmodel.OrganizationsViewModel
@@ -19,9 +20,11 @@ import org.koin.dsl.module
 
     factory { OrganizationClientImpl(get()) as OrganizationClientApi }
 
-    factory { OrganizationsViewModel(get(),get(),get(),get()) }
+    factory { OrganizationsViewModel( get(), get(),get(), get(), get()) }
 
     factory { CreateOrganizationUseCase(get()) }
+
+    factory { UpdateOrganizationUseCase(get()) }
 
     factory { DeleteOrganizationUseCase(get()) }
 

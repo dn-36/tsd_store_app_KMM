@@ -3,17 +3,17 @@ package org.example.project.presentation.crm_feature.edit_note_screen.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import com.example.notes_screens_impl.screens.edit_note.domain.usecases.DeleteNoteUseCase
 import com.example.notes_screens_impl.screens.edit_note.domain.usecases.GetNotesEditUseCase
 import com.example.notes_screens_impl.screens.edit_note.domain.usecases.GetUsersUseCase
 import com.example.notes_screens_impl.screens.edit_note.domain.usecases.UpdateNoteUseCase
-import com.example.notes_screens_impl.screens.edit_note.viewmodel.EditNoteState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
-import org.example.project.presentation.crm_feature.edit_note_screen.screen.EditNoteScreen
+import com.example.notes_screens_impl.screens.edit_note.screen.EditNoteScreen
 import com.example.notes_screens_impl.screens.notes.screen.NotesScreen
+import com.project.core_app.network_base_screen.NetworkViewModel
+import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
 import com.project.network.notes_network.model.BodyNoteDto
 import com.project.network.notes_network.model.Note
@@ -29,7 +29,7 @@ class EditNoteViewModel (
 
     val getUsersUseCase: GetUsersUseCase,
 
-    ) : ViewModel() {
+    ) : NetworkViewModel() {
 
     var editNoteState by mutableStateOf(EditNoteState())
 
@@ -98,6 +98,9 @@ class EditNoteViewModel (
                             )
 
                         })
+
+                        setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
 
                     }
 
@@ -320,8 +323,6 @@ class EditNoteViewModel (
 
 
     fun selectingEditableCategory(index: Int) {
-
-
 
         editNoteState = editNoteState.copy(
 

@@ -2,6 +2,7 @@ package com.profile.profile.screens.main_refactor.screens.arrival_and_consumptio
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
@@ -32,6 +33,8 @@ data class ArrivalAndConsumptionState (
 
     val isVisibilityDataEntryComponent: MutableState<Float> = mutableStateOf(0f),
 
+    val isVisibilityScannerComponent: MutableState<Float> = mutableStateOf(0f),
+
     val isVisibilityAddProductsComponent: MutableState<Float> = mutableStateOf(0f),
 
     val listProducts:List<AllProductArrivalAndConsumption> = emptyList(),
@@ -48,12 +51,14 @@ data class ArrivalAndConsumptionState (
 
     val updatedContragentParish : ContragentResponseArrivalAndConsumption? = null,
 
-    val updatedContragentEntityExpense : ContragentResponseArrivalAndConsumption? = null,
+    val updatedEntityExpense : ContragentResponseArrivalAndConsumption? = null,
 
-    val updatedContragentEntityParish: ContragentResponseArrivalAndConsumption? = null,
+    val updatedEntityParish: ContragentResponseArrivalAndConsumption? = null,
 
     val updatedWarehouse : WarehouseArrivalAndConsumption? = null,
 
-    val isUpdate: Boolean = false
+    val isUpdate: Boolean = false,
+
+    val colorBorderCountTF: Color = Color.LightGray
 
     )

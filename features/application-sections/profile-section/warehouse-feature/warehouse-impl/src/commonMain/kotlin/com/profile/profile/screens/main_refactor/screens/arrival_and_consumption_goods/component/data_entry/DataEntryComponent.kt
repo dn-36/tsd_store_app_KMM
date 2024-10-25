@@ -1,4 +1,4 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry_component
+package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,11 +26,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,8 +36,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry_component.viewmodel.DataEntryIntents
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry_component.viewmodel.DataEntryViewModel
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.viewmodel.DataEntryIntents
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.viewmodel.DataEntryViewModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
@@ -131,6 +129,13 @@ class DataEntryComponent(
 
 
                     },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = vm.state.listColorBorderTF[0], // Цвет границы при фокусе
+                        unfocusedBorderColor = vm.state.listColorBorderTF[0], // Цвет границы в неактивном состоянии
+                        backgroundColor = vm.state.listColorBorderTF[0].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                    ),
+
                     trailingIcon = {
 
                         IconButton(
@@ -224,6 +229,13 @@ class DataEntryComponent(
                         vm.processIntents( DataEntryIntents.TextInputLegalEntityParish(it) )
 
                         },
+
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                            unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                            backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                        ),
+
                         label = { Text("Юр.лицо") },
 
                         trailingIcon = {
@@ -253,7 +265,7 @@ class DataEntryComponent(
 
                     if ( vm.state.expandedLegalEntityParish && vm.state.selectedContragentParish!!.entits!!.isNotEmpty() ) {
 
-                        Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                        Box(modifier = Modifier.fillMaxWidth().height(100.dp), contentAlignment = Alignment.CenterStart) {
                             Card(
                                 modifier = Modifier.fillMaxSize()
                                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -261,17 +273,18 @@ class DataEntryComponent(
                                 shape = RoundedCornerShape(8.dp)
                             ) {}
 
+
                             LazyColumn {
 
-
                                 val validEntities =
-                                    vm.state.selectedContragentParish!!.entits!!.filter { it.name != null }
+                                    vm.state.selectedContragentParish?.entits?.filter { it.name != null }
 
-                                itemsIndexed(if(validEntities.isNotEmpty()) vm.state.selectedContragentParish!!.entits!! else listOf(
+                                itemsIndexed( if (validEntities != null && validEntities.isNotEmpty()) vm.state.selectedContragentParish!!.entits!! else
 
-                                    vm.state.selectedContragentParish!!.entits!![0])) { index, item ->
+                                    listOf<EntityArrivalAndConsumption>()  ) { index, item ->
 
-                                    if (validEntities.isNotEmpty()) {
+                                    if (validEntities!!.isNotEmpty()) {
+
                                         Text(item.name!!,
                                             fontSize = 20.sp,
                                             modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
@@ -345,6 +358,12 @@ class DataEntryComponent(
 
                     },
                     label = { Text("Контрагент расход") },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = vm.state.listColorBorderTF[2], // Цвет границы при фокусе
+                        unfocusedBorderColor = vm.state.listColorBorderTF[2], // Цвет границы в неактивном состоянии
+                        backgroundColor = vm.state.listColorBorderTF[2].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                    ),
 
                     trailingIcon = {
 
@@ -442,6 +461,12 @@ class DataEntryComponent(
                         },
                         label = { Text("Юр.лицо") },
 
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = vm.state.listColorBorderTF[3], // Цвет границы при фокусе
+                            unfocusedBorderColor = vm.state.listColorBorderTF[3], // Цвет границы в неактивном состоянии
+                            backgroundColor = vm.state.listColorBorderTF[3].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                        ),
+
                         trailingIcon = {
 
                             IconButton(
@@ -470,7 +495,7 @@ class DataEntryComponent(
 
                     if ( vm.state.expandedLegalEntityExpense && vm.state.selectedContragentExpense!!.entits!!.isNotEmpty()) {
 
-                        Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                        Box(modifier = Modifier.fillMaxWidth().height(100.dp), contentAlignment = Alignment.CenterStart) {
                             Card(
                                 modifier = Modifier.fillMaxSize()
                                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -481,15 +506,16 @@ class DataEntryComponent(
                             LazyColumn {
 
                                 val validEntities =
-                                    vm.state.selectedContragentExpense!!.entits!!.filter { it.name != null }
+                                    vm.state.selectedContragentExpense?.entits?.filter { it.name != null }
 
                                 itemsIndexed(
-                                    if (validEntities.isNotEmpty()) vm.state.selectedContragentExpense!!.entits!! else listOf(
-                                        vm.state.selectedContragentExpense!!.entits!![0]
-                                    )
+                                    if (validEntities != null && validEntities.isNotEmpty()) vm.state.selectedContragentExpense!!.entits!! else
+
+                                        listOf<EntityArrivalAndConsumption>()
+
                                 ) { index, item ->
 
-                                    if (validEntities.isNotEmpty()) {
+                                    if (validEntities!!.isNotEmpty()) {
 
                                         Text(item.name!!,
                                             fontSize = 20.sp,
@@ -565,7 +591,14 @@ class DataEntryComponent(
 
 
                     },
+
                     label = { Text("Cклад") },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = vm.state.listColorBorderTF[4], // Цвет границы при фокусе
+                        unfocusedBorderColor = vm.state.listColorBorderTF[4], // Цвет границы в неактивном состоянии
+                        backgroundColor = vm.state.listColorBorderTF[4].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                    ),
 
                     trailingIcon = {
 
@@ -658,19 +691,28 @@ class DataEntryComponent(
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Button(
-                    onClick = { onClickNext(
+                    onClick = {
 
-                        if (vm.state.selectedLegalEntityParish != null) vm.state.selectedLegalEntityParish!!.id else null ,
+                        vm.processIntents(DataEntryIntents.CheckNullTF)
 
-                        if (vm.state. selectedLegalEntityExpense != null) vm.state.selectedLegalEntityExpense!!.id else null ,
+                        if ( vm.state.onCheck ) {
 
-                        if (vm.state.selectedContragentExpense != null) vm.state.selectedContragentExpense!!.id else null ,
+                            onClickNext(
 
-                        if (vm.state.selectedContragentParish != null) vm.state.selectedContragentParish!!.id else null ,
+                                if (vm.state.selectedLegalEntityParish != null) vm.state.selectedLegalEntityParish!!.id else null,
 
-                        if (vm.state.selectedWarehouse != null) vm.state.selectedWarehouse!!.stores[0]!!.id else null
+                                if (vm.state.selectedLegalEntityExpense != null) vm.state.selectedLegalEntityExpense!!.id else null,
 
-                    ) },
+                                if (vm.state.selectedContragentExpense != null) vm.state.selectedContragentExpense!!.id else null,
+
+                                if (vm.state.selectedContragentParish != null) vm.state.selectedContragentParish!!.id else null,
+
+                                if (vm.state.selectedWarehouse != null) vm.state.selectedWarehouse!!.stores[0]!!.id else null
+
+                            )
+                        }
+
+                    },
 
                     modifier = Modifier
                         .clip(RoundedCornerShape(70.dp))

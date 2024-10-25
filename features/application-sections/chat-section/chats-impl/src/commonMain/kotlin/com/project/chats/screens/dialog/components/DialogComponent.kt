@@ -44,9 +44,9 @@ import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.viewmodel.DialogIntents
 import com.project.chats.screens.dialog.viewmodel.DialogViewModel
 import com.project.core_app.network_base_screen.NetworkComponent
+import com.project.core_app.network_base_screen.NetworkViewModel
 import com.skydoves.landscapist.coil3.CoilImage
 import org.jetbrains.compose.resources.painterResource
-import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.add_photo
 import project.core.resources.back
@@ -55,14 +55,15 @@ import project.core.resources.dots
 import project.core.resources.paperclip
 import project.core.resources.user_chats
 
-class DialogComponent(
+class DialogComponentScreen(
     private val uiChats:String,
     private val titleChat:String,
     private val urlIcon:String?,
     private val countNewMessage:Int,
-   // private val vm: DialogViewModel,
+    override val viewModel: DialogViewModel
+    //private val viewModel: DialogViewModel,
 ):NetworkComponent {
-    override val viewmodel:  DialogViewModel = getKoin().get()
+
     @Composable
     override fun Component() {
 
@@ -83,11 +84,11 @@ class DialogComponent(
         val listState = rememberLazyListState()
 
 
-        LaunchedEffect(viewmodel.state.listMessage.size) {
-            listState.scrollToItem(viewmodel.state.listMessage.size)
+        LaunchedEffect(this.viewModel.state.listMessage.size) {
+            listState.scrollToItem(this@DialogComponentScreen.viewModel.state.listMessage.size)
         }
 
-        viewmodel.processIntent(DialogIntents.SetScreen(uiChats, scope))
+        this.viewModel.processIntent(DialogIntents.SetScreen(uiChats, scope))
 
         Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
 
@@ -104,7 +105,7 @@ class DialogComponent(
                             modifier = Modifier.size(20.dp).clickable(
                                 indication = null, // Отключение эффекта затемнения
                                 interactionSource = remember { MutableInteractionSource() })
-                            { viewmodel.processIntent(DialogIntents.Back) }
+                            { this@DialogComponentScreen.viewModel.processIntent(DialogIntents.Back) }
                         )
 
                         Spacer(modifier = Modifier.width(15.dp))
@@ -132,7 +133,7 @@ class DialogComponent(
                         modifier = Modifier.size(20.dp).clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-                        { viewmodel.processIntent(DialogIntents.HistoryFiles) }
+                        { this@DialogComponentScreen.viewModel.processIntent(DialogIntents.HistoryFiles) }
                     )
 
                 }
@@ -142,12 +143,11 @@ class DialogComponent(
                     modifier = Modifier
                         .padding(10.dp)
                         .fillMaxWidth()
-                        .fillMaxHeight(0.94f),
-                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Bottom)
+                        .fillMaxHeight(0.94f)
                 ) {
 
 
-                    items(viewmodel.state.listMessage) { item ->
+                    items(this@DialogComponentScreen.viewModel.state.listMessage) { item ->
                         if (item.isShowDate) {
                             MessageDataComponent(item.time)
                         }
@@ -163,8 +163,8 @@ class DialogComponent(
                                 statusMessage = item.statusMessage
                             ),
                             {
-                                viewmodel.sendMessageUseCase(
-                                    viewmodel.state.listMessage.last().text,
+                                this@DialogComponentScreen.viewModel.sendMessageUseCase(
+                                    this@DialogComponentScreen.viewModel.state.listMessage.last().text,
                                     uiChats,
                                     scope
                                 )
@@ -215,9 +215,9 @@ class DialogComponent(
 
 
                             BasicTextField(
-                                value = viewmodel.state.titleChats,
+                                value = this@DialogComponentScreen.viewModel.state.titleChats,
                                 onValueChange = {
-                                    viewmodel.state = viewmodel.state.copy(
+                                    this@DialogComponentScreen.viewModel.state = this@DialogComponentScreen.viewModel.state.copy(
                                         titleChats = it
                                     )
                                 },
@@ -259,12 +259,12 @@ class DialogComponent(
                                     .size(25.dp)
                                     .graphicsLayer(rotationZ = 180f).clickable {
 
-                                        viewmodel.sendMessageUseCase(
-                                            viewmodel.state.titleChats,
+                                        this@DialogComponentScreen.viewModel.sendMessageUseCase(
+                                            this@DialogComponentScreen.viewModel.state.titleChats,
                                             uiChats,
                                             scope
                                         )
-                                        viewmodel.state = viewmodel.state.copy(
+                                        this@DialogComponentScreen.viewModel.state = this@DialogComponentScreen.viewModel.state.copy(
                                             titleChats = ""
                                         )
                                     }

@@ -5,6 +5,8 @@ data class AllProductArrivalAndConsumption(
 
     val id: Int?,
 
+    val sku:String?,
+
     val name: String?,
 
     val ui: String?,

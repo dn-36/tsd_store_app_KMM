@@ -1,4 +1,4 @@
-package org.example.project.presentation.crm_feature.edit_note_screen.screen
+package com.example.notes_screens_impl.screens.edit_note.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
+import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.network.notes_network.model.NoteResponse
 import org.example.project.presentation.crm_feature.edit_note_screen.model.WindowUpdate
 import org.example.project.presentation.crm_feature.edit_note_screen.viewmodel.EditNoteIntents
@@ -38,18 +38,16 @@ import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.dots
-import org.koin.mp.KoinPlatform.getKoin
 
 
-data class EditNoteScreen(val noteResponse: NoteResponse) : Screen {
+class EditNoteComponent(val noteResponse: NoteResponse, override val viewModel: EditNoteViewModel) : NetworkComponent {
 
-    val vm : EditNoteViewModel = getKoin().get()
     @Composable
-    override fun Content(){
+    override fun Component(){
 
         val scope = rememberCoroutineScope()
 
-        vm.processIntent(EditNoteIntents.SetScreen(noteResponse,scope))
+        viewModel.processIntent(EditNoteIntents.SetScreen(noteResponse,scope))
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
             Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
@@ -62,7 +60,7 @@ data class EditNoteScreen(val noteResponse: NoteResponse) : Screen {
                                 indication = null, // Отключение эффекта затемнения
                                 interactionSource = remember { MutableInteractionSource() })
                             {
-                                vm.processIntent(
+                                viewModel.processIntent(
                                     EditNoteIntents.UpdateNoteBack(
                                         noteResponse, scope)
                                 )
@@ -80,8 +78,8 @@ data class EditNoteScreen(val noteResponse: NoteResponse) : Screen {
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
                         {
-                            vm.editNoteState = vm.editNoteState.copy(
-                                expandedSettings = !vm.editNoteState.expandedSettings
+                            viewModel.editNoteState = viewModel.editNoteState.copy(
+                                expandedSettings = !viewModel.editNoteState.expandedSettings
                             )
                         })
                 }
@@ -103,17 +101,18 @@ data class EditNoteScreen(val noteResponse: NoteResponse) : Screen {
                     }
                 }*/
                 Spacer(modifier = Modifier.height(30.dp))
-                BasicTextField(value = vm.editNoteState.noteText!!,
-                   onValueChange = {vm.editNoteState = vm.editNoteState.copy(
+                BasicTextField(value = viewModel.editNoteState.noteText!!,
+                   onValueChange = {
+                       viewModel.editNoteState = viewModel.editNoteState.copy(
                        noteText = it
                    ) },
                     textStyle = TextStyle(fontSize = 15.sp)
                 )
             }
-            if(vm.editNoteState.expandedSettings) {
+            if(viewModel.editNoteState.expandedSettings) {
                 Box(modifier = Modifier.fillMaxWidth().padding(top = 50.dp,end = 16.dp)) {
                     Box(modifier = Modifier.align(Alignment.CenterEnd)
-                       .fillMaxWidth(0.55f).fillMaxHeight(vm.editNoteState.heightBox)
+                       .fillMaxWidth(0.55f).fillMaxHeight(viewModel.editNoteState.heightBox)
                     ) {
                         Card(
                             modifier = Modifier.fillMaxSize()
@@ -129,13 +128,13 @@ data class EditNoteScreen(val noteResponse: NoteResponse) : Screen {
                                             indication = null, // Отключение эффекта затемнения
                                             interactionSource = remember { MutableInteractionSource() })
                                         {
-                                            vm.editNoteState = vm.editNoteState.copy(
+                                            viewModel.editNoteState = viewModel.editNoteState.copy(
                                                 expandedSettings = false
                                             )
-                                            vm.processIntent(EditNoteIntents.SelectingEditableCategory(0))
+                                            viewModel.processIntent(EditNoteIntents.SelectingEditableCategory(0))
                                         }
                                 )
-                            if(vm.editNoteState.creator) {
+                            if(viewModel.editNoteState.creator) {
                                 Text("смена пользователей",
                                     fontSize = 15.sp,
                                     modifier = Modifier.padding(10.dp)
@@ -143,10 +142,10 @@ data class EditNoteScreen(val noteResponse: NoteResponse) : Screen {
                                             indication = null, // Отключение эффекта затемнения
                                             interactionSource = remember { MutableInteractionSource() })
                                         {
-                                            vm.editNoteState = vm.editNoteState.copy(
+                                            viewModel.editNoteState = viewModel.editNoteState.copy(
                                                 expandedSettings = false
                                             )
-                                            vm.processIntent(
+                                            viewModel.processIntent(
                                                 EditNoteIntents.SelectingEditableCategory(
                                                     1
                                                 )
@@ -161,10 +160,10 @@ data class EditNoteScreen(val noteResponse: NoteResponse) : Screen {
                                         indication = null, // Отключение эффекта затемнения
                                         interactionSource = remember { MutableInteractionSource() })
                                     {
-                                        vm.editNoteState = vm.editNoteState.copy(
+                                        viewModel.editNoteState = viewModel.editNoteState.copy(
                                             expandedSettings = false
                                         )
-                                        vm.processIntent(EditNoteIntents.SelectingEditableCategory(2))
+                                        viewModel.processIntent(EditNoteIntents.SelectingEditableCategory(2))
                                     }
                             )
                             Text("удалить заметку",
@@ -174,39 +173,39 @@ data class EditNoteScreen(val noteResponse: NoteResponse) : Screen {
                                         indication = null, // Отключение эффекта затемнения
                                         interactionSource = remember { MutableInteractionSource() })
                                     {
-                                        vm.editNoteState = vm.editNoteState.copy(
+                                        viewModel.editNoteState = viewModel.editNoteState.copy(
                                             expandedSettings = false
                                         )
-                                        vm.processIntent(EditNoteIntents.SelectingEditableCategory(3))
+                                        viewModel.processIntent(EditNoteIntents.SelectingEditableCategory(3))
                                     })
                             }
                         }
                     }
                 }
 
-                if (vm.editNoteState.openWindowUpdate) {
+                if (viewModel.editNoteState.openWindowUpdate) {
                     println("проверка видимости")
                     println("проверка видимости")
                     println("проверка видимости")
-                    println("${vm.editNoteState.openWindowUpdate},${vm.editNoteState.statusTF}")
+                    println("${viewModel.editNoteState.openWindowUpdate},${viewModel.editNoteState.statusTF}")
                     println("проверка видимости")
                     println("проверка видимости")
                     println("проверка видимости")
-                    when (vm.editNoteState.categoryNow) {
+                    when (viewModel.editNoteState.categoryNow) {
                         0 -> {
-                           WindowUpdate(vm,noteResponse).Status()
+                           WindowUpdate(viewModel,noteResponse).Status()
                         }
 
                         1 -> {
-                            WindowUpdate(vm,noteResponse).Users()
+                            WindowUpdate(viewModel,noteResponse).Users()
                         }
 
                         2 -> {
-                            WindowUpdate(vm,noteResponse).Name()
+                            WindowUpdate(viewModel,noteResponse).Name()
                         }
 
                         3 -> {
-                            WindowUpdate(vm,noteResponse).Delete()
+                            WindowUpdate(viewModel,noteResponse).Delete()
                         }
                     }
                 }
