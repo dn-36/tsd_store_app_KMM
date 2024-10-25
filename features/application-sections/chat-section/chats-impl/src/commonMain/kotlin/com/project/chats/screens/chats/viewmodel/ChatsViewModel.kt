@@ -18,7 +18,7 @@ class ChatsViewModel(
     val getListChatsUseCase: GetListChatsUseCase,
     val deleteChat : DeleteChatUseCase
 ) : NetworkViewModel() {
-
+//dsfkcndjfs
     private var isSeted = false
     var state = MutableStateFlow(ChatsState())
         private set
