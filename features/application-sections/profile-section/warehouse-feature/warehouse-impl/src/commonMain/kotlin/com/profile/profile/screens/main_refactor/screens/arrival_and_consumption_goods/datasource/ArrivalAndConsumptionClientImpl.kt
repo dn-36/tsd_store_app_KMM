@@ -114,10 +114,10 @@ class ArrivalAndConsumptionClientImpl (
 
                         )
                     )
-                    println("NewListStores: ${newListStores}")
+                  //  println("NewListStores: ${newListStores}")
                 }
 
-                println("NewListStoresTwo: ${newListStores}")
+               // println("NewListStoresTwo: ${newListStores}")
 
                 newListWarehouse.add(
 
@@ -185,7 +185,7 @@ class ArrivalAndConsumptionClientImpl (
 
                   product_id = product!!.product_id,
 
-                    count = product!!.count
+                    count = product!!.count!!
 
                 )
 
@@ -306,7 +306,7 @@ class ArrivalAndConsumptionClientImpl (
             idContragentExpense?:0,
             idContragentParish?:0,
             idLegalEntityExpense?:0,
-            idLegalEntityExpense?:0,
+            idLegalEntityParish?:0,
             idWarehouse?:0,
             isPush,
             products = listProducts.map {

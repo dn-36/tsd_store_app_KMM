@@ -2,6 +2,7 @@ package com.project.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -178,12 +179,21 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
 
             Column(horizontalAlignment = Alignment.End, modifier = Modifier.align(Alignment.BottomCenter)) {
 
-                Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
-                    modifier = Modifier.padding(16.dp).size(70.dp)
-                        .clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { viewModel.processIntent(OrganizationsIntents.OpenWindowAddOrganization)})
+
+                Box( modifier = Modifier.padding(16.dp)
+                    .size(60.dp).clip(CircleShape).background(Color.White).border(
+
+                        width = 2.dp, color = Color.Black, shape = CircleShape
+
+                    )
+                    , contentAlignment = Alignment.Center) {
+                    Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
+                        modifier = Modifier.size(60.dp)
+                            .clickable(
+                                indication = null, // Отключение эффекта затемнения
+                                interactionSource = remember { MutableInteractionSource() })
+                            { viewModel.processIntent(OrganizationsIntents.OpenWindowAddOrganization) })
+                }
 
                 Box(modifier = Modifier) {
                     MenuBottomBar().init(

@@ -41,7 +41,7 @@ data class ProductDataArrivalAndConsumption(
 
     val product_id: Int?,
 
-    val count: Int?,
+    val count: Double?,
 
 )
 

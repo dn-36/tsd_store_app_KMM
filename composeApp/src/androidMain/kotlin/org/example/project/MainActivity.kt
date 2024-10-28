@@ -28,19 +28,15 @@ class MainActivity : ComponentActivity() {
             androidContext(this@MainActivity.applicationContext)
         }
 
+        val permissionManeger = PermissionManeger(this)
 
-        val permissionManeger =  PermissionManeger(this)
+        permissionManeger.askPermissions(
 
+            PermissionManeger.PERMISSION.CONTACTS_PERMISSION,
+            PermissionManeger.PERMISSION.CAMERA_PERMISSION,
+            PermissionManeger.PERMISSION.BLUETOOTH_PERMISSION
+        )
 
-            permissionManeger.askPermissions(
-                PermissionManeger.PERMISSION.CAMERA_PERMISSION
-            )
-            permissionManeger.askPermissions(
-                PermissionManeger.PERMISSION.BLUETOOTH_PERMISSION
-            )
-            permissionManeger.askPermissions(
-                PermissionManeger.PERMISSION.CONTACTS_PERMISSION
-            )
 
 
         setContent {
@@ -49,6 +45,7 @@ class MainActivity : ComponentActivity() {
 
         }
     }
+
 }
 
 

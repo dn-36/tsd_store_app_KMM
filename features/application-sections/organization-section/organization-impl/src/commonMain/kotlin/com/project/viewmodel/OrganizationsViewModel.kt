@@ -186,6 +186,8 @@ class OrganizationsViewModel(
 
     fun selectItemUpdate ( item: Response ) {
 
+        println("URL ORGANIZATION: ${item}")
+
     state = state.copy(
 
         updateOrganization = item,

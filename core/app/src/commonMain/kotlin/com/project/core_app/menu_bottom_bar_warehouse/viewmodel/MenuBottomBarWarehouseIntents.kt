@@ -8,4 +8,6 @@ sealed class MenuBottomBarWarehouseIntents {
     data class Warehouse(val screen: Screen): MenuBottomBarWarehouseIntents()
     data class Print(val screen: Screen): MenuBottomBarWarehouseIntents()
     data class Profile(val screen: Screen): MenuBottomBarWarehouseIntents()
+    data class SetScreen(val section: MenuBottomBarWarehouseSection): MenuBottomBarWarehouseIntents()
+
 }

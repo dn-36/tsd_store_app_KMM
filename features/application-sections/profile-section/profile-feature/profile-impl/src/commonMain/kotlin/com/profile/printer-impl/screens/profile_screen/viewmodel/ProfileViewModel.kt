@@ -56,8 +56,11 @@ class ProfileViewModel : NetworkViewModel() {
                 //println("${notesApi.getUsers()}")
 
                 profileState = profileState.copy(
+
                     name = user?.name?:"",
+
                     numberPhone = keyValueStorage.getCurrentNumber()!!
+
                 )
 
                 println("${keyValueStorage.getCurrentNumber()!!}")

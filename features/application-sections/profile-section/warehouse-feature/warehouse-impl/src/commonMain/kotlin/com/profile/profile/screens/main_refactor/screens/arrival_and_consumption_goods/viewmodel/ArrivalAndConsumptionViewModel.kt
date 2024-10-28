@@ -525,11 +525,15 @@ class ArrivalAndConsumptionViewModel (
 
     fun ready ( count: String ) {
 
-        if ( count.isNotBlank() && count.toInt() > 0 ) {
+        val cont = count.toDoubleOrNull()
+
+        println("CHECK COUNT: ${cont}")
+
+        if ( count.isNotBlank() && count.toDoubleOrNull() != null && count.toDouble() > 0  ) {
 
             val newProduct = state.selectedProduct
 
-            newProduct!!.count = count.toInt()
+            newProduct!!.count = count.toDouble()
 
             val newList = state.listSelectedProducts.toMutableList()
 
@@ -643,7 +647,7 @@ class ArrivalAndConsumptionViewModel (
 
                 isVisibilityScannerComponent = mutableStateOf(0f),
 
-                selectedProduct = ProductArrivalAndConsumption( product = selectedProduct, count = 0 )
+                selectedProduct = ProductArrivalAndConsumption( product = selectedProduct, count = 0.0 )
 
             )
 

@@ -1,6 +1,8 @@
 package product_network.model
 
+import com.project.network.arrival_goods.ArrivalGoodsClient
 import kotlinx.serialization.Serializable
+import product_network.ProductApiClient
 
 
 @Serializable
@@ -48,9 +50,9 @@ data class Product(
     val min_count_store: Int?,
     val video: String?,
     val video_youtube: String?,
-    val summ_stock: Int?,
-    val summ_reserve: Int?,
-    val summ_order: Int?,
+    val summ_stock: Double?,
+    @Serializable(with = ProductApiClient.CountSerializer::class) val summ_reserve: Double?,
+    @Serializable(with = ProductApiClient.CountSerializer::class) val summ_order: Double?,
     val codes: List<String>?,
     val seo: Seo?,
     val ediz: Ediz?,
