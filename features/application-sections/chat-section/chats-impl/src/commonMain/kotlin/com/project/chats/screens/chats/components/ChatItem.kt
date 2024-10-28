@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -90,6 +91,7 @@ fun ChatItem(
                     if(!urlIconChat.isNullOrBlank()) {
                         CoilImage(
                             imageModel = { urlIconChat },
+                            loading = { CircularProgressIndicator(modifier = Modifier.size(10.dp)) },
                             modifier = Modifier.size(50.dp)
                         )
                     }else{

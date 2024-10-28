@@ -13,12 +13,13 @@ import com.project.chats.screens.select_contact.screen.SelectContactsScreen
 import com.project.chats.screens.dialog.screen.DialogScreen
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
+import kotlinx.coroutines.delay
 
 class ChatsViewModel(
     val getListChatsUseCase: GetListChatsUseCase,
     val deleteChat : DeleteChatUseCase
 ) : NetworkViewModel() {
-//dsfkcndjfs
+
     private var isSeted = false
     var state = MutableStateFlow(ChatsState())
         private set
@@ -80,9 +81,14 @@ class ChatsViewModel(
 
 
    private fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?,countNewMessage:Int) {
-
-            Navigation.navigator.push(DialogScreen(uiChats  = chatsUi,titleChat,urlIcon,countNewMessage))
-
+            Navigation.navigator.push(
+                DialogScreen(
+                    chatsUi,
+                    titleChat,
+                    urlIcon,
+                    countNewMessage
+                )
+            )
     }
 
    private fun addChat() {
@@ -90,19 +96,25 @@ class ChatsViewModel(
     }
 
    private fun setScreen( scope: CoroutineScope) {
-        if (!isSeted) {
-            scope.launch(Dispatchers.IO) {
-                isSeted = true
-                state.update {
-                    it.copy(
-                      listchats =   getListChatsUseCase.execute()
-                    )
-                }
-                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
-            }
+       if (!isSeted) {
+           scope.launch(Dispatchers.IO) {
+               while (true) {
 
-        }
-    }
+                   state.update {
+                       it.copy(
+                           listchats = getListChatsUseCase.execute()
+                       )
+                   }
+                   if (!isSeted) {
+                       isSeted = true
+                       setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+                   }
+                   delay(1500L)
+               }
+
+           }
+       }
+   }
 
    private fun showDeleteDealog(ui:String){
        selectedUiChat = ui

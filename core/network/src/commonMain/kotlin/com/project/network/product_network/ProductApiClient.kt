@@ -10,6 +10,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
+import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -30,14 +31,14 @@ class ProductApiClient(private val token: String) {
             })
         }
         install(Logging) {
-            level = LogLevel.BODY // Включить логирование для отладки
+            level = LogLevel.BODY
         }
         defaultRequest {
             header("Authorization", "Bearer $token")
         }
     }
 
-    // Функция для выполнения GET запроса с заданными параметрами и извлечения полей name
+
     suspend fun getProductNames(): List<Product>{
         val url = "https://delta.online/api/products-filter"
         val products: ApiResponse = client.get(url) {
@@ -48,10 +49,11 @@ class ProductApiClient(private val token: String) {
             parameter("order", "false")
             parameter("store", "false")
         }.body()
+
         return products.data?: listOf()//!!.map { it.name?:"" }
     }
 
-    // Закрываем клиент после использования
+
     fun close() {
         client.close()
     }
