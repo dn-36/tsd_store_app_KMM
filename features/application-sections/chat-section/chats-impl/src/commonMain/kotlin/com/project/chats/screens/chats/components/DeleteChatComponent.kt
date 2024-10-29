@@ -16,6 +16,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,11 +42,20 @@ fun ConfirmDeleteChatDialog(
         ) {
             Column(
                 modifier = Modifier
-                    .height(200.dp)
-                    .padding(16.dp)
+                    .height(170.dp)
+                    .padding(top = 16.dp, bottom = 10.dp)
                     .wrapContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Text(
+                    text = "Удаление сообщений",
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    // fontStyle = FontStyle. ,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
                 Text(
                     text = "Вы уверены что хотите удалить чат?",
                     fontSize = 18.sp,
@@ -56,51 +67,41 @@ fun ConfirmDeleteChatDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Card(
-                        shape = RoundedCornerShape(8.dp),
-                        elevation = 4.dp,
+
+                    Box(
                         modifier = Modifier
-                            .height(72.dp)
                             .weight(1f)
-                            .padding(8.dp)
-                            .clickable { onDelete() }
+                            .clickable { onCancel() },
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
 
-                            Text(
-                                text = "Удалить",
-                                modifier = Modifier
-                                    .padding(20.dp)
-                            )
+                        Text(
+                            text = "Отмена",
+                            modifier = Modifier
+                                .padding(25.dp),
+                            color = Color.Gray
+                        )
 
-                        }
                     }
 
 
-                    Card(
-                        shape = RoundedCornerShape(8.dp),
-                        elevation = 4.dp,
-                        modifier = Modifier
-                            .height(72.dp)
+
+
+                    Box(
+                        modifier =  Modifier
                             .weight(1f)
-                            .padding(8.dp)
-                            .clickable { onCancel() }
+                            .clickable { onDelete() },
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
 
-                            Text(
-                                text = "Отмена",
-                                modifier = Modifier
-                                    .padding(20.dp)
-                            )
+                        Text(
+                            text = "Удалить",
+                            modifier = Modifier
+                                .padding(25.dp),
+                            color = Color.Red
+                        )
 
-                        }
+
                     }
                 }
             }
