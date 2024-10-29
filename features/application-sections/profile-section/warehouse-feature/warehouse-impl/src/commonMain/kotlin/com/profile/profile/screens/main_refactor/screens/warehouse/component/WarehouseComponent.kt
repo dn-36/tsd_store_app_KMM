@@ -39,6 +39,7 @@ import com.project.chats.WarehouseScreensApi
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.`printer-api`.PrinterScreensApi
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
+import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform
 import project.core.resources.Res
@@ -68,7 +69,7 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn ( modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f) ) {
-                    items(viewModel.warehouseState.listAllWarehouse) { item ->
+                    items(viewModel.state.listAllWarehouse) { item ->
                         if(item.stores.isNotEmpty()) {
                             item.stores.forEach {
                                 Box() {
@@ -116,8 +117,15 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                                             modifier = Modifier.size(17.dp)
                                                 .clickable(
                                                     indication = null, // Отключение эффекта затемнения
-                                                    interactionSource = remember { MutableInteractionSource() })
-                                                {viewModel.processIntents(WarehouseIntents.OpenWindowUpdateWarehouse(scope,item))})
+                                                    interactionSource = remember {
+
+                                                        MutableInteractionSource() })
+                                                {
+                                                    if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
+
+                                                    viewModel.processIntents(WarehouseIntents.
+
+                                                    OpenWindowUpdateWarehouse(scope,item))}})
 
 
                                         Spacer(modifier = Modifier.width(20.dp))
@@ -130,9 +138,10 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                                                     interactionSource = remember { MutableInteractionSource() })
                                                 {
                                                     viewModel.processIntents(
-                                                        WarehouseIntents.DeleteWarehouse(
-                                                            scope,
-                                                            it!!.ui!!
+                                                        WarehouseIntents.OpenDeleteComponent(
+
+                                                            ui = it!!.ui
+
                                                         )
                                                     )
                                                 })
@@ -162,7 +171,12 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                             .clickable(
                                 indication = null, // Отключение эффекта затемнения
                                 interactionSource = remember { MutableInteractionSource() })
-                            { viewModel.processIntents(WarehouseIntents.OpenWindowAddWarehouse(scope)) })
+                            {
+                                if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
+
+                                viewModel.processIntents(WarehouseIntents.OpenWindowAddWarehouse(
+
+                                    scope)) }})
                 }
 
                 MenuBottomBarWarehouse().init(
@@ -171,10 +185,21 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                     ArrivalAndConsumptionScreen(),
                     printScreen.printer()
 
-                ).Content()
+                ).Content(MenuBottomBarWarehouseSection.WAREHOUSE)
             }
 
         }
+
+        if ( viewModel.state.isVisibilityDeleteComponent == 1f ) {
+
+            DeleteWarehouseComponent( onClickDelete = { scope -> viewModel.processIntents(
+
+                WarehouseIntents.DeleteWarehouse(scope)
+
+            ) }, onClickNo = { viewModel.processIntents(WarehouseIntents.NoDelete) } ).Content()
+
+        }
+
     }
 
 }

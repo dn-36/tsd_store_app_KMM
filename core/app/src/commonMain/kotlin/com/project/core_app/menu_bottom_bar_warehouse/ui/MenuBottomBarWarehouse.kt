@@ -26,6 +26,9 @@ import cafe.adriel.voyager.core.screen.Screen
 
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseIntents
 import com.profile.profile.screens.warehouse_feature.core.menu_bottom_bar_warehouse.viewmodel.MenuBottomBarWarehouseViewModel
+import com.project.core_app.menu_bottom_bar.viewmodel.MenuBottomBarIntents
+import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
+import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
 
 
 import org.jetbrains.compose.resources.painterResource
@@ -60,8 +63,11 @@ val vm = MenuBottomBarWarehouseViewModel()
     }
 
     @Composable
-     fun Content() {
-            Box(
+     fun Content(section: MenuBottomBarWarehouseSection) {
+
+        vm.processIntent(MenuBottomBarWarehouseIntents.SetScreen(section))
+
+        Box(
                 modifier = Modifier
                     .padding(bottom = 16.dp)
                     .fillMaxHeight(0.1f)
@@ -101,7 +107,7 @@ val vm = MenuBottomBarWarehouseViewModel()
 
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.state.section.ProfileButtonCollor)
+                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(Color.White)
                             .width(70.dp).height(40.dp).clickable { vm.processIntent(MenuBottomBarWarehouseIntents.Profile(
                                 _profileScreen!!)) }){
                             Image(painter = painterResource(Res.drawable.user),contentDescription = null,

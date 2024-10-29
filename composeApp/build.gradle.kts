@@ -55,6 +55,7 @@ kotlin {
             implementation(project(":features:application-sections:crm-section:munu-crm-feature:menu-crm-impl"))
             implementation(project(":features:application-sections:crm-section:munu-crm-feature:menu-crm-api"))
             implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-impl"))
+            implementation(project(":features:application-sections:crm-section:contragents-feature:contragents-impl"))
             implementation(project(":features:application-sections:tape-section:tape-impl"))
             implementation(project(":features:application-sections:profile-section:profile-feature:profile-api"))
             implementation(project(":features:application-sections:profile-section:profile-feature:profile-impl"))

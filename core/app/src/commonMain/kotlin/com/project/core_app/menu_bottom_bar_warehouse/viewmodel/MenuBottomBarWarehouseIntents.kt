@@ -1,6 +1,7 @@
 package org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel
 
 import cafe.adriel.voyager.core.screen.Screen
+import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 
 
 sealed class MenuBottomBarWarehouseIntents {

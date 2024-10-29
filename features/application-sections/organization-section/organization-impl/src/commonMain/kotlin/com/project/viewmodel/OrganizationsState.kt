@@ -11,6 +11,8 @@ data class OrganizationsState(
 
     val isUsed: MutableState<Boolean> = mutableStateOf(true),
 
+    val isVisibilityDeleteComponent: Float = 0f,
+
     val isUpdateOrganization: Boolean = false,
 
     val updateOrganization: Response? = null,

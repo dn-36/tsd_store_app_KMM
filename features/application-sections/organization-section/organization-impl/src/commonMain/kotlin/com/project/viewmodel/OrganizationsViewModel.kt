@@ -65,7 +65,7 @@ class OrganizationsViewModel(
 
                 }
 
-            }//setScreen(intent.coroutineScope)
+            }
 
             is OrganizationsIntents.ChoosingActiveOrganization -> {
 
@@ -85,17 +85,19 @@ class OrganizationsViewModel(
 
                 }
 
-            }//choosingActiveOrganization(intent.coroutineScope,intent.ui)
+            }
 
             is OrganizationsIntents.DeleteOrganization -> {
 
                 intent.coroutineScope.launch(Dispatchers.IO) {
 
-                    deleteOrganizationUseCase.execute(intent.ui,
+                    deleteOrganizationUseCase.execute( state.updateOrganization!!.company!!.ui!!,
                         onDelete = {
                             state = state.copy(
 
-                                isUsed = mutableStateOf(true)
+                                isUsed = mutableStateOf(true),
+
+                                isVisibilityDeleteComponent = 0f
 
                             )
                         })
@@ -103,7 +105,7 @@ class OrganizationsViewModel(
                     setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                 }
-            }//deleteOrganization(intent.coroutineScope,intent.ui)
+            }
 
             is OrganizationsIntents.CreateOrganization -> {
 
@@ -129,15 +131,13 @@ class OrganizationsViewModel(
                     }
 
                 }
-            }//createOrganization(intent.coroutineScope,intent.name,intent.url)
+            }
 
             is OrganizationsIntents.OpenWindowAddOrganization -> openWindowAddOrganization()
 
             is OrganizationsIntents.UpdateOrganization -> {
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
-
-                       // if ( intent.name.isNotBlank() && intent.url.isNotBlank() ) {
 
                             updateOrganization.execute(name = intent.name, url = intent.url,
 
@@ -163,6 +163,12 @@ class OrganizationsViewModel(
 
             is OrganizationsIntents.SelectItemUpdate -> { selectItemUpdate( intent.item ) }
 
+            is OrganizationsIntents.CancelOrganizationComponent -> { cancel() }
+
+            is OrganizationsIntents.NoDelete -> { noDelete() }
+
+            is OrganizationsIntents.OpenDeleteComponent -> { openDeleteComponent( intent.item ) }
+
         }
     }
 
@@ -172,9 +178,13 @@ class OrganizationsViewModel(
 
             processIntent(OrganizationsIntents.CreateOrganization(scope, name, url))
 
-        }, onClickUpdate = { scope, name, url -> } ,
+        }, onClickUpdate = { scope, name, url -> },
 
-            isUpdate = state.isUpdateOrganization, listBorderColor = state.listColorBorderTf, item = null ))
+            onClickCansel = { processIntent( OrganizationsIntents.CancelOrganizationComponent ) } ,
+
+            isUpdate = state.isUpdateOrganization, listBorderColor = state.listColorBorderTf,
+
+            item = null ))
 
         state = state.copy(
 
@@ -203,9 +213,43 @@ class OrganizationsViewModel(
 
         processIntent(OrganizationsIntents.UpdateOrganization( coroutineScope = scope,
 
-            name = name, url = url, ui = state.updateOrganization!!.company?.ui?:"" ))}
+            name = name, url = url, ui = state.updateOrganization!!.company?.ui?:"" ))},
 
-            , isUpdate = state.isUpdateOrganization, listBorderColor = state.listColorBorderTf, item = state.updateOrganization ))
+            onClickCansel = { processIntent( OrganizationsIntents.CancelOrganizationComponent ) }
+
+            , isUpdate = state.isUpdateOrganization, listBorderColor = state.listColorBorderTf,
+
+            item = state.updateOrganization ))
+
+    }
+
+    fun cancel () {
+
+        Navigation.navigator.push(OrganizationScreen())
+
+    }
+
+    fun openDeleteComponent ( item: Response ) {
+
+    state = state.copy(
+
+        isVisibilityDeleteComponent = 1f,
+
+        updateOrganization = item
+
+    )
+
+    }
+
+    fun noDelete () {
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = 0f,
+
+            updateOrganization = null
+
+        )
 
     }
 

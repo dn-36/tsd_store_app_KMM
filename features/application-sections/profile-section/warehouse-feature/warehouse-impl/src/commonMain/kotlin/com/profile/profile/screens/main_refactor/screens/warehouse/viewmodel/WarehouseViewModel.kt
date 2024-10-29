@@ -3,7 +3,6 @@ package com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import com.profile.profile.screens.main_refactor.screens.warehouse.component.CreateWarehouseComponent
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecases.CreateWarehouseUseCase
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecases.DeleteWarehouseUseCase
@@ -11,14 +10,10 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecas
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecases.GetWarehouseUseCase
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecases.UpdateWarehouseUseCase
 import com.profile.profile.screens.main_refactor.screens.warehouse.screen.WarehouseScreen
-import com.project.core_app.ConstData
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
-import com.project.network.locations_network.LocationsClient
-import com.project.network.warehouse_network.WarehouseClient
 import com.project.network.warehouse_network.model.Warehouse
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -37,7 +32,7 @@ class WarehouseViewModel (
 
     ) : NetworkViewModel() {
 
-    var warehouseState by mutableStateOf(WarehouseState())
+    var state by mutableStateOf(WarehouseState())
 
     fun processIntents(intent: WarehouseIntents) {
 
@@ -49,7 +44,7 @@ class WarehouseViewModel (
 
                     getLocationsUseCase.execute ( onGet = {listAllLocations ->
 
-                        warehouseState = warehouseState.copy(
+                        state = state.copy(
 
                             listAllLocations = listAllLocations,
                             index = 2
@@ -57,7 +52,7 @@ class WarehouseViewModel (
                         )
 
                         Navigation.navigator.push(
-                            CreateWarehouseComponent(listAllLocations = warehouseState.listAllLocations,
+                            CreateWarehouseComponent(listAllLocations = state.listAllLocations,
                                 onClickCreate = { scope, name, localId ->
                                     processIntents(
                                         WarehouseIntents.CreateWarehouse(
@@ -67,16 +62,19 @@ class WarehouseViewModel (
                                         )
                                     )
                                 }, onClickUpdate = {scope, name, localId, ui ->  }
-                                , warehouse = null, index = warehouseState.index, locationUpdated = null)
-                        )
+
+                                , warehouse = null, index = state.index,
+
+                                locationUpdated = null,
+
+                                onClickCansel = { processIntents(WarehouseIntents.CanselComponent)}))
+
 
                     } )
 
                     setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                 }
-
-                //openWindowAddWarehouse(intent.coroutineScope)
 
             }
 
@@ -86,7 +84,7 @@ class WarehouseViewModel (
 
                     getLocationsUseCase.execute ( onGet = { listAllLocations ->
 
-                        warehouseState = warehouseState.copy(
+                        state = state.copy(
 
                             listAllLocations = listAllLocations,
                             index = 1
@@ -96,7 +94,7 @@ class WarehouseViewModel (
                         val locations = listAllLocations.find { it.adres == intent.warehouse.stores[0]!!.local!!.adres}
 
                         Navigation.navigator.push(
-                            CreateWarehouseComponent(listAllLocations = warehouseState.listAllLocations,
+                            CreateWarehouseComponent(listAllLocations = state.listAllLocations,
                                 onClickUpdate = { scope, name, localId,ui ->
                                     processIntents(
                                         WarehouseIntents.UpdateWarehouse(
@@ -107,7 +105,12 @@ class WarehouseViewModel (
                                         )
                                     )
                                 }, onClickCreate = {scope, name, localId ->  }
-                                , warehouse = intent.warehouse, index = warehouseState.index, locationUpdated = locations)
+
+                                , warehouse = intent.warehouse, index = state.index,
+
+                                locationUpdated = locations,
+
+                                onClickCansel = { processIntents(WarehouseIntents.CanselComponent)})
                         )
 
                     },
@@ -117,21 +120,19 @@ class WarehouseViewModel (
 
                 }
 
-                //openWindowUpdateWarehouse(intent.coroutineScope,intent.warehouse)
-
             }
 
             is WarehouseIntents.SetScreen -> {
 
-                if(warehouseState.isUsed.value) {
+                if(state.isUsed.value) {
 
-                    warehouseState.isUsed.value = false
+                    state.isUsed.value = false
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
                         getWarehouseUseCase.execute(onGet = { listAllWarehouse ->
 
-                            warehouseState = warehouseState.copy(
+                            state = state.copy(
 
                                 listAllWarehouse = listAllWarehouse,
 
@@ -144,8 +145,6 @@ class WarehouseViewModel (
 
                     }
                 }
-
-                //setScreen(intent.coroutineScope)
 
             }
 
@@ -164,7 +163,7 @@ class WarehouseViewModel (
                         setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                     }
-                    //createWarehouse(intent.coroutineScope, intent.name, intent.localId)
+
                 }
 
             }
@@ -173,11 +172,13 @@ class WarehouseViewModel (
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
-                    deleteWarehouseUseCase.execute(intent.ui, onDelete = {
+                    deleteWarehouseUseCase.execute( state.updateUiWarehouse, onDelete = {
 
-                        warehouseState = warehouseState.copy(
+                        state = state.copy(
 
                             isUsed = mutableStateOf(true),
+
+                            isVisibilityDeleteComponent = 0f
 
                             )
 
@@ -186,7 +187,7 @@ class WarehouseViewModel (
                     setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                 }
-                //deleteWarehouse(intent.coroutineScope, intent.ui)
+
 
             }
 
@@ -204,12 +205,47 @@ class WarehouseViewModel (
 
                     }
 
-                    //updateWarehouse(intent.coroutineScope, intent.ui, intent.name, intent.localId)
-
                 }
             }
 
+            is WarehouseIntents.CanselComponent -> { cansel() }
+
+            is WarehouseIntents.NoDelete -> { noDelete() }
+
+            is WarehouseIntents.OpenDeleteComponent -> { openDeleteComponent( intent.ui ) }
+
         }
+
+    }
+
+    fun cansel () {
+
+        Navigation.navigator.push(WarehouseScreen())
+
+    }
+
+    fun noDelete () {
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = 0f,
+
+            updateUiWarehouse = ""
+
+        )
+
+    }
+
+    fun openDeleteComponent ( ui: String ) {
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = 1f,
+
+            updateUiWarehouse = ui
+
+        )
+
     }
 
 }

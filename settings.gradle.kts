@@ -71,6 +71,12 @@ include(":features:application-sections")
 /*------*/include(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-impl")
 
 /**features**/
+/*----*/include(":features:application-sections:crm-section:contragents-feature")
+/** api and impl**/
+/*------*/include(":features:application-sections:crm-section:contragents-feature:contragents-api")
+/*------*/include(":features:application-sections:crm-section:contragents-feature:contragents-impl")
+
+/**features**/
 /*----*/include(":features:application-sections:crm-section:munu-feature")
 /** api and impl**/
 /*------*/include(":features:application-sections:crm-section:munu-feature:munu-api")

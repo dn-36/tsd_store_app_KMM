@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -57,9 +58,13 @@ class CreateWarehouseComponent (
 
     val warehouse:Warehouse?,
 
-    val onClickCreate:( scope:CoroutineScope, name:String, localId:String) -> Unit, val index: Int,
+    val onClickCreate:( scope:CoroutineScope, name:String, localId:String) -> Unit,
 
-                                val locationUpdated:ResponseItem?) : Screen {
+    val index: Int, val locationUpdated:ResponseItem?,
+
+    val onClickCansel: () -> Unit
+
+) : Screen {
 
     var location by mutableStateOf(if (warehouse != null) warehouse.stores[0]!!.local!!.name else "")
 
@@ -102,6 +107,24 @@ class CreateWarehouseComponent (
                 Column(modifier = Modifier.padding(16.dp).fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
 
                     Column {
+
+                        Row ( modifier = Modifier.fillMaxWidth(),
+
+                            horizontalArrangement = Arrangement.End ) {
+
+                            Image(painter = painterResource(Res.drawable.cancel),
+                                contentDescription = null,
+                                modifier = Modifier.size(15.dp)
+                                    .clickable(
+                                        indication = null, // Отключение эффекта затемнения
+                                        interactionSource = remember { MutableInteractionSource() })
+
+                                    { onClickCansel() })
+
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
                         OutlinedTextField(
                             value = title,
                             onValueChange = {

@@ -376,6 +376,9 @@ data class WindowUpdate(val vm: EditNoteViewModel,val noteResponse: NoteResponse
                         .align(Alignment.Center)
                 ) {
                     Text("Удаление", fontSize = 12.sp)
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Text("Вы действительно хотите удалить заметку?", fontSize = 12.sp)
 
                     Spacer(modifier = Modifier.height(25.dp))

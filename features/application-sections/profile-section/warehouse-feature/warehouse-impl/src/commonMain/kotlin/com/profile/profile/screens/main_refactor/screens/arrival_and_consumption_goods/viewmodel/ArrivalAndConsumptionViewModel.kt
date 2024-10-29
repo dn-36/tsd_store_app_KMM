@@ -14,6 +14,7 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.UpdateArrivalOrConsumptionUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
@@ -112,6 +113,8 @@ class ArrivalAndConsumptionViewModel (
 
                             isVisibilityDataEntryComponent = mutableStateOf(1f),
 
+                            isVisibilityDeleteComponent = mutableStateOf(0f),
+
                             isPush = intent.isPush
 
                             )
@@ -138,9 +141,17 @@ class ArrivalAndConsumptionViewModel (
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
-                    deleteArrivalOrConsumptionUseCase.execute( ui = intent.ui )
+                    deleteArrivalOrConsumptionUseCase.execute( ui = state.updatedItem!!.ui!! )
 
-                    processIntent(ArrivalAndConsumptionIntents.GetArrivalAndConsumptionGoods(intent.coroutineScope))
+                    state = state.copy(
+
+                        isVisibilityDeleteComponent = mutableStateOf(0f)
+
+                    )
+
+                    processIntent(ArrivalAndConsumptionIntents.
+
+                    GetArrivalAndConsumptionGoods(intent.coroutineScope))
 
                     setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
@@ -459,15 +470,23 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.Next -> {
 
-                next( intent.idLegalEntityParish, intent.idLegalEntityExpense, intent.idContragentExpense,
+                next( intent.idLegalEntityParish, intent.idLegalEntityExpense,
 
-                    intent.idContragentParish, intent.idWarehouse )
+                    intent.idContragentExpense, intent.idContragentParish, intent.idWarehouse )
 
             }
 
-            is ArrivalAndConsumptionIntents.CanselSelectedProduct -> { canselSelectedProduct( intent.index ) }
+            is ArrivalAndConsumptionIntents.CanselSelectedProduct -> {
+
+                canselSelectedProduct( intent.index ) }
 
             is ArrivalAndConsumptionIntents.AddProductScanner -> { addProductScanner( intent.name ) }
+
+            is ArrivalAndConsumptionIntents.NoDelete -> { noDelete() }
+
+            is ArrivalAndConsumptionIntents.OpenDeleteComponent -> {
+
+                openDeleteComponent( intent.item!! ) }
 
         }
     }
@@ -674,6 +693,30 @@ class ArrivalAndConsumptionViewModel (
             isVisibilityScannerComponent = mutableStateOf(0f),
 
             isVisibilityAddProductsComponent = mutableStateOf(1f)
+
+        )
+
+    }
+
+    fun noDelete () {
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = mutableStateOf(0f),
+
+            updatedItem = null
+
+        )
+
+    }
+
+    fun openDeleteComponent ( item: StoreResponseArrivalAndConsumption ) {
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = mutableStateOf(1f),
+
+            updatedItem = item
 
         )
 

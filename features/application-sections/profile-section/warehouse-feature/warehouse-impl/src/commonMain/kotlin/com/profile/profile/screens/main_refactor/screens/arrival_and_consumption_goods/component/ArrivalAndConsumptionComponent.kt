@@ -30,6 +30,7 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
+import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
 
 class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsumptionViewModel) :
 
@@ -55,9 +56,10 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                         Item(item, onDelete = { ui ->
 
                             viewModel.processIntent(
-                                ArrivalAndConsumptionIntents.DeleteArrivalOrConsumption(
-                                    scope,
-                                    ui
+                                ArrivalAndConsumptionIntents.OpenDeleteComponent(
+
+                                    item
+
                                 )
                             )
                         },
@@ -107,7 +109,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                     if( viewModel.state.isVisibilityAddProductsComponent.value != 1f ) {
 
-                        MenuBottomBarWarehouse().Content()
+                        MenuBottomBarWarehouse().Content(MenuBottomBarWarehouseSection.FINANCE)
 
                     }
 
@@ -228,6 +230,18 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
             }, onClickCansel = { viewModel.processIntent(ArrivalAndConsumptionIntents.CanselScanner) } )
 
                 .QrScannerView()
+
+        }
+
+        else if ( viewModel.state.isVisibilityDeleteComponent.value == 1f ) {
+
+            DeleteComponent( onClickNo = {
+
+                viewModel.processIntent(ArrivalAndConsumptionIntents.NoDelete) },
+
+                onClickDelete = { scope -> viewModel.processIntent(
+
+                    ArrivalAndConsumptionIntents.DeleteArrivalOrConsumption( scope )) }).Content()
 
         }
 

@@ -10,29 +10,18 @@ data class MenuBottomBarWarehouseState(
 
 enum class MenuBottomBarWarehouseSection(
 
-    val PrintButtonCollor:Color,
+    val WarehouseButtonCollor:Color,
 
     val FinanceButtonCollor:Color,
 
-    val WarehouseButtonCollor:Color,
-
-    val ProfileButtonCollor:Color,
+    val PrintButtonCollor:Color,
 
     ) {
-    PROFILE( Color.White,
 
-        Color.White, Color.White, Color(0xFFFF9800)),
+    FINANCE(Color.White,Color(0xFFFF9800), Color.White),
 
-    FINANCE(Color.White,Color(0xFFFF9800), Color.White,
+    PRINT(Color.White, Color.White, Color(0xFFFF9800)),
 
-         Color.White),
-
-    PRINT(Color.White, Color.White, Color(0xFFFF9800),
-
-        Color.White ),
-
-    WAREHOUSE ( Color(0xFFFF9800), Color.White, Color.White,
-
-        Color.White )
+    WAREHOUSE ( Color(0xFFFF9800), Color.White, Color.White )
 
 }

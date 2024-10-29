@@ -78,18 +78,28 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
                     itemsIndexed( viewModel.state.allOrganizations ) { index, item ->
 
                         Box() {
+
                             Row(verticalAlignment = Alignment.CenterVertically,
+
                                 modifier = Modifier.fillMaxWidth()
+
                                     .padding(vertical = 8.dp).clickable(
+
                                         indication = null, // Отключение эффекта затемнения
+
                                         interactionSource = remember { MutableInteractionSource() })
                                     {
-                                        viewModel.processIntent(
-                                            OrganizationsIntents.ChoosingActiveOrganization(
-                                                scope,
-                                                item.company?.ui?:""
+                                        if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
+
+                                            viewModel.processIntent(
+                                                OrganizationsIntents.ChoosingActiveOrganization(
+                                                    scope,
+                                                    item.company?.ui?:""
+                                                )
                                             )
-                                        )
+
+                                        }
+
                                     }) {
 
                                 Box(
@@ -149,8 +159,11 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
                                                 indication = null, // Отключение эффекта затемнения
                                                 interactionSource = remember { MutableInteractionSource() })
                                             {
+                                                if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
 
-                                                viewModel.processIntent(OrganizationsIntents.SelectItemUpdate(item))
+                                                viewModel.processIntent(OrganizationsIntents.
+
+                                                SelectItemUpdate(item))}
 
                                             })
 
@@ -164,9 +177,8 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
                                                 interactionSource = remember { MutableInteractionSource() })
                                             {
                                                 viewModel.processIntent(
-                                                    OrganizationsIntents.DeleteOrganization(
-                                                        scope,
-                                                        item.company!!.ui!!
+                                                    OrganizationsIntents.OpenDeleteComponent(
+                                                        item
                                                     )
                                                 )
                                             })
@@ -187,12 +199,21 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
 
                     )
                     , contentAlignment = Alignment.Center) {
+
                     Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
                         modifier = Modifier.size(60.dp)
                             .clickable(
                                 indication = null, // Отключение эффекта затемнения
                                 interactionSource = remember { MutableInteractionSource() })
-                            { viewModel.processIntent(OrganizationsIntents.OpenWindowAddOrganization) })
+
+                            {
+                                if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
+
+                                    viewModel.processIntent(OrganizationsIntents.OpenWindowAddOrganization)
+
+                                }
+
+                            })
                 }
 
                 Box(modifier = Modifier) {
@@ -206,5 +227,18 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
                 }
             }
         }
+
+        if ( viewModel.state.isVisibilityDeleteComponent == 1f ) {
+
+            DeleteOrganizationComponent( onClickNo = {
+
+                viewModel.processIntent(OrganizationsIntents.NoDelete) },
+
+                onClickDelete = { coroutineScope -> viewModel.processIntent(
+
+                    OrganizationsIntents.DeleteOrganization ( coroutineScope ) ) }).Content()
+
+        }
+
     }
 }

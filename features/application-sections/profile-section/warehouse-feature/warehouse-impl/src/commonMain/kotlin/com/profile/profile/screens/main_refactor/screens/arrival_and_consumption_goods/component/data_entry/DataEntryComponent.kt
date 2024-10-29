@@ -280,9 +280,9 @@ class DataEntryComponent(
                                 val validEntities =
                                     vm.state.selectedContragentParish?.entits?.filter { it.name != null }
 
-                                itemsIndexed( if (validEntities != null && validEntities.isNotEmpty()) vm.state.selectedContragentParish!!.entits!! else
+                                println("checkkkk ${ validEntities }")
 
-                                    listOf<EntityArrivalAndConsumption>( EntityArrivalAndConsumption(id = 0,name = "Юр.лицо не найдено", ui = "" ) ) ) { index, item ->
+                                itemsIndexed( vm.state.selectedContragentParish!!.entits!! ) { index, item ->
 
                                         Text(item.name!!,
                                             fontSize = 20.sp,
@@ -308,6 +308,7 @@ class DataEntryComponent(
                             }
                         }
                     }
+
                     if( vm.state.selectedLegalEntityParish != null ) {
 
                         Spacer(modifier = Modifier.height(10.dp))

@@ -14,6 +14,8 @@ class MenuBottomBarWarehouseViewModel : ViewModel() {
 
     var state by mutableStateOf(MenuBottomBarWarehouseState( MenuBottomBarWarehouseSection.WAREHOUSE ))
 
+    private var setUsed:Boolean = false
+
     fun processIntent(intent: MenuBottomBarWarehouseIntents){
         when(intent){
             is MenuBottomBarWarehouseIntents.Finance -> { finance(intent.screen) }
@@ -24,7 +26,9 @@ class MenuBottomBarWarehouseViewModel : ViewModel() {
 
             is MenuBottomBarWarehouseIntents.Profile -> { profile(intent.screen) }
 
-            is MenuBottomBarWarehouseIntents.SetScreen -> { setScreen( intent.section ) }
+            is MenuBottomBarWarehouseIntents.SetScreen -> { if(!setUsed) {
+                setUsed = true
+                setScreen( intent.section ) } }
         }
     }
 
