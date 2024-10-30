@@ -1,5 +1,5 @@
 import cafe.adriel.voyager.core.screen.Screen
-import screens.ContragentsScreen
+import screen.ContragentsScreen
 
 class ContragentsScreensImpl: ContragentsScreensApi {
 

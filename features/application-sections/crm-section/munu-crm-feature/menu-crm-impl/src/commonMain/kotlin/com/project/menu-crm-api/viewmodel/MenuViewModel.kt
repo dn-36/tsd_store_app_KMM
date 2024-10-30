@@ -1,5 +1,6 @@
 package com.project.`menu-crm-api`.viewmodel
 
+import CRMScreenApi
 import ContragentsScreensApi
 import androidx.lifecycle.ViewModel
 import com.example.`notes-screens-api`.NotesScreensApi
@@ -16,10 +17,12 @@ class MenuViewModel:ViewModel() {
 
             is MenuIntents.Contragents -> { contragents() }
 
+            is MenuIntents.CRM -> { crm() }
+
         }
     }
 
-    fun shownotesIntent(){
+    fun shownotesIntent () {
 
         val notesScreen: NotesScreensApi = getKoin().get()
 
@@ -27,11 +30,19 @@ class MenuViewModel:ViewModel() {
 
     }
 
-    fun contragents(){
+    fun contragents () {
 
         val contragentsScreen: ContragentsScreensApi = getKoin().get()
 
         Navigation.navigator.push(contragentsScreen.contragents())
+
+    }
+
+    fun crm () {
+
+        val crmScreen: CRMScreenApi = getKoin().get()
+
+        Navigation.navigator.push(crmScreen.crm())
 
     }
 

@@ -29,10 +29,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:app"))
-            implementation(project( ":features:application-sections:crm-section:munu-crm-feature:menu-crm-api"))
-            implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api"))
-            implementation(project(":features:application-sections:crm-section:contragents-feature:contragents-api"))
-            implementation(project(":features:application-sections:crm-section:crm-feature:crm-api"))
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

@@ -1,12 +1,12 @@
 import com.project.network.contragent_network.ContragentClient
 import org.koin.dsl.module
-import screens.datasource.ContragentsClientImpl
-import screens.domain.repository.ContragentsClientApi
-import screens.domain.usecases.CreateContragentUseCase
-import screens.domain.usecases.DeleteContragentUseCase
-import screens.domain.usecases.GetContragentsUseCase
-import screens.domain.usecases.UpdateContragentUseCase
-import screens.viewmodel.ContragentsViewModel
+import screen.datasource.ContragentsClientImpl
+import screen.domain.repository.ContragentsClientApi
+import screen.domain.usecases.CreateContragentUseCase
+import screen.domain.usecases.DeleteContragentUseCase
+import screen.domain.usecases.GetContragentsUseCase
+import screen.domain.usecases.UpdateContragentUseCase
+import screen.viewmodel.ContragentsViewModel
 
 val contragentsModule = module {
 

@@ -29,10 +29,10 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:app"))
+            implementation(project(":core:recources"))
+            implementation(project(":core:network"))
+            implementation(project( ":features:application-sections:crm-section:crm-feature:crm-api"))
             implementation(project( ":features:application-sections:crm-section:munu-crm-feature:menu-crm-api"))
-            implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api"))
-            implementation(project(":features:application-sections:crm-section:contragents-feature:contragents-api"))
-            implementation(project(":features:application-sections:crm-section:crm-feature:crm-api"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -43,7 +43,11 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.koin.core)
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
-            implementation(libs.cafe.adriel.voyager.voyager.transitions)        }
+            implementation(libs.cafe.adriel.voyager.voyager.transitions)
+            implementation(libs.bundles.ktor)
+
+
+        }
 
     }
 }

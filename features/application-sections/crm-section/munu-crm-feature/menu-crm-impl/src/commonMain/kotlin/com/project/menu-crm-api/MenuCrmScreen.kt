@@ -30,9 +30,12 @@ import org.example.project.presentation.menu_feature.viewmodel.MenuIntents
 
 
 class MenuCrmScreen:Screen{
+
     val vm = MenuViewModel()
+
     @Composable
     override fun Content() {
+
         Navigation.navigator =  LocalNavigator.currentOrThrow
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)){
@@ -52,7 +55,7 @@ class MenuCrmScreen:Screen{
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 Button(
-                    onClick = {  },
+                    onClick = { vm.processIntent(MenuIntents.CRM) },
                     modifier = Modifier
                         .clip(RoundedCornerShape(50.dp))
                         .height(40.dp)
