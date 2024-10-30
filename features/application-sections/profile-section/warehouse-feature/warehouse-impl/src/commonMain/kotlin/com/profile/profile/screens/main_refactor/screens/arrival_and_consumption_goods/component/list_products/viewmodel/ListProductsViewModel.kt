@@ -56,7 +56,7 @@ class ListProductsViewModel {
 
         state = state.copy(
 
-            selectedProduct = ProductArrivalAndConsumption( product = item, count = 0 )
+            selectedProduct = ProductArrivalAndConsumption( product = item, count = 0.0 )
 
         )
 

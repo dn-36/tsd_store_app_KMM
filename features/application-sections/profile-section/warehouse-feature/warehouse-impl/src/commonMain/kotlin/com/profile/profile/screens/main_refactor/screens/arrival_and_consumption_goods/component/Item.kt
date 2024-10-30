@@ -27,7 +27,7 @@ import project.core.resources.cancel
 import project.core.resources.update_pencil
 
 @Composable
-fun Item (item: StoreResponseArrivalAndConsumption, onDelete:( ui:String ) -> Unit, onUpdate:(item:StoreResponseArrivalAndConsumption) -> Unit) {
+fun Item (item: StoreResponseArrivalAndConsumption, onDelete:( item:StoreResponseArrivalAndConsumption ) -> Unit, onUpdate:(item:StoreResponseArrivalAndConsumption) -> Unit) {
 
     Box() {
 
@@ -70,7 +70,7 @@ fun Item (item: StoreResponseArrivalAndConsumption, onDelete:( ui:String ) -> Un
                     indication = null, // Отключение эффекта затемнения
                     interactionSource = remember { MutableInteractionSource() })
 
-                { onUpdate(item) }
+                { onUpdate( item ) }
             )
 
             Spacer(modifier = Modifier.width(15.dp))
@@ -81,7 +81,7 @@ fun Item (item: StoreResponseArrivalAndConsumption, onDelete:( ui:String ) -> Un
                     indication = null, // Отключение эффекта затемнения
                     interactionSource = remember { MutableInteractionSource() })
 
-                { onDelete(item.ui!!) }
+                { onDelete( item ) }
             )
 
         }

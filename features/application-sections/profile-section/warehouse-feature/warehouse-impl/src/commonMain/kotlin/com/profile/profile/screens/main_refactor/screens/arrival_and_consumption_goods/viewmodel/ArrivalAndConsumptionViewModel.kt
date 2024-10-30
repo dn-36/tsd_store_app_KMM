@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.ViewModel
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.DeleteArrivalOrConsumptionUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
@@ -15,7 +14,10 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.UpdateArrivalOrConsumptionUseCase
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
+import com.project.core_app.network_base_screen.NetworkViewModel
+import com.project.core_app.network_base_screen.StatusNetworkScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -36,7 +38,7 @@ class ArrivalAndConsumptionViewModel (
 
     val updateArrivalOrConsumptionUseCase: UpdateArrivalOrConsumptionUseCase
 
-) : ViewModel() {
+) : NetworkViewModel() {
 
     var state by mutableStateOf(ArrivalAndConsumptionState())
 
@@ -58,7 +60,7 @@ class ArrivalAndConsumptionViewModel (
 
                                 if(it.entits != null) {
 
-                                    it.entits!!.forEach { entity ->
+                                    it.entits.forEach { entity ->
 
                                         newListEntity.add(EntityArrivalAndConsumption(
 
@@ -111,6 +113,8 @@ class ArrivalAndConsumptionViewModel (
 
                             isVisibilityDataEntryComponent = mutableStateOf(1f),
 
+                            isVisibilityDeleteComponent = mutableStateOf(0f),
+
                             isPush = intent.isPush
 
                             )
@@ -127,6 +131,8 @@ class ArrivalAndConsumptionViewModel (
 
                     })
 
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
                 }
 
             }
@@ -135,9 +141,19 @@ class ArrivalAndConsumptionViewModel (
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
-                    deleteArrivalOrConsumptionUseCase.execute( ui = intent.ui )
+                    deleteArrivalOrConsumptionUseCase.execute( ui = state.updatedItem!!.ui!! )
 
-                    processIntent(ArrivalAndConsumptionIntents.GetArrivalAndConsumptionGoods(intent.coroutineScope))
+                    state = state.copy(
+
+                        isVisibilityDeleteComponent = mutableStateOf(0f)
+
+                    )
+
+                    processIntent(ArrivalAndConsumptionIntents.
+
+                    GetArrivalAndConsumptionGoods(intent.coroutineScope))
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                 }
 
@@ -187,6 +203,8 @@ class ArrivalAndConsumptionViewModel (
                             listSelectedProducts = emptyList()
 
                         )
+
+                        setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                     }
 
@@ -367,6 +385,9 @@ class ArrivalAndConsumptionViewModel (
                         )
 
                     })
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
             }
 
             }
@@ -402,6 +423,8 @@ class ArrivalAndConsumptionViewModel (
 
                         )
 
+                        setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
                     }
 
                 }
@@ -434,6 +457,8 @@ class ArrivalAndConsumptionViewModel (
 
                 } )
 
+                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
             }
 
             }
@@ -445,15 +470,23 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.Next -> {
 
-                next( intent.idLegalEntityParish, intent.idLegalEntityExpense, intent.idContragentExpense,
+                next( intent.idLegalEntityParish, intent.idLegalEntityExpense,
 
-                    intent.idContragentParish, intent.idWarehouse )
+                    intent.idContragentExpense, intent.idContragentParish, intent.idWarehouse )
 
             }
 
-            is ArrivalAndConsumptionIntents.CanselSelectedProduct -> { canselSelectedProduct( intent.index ) }
+            is ArrivalAndConsumptionIntents.CanselSelectedProduct -> {
+
+                canselSelectedProduct( intent.index ) }
 
             is ArrivalAndConsumptionIntents.AddProductScanner -> { addProductScanner( intent.name ) }
+
+            is ArrivalAndConsumptionIntents.NoDelete -> { noDelete() }
+
+            is ArrivalAndConsumptionIntents.OpenDeleteComponent -> {
+
+                openDeleteComponent( intent.item!! ) }
 
         }
     }
@@ -511,11 +544,15 @@ class ArrivalAndConsumptionViewModel (
 
     fun ready ( count: String ) {
 
-        if ( count.isNotBlank() && count.toInt() > 0 ) {
+        val cont = count.toDoubleOrNull()
+
+        println("CHECK COUNT: ${cont}")
+
+        if ( count.isNotBlank() && count.toDoubleOrNull() != null && count.toDouble() > 0  ) {
 
             val newProduct = state.selectedProduct
 
-            newProduct!!.count = count.toInt()
+            newProduct!!.count = count.toDouble()
 
             val newList = state.listSelectedProducts.toMutableList()
 
@@ -629,7 +666,7 @@ class ArrivalAndConsumptionViewModel (
 
                 isVisibilityScannerComponent = mutableStateOf(0f),
 
-                selectedProduct = ProductArrivalAndConsumption( product = selectedProduct, count = 0 )
+                selectedProduct = ProductArrivalAndConsumption( product = selectedProduct, count = 0.0 )
 
             )
 
@@ -656,6 +693,30 @@ class ArrivalAndConsumptionViewModel (
             isVisibilityScannerComponent = mutableStateOf(0f),
 
             isVisibilityAddProductsComponent = mutableStateOf(1f)
+
+        )
+
+    }
+
+    fun noDelete () {
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = mutableStateOf(0f),
+
+            updatedItem = null
+
+        )
+
+    }
+
+    fun openDeleteComponent ( item: StoreResponseArrivalAndConsumption ) {
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = mutableStateOf(1f),
+
+            updatedItem = item
 
         )
 

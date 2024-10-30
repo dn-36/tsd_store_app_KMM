@@ -4,5 +4,7 @@ data class ProductArrivalAndConsumption (
 
     val product: AllProductArrivalAndConsumption,   // ID товара
 
-    var count: Int // Количество товаров
+    var count: Double // Количество товаров
 )
+
+

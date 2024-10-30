@@ -13,7 +13,9 @@ import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
 import com.project.network.notes_network.model.NoteResponse
 import com.example.notes_screens_impl.screens.edit_note.screen.EditNoteScreen
+import com.project.`menu-crm-api`.MenuCrmScreenApi
 import org.example.project.presentation.crm_feature.notes_screen.viewmodel.NotesIntents
+import org.koin.mp.KoinPlatform
 
 class NotesViewModel (
 
@@ -27,7 +29,9 @@ class NotesViewModel (
 
         when(intents){
 
-            is NotesIntents.CreateBookmarks -> {createNotesIntent()}
+            is NotesIntents.CreateBookmarks -> { createNotesIntent() }
+
+            is NotesIntents.Back -> { back() }
 
             is NotesIntents.SetNotes -> {
 
@@ -42,6 +46,7 @@ class NotesViewModel (
                         )
 
                     })
+
                     setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                 }
@@ -49,7 +54,7 @@ class NotesViewModel (
             //setNotesIntent(intents.coroutineScope)
             }
 
-            is NotesIntents.EditNote -> {editNote(intents.note)}
+            is NotesIntents.EditNote -> { editNote(intents.note) }
         }
     }
 
@@ -61,5 +66,13 @@ class NotesViewModel (
     fun editNote(note: NoteResponse){
 
         Navigation.navigator.push(EditNoteScreen(note))
+    }
+
+    fun back (){
+
+        val menuScreen: MenuCrmScreenApi = KoinPlatform.getKoin().get()
+
+        Navigation.navigator.push( menuScreen.MenuCrm() )
+
     }
 }

@@ -70,6 +70,14 @@ class AddProductsComponent(
 
     var expendedMenu by mutableStateOf(false)
 
+    fun convertDoubleToIntIfWhole(value: Double): Any {
+        return if (value % 1 == 0.0) {
+            value.toInt() // Преобразуем в Int, если дробная часть нулевая
+        } else {
+            value // Возвращаем как есть, если дробная часть не нулевая
+        }
+    }
+
     @Composable
 
     override fun Content() {
@@ -116,7 +124,7 @@ class AddProductsComponent(
                                 )
 
                                 Text(
-                                    "${item.count} шт.",
+                                    "${convertDoubleToIntIfWhole(item.count)} шт.",
                                     fontSize = 17.sp,
                                     fontWeight = FontWeight.Bold
                                 )

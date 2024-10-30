@@ -29,6 +29,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api"))
+            implementation(project( ":features:application-sections:crm-section:munu-crm-feature:menu-crm-api"))
+
             implementation(project(":core:app"))
             implementation(project(":core:recources"))
             implementation(project(":core:network"))

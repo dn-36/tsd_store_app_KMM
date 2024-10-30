@@ -14,6 +14,8 @@ import com.project.network.networkModule
 import com.project.`outhorization-screen-impl`.authorizationModule
 import com.project.tape.tapeScreenModule
 import contactProviderModule
+import contragentsModule
+import crmModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -36,6 +38,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             printerScreenModule,
             warehouseScreensModule,
             contactProviderModule,
+            contragentsModule,
+            crmModule
 
         )
     }

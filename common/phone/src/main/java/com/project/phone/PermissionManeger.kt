@@ -8,13 +8,19 @@ import androidx.core.content.ContextCompat
 
 class PermissionManeger(private val context: Context) {
     fun askPermissions(
-        permission: PERMISSION,
+        vararg permissions: PERMISSION,
 
-    ) {
+        ) {
+        val _permissions = mutableListOf<String>()
+
+        permissions.map {
+            _permissions.addAll(it.permissionList)
+        }
+
         actionPermissionPermissionsBle(
             context as ComponentActivity,
 
-        ).launch(permission.permissionList.toTypedArray())
+        ).launch(_permissions.toTypedArray())
     }
 
     fun isHasPermissions(context: Context, permissions: List<String>): Boolean {

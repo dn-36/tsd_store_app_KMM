@@ -45,6 +45,7 @@ import project.core.resources.cancel
 import project.core.resources.down_arrow
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 
 
@@ -279,11 +280,9 @@ class DataEntryComponent(
                                 val validEntities =
                                     vm.state.selectedContragentParish?.entits?.filter { it.name != null }
 
-                                itemsIndexed( if (validEntities != null && validEntities.isNotEmpty()) vm.state.selectedContragentParish!!.entits!! else
+                                println("checkkkk ${ validEntities }")
 
-                                    listOf<EntityArrivalAndConsumption>()  ) { index, item ->
-
-                                    if (validEntities!!.isNotEmpty()) {
+                                itemsIndexed( vm.state.selectedContragentParish!!.entits!! ) { index, item ->
 
                                         Text(item.name!!,
                                             fontSize = 20.sp,
@@ -293,22 +292,23 @@ class DataEntryComponent(
                                                     interactionSource = remember { MutableInteractionSource() })
                                                 {
 
-                                                    vm.processIntents(DataEntryIntents.SelectLegalEntityParish ( item ))
+                                                    if( item.name != "Юр.лицо не найдено" ) {
+
+                                                        vm.processIntents(
+                                                            DataEntryIntents.SelectLegalEntityParish(
+                                                                item
+                                                            )
+                                                        )
+
+                                                    }
 
                                                 })
-                                    } else {
-                                        Text("Юр.лицо не найдено",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
-                                                .clickable(
-                                                    indication = null, // Отключение эффекта затемнения
-                                                    interactionSource = remember { MutableInteractionSource() })
-                                                {})
-                                    }
+
                                 }
                             }
                         }
                     }
+
                     if( vm.state.selectedLegalEntityParish != null ) {
 
                         Spacer(modifier = Modifier.height(10.dp))
@@ -509,13 +509,13 @@ class DataEntryComponent(
                                     vm.state.selectedContragentExpense?.entits?.filter { it.name != null }
 
                                 itemsIndexed(
+
                                     if (validEntities != null && validEntities.isNotEmpty()) vm.state.selectedContragentExpense!!.entits!! else
 
-                                        listOf<EntityArrivalAndConsumption>()
+                                        listOf <EntityArrivalAndConsumption> ( EntityArrivalAndConsumption(id = 0,name = "Юр.лицо не найдено", ui = "" ))
 
                                 ) { index, item ->
 
-                                    if (validEntities!!.isNotEmpty()) {
 
                                         Text(item.name!!,
                                             fontSize = 20.sp,
@@ -526,20 +526,19 @@ class DataEntryComponent(
 
                                                 {
 
-                                                    vm.processIntents(DataEntryIntents.SelectLegalEntityExpense ( item ))
+                                                    if ( item.name != "Юр.лицо не найдено" ) {
+
+                                                        vm.processIntents(
+                                                            DataEntryIntents.SelectLegalEntityExpense(
+                                                                item
+                                                            )
+                                                        )
+
+                                                    }
 
 
                                                 })
-                                    } else {
 
-                                        Text("Юр.лицо не найдено",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
-                                                .clickable(
-                                                    indication = null, // Отключение эффекта затемнения
-                                                    interactionSource = remember { MutableInteractionSource() })
-                                                {})
-                                    }
                                 }
                             }
                         }
@@ -637,19 +636,33 @@ class DataEntryComponent(
 
                         LazyColumn {
 
-                            itemsIndexed( vm.state.filteredWarehouse ) { index, item ->
-                                Text(item.stores[0]!!.name,
-                                    fontSize = 20.sp,
-                                    modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
-                                        .clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
+                            itemsIndexed( if (vm.state.filteredWarehouse.size != 0) vm.state.filteredWarehouse
 
-                                        {
+                                else listOf ( WarehouseArrivalAndConsumption( stores = listOf(StoreArrivalAndConsumption( id = 0,
 
-                                            vm.processIntents(DataEntryIntents.SelectWarehouse ( item ))
+                                name = "Склад не найден" , ui = null )), name = " " ) )
 
-                                        })
+                            ) { index, item ->
+
+                                    Text(item.stores[0]!!.name,
+                                        fontSize = 20.sp,
+                                        modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
+
+                                            {
+
+                                                if ( item.stores[0]!!.name != "Склад не найден" ) {
+
+                                                    vm.processIntents(
+                                                        DataEntryIntents.SelectWarehouse(
+                                                            item
+                                                        )
+                                                    )
+                                                }
+
+                                            })
                             }
                         }
                     }

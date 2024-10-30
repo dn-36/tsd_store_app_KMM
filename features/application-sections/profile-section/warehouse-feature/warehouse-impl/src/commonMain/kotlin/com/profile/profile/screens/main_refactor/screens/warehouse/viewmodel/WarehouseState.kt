@@ -22,4 +22,8 @@ data class WarehouseState(
 
     val textButtonWindow: String = "",
 
+    val updateUiWarehouse: String = "",
+
+    val isVisibilityDeleteComponent: Float = 0f
+
     )

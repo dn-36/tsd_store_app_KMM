@@ -10,6 +10,10 @@ sealed class ArrivalAndConsumptionIntents {
     object BackDataEntry : ArrivalAndConsumptionIntents()
 
     object BackAddProducts : ArrivalAndConsumptionIntents()
+    object NoDelete : ArrivalAndConsumptionIntents()
+    data class OpenDeleteComponent ( val item: StoreResponseArrivalAndConsumption? )
+
+        : ArrivalAndConsumptionIntents()
 
     data class Next(
 
@@ -50,7 +54,8 @@ sealed class ArrivalAndConsumptionIntents {
     data class CreateArrivalOrConsumption(val coroutineScope: CoroutineScope) :
         ArrivalAndConsumptionIntents()
 
-    data class DeleteArrivalOrConsumption(val coroutineScope: CoroutineScope, val ui: String) :
+    data class DeleteArrivalOrConsumption(val coroutineScope: CoroutineScope ) :
+
         ArrivalAndConsumptionIntents()
 
     data class GetArrivalAndConsumptionGoods(val coroutineScope: CoroutineScope) :

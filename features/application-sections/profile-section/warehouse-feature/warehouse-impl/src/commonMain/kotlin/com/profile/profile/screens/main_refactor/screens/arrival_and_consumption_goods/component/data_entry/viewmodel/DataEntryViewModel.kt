@@ -339,6 +339,8 @@ class DataEntryViewModel: ViewModel() {
 
             val selectedWarehouse = if( updatedWarehouse != null ) updatedWarehouse else null
 
+            println("WAREHOUSE DATA: ${ listWarehouse }")
+
             state = state.copy (
 
                 isUsed = false,
