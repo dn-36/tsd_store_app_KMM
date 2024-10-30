@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.project.chats.screens.select_contact.viewmodel.SelectContactsIntents
 import com.project.chats.screens.select_contact.viewmodel.SelectContactsViewModel
+import com.project.core_app.components.BackButton
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
@@ -239,11 +240,13 @@ class SelectContactsScreen : Screen {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically) {
 
-                Image(painterResource(Res.drawable.back), contentDescription = null,
+               /* Image(painterResource(Res.drawable.back), contentDescription = null,
                     modifier = Modifier.padding(10.dp).size(30.dp).clickable(
                         indication = null, // Отключение эффекта затемнения
-                        interactionSource = remember { MutableInteractionSource() })
-                    { vm.processIntent(SelectContactsIntents.Back) })
+                        interactionSource = remember { MutableInteractionSource() })*/
+                BackButton {
+                    vm.processIntent(SelectContactsIntents.Back)
+                }
 
                 Image(
                     painter = painterResource(Res.drawable.ready), contentDescription = null,
