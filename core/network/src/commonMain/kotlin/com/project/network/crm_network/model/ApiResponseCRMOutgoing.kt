@@ -1,8 +1,10 @@
-package model
+package com.project.network.crm_network.model
 
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
-data class ApiResponseCRMModel(
+@Serializable
+data class ApiResponseCRMOutgoing(
     val id: Int?,
     val service_id: Int,
     val company_id: Int?,
@@ -51,18 +53,18 @@ data class ApiResponseCRMModel(
     val is_order_creater: Int?,
     val to_local_id: Int?,
     val from_local_id: Int?,
-    val entity_our: EntityOurModel?,
-    val specs: SpecsModel?,
-    val entity: EntityModel?,
-    val projects: ProjectModel?,
-    /*val service: ServiceModel?,
-    val company: CompanyModel?,
+    val projects: Project?,
+    val service: Service?,
+    val company: Company?,
     val companactiv: String?,
-    val entity: EntityModel?,
-    val groupentits: GroupEntityModel?*/
+    val entity: Entity?,
+    val groupentits: GroupEntity?,
+    val entity_our: EntityOur?,
+    val specs: Specs?
 )
 
-data class ServiceModel(
+@Serializable
+data class Service(
     val id: Int?,
     val name: String?,
     val text: String?,
@@ -88,12 +90,13 @@ data class ServiceModel(
     val default_entity_id: Int?,
     val background: String?,
     val image: String?,
-    val items_value: List<ItemValueModel>?,
+    val items_value: List<ItemValue>?,
     val all_check_users_id: List<Int>?,
     val all_check_users_other: List<String>?
 )
 
-data class ItemValueModel(
+@Serializable
+data class ItemValue(
     val id: Int?,
     val service_id: Int?,
     val name: String?,
@@ -105,7 +108,8 @@ data class ItemValueModel(
     val updated_at: String?
 )
 
-data class CompanyModel(
+@Serializable
+data class Company(
     val id: Int?,
     val name: String?,
     val creater_id: Int?,
@@ -115,14 +119,15 @@ data class CompanyModel(
     val own: Int?
 )
 
-data class EntityOurModel(
+@Serializable
+data class EntityOur(
     val id: Int?,
     val own: Int?,
-    //val creater_id: Int?,
+    val creater_id: Int?,
     val contragent_id: Int?,
     val company_id: Int?,
     val name: String?,
-    /*val inn: String?,
+    val inn: String?,
     val kpp: String?,
     val okpo: String?,
     val ogrn: String?,
@@ -142,33 +147,38 @@ data class EntityOurModel(
     val created_at: String?,
     val updated_at: String?,
     val user_id: Int?,
-    val company: CompanyModel?*/
+    val company: Company?
 )
 
-data class SpecsModel(
+@Serializable
+data class Specs(
     val id: Int?,
     val company_id: Int?,
     val text: String?
 )
 
-data class EntityModel(
+@Serializable
+data class Entity(
     val id: Int?,
     val own: Int?,
     val creater_id: Int?,
     val name: String?
+    // другие возможные поля...
 )
 
-data class Active(
+data class Activee(
     val id: Int,
     val service_id: Int
 )
 
-data class ProjectModel(
+@Serializable
+data class Project(
     val id: Int,
     val name: String
 )
 
-data class GroupEntityModel(
+@Serializable
+data class GroupEntity(
     val id: Int,
     val name: String
 )

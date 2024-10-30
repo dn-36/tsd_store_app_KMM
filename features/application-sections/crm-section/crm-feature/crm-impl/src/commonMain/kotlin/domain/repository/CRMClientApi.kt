@@ -5,6 +5,6 @@ import model.ApiResponseCRMModel
 interface CRMClientApi {
 
     suspend fun getIncomingCRM (): List<ApiResponseCRMModel>
-    suspend fun getOutgoingCRM (): String
+    suspend fun getOutgoingCRM (): List<ApiResponseCRMModel>
 
 }

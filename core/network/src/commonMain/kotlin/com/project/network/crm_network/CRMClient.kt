@@ -1,6 +1,6 @@
 package com.project.network.crm_network
 
-import com.project.network.crm_network.model.ApiResponseCRM
+import com.project.network.crm_network.model.ApiResponseCRMOutgoing
 import com.project.network.httpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -28,7 +28,8 @@ class CRMClient {
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true // Игнорировать неизвестные поля
-                isLenient = true // Быть гибким с форматом JSON
+                isLenient = true// Быть гибким с форматом JSON
+                explicitNulls = false
             })
         }
         install(Logging) {
@@ -41,27 +42,29 @@ class CRMClient {
 
     // получение всех входящих crm
 
-     suspend fun getIncomingCRM(): List<ApiResponseCRM> {
+     suspend fun getIncomingCRM(): List<ApiResponseCRMOutgoing> {
 
         val response = client.get("https://delta.online/api/crm-other-company") {
 
         }
         println(" ////////////////////++++++++++")
         println("Входящие CRM:  ${response}")
+        println("Итог:  ${response.bodyAsText()}")
         println(" ////////////////////++++++++++")
-        return response.body<List<ApiResponseCRM>>()
+        return response.body<List<ApiResponseCRMOutgoing>>()
     }
 
     // получение всех исходящих crm
-    suspend fun getOutgoingCRM(): String {
+    suspend fun getOutgoingCRM(): List<ApiResponseCRMOutgoing> {
 
-        val response = client.get("https://delta.online/api/сrm?type=1&service=[]&my=0&delete=0&search=&active=0") {
+        val response = client.get("https://delta.online/api/crm?type=1&service=%5B%5D&my=0&delete=0&search=&active=0") {
 
         }
         println(" ////////////////////++++++++++")
         println("Исходящие CRM:  ${response}")
+        //println("Итог:  ${response.bodyAsText()}")
         println(" ////////////////////++++++++++")
-        return response.bodyAsText()
+        return response.body<List<ApiResponseCRMOutgoing>>()
     }
 
 }
