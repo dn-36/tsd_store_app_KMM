@@ -1,5 +1,6 @@
 package com.project.chats.screens.chats.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import com.project.chats.screens.chats.domain.DeleteChatUseCase
 import com.project.chats.screens.chats.domain.GetListChatsUseCase
 import com.project.network.Navigation
@@ -14,6 +15,7 @@ import com.project.chats.screens.dialog.screen.DialogScreen
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import kotlinx.coroutines.delay
+import org.koin.core.component.getScopeId
 
 class ChatsViewModel(
     val getListChatsUseCase: GetListChatsUseCase,
@@ -124,5 +126,6 @@ class ChatsViewModel(
             )
         }
     }
+
 
 }

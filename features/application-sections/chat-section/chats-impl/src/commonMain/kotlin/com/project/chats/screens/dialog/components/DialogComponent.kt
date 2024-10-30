@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
@@ -68,18 +70,6 @@ class DialogComponentScreen(
     override fun Component() {
 
         val scope = rememberCoroutineScope()
-
-        val images = remember { mutableStateListOf<ImageBitmap>() }
-
-        val multipleImagePicker = rememberImagePickerLauncher(
-            scope = scope,
-            selectionMode = SelectionMode.Multiple(),
-            onResult = { byteArrays ->
-                images += byteArrays.map {
-                    it.toImageBitmap()
-                }
-            }
-        )
 
         val listState = rememberLazyListState()
 
@@ -175,13 +165,18 @@ class DialogComponentScreen(
                 }
             }
             Column(modifier = Modifier.align(Alignment.BottomCenter)) {
-                if (images.size != 0) {
+
+                if (viewModel.state.listImages.size != 0) {
+
                     LazyRow(modifier = Modifier.fillMaxWidth()) {
-                        items(images) { item ->
+
+                        items(viewModel.state.listImages) { item ->
+
                             Box(modifier = Modifier.size(95.dp)) {
                                 Image(
                                     modifier = Modifier.padding(10.dp)
-                                        .size(90.dp),
+                                        .size(100.dp)
+                                        .clip(RoundedCornerShape(20.dp)),
                                     bitmap = item,
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop
@@ -193,7 +188,12 @@ class DialogComponentScreen(
                                         .clickable(
                                             indication = null, // Отключение эффекта затемнения
                                             interactionSource = remember { MutableInteractionSource() })
-                                        { images.remove(item) })
+
+                                        { viewModel.processIntent(DialogIntents
+
+                                            .DeleteSelectedPhoto( item ))
+
+                                        })
                             }
                         }
                     }
@@ -229,17 +229,6 @@ class DialogComponentScreen(
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                             )
 
-                            Image(
-                                painter = painterResource(Res.drawable.add_photo),
-                                contentDescription = null,
-                                modifier = Modifier.padding(bottom = 15.dp, top = 8.dp)
-                                    .size(22.dp)
-                                    .clickable(
-                                        indication = null, // Отключение эффекта затемнения
-                                        interactionSource = remember { MutableInteractionSource() })
-                                    { multipleImagePicker.launch() }
-                            )
-
                             Spacer(modifier = Modifier.width(7.dp))
 
                             Image(
@@ -250,7 +239,7 @@ class DialogComponentScreen(
                                     .clickable(
                                         indication = null, // Отключение эффекта затемнения
                                         interactionSource = remember { MutableInteractionSource() })
-                                    { }
+                                    {  viewModel.processIntent(DialogIntents.OpenSelectFileComponent) }
                             )
                             Spacer(modifier = Modifier.width(7.dp))
                             Image(
@@ -275,5 +264,20 @@ class DialogComponentScreen(
                 }
             }
         }
+
+        if ( viewModel.state.isVisibilitySelectFileComponent.value == 1f ) {
+
+            SelectFileForSendComponent( onClickCansel = {
+
+                viewModel.processIntent(DialogIntents.CloseSelectFileComponent) },
+
+               onClickAddNewPhoto = { images ->
+
+                   viewModel.processIntent(DialogIntents.AddNewPhotosGalleryOrCamera( images ))
+
+               } ).Content()
+
+        }
+
     }
 }

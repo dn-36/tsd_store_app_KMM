@@ -3,6 +3,7 @@ package com.project.chats.screens.dialog.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.util.fastForEachIndexed
 import com.project.chats.screens.chats.screen.ChatsScreen
 import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
@@ -19,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.example.project.nika_screens_chats.history_files_feature.screen.HistoryFilesScreen
 
@@ -40,6 +42,17 @@ class DialogViewModel(
             is DialogIntents.SetScreen -> {
                 setScreen(intent.uiChats,intent.scope)
             }
+            is DialogIntents.OpenSelectFileComponent -> { openSelectFileComponent() }
+
+            is DialogIntents.CloseSelectFileComponent -> { closeSelectFileComponent() }
+
+            is DialogIntents.AddNewPhotosGalleryOrCamera -> {
+
+                addNewPhotosGalleryOrCamera( intent.images )
+
+            }
+
+            is DialogIntents.DeleteSelectedPhoto -> { deleteSelectedPhoto( intent.image ) }
         }
     }
 
@@ -170,4 +183,59 @@ scope.launch(Dispatchers.IO) {
 
 
 }
+
+    private fun openSelectFileComponent () {
+
+        state = state.copy(
+
+                isVisibilitySelectFileComponent = mutableStateOf(1f)
+
+            )
+
+
+    }
+
+    private fun closeSelectFileComponent () {
+
+        state = state.copy(
+
+                isVisibilitySelectFileComponent = mutableStateOf(0f)
+
+            )
+
+
+    }
+
+    private fun addNewPhotosGalleryOrCamera ( images: List<ImageBitmap> ) {
+
+        val newList = state.listImages.toMutableList()
+
+        newList.addAll(images)
+
+        state = state.copy(
+
+            isVisibilitySelectFileComponent = mutableStateOf(0f),
+
+            listImages = newList
+
+        )
+
+
+    }
+
+    private fun deleteSelectedPhoto ( image: ImageBitmap ) {
+
+        val newList = state.listImages.toMutableList()
+
+        newList.remove(image)
+
+        state = state.copy(
+
+            listImages = newList
+
+        )
+
+
+    }
+
 }

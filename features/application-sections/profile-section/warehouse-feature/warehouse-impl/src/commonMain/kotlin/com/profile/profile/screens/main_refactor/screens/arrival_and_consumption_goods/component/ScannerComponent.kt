@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -160,13 +161,16 @@ class ScannerComponent (
 
                                 Box(
                                     modifier = Modifier
-                                        .clip(RoundedCornerShape(70.dp))
-                                        .height(30.dp)
-                                        .fillMaxWidth(0.5f)
-                                        .background(Color.LightGray),
+
+                                        .clip(CircleShape)
+
+                                        .size(70.dp)
+
+                                        .border(width = 3.dp, color = Color.White, shape = CircleShape),
+
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text(text = "Готово")
+
                                 }
 
                                 /*Image(painterResource(Res.drawable.ready), contentDescription = null,
