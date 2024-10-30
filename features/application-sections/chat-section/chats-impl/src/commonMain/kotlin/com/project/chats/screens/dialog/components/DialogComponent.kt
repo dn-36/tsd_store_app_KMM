@@ -260,12 +260,12 @@ class DialogComponentScreen(
                                     .size(25.dp)
                                     .graphicsLayer(rotationZ = 180f).clickable {
 
-                                        this@DialogComponentScreen.viewModel.sendMessageUseCase(
-                                            this@DialogComponentScreen.viewModel.state.titleChats,
+                                        viewModel.sendMessageUseCase(
+                                        viewModel.state.titleChats,
                                             uiChats,
                                             scope
                                         )
-                                        this@DialogComponentScreen.viewModel.state = this@DialogComponentScreen.viewModel.state.copy(
+                                        viewModel.state = viewModel.state.copy(
                                             titleChats = ""
                                         )
                                     }

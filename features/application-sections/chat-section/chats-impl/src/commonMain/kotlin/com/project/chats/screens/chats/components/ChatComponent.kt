@@ -26,11 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.chats.screens.chats.viewmodel.ChatsIntents
 import com.project.chats.screens.chats.viewmodel.ChatsViewModel
+import com.project.core_app.components.PlusButton
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
+import project.core.resources.blockquote
 import project.core.resources.plus
 
 class ChatComponent(override val viewModel: ChatsViewModel) : NetworkComponent {
@@ -75,8 +77,11 @@ class ChatComponent(override val viewModel: ChatsViewModel) : NetworkComponent {
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.Bottom
             ) {
-                Image(
-                    painter = painterResource(Res.drawable.plus),
+                PlusButton{
+                    viewModel.processIntent(ChatsIntents.AddChat)
+                }
+              /*  Image(
+                    painter = painterResource(Res.drawable.blockquote ),
                     contentDescription = null,
                     modifier = Modifier
                         .size(60.dp)
@@ -86,7 +91,7 @@ class ChatComponent(override val viewModel: ChatsViewModel) : NetworkComponent {
                             interactionSource = remember { MutableInteractionSource() })
                         { this@ChatComponent.viewModel.processIntent(ChatsIntents.AddChat) }
                 )
-
+*/
                 MenuBottomBar().Content(MenuBottomBarSection.CHATS)
             }
         }

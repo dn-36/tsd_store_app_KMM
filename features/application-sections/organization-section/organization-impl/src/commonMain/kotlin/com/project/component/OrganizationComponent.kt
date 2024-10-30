@@ -173,7 +173,7 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
                                         contentDescription = null,
                                         modifier = Modifier.size(15.dp)
                                             .clickable(
-                                                indication = null, // Отключение эффекта затемнения
+                                                indication = null,
                                                 interactionSource = remember { MutableInteractionSource() })
                                             {
                                                 viewModel.processIntent(
