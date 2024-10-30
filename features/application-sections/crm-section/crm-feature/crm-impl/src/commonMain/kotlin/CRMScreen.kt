@@ -30,7 +30,7 @@ import viewmodel.CRMIntents
 
 class CRMScreen : Screen{
 
-    val viewModel = CRMViewModel( getKoin().get() )
+    val viewModel = CRMViewModel( getKoin().get(), getKoin().get() )
 
     @Composable
 
