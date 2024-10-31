@@ -3,14 +3,18 @@ package viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.network.Navigation
-import com.project.network.contragent_network.ContragentClient
 import domain.usecases.GetIncomingCRMUseCase
+import domain.usecases.GetLegalEntitiesUseCase
 import domain.usecases.GetOutgoingCRMUseCase
+import domain.usecases.GetServicesUseCase
+import domain.usecases.GetSpecificationsUseCase
+import domain.usecases.GetEmployeeUseCase
+import domain.usecases.GetLocationsUseCase
+import domain.usecases.GetProjectsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -20,7 +24,19 @@ class CRMViewModel (
 
     val getIncomingCRMUseCase: GetIncomingCRMUseCase,
 
-    val getOutgoingCRMUseCase: GetOutgoingCRMUseCase
+    val getOutgoingCRMUseCase: GetOutgoingCRMUseCase,
+
+    val getServicesUseCase: GetServicesUseCase,
+
+    val getSpecificationsUseCase: GetSpecificationsUseCase,
+
+    val getUsersUseCase: GetEmployeeUseCase,
+
+    val getLegalEntitiesUseCase: GetLegalEntitiesUseCase,
+
+    val getLocationsUseCase: GetLocationsUseCase,
+
+    val getProjectsUseCase: GetProjectsUseCase
 
 ): NetworkViewModel() {
 
@@ -30,7 +46,7 @@ class CRMViewModel (
 
         when ( intent ) {
 
-            is CRMIntents.getIncomingCRM -> {
+            is CRMIntents.SetScreen -> {
 
                 if ( state.isSet ) {
 
@@ -41,6 +57,8 @@ class CRMViewModel (
                             listIncomingCRM = getIncomingCRMUseCase.execute(),
 
                             listOutgoingCRM = getOutgoingCRMUseCase.execute(),
+
+                            listProjects = getProjectsUseCase.execute(),
 
                             isSet = false
 
@@ -53,9 +71,39 @@ class CRMViewModel (
 
             }
 
-            is CRMIntents.Back -> { back() }
+            is CRMIntents.Back ->  back()
 
-            is CRMIntents.SelectTypeCRM -> { selectTypeCRM( intent.index ) }
+            is CRMIntents.SelectTypeCRM ->  selectTypeCRM( intent.index )
+
+            is CRMIntents.BackToCRMComponent ->  backToCRMComponent()
+
+            is CRMIntents.OpenDataEntryComponent -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+             intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                 state = state.copy(
+
+                     listServices = getServicesUseCase.execute(),
+
+                     listSpecifications = getSpecificationsUseCase.execute(),
+
+                     listEmployee = getUsersUseCase.execute(),
+
+                     listLegalEntities = getLegalEntitiesUseCase.execute(),
+
+                     listLocations = getLocationsUseCase.execute(),
+
+                     isVisibilityDataEntryComponent = 1f
+
+                 )
+
+                 setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+             }
+
+            }
 
         }
 
@@ -66,6 +114,12 @@ class CRMViewModel (
          println(" CHECK CRM: ${state.listIncomingCRM} ")
 
          println(" CHECK OUTGOING CRM: ${state.listOutgoingCRM} ")
+
+         println(" CHECK SPECIFICATIONS: ${state.listSpecifications} ")
+
+         println(" CHECK SERVICES: ${state.listServices} ")
+
+         println(" CHECK PROJECTS: ${state.listProjects} ")
 
         val menuScreen: MenuCrmScreenApi = KoinPlatform.getKoin().get()
 
@@ -94,6 +148,16 @@ class CRMViewModel (
             ) }
 
         }
+
+    }
+
+    fun backToCRMComponent () {
+
+        state = state.copy(
+
+            isVisibilityDataEntryComponent = 0f
+
+        )
 
     }
 

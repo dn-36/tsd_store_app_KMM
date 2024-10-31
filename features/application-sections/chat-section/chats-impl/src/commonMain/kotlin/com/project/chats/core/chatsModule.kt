@@ -21,7 +21,7 @@ import com.project.chats.screens.titile_chat.datasource.TitleChatRepositoryImpl
 import com.project.chats.screens.titile_chat.domain.CreateChatUseCase
 import com.project.chats.screens.titile_chat.domain.TitleChatRepositoryApi
 import com.project.chats.screens.titile_chat.viewmodel.TitleChatViewModel
-import com.project.network.users_network.UsersApi
+import com.project.network.users_network.UsersClient
 import org.koin.dsl.module
 
 val chatsModule = module{
@@ -69,7 +69,7 @@ val chatsModule = module{
          SelectContactRepositoryImpl(get(),get()) as SelectContactRepositoryApi
      }
      factory {
-          UsersApi()
+          UsersClient()
      }
      factory {
           TitleChatViewModel(get())

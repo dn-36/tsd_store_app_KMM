@@ -1,7 +1,11 @@
 package viewmodel
 
 import model.ApiResponseCRMModel
-import model.EntityModel
+import model.EntityContragentModel
+import model.LocationResponseModel
+import model.ServiceResponseModel
+import model.SpecificResponseModel
+import model.UserCRMModel
 
 data class CRMState(
 
@@ -9,12 +13,39 @@ data class CRMState(
 
     val listOutgoingCRM: List<ApiResponseCRMModel> = emptyList(),
 
+    val listSpecifications: List<SpecificResponseModel> = emptyList(),
+
+    val listServices: List<ServiceResponseModel> = emptyList(),
+
+    val listEmployee: List<UserCRMModel> = emptyList(),
+
+    val listLegalEntities: List<EntityContragentModel> = emptyList(),
+
+    val listLocations: List<LocationResponseModel> = emptyList(),
+
+    val listProjects: String = String(),
+
+
     val isIncoming: Boolean = true,
 
     val isOutgoing: Boolean = false,
 
     val isSet: Boolean = true,
 
-    val entity: EntityModel? = null
+    val isVisibilityDataEntryComponent: Float = 0f,
 
-)
+    val expendedService: Boolean = false,
+
+    val expendedStatus: Boolean = false,
+
+    val expendedEmployee: Boolean = false,
+
+    val expendedLegalEntityPerformer: Boolean = false,
+
+    val expendedSpecifications: Boolean = false,
+
+    val expendedLocations: Boolean = false,
+
+    val expendedGoodsAndServices: Boolean = false,
+
+    )

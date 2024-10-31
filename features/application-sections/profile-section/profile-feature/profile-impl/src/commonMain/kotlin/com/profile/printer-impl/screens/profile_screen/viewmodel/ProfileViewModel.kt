@@ -3,7 +3,6 @@ package org.example.project.presentation.profile_feature.main_feature.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import com.project.chats.WarehouseScreensApi
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
@@ -13,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.project.network.Navigation
-import com.project.network.users_network.UsersApi
+import com.project.network.users_network.UsersClient
 import org.koin.mp.KoinPlatform.getKoin
 
 class ProfileViewModel : NetworkViewModel() {
@@ -49,7 +48,7 @@ class ProfileViewModel : NetworkViewModel() {
 
             scope.launch(Dispatchers.IO) {
 
-            val usersApi = UsersApi().init(keyValueStorage.getToken())
+            val usersApi = UsersClient().init(keyValueStorage.getToken())
 
                val user = usersApi.getUsers().find { it.phone == keyValueStorage.getCurrentNumber()!! }
 

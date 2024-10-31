@@ -26,9 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
+import component.data_entry.DataEntryComponent
 import org.jetbrains.compose.resources.painterResource
-import org.koin.mp.KoinPlatform
 import project.core.resources.Res
 import project.core.resources.back
 import util.formatDateTime
@@ -43,13 +44,14 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
         val scope = rememberCoroutineScope()
 
-        viewModel.processIntents(CRMIntents.getIncomingCRM(scope))
+        viewModel.processIntents(CRMIntents.SetScreen(scope))
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
 
             Column(modifier = Modifier.padding(16.dp)) {
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
+
                     Image(
                         painter = painterResource(Res.drawable.back), contentDescription = null,
                         modifier = Modifier.size(20.dp).clickable(
@@ -234,6 +236,35 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
 
             }
+
+            Box(modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)) {
+
+                PlusButton {
+
+                    viewModel.processIntents(CRMIntents.OpenDataEntryComponent( scope ))
+
+                }
+
+            }
+
+        }
+
+        if ( viewModel.state.isVisibilityDataEntryComponent == 1f ) {
+
+            DataEntryComponent( onClickBack = {
+
+                viewModel.processIntents(CRMIntents.BackToCRMComponent) },
+
+                listSpecifications = viewModel.state.listSpecifications,
+
+                listServices = viewModel.state.listServices,
+
+                listLocations = viewModel.state.listLocations,
+
+                listLegalEntities = viewModel.state.listLegalEntities,
+
+                listEmployee = viewModel.state.listEmployee ).Content()
+
         }
     }
 }

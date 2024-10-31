@@ -1,9 +1,20 @@
-import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
+import com.project.network.contragent_network.ContragentClient
 import com.project.network.crm_network.CRMClient
+import com.project.network.locations_network.LocationsClient
+import com.project.network.projects_network.ProjectsClient
+import com.project.network.services_network.ServicesClient
+import com.project.network.specifications_network.SpecificationsClient
+import com.project.network.users_network.UsersClient
 import datasource.CRMClientImpl
 import domain.repository.CRMClientApi
 import domain.usecases.GetIncomingCRMUseCase
+import domain.usecases.GetLegalEntitiesUseCase
 import domain.usecases.GetOutgoingCRMUseCase
+import domain.usecases.GetServicesUseCase
+import domain.usecases.GetSpecificationsUseCase
+import domain.usecases.GetEmployeeUseCase
+import domain.usecases.GetLocationsUseCase
+import domain.usecases.GetProjectsUseCase
 import org.koin.dsl.module
 import viewmodel.CRMViewModel
 
@@ -13,14 +24,36 @@ val crmModule = module {
 
     factory { GetIncomingCRMUseCase(get()) }
 
+    factory { GetProjectsUseCase(get()) }
+
     factory { GetOutgoingCRMUseCase(get()) }
 
-    factory { CRMViewModel( get(), get() ) }
+    factory { GetSpecificationsUseCase(get()) }
+
+    factory { GetServicesUseCase(get()) }
+
+    factory { GetLegalEntitiesUseCase(get()) }
+
+    factory { GetEmployeeUseCase(get()) }
+
+    factory { GetLocationsUseCase(get()) }
+
+    factory { CRMViewModel( get(), get(), get(), get(), get(), get(), get(), get() ) }
 
     factory { CRMClient() }
 
-   // factory { SharedPrefsApi() }
+    factory { LocationsClient() }
 
-    factory { CRMClientImpl( get(), get() ) as CRMClientApi }
+    factory { ProjectsClient() }
+
+    factory { ServicesClient() }
+
+    factory { SpecificationsClient() }
+
+    factory { ContragentClient() }
+
+    factory { UsersClient() }
+
+    factory { CRMClientImpl( get(), get(), get(), get(), get(), get(), get(), get() ) as CRMClientApi }
 
 }

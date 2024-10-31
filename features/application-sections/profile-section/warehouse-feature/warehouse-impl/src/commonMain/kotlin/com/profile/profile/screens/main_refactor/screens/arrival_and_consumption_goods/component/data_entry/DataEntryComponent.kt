@@ -736,7 +736,9 @@ class DataEntryComponent(
                         .height(40.dp)
                         .fillMaxWidth()
                 ) {
+
                     Text(text = "Далее")
+
                 }
             }
         }
