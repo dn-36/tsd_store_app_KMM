@@ -10,6 +10,8 @@ data class Message(
     val whoseMessage: WhoseMessage,
     var isShowDate:Boolean = false,
     val isReaded:Boolean = false,
+    val ui:String,
+    var answerMessage:ReplyMessage? = null,
     var statusMessage:StatusMessage = StatusMessage.IS_SECCUESS
 )
 
@@ -19,3 +21,8 @@ enum class WhoseMessage{
 enum class StatusMessage{
     IS_LOADING,IS_SECCUESS,IS_ERROR,IS_READED
 }
+data class ReplyMessage(
+    val name:String,
+    val text:String,
+    val ui:String?
+)

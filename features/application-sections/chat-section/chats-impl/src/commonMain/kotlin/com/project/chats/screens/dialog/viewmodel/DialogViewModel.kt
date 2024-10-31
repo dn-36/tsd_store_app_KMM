@@ -9,6 +9,7 @@ import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
 import com.project.chats.screens.dialog.domain.ReadMessegeUseCase
 import com.project.chats.screens.dialog.domain.SendMessageUseCase
 import com.project.chats.screens.dialog.domain.models.Message
+import com.project.chats.screens.dialog.domain.models.ReplyMessage
 import com.project.chats.screens.dialog.domain.models.StatusMessage
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.project.core_app.getFormattedDateTime
@@ -61,23 +62,19 @@ class DialogViewModel(
             return@launch
         }
 
-try{
-
+          try{
              this.launch {
                  while (
                      true
                  ){
                  readMessageUseCase.execute(uiChats)
                  delay(1500L)
-
                  }
                  }
 
-            while (
-               true
-            ){
+            while (true){
+
                 val listDate = mutableSetOf<String>()
-
                 val listMessages = getListMessagesUseCase.execute(uiChats)?: emptyList()
 
 
@@ -85,19 +82,23 @@ try{
 
                     if(message.isReaded){
                         listMessages[i].statusMessage = StatusMessage.IS_READED
+                        println("///////////lllllllll///////////")
                     }
-
 
                     if(!listDate.contains(listMessages[i].time)){
                         listMessages[i].isShowDate = true
                     }
                     listDate.add(message.time)
                 }
-                if((listMessages.size != 0)  && (state.listMessage.lastOrNull()?.statusMessage?:StatusMessage.IS_SECCUESS)
+                if(
+                    (listMessages.size != 0)  &&
+                    (state.listMessage.lastOrNull()?.statusMessage?:StatusMessage.IS_SECCUESS)
                     != StatusMessage.IS_ERROR){
+
                     state = state.copy(
                         listMessage = listMessages
                     )
+
                 }
 
 if(!isSeted){
@@ -118,7 +119,6 @@ if(!isSeted){
 fun sendMessageUseCase(text:String,ui:String,scope: CoroutineScope){
 scope.launch(Dispatchers.IO) {
 
-
  val list = state.listMessage.toMutableList()
  list.add(
      Message(
@@ -129,12 +129,16 @@ scope.launch(Dispatchers.IO) {
          null,
          WhoseMessage.YOU,
          false,
+         answerMessage = state.replyMessage,
+         ui = ui,
          statusMessage = StatusMessage.IS_LOADING
      )
  )
  state = state.copy(listMessage = list)
-
- val result = sendMessageUseCase.execute(text, ui)
+    println("AAÁÁÁaaaaaaaaaaaaa")
+    println(state.replyMessage?.ui)
+    println("AAÁÁÁaaaaaaaaaaaaa")
+ val result = sendMessageUseCase.execute(text,state.replyMessage?.ui?:"", ui)
 
 
  if(result != sendMessageUseCase.ERROR){
@@ -163,11 +167,23 @@ scope.launch(Dispatchers.IO) {
              message
          }
      }
-     state = state.copy(listMessage = updatedList)
+     state = state.copy(
+         listMessage = updatedList,
+         replyMessage = null
+     )
  }
 
 }
 
 
 }
+    fun selectReplyMessage(replyMessage: ReplyMessage){
+
+        state = state.copy(
+            replyMessage = replyMessage,
+            )
+    }
+    fun cancelReplyMessage(){
+        state = state.copy(replyMessage = null)
+    }
 }

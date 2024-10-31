@@ -1,7 +1,9 @@
 package com.project.chats.screens.dialog.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +12,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,6 +38,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,10 +46,10 @@ import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import com.preat.peekaboo.image.picker.toImageBitmap
 import com.project.chats.screens.dialog.domain.models.Message
+import com.project.chats.screens.dialog.domain.models.ReplyMessage
 import com.project.chats.screens.dialog.viewmodel.DialogIntents
 import com.project.chats.screens.dialog.viewmodel.DialogViewModel
 import com.project.core_app.network_base_screen.NetworkComponent
-import com.project.core_app.network_base_screen.NetworkViewModel
 import com.skydoves.landscapist.coil3.CoilImage
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
@@ -53,15 +58,14 @@ import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.dots
 import project.core.resources.paperclip
+import project.core.resources.share
 import project.core.resources.user_chats
 
 class DialogComponentScreen(
     private val uiChats:String,
     private val titleChat:String,
     private val urlIcon:String?,
-    private val countNewMessage:Int,
     override val viewModel: DialogViewModel
-    //private val viewModel: DialogViewModel,
 ):NetworkComponent {
 
     @Composable
@@ -82,11 +86,11 @@ class DialogComponentScreen(
         )
 
         val listState = rememberLazyListState()
-
-
-        LaunchedEffect(this.viewModel.state.listMessage.size) {
-            listState.scrollToItem(this@DialogComponentScreen.viewModel.state.listMessage.size)
+        LaunchedEffect(viewModel.state.listMessage.size){
+            listState.scrollToItem(viewModel.state.listMessage.size)
         }
+
+
 
         this.viewModel.processIntent(DialogIntents.SetScreen(uiChats, scope))
 
@@ -143,12 +147,15 @@ class DialogComponentScreen(
                     modifier = Modifier
                         .padding(10.dp)
                         .fillMaxWidth()
-                        .fillMaxHeight(0.94f),
+                        //.fillMaxHeight(0.94f),
+                        .fillMaxHeight(
+                            if(viewModel.state.replyMessage != null) 0.88F
+                       else 0.94F ),
                     verticalArrangement = Arrangement.Bottom
                 ) {
 
 
-                    items(this@DialogComponentScreen.viewModel.state.listMessage) { item ->
+                    items(viewModel.state.listMessage) { item ->
                         if (item.isShowDate) {
                             MessageDataComponent(item.time)
                         }
@@ -161,15 +168,29 @@ class DialogComponentScreen(
                                 item.time,
                                 item.url_icon,
                                 item.whoseMessage,
-                                statusMessage = item.statusMessage
+                                answerMessage = item.answerMessage,
+                                ui = item.ui,
+                                statusMessage = item.statusMessage,
                             ),
                             {
-                                this@DialogComponentScreen.viewModel.sendMessageUseCase(
-                                    this@DialogComponentScreen.viewModel.state.listMessage.last().text,
+                               viewModel.sendMessageUseCase(
+                                    viewModel.state.listMessage.last().text,
                                     uiChats,
+                                   /* item.answerMessage?.ui,*/
                                     scope
                                 )
-                            }
+                            },
+                            {
+                                    viewModel.selectReplyMessage(
+                                        ReplyMessage(
+                                            "Reply message",
+                                            item.text,
+                                            item.ui
+                                        )
+                                    )
+
+                            },
+
                         )
                     }
                 }
@@ -191,13 +212,68 @@ class DialogComponentScreen(
                                     contentDescription = null,
                                     modifier = Modifier.size(10.dp).align(Alignment.TopEnd)
                                         .clickable(
-                                            indication = null, // Отключение эффекта затемнения
+                                            indication = null,
                                             interactionSource = remember { MutableInteractionSource() })
                                         { images.remove(item) })
                             }
                         }
                     }
                 }
+
+            if(viewModel.state.replyMessage!=null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .height(50.dp)
+                        .border(
+                            BorderStroke(2.dp, color = Color.Black)
+                        )
+                ) {
+                    Row {
+
+                        Image(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(30.dp)
+                                .align(Alignment.CenterVertically),
+                            painter = painterResource(Res.drawable.share),
+                            contentDescription = null
+                        )
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
+                            Text(
+                                viewModel.state.replyMessage?.name?:"",
+
+                                //"Reply to Anna HR",
+                                modifier = Modifier.padding(start = 14.dp, top = 6.dp,),
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                viewModel.state.replyMessage?.text?:"",
+                                fontSize = 10.sp,
+                                modifier = Modifier.padding(start = 14.dp, top = 5.dp)
+                            )
+
+                        }
+                    }
+                    Image(
+                        painter = painterResource(Res.drawable.cancel),
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(15.dp)
+                            .align(Alignment.CenterEnd)
+                            .clickable {
+                                viewModel.cancelReplyMessage()
+                            },
+                        contentDescription = null
+                    )
+                }
+            }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -216,9 +292,9 @@ class DialogComponentScreen(
 
 
                             BasicTextField(
-                                value = this@DialogComponentScreen.viewModel.state.titleChats,
+                                value = viewModel.state.titleChats,
                                 onValueChange = {
-                                    this@DialogComponentScreen.viewModel.state = this@DialogComponentScreen.viewModel.state.copy(
+                                    viewModel.state = viewModel.state.copy(
                                         titleChats = it
                                     )
                                 },
@@ -263,7 +339,7 @@ class DialogComponentScreen(
                                         this@DialogComponentScreen.viewModel.sendMessageUseCase(
                                             this@DialogComponentScreen.viewModel.state.titleChats,
                                             uiChats,
-                                            scope
+                                            scope,
                                         )
                                         this@DialogComponentScreen.viewModel.state = this@DialogComponentScreen.viewModel.state.copy(
                                             titleChats = ""

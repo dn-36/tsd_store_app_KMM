@@ -75,8 +75,8 @@ class ChatsApi() {
 
             val response = client.get(baseUrl+"api/chats/${chatId}?page=1") {
                 parameter("active", 1)
-
             }
+
             return response.body()
 
     }
@@ -102,14 +102,10 @@ class ChatsApi() {
             cutList.forEach {
                 if(myNumber!= it?.user?.phone?:"") {
 
-                  println("!!!!\n" +
-                          "${it?.user?.phone}"+
-                          "\n\n " + client
-                      .post(baseUrl+"view-message/${it?.ui?: ""}")
-                      .status +
-                          "\n" +
-                          "\n !!!!"
+                  println(
+                      client.post(baseUrl+"view-message/${it?.ui?: ""}")
                   )
+
                 }
             }
 
@@ -140,6 +136,9 @@ class ChatsApi() {
         try {
 
             val response: HttpResponse = client.post(baseUrl+"api/message/") {
+
+                println(" feedbackUI "+feedbackUI)
+
 
                 setBody(
                     MultiPartFormDataContent(

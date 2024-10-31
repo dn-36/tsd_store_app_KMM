@@ -16,7 +16,7 @@ class DialogScreen(
         uiChats,
         titleChat,
         urlIcon,
-        countNewMessage,
+      //  countNewMessage,
         getKoin().get()
     )
 )
