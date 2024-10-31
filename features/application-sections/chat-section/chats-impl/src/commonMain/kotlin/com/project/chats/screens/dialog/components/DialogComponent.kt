@@ -60,7 +60,6 @@ import project.core.resources.dots
 import project.core.resources.paperclip
 import project.core.resources.share
 import project.core.resources.user_chats
-
 class DialogComponentScreen(
     private val uiChats:String,
     private val titleChat:String,
@@ -92,7 +91,7 @@ class DialogComponentScreen(
 
 
 
-        this.viewModel.processIntent(DialogIntents.SetScreen(uiChats, scope))
+        viewModel.processIntent(DialogIntents.SetScreen(uiChats, scope))
 
         Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
 
@@ -137,7 +136,7 @@ class DialogComponentScreen(
                         modifier = Modifier.size(20.dp).clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-                        { this@DialogComponentScreen.viewModel.processIntent(DialogIntents.HistoryFiles) }
+                        { viewModel.processIntent(DialogIntents.HistoryFiles) }
                     )
 
                 }
@@ -176,7 +175,6 @@ class DialogComponentScreen(
                                viewModel.sendMessageUseCase(
                                     viewModel.state.listMessage.last().text,
                                     uiChats,
-                                   /* item.answerMessage?.ui,*/
                                     scope
                                 )
                             },

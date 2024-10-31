@@ -87,29 +87,33 @@ class ChatsApi() {
         return try {
             val listMassengers = (getListMassengers(uiChat).messages?.data?: listOf())
 
-              val cutList:MutableList<MessageData?> =  mutableListOf()
+            val cutList:MutableList<MessageData?> =  mutableListOf()
 
             listMassengers.forEachIndexed { index, messageData ->
                 if(
-                  listMassengers.size <= 12
+                    listMassengers.size <= 12
                 ) cutList.add(messageData)
-                  else
-                  if(index in (listMassengers.size - 12)..listMassengers.size){
-                      cutList.add(messageData)
-                  }
+                else
+                    if(index in (listMassengers.size - 12)..listMassengers.size){
+                        cutList.add(messageData)
+                    }
             }
 
             cutList.forEach {
                 if(myNumber!= it?.user?.phone?:"") {
 
-                  println(
-                      client.post(baseUrl+"view-message/${it?.ui?: ""}")
-                  )
-
+                    println("!!!!\n" +
+                            "${it?.user?.phone}"+
+                            "\n\n " + client
+                        .post("https://delta.online/api/view-message/${it?.ui?: ""}")
+                        .status +
+                            "\n" +
+                            "\n !!!!"
+                    )
                 }
             }
 
-           Result.Success("Result")
+            Result.Success("Result")
 
         } catch (e: Exception) {
 

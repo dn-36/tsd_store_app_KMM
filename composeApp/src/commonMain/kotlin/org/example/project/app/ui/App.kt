@@ -11,17 +11,17 @@ import kotlinx.coroutines.CoroutineScope
 import org.example.project.app.domain.AuthorizationStatus
 import org.example.project.app.viewmodel.AppIntent
 import org.example.project.app.viewmodel.AppViewModel
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.mp.KoinPlatform.getKoin
 
 
-object App {
-
-    private val viewModel = AppViewModel(getKoin().get())
 
     @Composable
-    @Preview
-    fun Content(){
+    fun AppContent(){
+
+        val viewModel =  remember { AppViewModel(getKoin().get())}
+
+
+
         val state by viewModel.state.collectAsState()
         val authorization: AuthorizationScreensApi = getKoin().get()
         val organizationScreen: OrganizationScreenApi = getKoin().get()
@@ -45,5 +45,5 @@ object App {
 
         }
     }
-}
+
 

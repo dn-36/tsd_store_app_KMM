@@ -43,6 +43,8 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
+            implementation(dependencyNotation = libs.peekaboo.ui)
+            implementation(dependencyNotation = libs.peekaboo.imagepicker)
             implementation(libs.kotlinx.io)
             implementation("io.ktor:ktor-utils:2.0.0")
             implementation(compose.runtime)

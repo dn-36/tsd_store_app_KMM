@@ -12,7 +12,7 @@ class DialogScreen(
     private val urlIcon:String?,
     private val countNewMessage:Int
 ) : NetworkScreen(
-    DialogComponentScreen(
+      DialogComponentScreen(
         uiChats,
         titleChat,
         urlIcon,

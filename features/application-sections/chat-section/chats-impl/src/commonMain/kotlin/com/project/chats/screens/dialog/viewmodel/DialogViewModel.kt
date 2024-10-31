@@ -140,7 +140,6 @@ scope.launch(Dispatchers.IO) {
     println("AAÁÁÁaaaaaaaaaaaaa")
  val result = sendMessageUseCase.execute(text,state.replyMessage?.ui?:"", ui)
 
-
  if(result != sendMessageUseCase.ERROR){
      val removeIndex = mutableListOf<Int>()
      val updatedList = list.mapIndexed { index, message ->

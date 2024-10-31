@@ -50,9 +50,8 @@ import project.core.resources.Res
 import project.core.resources.cancel
 import project.core.resources.plus
 import project.core.resources.update_pencil
+import kotlin.jvm.Transient
 
 class OrganizationScreen : NetworkScreen(
-
-    OrganizationComponent ( getKoin().get() )
-
+    OrganizationComponent (getKoin().get())
 )
