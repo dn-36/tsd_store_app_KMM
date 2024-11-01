@@ -45,7 +45,7 @@ class DataEntryViewModel (): ViewModel() {
 
             is DataEntryIntents.SelectGoodsAndServices -> selectArrivalAndServices( intent.item )
 
-            is DataEntryIntents.SelectStatus -> selectStatus( intent.item )
+            is DataEntryIntents.SelectStatus -> selectStatus( intent.item, intent.index )
 
 
             is DataEntryIntents.DeleteSelectedEmployee -> deleteSelectedEmployee()
@@ -105,6 +105,8 @@ class DataEntryViewModel (): ViewModel() {
                 intent.listLocations)
 
             }
+
+            is DataEntryIntents.TotalPrice -> totalPrice()
 
 
         }
@@ -272,11 +274,11 @@ class DataEntryViewModel (): ViewModel() {
 
     }
 
-    fun selectStatus ( item: String ) {
+    fun selectStatus ( item: String, index:Int ) {
 
         state = state.copy(
 
-            selectedStatus = item,
+            selectedStatus = Pair(item,index),
 
             expendedStatus = false
 
@@ -353,7 +355,7 @@ class DataEntryViewModel (): ViewModel() {
 
         state = state.copy(
 
-            selectedStatus = ""
+            selectedStatus = Pair("",0)
 
         )
 
@@ -538,6 +540,7 @@ class DataEntryViewModel (): ViewModel() {
                 filteredListSpecifications = listSpecifications,
 
                 filteredListStatus = listOf(
+
                     "Активна", "В работе", "Срочная", "Завершена", "Не выполнена",
 
                     "Выполнена не до конца", "Отложена"
@@ -550,6 +553,28 @@ class DataEntryViewModel (): ViewModel() {
             )
 
         }
+
+
+    }
+
+    fun totalPrice () {
+
+            var priceTotal = 0.0
+
+        if ( state.selectedSpecific != null ) {
+
+            state.selectedSpecific!!.spec_item!!.forEach {
+
+                priceTotal += it.price ?: 0.0
+
+            }
+        }
+
+            state = state.copy(
+
+                totalPrice = priceTotal
+
+            )
 
 
     }

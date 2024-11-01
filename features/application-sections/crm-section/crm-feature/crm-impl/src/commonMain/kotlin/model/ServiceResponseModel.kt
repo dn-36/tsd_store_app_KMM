@@ -1,5 +1,7 @@
 package model
 
+import kotlinx.serialization.Serializable
+
 data class ServiceResponseModel(
 
     val id: Int,
@@ -26,5 +28,19 @@ data class ServiceResponseModel(
     val limit_group_entity_id: Int? = null,
     val default_entity_id: Int? = null,
     val background: String?,
-    val image: String? = null
+    val image: String? = null,
+    val items: List<ServiceItemModel>?
+
+    )
+
+data class ServiceItemModel(
+    val id: Int,
+    val service_id: Int?,
+    val name: String?,
+    val type: String?,
+    val metka: String? = null,
+    val search: Int?,
+    val req: Int?,
+    val created_at: String?,
+    val updated_at: String?
 )

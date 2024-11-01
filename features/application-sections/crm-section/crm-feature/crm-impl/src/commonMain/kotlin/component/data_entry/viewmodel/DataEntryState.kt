@@ -65,7 +65,7 @@ data class DataEntryState (
 
     val selectedGoodsAndServices: SpecificResponseModel? = null,
 
-    val selectedStatus: String = "",
+    val selectedStatus: Pair<String,Int> = Pair("",0),
 
 
     val filteredListSpecifications: List<SpecificResponseModel> = emptyList(),
@@ -82,6 +82,9 @@ data class DataEntryState (
 
     val filteredListStatus: List<String> = emptyList(),
 
-    val isSet: Boolean = true
+    val isSet: Boolean = true,
+
+
+    val totalPrice: Double? = null
 
     )

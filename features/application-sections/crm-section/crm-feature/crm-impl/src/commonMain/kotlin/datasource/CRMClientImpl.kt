@@ -3,6 +3,7 @@ package datasource
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.crm_network.CRMClient
+import com.project.network.crm_network.model.ServiceItem
 import com.project.network.locations_network.LocationsClient
 import com.project.network.projects_network.ProjectsClient
 import com.project.network.services_network.ServicesClient
@@ -10,13 +11,15 @@ import com.project.network.specifications_network.SpecificationsClient
 import com.project.network.users_network.UsersClient
 import domain.repository.CRMClientApi
 import model.ApiResponseCRMModel
-import model.ContragentResponseModel
 import model.EntityContragentModel
 import model.EntityModel
 import model.EntityOurModel
 import model.LocationResponseModel
 import model.ProjectModel
+import model.ServiceItemModel
 import model.ServiceResponseModel
+import model.ServiceItemCreateCRMModel
+import model.SpecItemModel
 import model.SpecificResponseModel
 import model.SpecsModel
 import model.UserCRMModel
@@ -96,20 +99,28 @@ class CRMClientImpl(
                 is_order_creater = it.is_order_creater,
                 to_local_id = it.to_local_id,
                 from_local_id = it.from_local_id,
-                entity_our = if ( it.entity_our != null ) EntityOurModel( id = it.entity_our!!.id,
+                entity_our = if (it.entity_our != null) EntityOurModel(
+                    id = it.entity_our!!.id,
                     own = it.entity_our!!.own,
                     contragent_id = it.entity_our!!.contragent_id,
-                    company_id = it.entity_our!!.company_id, name = it.entity_our!!.name) else null,
-                specs = if ( it.specs != null) SpecsModel( id = it.specs!!.id,
+                    company_id = it.entity_our!!.company_id, name = it.entity_our!!.name
+                ) else null,
+                specs = if (it.specs != null) SpecsModel(
+                    id = it.specs!!.id,
 
-                    company_id = it.specs!!.company_id, text = it.specs!!.text) else null,
+                    company_id = it.specs!!.company_id, text = it.specs!!.text
+                ) else null,
 
-                entity = if ( it.entity != null) EntityModel( id = it.entity!!.id,
+                entity = if (it.entity != null) EntityModel(
+                    id = it.entity!!.id,
                     own = it.entity!!.own, creater_id = it.entity!!.creater_id,
-                    name = it.entity!!.name ) else null,
+                    name = it.entity!!.name
+                ) else null,
 
-                projects = if ( it.projects != null) ProjectModel( id = it.projects!!.id,
-                    name = it.projects!!.name ) else null
+                projects = if (it.projects != null) ProjectModel(
+                    id = it.projects!!.id,
+                    name = it.projects!!.name
+                ) else null
                 /*projects = it.projects,
                 service = it.service,
                 company = it.company,
@@ -132,7 +143,7 @@ class CRMClientImpl(
 
         crmClient.init(sharedPrefsApi.getToken() ?: "")
 
-        val newList  = crmClient.getOutgoingCRM().map {
+        val newList = crmClient.getOutgoingCRM().map {
 
             ApiResponseCRMModel(
                 id = it.id,
@@ -183,20 +194,28 @@ class CRMClientImpl(
                 is_order_creater = it.is_order_creater,
                 to_local_id = it.to_local_id,
                 from_local_id = it.from_local_id,
-                entity_our = if ( it.entity_our != null ) EntityOurModel( id = it.entity_our!!.id,
+                entity_our = if (it.entity_our != null) EntityOurModel(
+                    id = it.entity_our!!.id,
                     own = it.entity_our!!.own,
                     contragent_id = it.entity_our!!.contragent_id,
-                    company_id = it.entity_our!!.company_id, name = it.entity_our!!.name) else null,
-                specs = if ( it.specs != null) SpecsModel( id = it.specs!!.id,
+                    company_id = it.entity_our!!.company_id, name = it.entity_our!!.name
+                ) else null,
+                specs = if (it.specs != null) SpecsModel(
+                    id = it.specs!!.id,
 
-                    company_id = it.specs!!.company_id, text = it.specs!!.text) else null,
+                    company_id = it.specs!!.company_id, text = it.specs!!.text
+                ) else null,
 
-                entity = if ( it.entity != null) EntityModel( id = it.entity!!.id,
+                entity = if (it.entity != null) EntityModel(
+                    id = it.entity!!.id,
                     own = it.entity!!.own, creater_id = it.entity!!.creater_id,
-                    name = it.entity!!.name ) else null,
+                    name = it.entity!!.name
+                ) else null,
 
-                projects = if ( it.projects != null) ProjectModel( id = it.projects!!.id,
-                    name = it.projects!!.name ) else null
+                projects = if (it.projects != null) ProjectModel(
+                    id = it.projects!!.id,
+                    name = it.projects!!.name
+                ) else null
 
             )
 
@@ -210,38 +229,63 @@ class CRMClientImpl(
 
         servicesClient.init(sharedPrefsApi.getToken() ?: "")
 
-        val newList  = servicesClient.getServices().map {
+        val newList = servicesClient.getServices().map {
 
-         ServiceResponseModel(
+            ServiceResponseModel(
 
-             id = it.id,
-             name = it.name,
-             text = it.text,
-             doc = it.doc,
-             ui = it.ui,
-             system = it.system,
-             width = it.width,
-             height = it.height,
-             service_type_doc = it.service_type_doc,
-             comp_project = it.comp_project,
-             view = it.view,
-             view_comp_project = it.view_comp_project,
-             store = it.store,
-             delete_status = it.delete_status,
-             company_id = it.company_id,
-             created_at = it.created_at,
-             updated_at = it.updated_at,
-             need_check = it.need_check,
-             check_entity_id = it.check_entity_id,
-             check_group_entity_id = it.check_group_entity_id,
-             need_check_our = it.need_check_our,
-             limit_group_entity_id = it.limit_group_entity_id,
-             default_entity_id = it.default_entity_id,
-             background = it.background,
-             image = it.image
+                id = it.id,
+                name = it.name,
+                text = it.text,
+                doc = it.doc,
+                ui = it.ui,
+                system = it.system,
+                width = it.width,
+                height = it.height,
+                service_type_doc = it.service_type_doc,
+                comp_project = it.comp_project,
+                view = it.view,
+                view_comp_project = it.view_comp_project,
+                store = it.store,
+                delete_status = it.delete_status,
+                company_id = it.company_id,
+                created_at = it.created_at,
+                updated_at = it.updated_at,
+                need_check = it.need_check,
+                check_entity_id = it.check_entity_id,
+                check_group_entity_id = it.check_group_entity_id,
+                need_check_our = it.need_check_our,
+                limit_group_entity_id = it.limit_group_entity_id,
+                default_entity_id = it.default_entity_id,
+                background = it.background,
+                image = it.image,
+                items = it.items!!.map {
+
+                    ServiceItemModel(
+
+                        id = it.id,
+
+                        service_id = it.service_id,
+
+                        name = it.name,
+
+                        type = it.type,
+
+                        metka = it.metka,
+
+                        search = it.search,
+
+                        req = it.req,
+
+                        created_at = it.created_at,
+
+                        updated_at = it.updated_at
+
+                    )
+
+                }
 
 
-         )
+            )
 
         }
 
@@ -268,7 +312,32 @@ class CRMClientImpl(
                 updated_at = it.updated_at,
                 local_store_id = it.local_store_id,
                 entity_id = it.entity_id,
-                specification_id = it.specification_id
+                specification_id = it.specification_id,
+                spec_item = it.spec_item!!.map {
+
+                    SpecItemModel(
+
+                        id = it.id,
+                        spec_id = it.spec_id,
+                        product_id = it.product_id,
+                        price_id = it.price_id,
+                        block = it.block,
+                        count = it.count,
+                        price = it.price,
+                        nds = it.nds,
+                        text = it.text,
+                        created_at = it.created_at,
+                        updated_at = it.updated_at,
+                        cafe_send = it.cafe_send,
+                        spec_item_id = it.spec_item_id,
+                        numb = it.numb,
+                        work = it.work,
+                        sale = it.sale,
+
+
+                        )
+
+                }
 
             )
 
@@ -299,7 +368,7 @@ class CRMClientImpl(
 
         usersClient.init(sharedPrefsApi.getToken())
 
-        val newList  = usersClient.getUsers().map {
+        val newList = usersClient.getUsers().map {
 
             UserCRMModel(
 
@@ -349,9 +418,47 @@ class CRMClientImpl(
 
     override suspend fun getProjects(): String {
 
-        projectsClient.init(sharedPrefsApi.getToken()?: "")
+        projectsClient.init(sharedPrefsApi.getToken() ?: "")
 
         return projectsClient.getProjects()
+
+    }
+
+    override suspend fun createCRM(
+
+        serviceId: Int?,
+        statusPay: Int?,
+        verifyPay: Int?,
+        task: String?,
+        price: String?,
+        arendaId: Int?,
+        specificationId: Int?,
+        projectId: Int?,
+        entityId: Int?,
+        ourEntityId: Int?,
+        text: String?,
+        statusId: Int?,
+        items: List<ServiceItemCreateCRMModel>?
+
+    ) {
+
+        crmClient.init(sharedPrefsApi.getToken() ?: "")
+
+        crmClient.createCRM(serviceId, statusPay, verifyPay, task, price, arendaId,
+
+            specificationId, projectId, entityId,
+
+            ourEntityId, text, statusId, items = items!!.map {
+
+                ServiceItem(
+
+                    type_id = it.type_id,
+
+                    name = it.name
+
+                )
+
+            })
 
     }
 

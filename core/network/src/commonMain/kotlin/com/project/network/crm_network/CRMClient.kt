@@ -103,7 +103,7 @@ class CRMClient {
         ourEntityId: Int?,
         text: String?,
         statusId: Int?,
-        items: List<ServiceItem>? = listOf()
+        items: List<ServiceItem>?
     ): String {
         return try {
             val requestBody = CreateCRM(
@@ -114,7 +114,7 @@ class CRMClient {
                 price = price,
                 arenda_id = arendaId,
                 specification_id = specificationId,
-                project_id = projectId,
+                 project_id = projectId,
                 entity_id = entityId,
                 our_entity_id = ourEntityId,
                 text = text,
@@ -129,7 +129,7 @@ class CRMClient {
 
             println("333")
             println("333")
-            println("${requestBody}")
+            println("${response}")
             println("333")
             println("333")
 

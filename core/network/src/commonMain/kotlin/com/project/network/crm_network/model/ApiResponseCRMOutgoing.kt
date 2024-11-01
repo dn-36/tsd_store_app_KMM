@@ -25,7 +25,7 @@ data class ApiResponseCRMOutgoing(
     val data: String?,
     val date_start: String?,
     val date_stop: String?,
-    val price: Int?,
+    val price: Double?,
     val template: Int?,
     val status_pay: String?,
     val template_value: String?,

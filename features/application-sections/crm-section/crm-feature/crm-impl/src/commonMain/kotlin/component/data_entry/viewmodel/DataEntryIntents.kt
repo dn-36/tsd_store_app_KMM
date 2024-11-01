@@ -33,7 +33,7 @@ sealed class DataEntryIntents {
 
     data class SelectEmployee(val item: UserCRMModel) : DataEntryIntents()
 
-    data class SelectStatus(val item: String) : DataEntryIntents()
+    data class SelectStatus(val item: String, val index:Int) : DataEntryIntents()
 
     data class SelectSpecification(val item: SpecificResponseModel) : DataEntryIntents()
 
@@ -133,5 +133,8 @@ sealed class DataEntryIntents {
         val listLocations: List<LocationResponseModel>
 
     ) : DataEntryIntents()
+
+
+    object TotalPrice: DataEntryIntents()
 
 }

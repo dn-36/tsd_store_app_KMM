@@ -28,7 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
+import com.project.network.crm_network.model.ServiceItem
 import component.data_entry.DataEntryComponent
+import component.data_entry.viewmodel.DataEntryIntents
+import kotlinx.coroutines.CoroutineScope
+import model.ServiceItemCreateCRMModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
@@ -263,7 +267,25 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                 listLegalEntities = viewModel.state.listLegalEntities,
 
-                listEmployee = viewModel.state.listEmployee ).Content()
+                listEmployee = viewModel.state.listEmployee,
+
+                onClickCreate = { scope: CoroutineScope ,serviceId: Int?, statusPay: Int?, verifyPay: Int?, task: String?,
+
+                                  price: String?, arendaId: Int?, specificationId: Int?,
+
+                                  projectId: Int?, entityId: Int?,
+
+                                  ourEntityId: Int?, text: String?,
+
+                                  statusId: Int?, items: List<ServiceItemCreateCRMModel>? ->
+
+                    viewModel.processIntents( CRMIntents.CreateCRM( scope, serviceId, statusPay,
+
+                        verifyPay, task, price, arendaId, specificationId, projectId, entityId,
+
+                        ourEntityId, text, statusId, items ))
+
+                }).Content()
 
         }
     }

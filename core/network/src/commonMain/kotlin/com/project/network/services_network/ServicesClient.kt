@@ -18,10 +18,14 @@ import kotlinx.serialization.json.Json
 class ServicesClient {
 
     companion object{
+
         private var _token: String = ""
+
     }
     fun init(token: String): ServicesClient {
+
         _token = token
+
         return this
     }
 

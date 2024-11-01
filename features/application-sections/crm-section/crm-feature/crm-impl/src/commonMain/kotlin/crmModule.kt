@@ -7,6 +7,7 @@ import com.project.network.specifications_network.SpecificationsClient
 import com.project.network.users_network.UsersClient
 import datasource.CRMClientImpl
 import domain.repository.CRMClientApi
+import domain.usecases.CreateCRMUseCase
 import domain.usecases.GetIncomingCRMUseCase
 import domain.usecases.GetLegalEntitiesUseCase
 import domain.usecases.GetOutgoingCRMUseCase
@@ -30,6 +31,8 @@ val crmModule = module {
 
     factory { GetSpecificationsUseCase(get()) }
 
+    factory { CreateCRMUseCase(get()) }
+
     factory { GetServicesUseCase(get()) }
 
     factory { GetLegalEntitiesUseCase(get()) }
@@ -38,7 +41,7 @@ val crmModule = module {
 
     factory { GetLocationsUseCase(get()) }
 
-    factory { CRMViewModel( get(), get(), get(), get(), get(), get(), get(), get() ) }
+    factory { CRMViewModel( get(), get(), get(), get(), get(), get(), get(), get(), get() ) }
 
     factory { CRMClient() }
 

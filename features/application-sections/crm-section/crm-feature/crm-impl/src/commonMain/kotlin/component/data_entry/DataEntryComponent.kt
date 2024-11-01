@@ -28,7 +28,11 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,8 +42,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import component.data_entry.viewmodel.DataEntryIntents
 import component.data_entry.viewmodel.DataEntryViewModel
+import kotlinx.coroutines.CoroutineScope
 import model.EntityContragentModel
 import model.LocationResponseModel
+import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
 import model.UserCRMModel
@@ -51,17 +57,49 @@ import project.core.resources.down_arrow
 
 class DataEntryComponent (
 
-    val onClickBack: () -> Unit ,
+    val onClickBack: () -> Unit,
 
-    val listSpecifications: List<SpecificResponseModel> ,
+    val listSpecifications: List<SpecificResponseModel>,
 
-    val listServices: List<ServiceResponseModel> ,
+    val listServices: List<ServiceResponseModel>,
 
-    val listEmployee: List<UserCRMModel> ,
+    val listEmployee: List<UserCRMModel>,
 
-    val listLegalEntities: List<EntityContragentModel> ,
+    val listLegalEntities: List<EntityContragentModel>,
 
-    val listLocations: List<LocationResponseModel>
+    val listLocations: List<LocationResponseModel>,
+
+    val onClickCreate: (
+
+        scope: CoroutineScope,
+
+        serviceId: Int?,
+
+        statusPay: Int?,
+
+        verifyPay: Int?,
+
+        task: String?,
+
+        price: String?,
+
+        arendaId: Int?,
+
+        specificationId: Int?,
+
+        projectId: Int?,
+
+        entityId: Int?,
+
+        ourEntityId: Int?,
+
+        text: String?,
+
+        statusId: Int?,
+
+        items: List<ServiceItemCreateCRMModel>?
+
+    ) -> Unit
 
 ) {
 
@@ -76,6 +114,8 @@ class DataEntryComponent (
             listEmployee, listLegalEntities, listLocations ))
 
         val scrollState = rememberScrollState() // Состояние прокрутки
+
+        val scope = rememberCoroutineScope()
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
 
@@ -734,7 +774,7 @@ class DataEntryComponent (
                         { }// Стандартная высота TextField
                 )
 
-                if ( viewModel.state.selectedStatus != "" ) {
+                if ( viewModel.state.selectedStatus.first != "" ) {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -743,7 +783,7 @@ class DataEntryComponent (
                             .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
                     ) {
                         Text(
-                            text = viewModel.state.selectedStatus,
+                            text = viewModel.state.selectedStatus.first,
                             color = Color.White,
                             fontSize = 15.sp,
                             modifier = Modifier.padding(8.dp).align(
@@ -788,7 +828,7 @@ class DataEntryComponent (
 
                                         {
 
-                                            viewModel.processIntents(DataEntryIntents.SelectStatus( item ))
+                                            viewModel.processIntents(DataEntryIntents.SelectStatus( item,index ))
 
                                         })
                             }
@@ -854,92 +894,46 @@ class DataEntryComponent (
                         { }// Стандартная высота TextField
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
-
-                OutlinedTextField(
-
-                    value = viewModel.state.fio,
-
-                    onValueChange = { inputText ->
-
-                        viewModel.processIntents(DataEntryIntents.InputTextFIO( inputText ))
-
-                    },
-
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
-
-                    label = { Text("Ф.И.О") },
-
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 40.dp)
-                        .clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { }// Стандартная высота TextField
-                )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                OutlinedTextField(
+                if ( viewModel.state.selectedService != null &&
 
-                    value = viewModel.state.comment,
+                    viewModel.state.selectedService!!.items != null ) {
 
-                    onValueChange = { inputText ->
+                    viewModel.state.selectedService!!.items!!.forEach {
 
-                        viewModel.processIntents(DataEntryIntents.InputTextComment( inputText ))
+                        var text by remember { mutableStateOf("") }
 
-                    },
+                            OutlinedTextField(
 
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
+                                value = text,
 
-                    label = { Text("Комменатрий") },
+                                onValueChange = {
 
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 40.dp)
-                        .clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { }// Стандартная высота TextField
-                )
+                                    text = it
 
-                Spacer(modifier = Modifier.height(10.dp))
+                                },
 
-                OutlinedTextField(
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                                    //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                                    backgroundColor = Color.LightGray.copy(alpha = 0.5f) // Цвет фона с легкой прозрачностью
+                                ),
 
-                    value = viewModel.state.phoneNumber,
+                                label = { Text(it.name ?: "") },
 
-                    onValueChange = { inputText ->
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(min = 40.dp)
+                                    .clickable(
+                                        indication = null, // Отключение эффекта затемнения
+                                        interactionSource = remember { MutableInteractionSource() })
+                                    { }// Стандартная высота TextField
+                            )
 
-                        viewModel.processIntents(DataEntryIntents.InputTextPhoneNumber( inputText ))
-
-                    },
-
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
-
-                    label = { Text("Телефон") },
-
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 40.dp)
-                        .clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { }// Стандартная высота TextField
-                )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -1058,7 +1052,38 @@ class DataEntryComponent (
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
+
                     onClick = {
+
+                        if (viewModel.state.selectedService != null) {
+
+                            viewModel.processIntents(DataEntryIntents.TotalPrice)
+
+                            onClickCreate(
+                                scope,
+
+
+                                viewModel.state.selectedService!!.id,
+
+                                0, 0, viewModel.state.task,
+
+                                "${viewModel.state.totalPrice ?: 0.0}", null,
+
+                                if (viewModel.state.selectedSpecific != null) viewModel.state.selectedSpecific!!.id else null,
+
+                                null, null,
+
+                                if (viewModel.state.selectedLegalEntityPerformer != null) viewModel.state.selectedLegalEntityPerformer!!.id else viewModel.state.selectedService!!.default_entity_id,
+
+                                if (viewModel.state.selectedService != null) viewModel.state.selectedService!!.text else "",
+
+                                1,
+
+                                emptyList()
+
+                            )
+
+                        }
 
                     },
 
@@ -1073,5 +1098,4 @@ class DataEntryComponent (
             }
         }
     }
-
 }

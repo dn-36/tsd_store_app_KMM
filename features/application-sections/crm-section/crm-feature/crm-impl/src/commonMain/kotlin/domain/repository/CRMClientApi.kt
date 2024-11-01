@@ -1,9 +1,9 @@
 package domain.repository
 
-import com.project.network.crm_network.model.ServiceItem
 import model.ApiResponseCRMModel
 import model.EntityContragentModel
 import model.LocationResponseModel
+import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
 import model.UserCRMModel
@@ -18,7 +18,7 @@ interface CRMClientApi {
     suspend fun getLegalEntities(): List<EntityContragentModel>
     suspend fun getLocations(): List<LocationResponseModel>
     suspend fun getProjects(): String
-   /* suspend fun createCRM (
+    suspend fun createCRM (
 
         serviceId: Int?,
         statusPay: Int?,
@@ -32,7 +32,7 @@ interface CRMClientApi {
         ourEntityId: Int?,
         text: String?,
         statusId: Int?,
-        items: List<ServiceItem>? = listOf()
-    )*/
+        items: List<ServiceItemCreateCRMModel>? = listOf()
+    )
 
 }

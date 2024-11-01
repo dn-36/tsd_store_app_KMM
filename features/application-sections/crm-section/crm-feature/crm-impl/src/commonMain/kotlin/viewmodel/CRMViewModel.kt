@@ -7,6 +7,7 @@ import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.network.Navigation
+import domain.usecases.CreateCRMUseCase
 import domain.usecases.GetIncomingCRMUseCase
 import domain.usecases.GetLegalEntitiesUseCase
 import domain.usecases.GetOutgoingCRMUseCase
@@ -36,7 +37,9 @@ class CRMViewModel (
 
     val getLocationsUseCase: GetLocationsUseCase,
 
-    val getProjectsUseCase: GetProjectsUseCase
+    val getProjectsUseCase: GetProjectsUseCase,
+
+    val createCRMUseCase: CreateCRMUseCase
 
 ): NetworkViewModel() {
 
@@ -56,7 +59,7 @@ class CRMViewModel (
 
                             listIncomingCRM = getIncomingCRMUseCase.execute(),
 
-                            listOutgoingCRM = getOutgoingCRMUseCase.execute(),
+                            listOutgoingCRM = getOutgoingCRMUseCase.execute().toMutableList(),
 
                             listProjects = getProjectsUseCase.execute(),
 
@@ -102,6 +105,36 @@ class CRMViewModel (
                  setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
              }
+
+            }
+
+            is CRMIntents.CreateCRM -> {
+
+            intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                createCRMUseCase.execute ( serviceId = intent.serviceId,
+
+                    statusPay = intent.statusPay, verifyPay = intent.verifyPay,
+
+                    task = intent.task, price = intent.price, arendaId = intent.arendaId,
+
+                    specificationId = intent.specificationId,projectId = intent.projectId,
+
+                    entityId = intent.entityId,
+
+                    ourEntityId = intent.ourEntityId,
+
+                    text = intent.text, statusId = intent.statusId, items = intent.items )
+
+                state = state.copy(
+
+                    isVisibilityDataEntryComponent = 0f,
+
+                    listOutgoingCRM = getOutgoingCRMUseCase.execute().toMutableList()
+
+                )
+
+            }
 
             }
 
