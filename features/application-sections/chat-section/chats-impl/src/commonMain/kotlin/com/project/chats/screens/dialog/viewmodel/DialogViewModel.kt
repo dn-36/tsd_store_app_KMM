@@ -15,6 +15,7 @@ import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.project.core_app.getFormattedDateTime
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
+import com.project.core_app.utils.imageBitmapToBase64
 import com.project.network.Navigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -82,7 +83,6 @@ class DialogViewModel(
 
                     if(message.isReaded){
                         listMessages[i].statusMessage = StatusMessage.IS_READED
-                        println("///////////lllllllll///////////")
                     }
 
                     if(!listDate.contains(listMessages[i].time)){
@@ -106,14 +106,14 @@ if(!isSeted){
       setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
       isSeted = true
   }
-
   delay(1500L)
   }
 }catch (e:Exception){
+    println("AS__AS "+e.toString())
     setStatusNetworkScreen(StatusNetworkScreen.ERROR)
 
-}}
-
+   }
+ }
 }
 
 fun sendMessageUseCase(text:String,ui:String,scope: CoroutineScope){
@@ -126,21 +126,28 @@ scope.launch(Dispatchers.IO) {
          "You",
          date = getFormattedDateTime().date,
          time = getFormattedDateTime().time,
-         null,
          WhoseMessage.YOU,
          false,
          answerMessage = state.replyMessage,
          ui = ui,
-         statusMessage = StatusMessage.IS_LOADING
+         statusMessage = StatusMessage.IS_LOADING,
+
+
      )
  )
  state = state.copy(listMessage = list)
-    println("AAÁÁÁaaaaaaaaaaaaa")
-    println(state.replyMessage?.ui)
-    println("AAÁÁÁaaaaaaaaaaaaa")
- val result = sendMessageUseCase.execute(text,state.replyMessage?.ui?:"", ui)
+
+ val result = sendMessageUseCase.execute(
+     text,
+     state.replyMessage?.ui?:"",
+     if(state.listImages?.isNullOrEmpty() != true)
+         imageBitmapToBase64(state.listImages!!.first())
+     else
+         null,
+     ui)
 
  if(result != sendMessageUseCase.ERROR){
+
      val removeIndex = mutableListOf<Int>()
      val updatedList = list.mapIndexed { index, message ->
          if(message.statusMessage == StatusMessage.IS_ERROR){
@@ -168,7 +175,8 @@ scope.launch(Dispatchers.IO) {
      }
      state = state.copy(
          listMessage = updatedList,
-         replyMessage = null
+         replyMessage = null,
+         listImages = null
      )
  }
 

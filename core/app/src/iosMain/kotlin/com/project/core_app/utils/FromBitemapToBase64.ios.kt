@@ -24,6 +24,7 @@ actual fun ImageBitmap.encodeToByteArray(): ByteArray {
     return byteArray
 }
 
+
 @OptIn(ExperimentalForeignApi::class)
 fun ImageBitmap.toUIImage(): UIImage? {
     val width = this.width

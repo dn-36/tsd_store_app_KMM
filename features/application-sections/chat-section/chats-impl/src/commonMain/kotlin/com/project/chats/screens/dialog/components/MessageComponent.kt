@@ -11,11 +11,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -31,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.project.chats.screens.dialog.domain.models.ReplyMessage
 import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.domain.models.StatusMessage
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
@@ -71,10 +69,6 @@ fun MessageComponent(
             .fillMaxWidth()
             .padding(vertical = 10.dp,)
     ) {
-       // if(message.whoseMessage)
-     // val containerMessage =
-
-
 
         SwipeToDismiss(
             state = dismissState,
@@ -123,7 +117,7 @@ fun MessageComponent(
                         .padding(4.dp)
                         .align(Alignment.CenterVertically)
                 ) {
-                    if (!message.url_icon.isNullOrBlank()) {
+                    if (false){//!message.url_icon.isNullOrBlank()) {
                         CoilImage(
                             imageModel = { message.url_icon },
                             modifier = Modifier.padding(3.dp).size(20.dp)
@@ -186,8 +180,13 @@ fun MessageComponent(
                     Column(
 
                     ) {
-                        ///REPLY
-                        //if(true){
+                   if(message.url_icon != null) {
+                       CoilImage(
+                           imageModel = {  message.url_icon },
+                           loading = { CircularProgressIndicator(modifier = Modifier.size(10.dp)) },
+                           modifier = Modifier.size(150.dp)
+                       )
+                        }
                    if(message.answerMessage != null) {
                            Column (
                            modifier = Modifier
@@ -280,7 +279,7 @@ fun MessageComponent(
             }
             if (message.whoseMessage == WhoseMessage.YOU) {
                 Column(modifier = Modifier.padding(4.dp).align(Alignment.CenterVertically)) {
-                    if (!message.url_icon.isNullOrBlank()) {
+                    if (false){//!message.url_icon.isNullOrBlank()) {
                         CoilImage(
                             imageModel = { message.url_icon },
                             modifier = Modifier.padding(3.dp).size(30.dp)

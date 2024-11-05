@@ -51,11 +51,12 @@ import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.ready
 import project.core.resources.user_chats
+import kotlin.jvm.Transient
 
 
 class SelectContactsScreen : Screen {
 
-    private val vm:SelectContactsViewModel = getKoin().get()
+   @Transient private val vm:SelectContactsViewModel = getKoin().get()
 
     @Composable
     override fun Content() {

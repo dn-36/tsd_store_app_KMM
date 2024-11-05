@@ -72,15 +72,19 @@ class DialogComponentScreen(
 
         val scope = rememberCoroutineScope()
 
-        val images = remember { mutableStateListOf<ImageBitmap>() }
 
         val multipleImagePicker = rememberImagePickerLauncher(
             scope = scope,
             selectionMode = SelectionMode.Multiple(),
             onResult = { byteArrays ->
-                images += byteArrays.map {
-                    it.toImageBitmap()
-                }
+
+                viewModel.state = viewModel.state.copy(
+                listImages = byteArrays.map {
+                        it.toImageBitmap()
+                    }
+                )
+
+
             }
         )
 
@@ -165,11 +169,11 @@ class DialogComponentScreen(
                                 item.name,
                                 item.date,
                                 item.time,
-                                item.url_icon,
                                 item.whoseMessage,
                                 answerMessage = item.answerMessage,
                                 ui = item.ui,
                                 statusMessage = item.statusMessage,
+                                url_icon = item.url_icon,
                             ),
                             {
                                viewModel.sendMessageUseCase(
@@ -194,9 +198,9 @@ class DialogComponentScreen(
                 }
             }
             Column(modifier = Modifier.align(Alignment.BottomCenter)) {
-                if (images.size != 0) {
                     LazyRow(modifier = Modifier.fillMaxWidth()) {
-                        items(images) { item ->
+                        items(viewModel.state.listImages?: listOf()) { item ->
+
                             Box(modifier = Modifier.size(95.dp)) {
                                 Image(
                                     modifier = Modifier.padding(10.dp)
@@ -212,11 +216,15 @@ class DialogComponentScreen(
                                         .clickable(
                                             indication = null,
                                             interactionSource = remember { MutableInteractionSource() })
-                                        { images.remove(item) })
+                                        {
+                                           val deleteList =  viewModel.state.listImages!!.toMutableList()
+                                            deleteList.remove(item)
+                                           viewModel.state =  viewModel.state.copy(listImages = deleteList)
+                                        })
                             }
                         }
                     }
-                }
+
 
             if(viewModel.state.replyMessage!=null) {
                 Box(
@@ -334,12 +342,12 @@ class DialogComponentScreen(
                                     .size(25.dp)
                                     .graphicsLayer(rotationZ = 180f).clickable {
 
-                                        this@DialogComponentScreen.viewModel.sendMessageUseCase(
-                                            this@DialogComponentScreen.viewModel.state.titleChats,
+                                       viewModel.sendMessageUseCase(
+                                       viewModel.state.titleChats,
                                             uiChats,
                                             scope,
                                         )
-                                        this@DialogComponentScreen.viewModel.state = this@DialogComponentScreen.viewModel.state.copy(
+                                       viewModel.state = viewModel.state.copy(
                                             titleChats = ""
                                         )
                                     }

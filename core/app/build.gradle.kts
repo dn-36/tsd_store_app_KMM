@@ -45,6 +45,7 @@ kotlin {
             implementation(project(":core:local-storage"))
             implementation(dependencyNotation = libs.peekaboo.ui)
             implementation(dependencyNotation = libs.peekaboo.imagepicker)
+            implementation("com.squareup.okio:okio:3.9.1")
             implementation(libs.kotlinx.io)
             implementation("io.ktor:ktor-utils:2.0.0")
             implementation(compose.runtime)

@@ -8,7 +8,6 @@ import com.project.chats.screens.dialog.domain.models.ReplyMessage
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.chats_network.ChatsApi
-import com.project.network.chats_network.Feedback
 import util.NetworkError
 import util.Result
 
@@ -34,12 +33,12 @@ class DialogRepositoryImpl(
                 it.user?.name?:"",
                 Utils.parseDateTimeManually (it?.created_at?:"").time ,
                 Utils.parseDateTimeManually (it?.created_at?:"").date ,
-                it.image,
                 if(it?.user?.phone == profileSavedDate.getCurrentNumber()?:"") WhoseMessage.YOU
                 else WhoseMessage.INTERLOCUTOR,
                 ui = it.ui?:"",
                 isReaded = it.status_view == 1,
-                answerMessage = replyMessage
+                answerMessage = replyMessage,
+                url_icon = if(it.image != null)"https://delta.online/storage/" + it.image else null
             )
         }
     }
@@ -50,13 +49,14 @@ class DialogRepositoryImpl(
         text: String,
         feedbackUi: String?,
         uiChat: String,
+        imageBiteMap : String?,
         userToken: String
     ):String {
        val result:Result<String,NetworkError> = chatApi.sendMessage(
            uiChat,
            feedbackUi?:"",
            text,
-           null,
+           imageBiteMap,
            listOf(),
            listOf()
        )
