@@ -76,25 +76,13 @@ class CRMClient {
         return response.body<List<ApiResponseCRMOutgoing>>()
     }
 
-    //https://delta.online/api/crm-services
-
-    suspend fun getServices(): String {
-
-        val response = client.get("https://delta.online/api/crm-services") {
-
-        }
-        println(" ////////////////////++++++++++")
-        println("Получение Услуг:  ${response}")
-        println(" ////////////////////++++++++++")
-        return response.bodyAsText()
-    }
-
     // создание услуги
     suspend fun createCRM(
         serviceId: Int?,
         statusPay: Int?,
         verifyPay: Int?,
         task: String?,
+        status: String?,
         price: String?,
         arendaId: Int?,
         specificationId: Int?,
@@ -103,7 +91,7 @@ class CRMClient {
         ourEntityId: Int?,
         text: String?,
         statusId: Int?,
-        items: List<ServiceItem>?
+        items: List<ServiceItem>
     ): String {
         return try {
             val requestBody = CreateCRM(
@@ -111,6 +99,7 @@ class CRMClient {
                 status_pay = statusPay,
                 verify_pay = verifyPay,
                 task = task,
+                status = status,
                 price = price,
                 arenda_id = arendaId,
                 specification_id = specificationId,

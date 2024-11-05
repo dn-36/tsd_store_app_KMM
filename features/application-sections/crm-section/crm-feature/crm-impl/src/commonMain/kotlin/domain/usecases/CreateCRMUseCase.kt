@@ -15,6 +15,7 @@ class CreateCRMUseCase(
         statusPay: Int?,
         verifyPay: Int?,
         task: String?,
+        status: String?,
         price: String?,
         arendaId: Int?,
         specificationId: Int?,
@@ -28,7 +29,8 @@ class CreateCRMUseCase(
     ) {
 
         client.createCRM(
-            serviceId, statusPay, verifyPay, task, price, arendaId, specificationId,
+
+            serviceId, statusPay, verifyPay, task,status, price, arendaId, specificationId,
 
             projectId, entityId,
 

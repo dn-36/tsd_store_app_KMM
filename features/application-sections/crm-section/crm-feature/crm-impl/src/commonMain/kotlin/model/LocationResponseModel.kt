@@ -16,5 +16,13 @@ data class LocationResponseModel(
     val email: String?,
     val phone: String?,
     val text: String?,
+    val contragent:ContragentLocationModel?
 
     )
+
+data class ContragentLocationModel(
+    val id: Int?,
+    val name: String?,
+    val ui: String?,
+    val own: Int?
+)

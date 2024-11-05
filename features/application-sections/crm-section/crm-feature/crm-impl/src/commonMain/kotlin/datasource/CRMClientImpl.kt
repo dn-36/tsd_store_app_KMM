@@ -1,6 +1,7 @@
 package datasource
 
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
+import com.project.network.cargo_network.CargoClient
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.crm_network.CRMClient
 import com.project.network.crm_network.model.ServiceItem
@@ -11,6 +12,9 @@ import com.project.network.specifications_network.SpecificationsClient
 import com.project.network.users_network.UsersClient
 import domain.repository.CRMClientApi
 import model.ApiResponseCRMModel
+import model.CargoResponseModel
+import model.ContragentLocationModel
+import model.ContragentResponseModel
 import model.EntityContragentModel
 import model.EntityModel
 import model.EntityOurModel
@@ -40,7 +44,9 @@ class CRMClientImpl(
 
     private val locationsClient: LocationsClient,
 
-    private val projectsClient: ProjectsClient
+    private val projectsClient: ProjectsClient,
+
+    private val cargoClient: CargoClient
 
 ) : CRMClientApi {
 
@@ -347,17 +353,36 @@ class CRMClientImpl(
 
     }
 
-    override suspend fun getLegalEntities(): List<EntityContragentModel> {
+    override suspend fun getContragents(): List<ContragentResponseModel> {
 
-        var newList = contragentsClient.getContragents().flatMap { item ->
+        val newList = contragentsClient.getContragents().map {
 
-            item.entits?.map {
-                EntityContragentModel(
-                    id = it.id,
-                    name = it.name,
-                    ui = it.ui
-                )
-            } ?: emptyList() // Если entits == null, возвращаем пустой список
+               ContragentResponseModel(
+
+                   id = it.id?:0,
+                   name = it.name?:"",
+                   ui = it.ui?:"",
+                   own = it.own?:0,
+                   entities = if ( it.entits != null ) {
+
+                       it.entits!!.map {
+
+                           EntityContragentModel(
+
+                               id = it.id ?: 0,
+                               name = it.name ?: "",
+                               ui = it.ui ?: ""
+
+                           )
+
+                       }
+                   }
+
+                   else emptyList()
+
+               )
+
+
         }
 
         return newList
@@ -406,7 +431,19 @@ class CRMClientImpl(
                 ui = it.ui,
                 email = it.email,
                 phone = it.phone,
-                text = it.text
+                text = it.text,
+                contragent = if ( it.contragent != null ) {
+
+                    ContragentLocationModel(
+
+                        id = it.contragent!!.id ?: 0,
+                        name = it.contragent!!.name ?: "",
+                        ui = it.contragent!!.ui ?: "",
+                        own = it.contragent!!.own ?: 0
+
+                    )
+                }
+                else null
 
             )
 
@@ -430,6 +467,7 @@ class CRMClientImpl(
         statusPay: Int?,
         verifyPay: Int?,
         task: String?,
+        status: String?,
         price: String?,
         arendaId: Int?,
         specificationId: Int?,
@@ -444,7 +482,7 @@ class CRMClientImpl(
 
         crmClient.init(sharedPrefsApi.getToken() ?: "")
 
-        crmClient.createCRM(serviceId, statusPay, verifyPay, task, price, arendaId,
+        crmClient.createCRM(serviceId, statusPay, verifyPay, task, status, price, arendaId,
 
             specificationId, projectId, entityId,
 
@@ -452,13 +490,63 @@ class CRMClientImpl(
 
                 ServiceItem(
 
+                    number = it.number,
+
                     type_id = it.type_id,
 
-                    name = it.name
+                    name = it.name,
+
+                    file = null,
+
+                    filename = null,
+
+                    req = it.req?:0,
+
+                    type = it.type?:""
+
 
                 )
 
             })
+
+    }
+
+    override suspend fun getCargo(): List<CargoResponseModel> {
+
+        cargoClient.init(sharedPrefsApi.getToken() ?: "")
+
+        val newList = cargoClient.getCargo().map {
+
+            CargoResponseModel(
+
+                id = it.id,
+                company_id = it.company_id,
+                name = it.name,
+                status = it.status,
+                number = it.number,
+                ui = it.ui,
+                text = it.text,
+                from = it.from,
+                to = it.to?:"",
+                from_point  = it.from_point,
+                to_point = it.to_point,
+                cargo_type_id = it.cargo_type_id,
+                archive = it.archive,
+                to_local = it.to_local,
+                from_local = it.from_local,
+                to_local_id = it.to_local_id,
+                cargo_type = it.cargo_type,
+                created_at = it.created_at,
+                updated_at = it.updated_at,
+                delivery = it.delivery,
+                delivery_id = it.delivery_id,
+                from_local_id = it.from_local_id
+
+            )
+
+        }
+
+        return newList
 
     }
 

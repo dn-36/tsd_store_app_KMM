@@ -1,7 +1,8 @@
 package viewmodel
 
 import model.ApiResponseCRMModel
-import model.EntityContragentModel
+import model.CargoResponseModel
+import model.ContragentResponseModel
 import model.LocationResponseModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
@@ -19,7 +20,9 @@ data class CRMState(
 
     val listEmployee: List<UserCRMModel> = emptyList(),
 
-    val listLegalEntities: List<EntityContragentModel> = emptyList(),
+    val listContragents: List<ContragentResponseModel> = emptyList(),
+
+    val listCargo: List<CargoResponseModel> = emptyList(),
 
     val listLocations: List<LocationResponseModel> = emptyList(),
 
@@ -47,5 +50,6 @@ data class CRMState(
     val expendedLocations: Boolean = false,
 
     val expendedGoodsAndServices: Boolean = false,
+
 
     )

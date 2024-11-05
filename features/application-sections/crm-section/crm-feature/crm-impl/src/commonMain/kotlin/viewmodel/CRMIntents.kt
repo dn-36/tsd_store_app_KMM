@@ -14,13 +14,11 @@ sealed class CRMIntents {
 
                            val statusPay: Int?, val verifyPay: Int?, val task: String?,
 
-                           val price: String?, val arendaId: Int?, val specificationId: Int?,
+                           val status: String?, val price: String?, val arendaId: Int?,
 
-                           val projectId: Int?, val entityId: Int?,
+                           val specificationId: Int?, val projectId: Int?, val entityId: Int?,
 
-                           val ourEntityId: Int?,
-
-                           val text: String?, val statusId: Int?,
+                           val ourEntityId: Int?, val text: String?, val statusId: Int?,
 
                            val items: List<ServiceItemCreateCRMModel>? ): CRMIntents()
 

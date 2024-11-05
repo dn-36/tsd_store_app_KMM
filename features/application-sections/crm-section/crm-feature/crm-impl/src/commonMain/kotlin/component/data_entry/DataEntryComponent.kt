@@ -43,7 +43,8 @@ import androidx.compose.ui.unit.sp
 import component.data_entry.viewmodel.DataEntryIntents
 import component.data_entry.viewmodel.DataEntryViewModel
 import kotlinx.coroutines.CoroutineScope
-import model.EntityContragentModel
+import model.CargoResponseModel
+import model.ContragentResponseModel
 import model.LocationResponseModel
 import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
@@ -65,9 +66,11 @@ class DataEntryComponent (
 
     val listEmployee: List<UserCRMModel>,
 
-    val listLegalEntities: List<EntityContragentModel>,
+    val listContragents: List<ContragentResponseModel>,
 
     val listLocations: List<LocationResponseModel>,
+
+    val listCargo: List<CargoResponseModel>,
 
     val onClickCreate: (
 
@@ -80,6 +83,8 @@ class DataEntryComponent (
         verifyPay: Int?,
 
         task: String?,
+
+        status: String?,
 
         price: String?,
 
@@ -111,7 +116,7 @@ class DataEntryComponent (
 
         viewModel.processIntents(DataEntryIntents.SetScreen ( listSpecifications, listServices,
 
-            listEmployee, listLegalEntities, listLocations ))
+            listEmployee, listContragents, listLocations, listCargo ))
 
         val scrollState = rememberScrollState() // Состояние прокрутки
 
@@ -154,9 +159,9 @@ class DataEntryComponent (
                     },
 
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                        focusedBorderColor = viewModel.state.borderServiceColor, // Цвет границы при фокусе
+                        unfocusedBorderColor = viewModel.state.borderServiceColor, // Цвет границы в неактивном состоянии
+                        backgroundColor = viewModel.state.containerServiceColor.copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
                     ),
 
                     label = { Text("Услуги") },
@@ -251,6 +256,653 @@ class DataEntryComponent (
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                OutlinedTextField(
+
+                    value = viewModel.state.status,
+
+                    onValueChange = { inputText ->
+
+                        viewModel.processIntents(DataEntryIntents.InputTextStatus( inputText,
+
+                            listOf(
+                                "Оплачено","Не оплачено"
+                            ).filter {
+
+                                it.contains(inputText, ignoreCase = true) } ))
+
+                    },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                    ),
+
+                    label = { Text("Оплачено") },
+
+                    trailingIcon = {
+
+                        IconButton(
+
+                            onClick = {
+
+                                viewModel.processIntents(DataEntryIntents.MenuPaidFor)
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = "Статус",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 40.dp)
+                        .clickable(
+                            indication = null, // Отключение эффекта затемнения
+                            interactionSource = remember { MutableInteractionSource() })
+                        { }// Стандартная высота TextField
+                )
+                if ( viewModel.state.selectedPaidFor != null &&
+
+                    viewModel.state.selectedPaidFor!!.first != "" ) {
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Box(
+                        modifier = Modifier.padding(vertical = 5.dp).clip(RoundedCornerShape(10.dp))
+                            .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
+                    ) {
+                        Text(
+                            text = viewModel.state.selectedPaidFor!!.first,
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            modifier = Modifier.padding(8.dp).align(
+                                Alignment.CenterStart
+                            )
+                        )
+                        Image(painter = painterResource(Res.drawable.cancel),
+                            contentDescription = null,
+                            modifier = Modifier.padding(8.dp).size(10.dp).align(Alignment.TopEnd)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+
+                                {
+
+                                    viewModel.processIntents(DataEntryIntents.DeleteSelectedPaidFor)
+
+                                })
+                    }
+                }
+
+                if ( viewModel.state.expendedPaidFor ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+                        Card(
+                            modifier = Modifier.fillMaxSize()
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {}
+                        LazyColumn {
+                            itemsIndexed ( listOf("Не оплачено","оплачено") )
+
+                            { index, item ->
+
+                                Text( text = item,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryIntents.SelectPaidFor( item,index ))
+
+                                        })
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField(
+
+                    value = viewModel.state.status,
+
+                    onValueChange = { inputText ->
+
+                        viewModel.processIntents(DataEntryIntents.InputTextStatus( inputText,
+
+                            listOf(
+                                "Не подтвержен","подтвержден"
+
+                            ).filter {
+
+                                it.contains(inputText, ignoreCase = true) } ))
+
+                    },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                    ),
+
+                    label = { Text("Платеж подтвержден") },
+
+                    trailingIcon = {
+
+                        IconButton(
+
+                            onClick = {
+
+                                viewModel.processIntents(DataEntryIntents.MenuVerified)
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = "Подтвержен",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 40.dp)
+                        .clickable(
+                            indication = null, // Отключение эффекта затемнения
+                            interactionSource = remember { MutableInteractionSource() })
+                        { }// Стандартная высота TextField
+                )
+                if ( viewModel.state.selectedVerified != null &&
+
+                    viewModel.state.selectedVerified!!.first != "" ) {
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Box(
+                        modifier = Modifier.padding(vertical = 5.dp).clip(RoundedCornerShape(10.dp))
+                            .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
+                    ) {
+                        Text(
+                            text = viewModel.state.selectedVerified!!.first,
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            modifier = Modifier.padding(8.dp).align(
+                                Alignment.CenterStart
+                            )
+                        )
+                        Image(painter = painterResource(Res.drawable.cancel),
+                            contentDescription = null,
+                            modifier = Modifier.padding(8.dp).size(10.dp).align(Alignment.TopEnd)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+
+                                {
+
+                                    viewModel.processIntents(
+
+                                        DataEntryIntents.DeleteSelectedVerified )
+
+                                })
+                    }
+                }
+
+                if ( viewModel.state.expendedVerified ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+                        Card(
+                            modifier = Modifier.fillMaxSize()
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {}
+                        LazyColumn {
+                            itemsIndexed ( listOf("Не подтвержен","подтвержден") )
+
+                            { index, item ->
+
+                                Text( text = item,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryIntents.SelectVerified( item,index ))
+
+                                        })
+                            }
+                        }
+                    }
+                }
+
+
+                if ( viewModel.state.selectedService != null &&
+
+                    viewModel.state.selectedService!!.comp_project != null ) {
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    val checkProject =
+                        viewModel.state.selectedService!!.comp_project!!.find { it == "Проект" }
+
+                    val checkEntity =
+                        viewModel.state.selectedService!!.comp_project!!.find { it == "Компания" }
+
+                    if (checkEntity != null) {
+
+
+                        OutlinedTextField(
+
+                            value = viewModel.state.legalEntity,
+
+                            onValueChange = { inputText ->
+
+                                viewModel.processIntents(
+
+                                    DataEntryIntents.InputTextLegalEntity(inputText,
+
+                                        listContragents.filter { legalEntity ->
+                                            legalEntity.entities?.any { entity ->
+                                                // Проверяем, что name не равен null, и затем фильтруем
+                                                entity.name?.contains(inputText, ignoreCase = true) == true
+                                            } == true // Условие фильтрации, если хотя бы один entity подходит
+                                        }
+                                    ))
+
+                            },
+
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                                //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                                //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                            ),
+
+                            label = { Text("Юр.лица") },
+
+                            trailingIcon = {
+
+                                IconButton(
+
+                                    onClick = {
+
+                                        viewModel.processIntents(DataEntryIntents.MenuLegalEntity)
+
+                                    }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(Res.drawable.down_arrow),
+                                        contentDescription = "Поиск",
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+                                { }// Стандартная высота TextField
+                        )
+
+                        if (viewModel.state.selectedLegalEntity != null) {
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Box(
+                                modifier = Modifier.padding(vertical = 5.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
+                            ) {
+
+                                Text(
+                                    text = viewModel.state.selectedLegalEntity!!.name?:"",
+                                    color = Color.White,
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.padding(8.dp).align(
+                                        Alignment.CenterStart
+                                    )
+                                )
+
+                                Image(painter = painterResource(Res.drawable.cancel),
+                                    contentDescription = null,
+                                    modifier = Modifier.padding(8.dp).size(10.dp)
+                                        .align(Alignment.TopEnd)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryIntents.DeleteSelectedLegalEntity
+                                            )
+
+                                        })
+                            }
+                        }
+
+                        if (viewModel.state.expendedLegalEntity) {
+
+                            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                                Card(
+                                    modifier = Modifier.fillMaxSize()
+                                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                                    backgroundColor = Color.White,
+                                    shape = RoundedCornerShape(8.dp)
+                                ) {}
+                                LazyColumn {
+                                    itemsIndexed(viewModel.state.filteredListContragents)
+
+                                    { index, item ->
+
+                                        item.entities!!.forEach { entity ->
+
+                                            if ( entity.name != null && entity.name != "" ) {
+
+                                                Text(entity.name,
+                                                    fontSize = 20.sp,
+                                                    modifier = Modifier.fillMaxWidth(0.9f)
+                                                        .padding(16.dp)
+                                                        .clickable(
+                                                            indication = null, // Отключение эффекта затемнения
+                                                            interactionSource = remember { MutableInteractionSource() })
+
+                                                        {
+
+                                                            viewModel.processIntents(
+
+                                                                DataEntryIntents.SelectLegalEntity(
+
+                                                                  entity, item
+                                                                )
+                                                            )
+
+                                                        })
+
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+
+                       /* Spacer(modifier = Modifier.height(10.dp))
+
+                        OutlinedTextField(
+
+                            value = viewModel.state.employee,
+
+                            onValueChange = { inputText ->
+
+                                viewModel.processIntents(DataEntryIntents.InputTextEmployee(
+                                    inputText,
+
+                                    listEmployee.filter {
+
+                                        it.name!!.contains(inputText, ignoreCase = true)
+                                    }))
+
+                            },
+
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                                //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                                //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                            ),
+
+                            label = { Text("Сотрудник") },
+
+                            trailingIcon = {
+
+                                IconButton(
+
+                                    onClick = {
+
+                                        viewModel.processIntents(DataEntryIntents.MenuEmployee)
+
+                                    }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(Res.drawable.down_arrow),
+                                        contentDescription = "Поиск",
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+                                { }// Стандартная высота TextField
+                        )
+
+                        if (viewModel.state.selectedEmployee != null) {
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Box(
+                                modifier = Modifier.padding(vertical = 5.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
+                            ) {
+                                Text(
+                                    text = viewModel.state.selectedEmployee!!.name ?: "нет имени",
+                                    color = Color.White,
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.padding(8.dp).align(
+                                        Alignment.CenterStart
+                                    )
+                                )
+                                Image(painter = painterResource(Res.drawable.cancel),
+                                    contentDescription = null,
+                                    modifier = Modifier.padding(8.dp).size(10.dp)
+                                        .align(Alignment.TopEnd)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryIntents.DeleteSelectedEmployee
+                                            )
+
+                                        })
+                            }
+                        }
+
+                        if (viewModel.state.expendedEmployee) {
+
+                            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                                Card(
+                                    modifier = Modifier.fillMaxSize()
+                                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                                    backgroundColor = Color.White,
+                                    shape = RoundedCornerShape(8.dp)
+                                ) {}
+                                LazyColumn {
+                                    itemsIndexed(viewModel.state.filteredListEmployee)
+
+                                    { index, item ->
+
+                                        if ( item.contragents == viewModel.state.selectedContragent?.id) {
+
+                                            Text(item.name ?: "нет имени",
+                                                fontSize = 20.sp,
+                                                modifier = Modifier.fillMaxWidth(0.9f)
+                                                    .padding(16.dp)
+                                                    .clickable(
+                                                        indication = null, // Отключение эффекта затемнения
+                                                        interactionSource = remember { MutableInteractionSource() })
+
+                                                    {
+
+                                                        viewModel.processIntents(
+                                                            DataEntryIntents.SelectEmployee(
+                                                                item
+                                                            )
+                                                        )
+
+                                                    })
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        OutlinedTextField(
+
+                            value = viewModel.state.location,
+
+                            onValueChange = { inputText ->
+
+                                viewModel.processIntents(DataEntryIntents.InputTextLocation(
+                                    inputText,
+
+                                    listLocations.filter {
+
+                                        it.name!!.contains(inputText, ignoreCase = true)
+                                    }))
+
+                            },
+
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                                //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                                //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                            ),
+
+                            label = { Text("Юр.лица \nЛокация") },
+
+                            trailingIcon = {
+
+                                IconButton(
+
+                                    onClick = {
+
+                                        viewModel.processIntents(DataEntryIntents.MenuLocations)
+
+                                    }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(Res.drawable.down_arrow),
+                                        contentDescription = "Поиск",
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+                                { }// Стандартная высота TextField
+                        )
+
+                        if (viewModel.state.selectedLocation != null) {
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Box(
+                                modifier = Modifier.padding(vertical = 5.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
+                            ) {
+                                Text(
+                                    text = viewModel.state.selectedLocation!!.name ?: "нет имени",
+                                    color = Color.White,
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.padding(8.dp).align(
+                                        Alignment.CenterStart
+                                    )
+                                )
+                                Image(painter = painterResource(Res.drawable.cancel),
+                                    contentDescription = null,
+                                    modifier = Modifier.padding(8.dp).size(10.dp)
+                                        .align(Alignment.TopEnd)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryIntents.DeleteSelectedLocation)
+
+                                        })
+                            }
+                        }
+
+                        if (viewModel.state.expendedLocations) {
+
+                            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                                Card(
+                                    modifier = Modifier.fillMaxSize()
+                                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                                    backgroundColor = Color.White,
+                                    shape = RoundedCornerShape(8.dp)
+                                ) {}
+                                LazyColumn {
+                                    itemsIndexed(viewModel.state.filteredListLocations)
+
+                                    { index, item ->
+
+                                        if ( viewModel.state.selectedContragent?.name == item.contragent?.name ) {
+
+                                            Text(item.name ?: "нет имени",
+                                                fontSize = 20.sp,
+                                                modifier = Modifier.fillMaxWidth(0.9f)
+                                                    .padding(16.dp)
+                                                    .clickable(
+                                                        indication = null, // Отключение эффекта затемнения
+                                                        interactionSource = remember { MutableInteractionSource() })
+
+                                                    {
+
+                                                        viewModel.processIntents(
+                                                            DataEntryIntents.SelectLocation(
+                                                                item
+                                                            )
+                                                        )
+
+                                                    })
+                                        }
+                                    }
+                                }
+                            }
+                        }*/
+
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
                 OutlinedTextField (
 
                     value = viewModel.state.legalEntityPerformer,
@@ -261,9 +913,11 @@ class DataEntryComponent (
 
                             DataEntryIntents.InputTextLegalEntityPerformer( inputText,
 
-                                listLegalEntities.filter { entity ->
-                                    // Проверяем, что name не равен null, и затем фильтруем
-                                    entity.name?.contains(inputText, ignoreCase = true) == true
+                                 listContragents.filter { legalEntity ->
+                                    legalEntity.entities?.any { entity ->
+                                        // Проверяем, что name не равен null, и затем фильтруем
+                                        entity.name?.contains(inputText, ignoreCase = true) == true
+                                    } == true // Условие фильтрации, если хотя бы один entity подходит
                                 } ))
 
                     },
@@ -312,7 +966,7 @@ class DataEntryComponent (
                     ) {
 
                             Text(
-                                text = viewModel.state.selectedLegalEntityPerformer!!.name!!,
+                                text = viewModel.state.selectedLegalEntityPerformer!!.name?:"",
                                 color = Color.White,
                                 fontSize = 15.sp,
                                 modifier = Modifier.padding(8.dp).align(
@@ -329,9 +983,9 @@ class DataEntryComponent (
 
                                 {
 
-                                    viewModel.processIntents(
+                                    viewModel.processIntents (
 
-                                        DataEntryIntents.DeleteSelectedLegalEntityPerformer)
+                                        DataEntryIntents.DeleteSelectedLegalEntityPerformer )
 
                                 })
                     }
@@ -347,29 +1001,34 @@ class DataEntryComponent (
                             shape = RoundedCornerShape(8.dp)
                         ) {}
                         LazyColumn {
-                            itemsIndexed( viewModel.state.filteredListLegalEntities )
+                            itemsIndexed( viewModel.state.filteredListContragents )
 
                             { index, item ->
 
-                                if ( item.name != null ) {
+                                item.entities!!.forEach { entity ->
 
-                                    Text( item.name,
-                                        fontSize = 20.sp,
-                                        modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
-                                            .clickable(
-                                                indication = null, // Отключение эффекта затемнения
-                                                interactionSource = remember { MutableInteractionSource() })
+                                    if (entity.name != null && entity.name != "" ) {
 
-                                            {
+                                        Text(entity.name,
+                                            fontSize = 20.sp,
+                                            modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                                .clickable(
+                                                    indication = null, // Отключение эффекта затемнения
+                                                    interactionSource = remember { MutableInteractionSource() })
 
-                                                viewModel.processIntents(
-                                                    DataEntryIntents.SelectLegalEntityPerformer(
-                                                        item
+                                                {
+
+                                                    viewModel.processIntents(
+
+                                                        DataEntryIntents.SelectLegalEntityPerformer(
+
+                                                           entity, item
+                                                        )
                                                     )
-                                                )
 
-                                            })
+                                                })
 
+                                    }
                                 }
 
                             }
@@ -377,15 +1036,15 @@ class DataEntryComponent (
                     }
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
+              //  Spacer(modifier = Modifier.height(10.dp))
 
-                OutlinedTextField(
+               /* OutlinedTextField(
 
-                    value = viewModel.state.employee,
+                    value = viewModel.state.employeePerformer,
 
                     onValueChange = { inputText ->
 
-                        viewModel.processIntents(DataEntryIntents.InputTextEmployee( inputText,
+                        viewModel.processIntents(DataEntryIntents.InputTextEmployeePerformer( inputText,
 
                             listEmployee.filter {
 
@@ -407,7 +1066,7 @@ class DataEntryComponent (
 
                             onClick = {
 
-                                viewModel.processIntents(DataEntryIntents.MenuEmployee)
+                                viewModel.processIntents(DataEntryIntents.MenuEmployeePerformer)
 
                             }
                         ) {
@@ -427,7 +1086,7 @@ class DataEntryComponent (
                         { }// Стандартная высота TextField
                 )
 
-                if ( viewModel.state.selectedEmployee != null ) {
+                if ( viewModel.state.selectedEmployeePerformer != null ) {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -436,7 +1095,7 @@ class DataEntryComponent (
                             .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
                     ) {
                         Text(
-                            text = viewModel.state.selectedEmployee!!.name?:"нет имени",
+                            text = viewModel.state.selectedEmployeePerformer!!.name?:"нет имени",
                             color = Color.White,
                             fontSize = 15.sp,
                             modifier = Modifier.padding(8.dp).align(
@@ -454,13 +1113,13 @@ class DataEntryComponent (
 
                                     viewModel.processIntents(
 
-                                        DataEntryIntents.DeleteSelectedEmployee)
+                                        DataEntryIntents.DeleteSelectedEmployeePerformer)
 
                                 })
                     }
                 }
 
-                if ( viewModel.state.expendedEmployee ) {
+                if ( viewModel.state.expendedEmployeePerformer ) {
 
                     Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
                         Card(
@@ -474,32 +1133,39 @@ class DataEntryComponent (
 
                             { index, item ->
 
-                                Text(item.name?:"нет имени",
-                                    fontSize = 20.sp,
-                                    modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
-                                        .clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
+                                if ( item.contragents == viewModel.state.selectedContragentPerformer?.id ) {
 
-                                        {
+                                    Text(item.name ?: "нет имени",
+                                        fontSize = 20.sp,
+                                        modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
 
-                                            viewModel.processIntents(DataEntryIntents.SelectEmployee( item ))
+                                            {
 
-                                        })
+                                                viewModel.processIntents(
+                                                    DataEntryIntents.SelectEmployeePerformer(
+                                                        item
+                                                    )
+                                                )
+
+                                            })
+                                }
                             }
                         }
                     }
-                }
+                }*/
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                OutlinedTextField(
+               /* OutlinedTextField(
 
-                    value = viewModel.state.location,
+                    value = viewModel.state.locationPerformer,
 
                     onValueChange = { inputText ->
 
-                        viewModel.processIntents(DataEntryIntents.InputTextLocation( inputText,
+                        viewModel.processIntents(DataEntryIntents.InputTextLocationPerformer( inputText,
 
                             listLocations.filter {
 
@@ -521,7 +1187,7 @@ class DataEntryComponent (
 
                             onClick = {
 
-                                viewModel.processIntents(DataEntryIntents.MenuLocations)
+                                viewModel.processIntents(DataEntryIntents.MenuLocationsPerformer)
 
                             }
                         ) {
@@ -541,7 +1207,7 @@ class DataEntryComponent (
                         { }// Стандартная высота TextField
                 )
 
-                if ( viewModel.state.selectedLocation != null ) {
+                if ( viewModel.state.selectedLocationPerformer != null ) {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -550,7 +1216,7 @@ class DataEntryComponent (
                             .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
                     ) {
                         Text(
-                            text = viewModel.state.selectedLocation!!.name?:"нет имени",
+                            text = viewModel.state.selectedLocationPerformer!!.name?:"нет имени",
                             color = Color.White,
                             fontSize = 15.sp,
                             modifier = Modifier.padding(8.dp).align(
@@ -566,13 +1232,13 @@ class DataEntryComponent (
 
                                 {
 
-                                    viewModel.processIntents(DataEntryIntents.DeleteSelectedLocation)
+                                    viewModel.processIntents(DataEntryIntents.DeleteSelectedLocationPerformer)
 
                                 })
                     }
                 }
 
-                if ( viewModel.state.expendedLocations ) {
+                if ( viewModel.state.expendedLocationsPerformer ) {
 
                     Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
                         Card(
@@ -586,22 +1252,29 @@ class DataEntryComponent (
 
                             { index, item ->
 
-                                Text(item.name?:"нет имени",
-                                    fontSize = 20.sp,
-                                    modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
-                                        .clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
+                                if ( viewModel.state.selectedContragentPerformer?.name == item.contragent?.name) {
 
-                                        {
+                                    Text(item.name ?: "нет имени",
+                                        fontSize = 20.sp,
+                                        modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
 
-                                            viewModel.processIntents(DataEntryIntents.SelectLocation( item ))
+                                            {
 
-                                        })
+                                                viewModel.processIntents(
+                                                    DataEntryIntents.SelectLocationPerformer(
+                                                        item
+                                                    )
+                                                )
+
+                                            })
+                                }
                             }
                         }
                     }
-                }
+                }*/
 
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -731,7 +1404,7 @@ class DataEntryComponent (
                         viewModel.processIntents(DataEntryIntents.InputTextStatus( inputText,
 
                             listOf(
-                                "Активна", "В работе", "Срочная", "Завершена", "Не выполнена",
+                                "Завершена", "Активна", "В работе", "Срочная", "Не выполнена",
 
                                 "Выполнена не до конца", "Отложена"
                             ).filter {
@@ -836,6 +1509,171 @@ class DataEntryComponent (
                     }
                 }
 
+               // Spacer(modifier = Modifier.height(10.dp))
+
+               /* OutlinedTextField(
+
+                    value = viewModel.state.cargo,
+
+                    onValueChange = { inputText ->
+
+                        viewModel.processIntents(
+
+                            DataEntryIntents.InputTextCargo( inputText,
+
+                                listCargo.filter {
+
+                                    it.name!!.contains(inputText, ignoreCase = true) } ))
+
+                    },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                    ),
+
+                    label = { Text("Груз") },
+
+                    trailingIcon = {
+
+                        IconButton(
+
+                            onClick = {
+
+                                viewModel.processIntents(DataEntryIntents.MenuCargo)
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = "Поиск",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 40.dp)
+                        .clickable(
+                            indication = null, // Отключение эффекта затемнения
+                            interactionSource = remember { MutableInteractionSource() })
+                        { }// Стандартная высота TextField
+                )
+
+                if ( viewModel.state.selectedCargo != null ) {
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Box(
+                        modifier = Modifier.padding(vertical = 5.dp).clip(RoundedCornerShape(10.dp))
+                            .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
+                    ) {
+                        Text(
+                            text = viewModel.state.selectedCargo!!.name?:"нет имени",
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            modifier = Modifier.padding(8.dp).align(
+                                Alignment.CenterStart
+                            )
+                        )
+                        Image(painter = painterResource(Res.drawable.cancel),
+                            contentDescription = null,
+                            modifier = Modifier.padding(8.dp).size(10.dp).align(Alignment.TopEnd)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+
+                                {
+
+                                    viewModel.processIntents(
+
+                                        DataEntryIntents.DeleteSelectedCargo )
+
+                                })
+                    }
+                }
+
+                if ( viewModel.state.expendedCargo ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                        Card(
+                            modifier = Modifier.fillMaxSize()
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {}
+                        LazyColumn {
+                            itemsIndexed( viewModel.state.filteredListCargo )
+
+                            { index, item ->
+
+                                Text(item.name?:"нет имени",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(DataEntryIntents.SelectCargo( item ))
+
+
+                                        })
+                            }
+                        }
+                    }
+                }*/
+
+                if ( viewModel.state.selectedService != null &&
+
+                    viewModel.state.selectedService!!.items != null ) {
+
+                    viewModel.state.selectedService!!.items!!.forEachIndexed { index,it ->
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        if (it.type == "text" ||
+
+                            it.type == "alltext" || it.type == "number" || it.type == "date" ||
+
+                            it.type == "coordinate"
+                        ) {
+
+                            OutlinedTextField(
+
+                                value = viewModel.state.textFieldsValues[index],
+
+                                onValueChange = {
+
+                                    viewModel.processIntents(
+
+                                        DataEntryIntents.InputTextAdditionalFields( it, index ))
+
+                                },
+
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                                    //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                                    backgroundColor = Color.LightGray.copy(alpha = 0.5f) // Цвет фона с легкой прозрачностью
+                                ),
+
+                                label = { Text(it.name ?: "") },
+
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(min = 40.dp)
+                                    .clickable(
+                                        indication = null, // Отключение эффекта затемнения
+                                        interactionSource = remember { MutableInteractionSource() })
+                                    { }// Стандартная высота TextField
+                            )
+                        }
+
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(10.dp))
 
                 OutlinedTextField(
@@ -895,160 +1733,6 @@ class DataEntryComponent (
                 )
 
 
-                Spacer(modifier = Modifier.height(10.dp))
-
-                if ( viewModel.state.selectedService != null &&
-
-                    viewModel.state.selectedService!!.items != null ) {
-
-                    viewModel.state.selectedService!!.items!!.forEach {
-
-                        var text by remember { mutableStateOf("") }
-
-                            OutlinedTextField(
-
-                                value = text,
-
-                                onValueChange = {
-
-                                    text = it
-
-                                },
-
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                                    //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                                    backgroundColor = Color.LightGray.copy(alpha = 0.5f) // Цвет фона с легкой прозрачностью
-                                ),
-
-                                label = { Text(it.name ?: "") },
-
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .heightIn(min = 40.dp)
-                                    .clickable(
-                                        indication = null, // Отключение эффекта затемнения
-                                        interactionSource = remember { MutableInteractionSource() })
-                                    { }// Стандартная высота TextField
-                            )
-
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                OutlinedTextField(
-
-                    value = viewModel.state.goodsAndServices,
-
-                    onValueChange = { inputText ->
-
-                        viewModel.processIntents(
-
-                            DataEntryIntents.InputTextGoodsAndServices( inputText,
-
-                                listSpecifications.filter {
-
-                                    it.text!!.contains(inputText, ignoreCase = true) } ))
-
-                    },
-
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
-
-                    label = { Text("Товары и Услуги") },
-
-                    trailingIcon = {
-
-                        IconButton(
-
-                            onClick = {
-
-                                viewModel.processIntents(DataEntryIntents.MenuGoodsAndServices)
-
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(Res.drawable.down_arrow),
-                                contentDescription = "Поиск",
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 40.dp)
-                        .clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { }// Стандартная высота TextField
-                )
-
-                if ( viewModel.state.selectedGoodsAndServices != null ) {
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Box(
-                        modifier = Modifier.padding(vertical = 5.dp).clip(RoundedCornerShape(10.dp))
-                            .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
-                    ) {
-                        Text(
-                            text = viewModel.state.selectedGoodsAndServices!!.text?:"нет имени",
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            modifier = Modifier.padding(8.dp).align(
-                                Alignment.CenterStart
-                            )
-                        )
-                        Image(painter = painterResource(Res.drawable.cancel),
-                            contentDescription = null,
-                            modifier = Modifier.padding(8.dp).size(10.dp).align(Alignment.TopEnd)
-                                .clickable(
-                                    indication = null, // Отключение эффекта затемнения
-                                    interactionSource = remember { MutableInteractionSource() })
-
-                                {
-
-                                    viewModel.processIntents(DataEntryIntents.DeleteSelectedGoodsAndServices)
-
-                                })
-                    }
-                }
-
-                if ( viewModel.state.expendedGoodsAndServices ) {
-
-                    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
-                        Card(
-                            modifier = Modifier.fillMaxSize()
-                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
-                            backgroundColor = Color.White,
-                            shape = RoundedCornerShape(8.dp)
-                        ) {}
-                        LazyColumn {
-                            itemsIndexed( viewModel.state.filteredListGoodsAndServices )
-
-                            { index, item ->
-
-                                Text(item.text?:"нет имени",
-                                    fontSize = 20.sp,
-                                    modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
-                                        .clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
-
-                                        {
-
-                                            viewModel.processIntents(DataEntryIntents.SelectGoodsAndServices( item ))
-
-                                        })
-                            }
-                        }
-                    }
-                }
-
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
@@ -1060,28 +1744,50 @@ class DataEntryComponent (
                             viewModel.processIntents(DataEntryIntents.TotalPrice)
 
                             onClickCreate(
-                                scope,
 
+                                scope,
 
                                 viewModel.state.selectedService!!.id,
 
-                                0, 0, viewModel.state.task,
+                                if ( viewModel.state.selectedPaidFor != null ) viewModel.state.selectedPaidFor!!.second else 0,
 
-                                "${viewModel.state.totalPrice ?: 0.0}", null,
+                                if ( viewModel.state.selectedVerified != null ) viewModel.state.selectedVerified!!.second else 0,
+
+                                 viewModel.state.task, viewModel.state.statusText,
+
+                                "${ viewModel.state.totalPrice ?: 0.0 }", null,
 
                                 if (viewModel.state.selectedSpecific != null) viewModel.state.selectedSpecific!!.id else null,
 
-                                null, null,
+                                null,  if ( viewModel.state.selectedLegalEntity != null ) viewModel.state.selectedLegalEntity!!.id?:0 else null,
 
                                 if (viewModel.state.selectedLegalEntityPerformer != null) viewModel.state.selectedLegalEntityPerformer!!.id else viewModel.state.selectedService!!.default_entity_id,
 
                                 if (viewModel.state.selectedService != null) viewModel.state.selectedService!!.text else "",
 
-                                1,
+                                if ( viewModel.state.selectedStatus != null ) viewModel.state.selectedStatus.second else 1 ,
 
-                                emptyList()
+                                //emptyList()
+
+                                viewModel.state.selectedService!!.items!!.mapIndexed { index, it ->
+                                    ServiceItemCreateCRMModel(
+                                        number = index,
+                                        type_id = it.id,
+                                        name = viewModel.state.textFieldsValues[index],
+                                        file = null,
+                                        filename = null,
+                                        req = it.req?:0,
+                                        type = it.type?:""
+                                    )
+                                }
 
                             )
+
+                        }
+
+                        else {
+
+                           viewModel.processIntents(DataEntryIntents.ColorTF)
 
                         }
 

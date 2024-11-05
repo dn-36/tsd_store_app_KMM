@@ -8,8 +8,9 @@ import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.network.Navigation
 import domain.usecases.CreateCRMUseCase
+import domain.usecases.GetCargoUseCase
 import domain.usecases.GetIncomingCRMUseCase
-import domain.usecases.GetLegalEntitiesUseCase
+import domain.usecases.GetContragentsUseCase
 import domain.usecases.GetOutgoingCRMUseCase
 import domain.usecases.GetServicesUseCase
 import domain.usecases.GetSpecificationsUseCase
@@ -33,13 +34,15 @@ class CRMViewModel (
 
     val getUsersUseCase: GetEmployeeUseCase,
 
-    val getLegalEntitiesUseCase: GetLegalEntitiesUseCase,
+    val getContragentsUseCase: GetContragentsUseCase,
 
     val getLocationsUseCase: GetLocationsUseCase,
 
     val getProjectsUseCase: GetProjectsUseCase,
 
-    val createCRMUseCase: CreateCRMUseCase
+    val createCRMUseCase: CreateCRMUseCase,
+
+    val getCargoUseCase: GetCargoUseCase
 
 ): NetworkViewModel() {
 
@@ -94,9 +97,11 @@ class CRMViewModel (
 
                      listEmployee = getUsersUseCase.execute(),
 
-                     listLegalEntities = getLegalEntitiesUseCase.execute(),
+                     listContragents = getContragentsUseCase.execute(),
 
                      listLocations = getLocationsUseCase.execute(),
+
+                     listCargo = getCargoUseCase.execute(),
 
                      isVisibilityDataEntryComponent = 1f
 
@@ -116,7 +121,9 @@ class CRMViewModel (
 
                     statusPay = intent.statusPay, verifyPay = intent.verifyPay,
 
-                    task = intent.task, price = intent.price, arendaId = intent.arendaId,
+                    task = intent.task, status = intent.status,
+
+                    price = intent.price, arendaId = intent.arendaId,
 
                     specificationId = intent.specificationId,projectId = intent.projectId,
 
@@ -153,6 +160,10 @@ class CRMViewModel (
          println(" CHECK SERVICES: ${state.listServices} ")
 
          println(" CHECK PROJECTS: ${state.listProjects} ")
+
+         println(" CHECK CONTRGENTS: ${state.listContragents} ")
+
+         println(" CHECK EMPLOYEE: ${state.listEmployee} ")
 
         val menuScreen: MenuCrmScreenApi = KoinPlatform.getKoin().get()
 

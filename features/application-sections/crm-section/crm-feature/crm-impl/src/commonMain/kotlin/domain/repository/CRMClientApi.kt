@@ -1,7 +1,8 @@
 package domain.repository
 
 import model.ApiResponseCRMModel
-import model.EntityContragentModel
+import model.CargoResponseModel
+import model.ContragentResponseModel
 import model.LocationResponseModel
 import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
@@ -15,7 +16,8 @@ interface CRMClientApi {
     suspend fun getSpecifications(): List<SpecificResponseModel>
     suspend fun getServices(): List<ServiceResponseModel>
     suspend fun getUsers(): List<UserCRMModel>
-    suspend fun getLegalEntities(): List<EntityContragentModel>
+    suspend fun getCargo(): List<CargoResponseModel>
+    suspend fun getContragents(): List<ContragentResponseModel>
     suspend fun getLocations(): List<LocationResponseModel>
     suspend fun getProjects(): String
     suspend fun createCRM (
@@ -24,6 +26,7 @@ interface CRMClientApi {
         statusPay: Int?,
         verifyPay: Int?,
         task: String?,
+        status: String?,
         price: String?,
         arendaId: Int?,
         specificationId: Int?,
