@@ -1,5 +1,6 @@
 package com.project.network.crm_network.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
@@ -53,6 +54,7 @@ data class ApiResponseCRMOutgoing(
     val is_order_creater: Int?,
     val to_local_id: Int?,
     val from_local_id: Int?,
+    val cargos: List<Cargo>?,
     val projects: Project?,
     val service: Service?,
     val company: Company?,
@@ -181,4 +183,30 @@ data class Project(
 data class GroupEntity(
     val id: Int,
     val name: String
+)
+
+
+@Serializable
+data class Cargo(
+    val id: Int,
+    val company_id: Int,
+    val name: String,
+    val status: String?, // Может быть null
+    val number: String,
+    val ui: String,
+    val created_at: String,
+    val updated_at: String,
+    val from: String?, // Может быть null
+    val text: String?, // Может быть null
+    val to: String?, // Может быть null
+    val from_point: String?, // Может быть null
+    val to_point: String?, // Может быть null
+    val push_entity_id: Int?, // Может быть null
+    val pull_entity_id: Int?, // Может быть null
+    val to_local_id: Int?, // Может быть null
+    val from_local_id: Int?, // Может быть null
+    val cargo_type_id: Int, // Обязательное поле
+    val archive: Int,
+    val delivery_id: Int?, // Может быть null
+    val laravel_through_key: Int
 )

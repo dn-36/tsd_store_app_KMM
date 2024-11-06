@@ -5,9 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import model.ApiResponseCRMModel
 import model.CargoResponseModel
 import model.ContragentResponseModel
 import model.EntityContragentModel
+import model.GroupEntityResponseModel
 import model.LocationResponseModel
 import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
@@ -23,6 +25,8 @@ class DataEntryViewModel (): ViewModel() {
         when ( intent ) {
 
             is DataEntryIntents.MenuEmployeePerformer -> menuEmployeePerformer()
+
+            is DataEntryIntents.MenuGroupEntity -> menuGroupEntity()
 
             is DataEntryIntents.MenuEmployee -> menuEmployee()
 
@@ -52,6 +56,8 @@ class DataEntryViewModel (): ViewModel() {
             is DataEntryIntents.SelectEmployeePerformer -> selectEmployeePerformer( intent.item )
 
             is DataEntryIntents.SelectEmployee -> selectEmployee( intent.item )
+
+            is DataEntryIntents.SelectGroupEntity-> selectGroupEntity( intent.item )
 
             is DataEntryIntents.SelectLocationPerformer -> selectLocationPerformer( intent.item )
 
@@ -84,6 +90,8 @@ class DataEntryViewModel (): ViewModel() {
 
             is DataEntryIntents.DeleteSelectedEmployee -> deleteSelectedEmployee()
 
+            is DataEntryIntents.DeleteSelectedGroupEntity -> deleteSelectedGroupEntity()
+
             is DataEntryIntents.DeleteSelectedPaidFor -> deleteSelectedPaidFor()
 
             is DataEntryIntents.DeleteSelectedVerified -> deleteSelectedVerified()
@@ -110,9 +118,13 @@ class DataEntryViewModel (): ViewModel() {
             is DataEntryIntents.DeleteSelectedGoodsAndServices -> deleteSelectedGoodsAndServices()
 
 
-            is DataEntryIntents.InputTextLocationPerformer -> inputTextLocationPerfomer( intent.text, intent.list )
+            is DataEntryIntents.InputTextLocationPerformer -> inputTextLocationPerfomer(
+
+                intent.text, intent.list )
 
             is DataEntryIntents.InputTextCargo -> inputTextCargo( intent.text, intent.list )
+
+            is DataEntryIntents.InputTextGroupEntity -> inputTextGroupEntity( intent.text, intent.list )
 
             is DataEntryIntents.InputTextLocation -> inputTextLocation( intent.text, intent.list )
 
@@ -134,8 +146,6 @@ class DataEntryViewModel (): ViewModel() {
 
                 intent.list )
 
-            is DataEntryIntents.InputTextStatus -> inputTextStatus( intent.text, intent.list )
-
             is DataEntryIntents.InputTextEmployeePerformer -> inputTextEmployeePerfomer( intent.text, intent.list )
 
             is DataEntryIntents.InputTextEmployee -> inputTextEmployee( intent.text, intent.list )
@@ -149,7 +159,7 @@ class DataEntryViewModel (): ViewModel() {
 
                 intent.listServices, intent.listEmployee, intent.listLegalEntities,
 
-                intent.listLocations, intent.listCargo)
+                intent.listLocations, intent.listCargo, intent.listGroupEntity, intent.item)
 
             }
 
@@ -248,6 +258,27 @@ class DataEntryViewModel (): ViewModel() {
         state = state.copy(
 
             expendedEmployee = !state.expendedEmployee,
+            expendedStatus = false,
+            expendedLegalEntityPerformer = false,
+            expendedGoodsAndServices = false,
+            expendedSpecifications = false,
+            expendedLocationsPerformer = false,
+            expendedService = false,
+            expendedLegalEntity = false,
+            expendedLocations = false,
+            expendedEmployeePerformer = false,
+            expendedCargo = false
+
+        )
+
+    }
+
+    fun menuGroupEntity () {
+
+        state = state.copy(
+
+            expendedGroupEntity = !state.expendedGroupEntity,
+            expendedEmployee = false,
             expendedStatus = false,
             expendedLegalEntityPerformer = false,
             expendedGoodsAndServices = false,
@@ -461,6 +492,18 @@ class DataEntryViewModel (): ViewModel() {
 
     }
 
+    fun selectGroupEntity ( item: GroupEntityResponseModel ) {
+
+        state = state.copy(
+
+            selectedGroupEntity = item,
+
+            expendedGroupEntity = false
+
+        )
+
+    }
+
     fun selectSpecific ( item: SpecificResponseModel ) {
 
         state = state.copy(
@@ -632,6 +675,16 @@ class DataEntryViewModel (): ViewModel() {
 
     }
 
+    fun deleteSelectedGroupEntity ( ) {
+
+        state = state.copy(
+
+            selectedGroupEntity = null
+
+        )
+
+    }
+
     fun deleteSelectedLegalEntityPerformer ( ) {
 
         state = state.copy(
@@ -768,6 +821,18 @@ class DataEntryViewModel (): ViewModel() {
 
     }
 
+    fun inputTextGroupEntity (text: String, list: List<GroupEntityResponseModel> ) {
+
+        state = state.copy(
+
+            groupEntity = text,
+
+            filteredListGroupEntity = list
+
+        )
+
+    }
+
     fun inputTextLegalEntityPerformer ( text: String, list: List<ContragentResponseModel> ) {
 
         state = state.copy(
@@ -842,18 +907,6 @@ class DataEntryViewModel (): ViewModel() {
 
     }
 
-    fun inputTextStatus ( text: String, list: List<String> ) {
-
-        state = state.copy(
-
-            status = text,
-
-            filteredListStatus = list
-
-        )
-
-    }
-
     fun inputTextAdditionalFields ( text: String, index: Int ) {
 
         val newList = state.textFieldsValues.toMutableList()
@@ -898,7 +951,11 @@ class DataEntryViewModel (): ViewModel() {
 
                     listLocations: List<LocationResponseModel>,
 
-                    listCargo: List<CargoResponseModel> ) {
+                    listCargo: List<CargoResponseModel>,
+
+                    listGroupEntity: List<GroupEntityResponseModel>,
+
+                    item: ApiResponseCRMModel? ) {
 
         if ( state.isSet ) {
 
@@ -916,20 +973,80 @@ class DataEntryViewModel (): ViewModel() {
 
                 filteredListCargo = listCargo,
 
-                filteredListStatus = listOf(
-
-                    "Активна", "В работе", "Срочная", "Завершена", "Не выполнена",
-
-                    "Выполнена не до конца", "Отложена"
-                ),
+                filteredListGroupEntity = listGroupEntity,
 
                 filteredListGoodsAndServices = listSpecifications,
+
+                selectedGroupEntity = if ( item?.groupentits != null ) GroupEntityResponseModel(
+
+                    id = item.groupentits.id,
+                    name = item.groupentits.name,
+                    0,
+                    "",
+                    "",
+                    ""
+
+                ) else null,
+
+                selectedLegalEntity = if ( item?.entity != null ) EntityContragentModel(
+
+                    id = item.entity.id,
+                    name = item.entity.name,
+                    ui = ""
+
+                ) else null,
+
+                selectedLegalEntityPerformer = if ( item?.entity_our != null ) EntityContragentModel(
+
+                    id = item.entity_our.id,
+                    name = item.entity_our.name,
+                    ui = ""
+
+                ) else null,
+
+                selectedLocation = if ( item?.to_local_id != null )
+
+                    listLocations.find { it.id == item.to_local_id } else null,
+
+
+                selectedLocationPerformer = if ( item?.from_local_id != null )
+
+                    listLocations.find { it.id == item.from_local_id } else null,
+
+                task = item?.task?:"",
+
+                statusText = item?.status?:"",
+
+                selectedSpecific = if ( item?.specification_id != null )
+
+                    listSpecifications.find { it.id == item.specification_id } else null,
+
+                selectedStatus = Pair(
+
+                    when (item?.statusid) {
+                        0 -> "Завершена"
+                        1 -> "Активна"
+                        2 -> "В работе"
+                        3 -> "Срочная"
+                        4 -> "Не выполнена"
+                        5 -> "Выполнена не до конца"
+                        6 -> "Отложена"
+                        else -> "" // Добавлено корректное завершение when с else
+                    },
+                    item?.statusid ?: 1
+                ),
+
+                selectedService = if ( item?.service_id != null )
+
+                    listServices.find { it.id == item.service_id } else null,
+
 
                 isSet = false
 
             )
 
-            println("STATE CONTR: ${state.filteredListContragents}")
+            println("SELECTED SERVICES ${state.selectedService}")
+
 
         }
 

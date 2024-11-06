@@ -34,6 +34,7 @@ import model.ServiceItemCreateCRMModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
+import project.core.resources.update_pencil
 import util.formatDateTime
 import viewmodel.CRMIntents
 import viewmodel.CRMViewModel
@@ -143,6 +144,10 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
                                         if (item.entity != null)
 
                                             item.entity.name else "Не указано"
+                                    } ${
+                                        if (item.groupentits != null)
+
+                                            "/ ${item.groupentits.name}" else ""
                                     } / ${
 
                                         if (item.projects != null)
@@ -171,6 +176,26 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
+                                when ( item.statusid ) {
+
+                                    0 -> Text("Статус - Завершена")
+
+                                    1 -> Text("Статус - Активна")
+
+                                    2 -> Text("Статус - В работе")
+
+                                    3 -> Text("Статус - Срочная")
+
+                                    4 -> Text("Статус - Не выполнена")
+
+                                    5 -> Text("Статус - Выполнена не до конца")
+
+                                    6 -> Text("Статус - Отложена")
+
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
                                 Box(
                                     modifier = Modifier.height(1.dp).fillMaxWidth()
 
@@ -188,46 +213,89 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                         items(viewModel.state.listOutgoingCRM) { item ->
 
-                            Column(modifier = Modifier.fillMaxWidth()) {
+                            Box (modifier = Modifier.fillMaxWidth()) {
 
-                                Text(
-                                    "Клиент/Проект - ${
-                                        if (item.entity != null)
+                                Column() {
 
-                                            item.entity.name else "Не указано"
-                                    } / ${
+                                    Text(
+                                        "Клиент/Проект - ${
+                                            if (item.entity != null)
 
-                                        if (item.projects != null)
+                                                item.entity.name else "Не указано"
+                                        } ${
+                                            if (item.groupentits != null)
 
-                                            item.projects.name else "Не указано"
-                                    }"
-                                )
+                                                "/ ${item.groupentits.name}" else ""
+                                        } / ${
 
-                                Spacer(modifier = Modifier.height(8.dp))
+                                            if (item.projects != null)
 
-                                Text(
-                                    "Юр.лицо исполнитель - ${
-                                        if (item.entity_our != null)
+                                                item.projects.name else "Не указано"
+                                        }"
+                                    )
 
-                                            item.entity_our.name else "Не указано"
-                                    }"
-                                )
+                                    Spacer(modifier = Modifier.height(8.dp))
 
-                                Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        "Юр.лицо исполнитель - ${
+                                            if (item.entity_our != null)
 
-                                Text("Дата - ${formatDateTime(item.created_at)}")
+                                                item.entity_our.name else "Не указано"
+                                        }"
+                                    )
 
-                                Spacer(modifier = Modifier.height(8.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
 
-                                Text("Прайс - ${item.price}")
+                                    Text("Дата - ${formatDateTime(item.created_at)}")
 
-                                Spacer(modifier = Modifier.height(8.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
 
-                                Box(
-                                    modifier = Modifier.height(1.dp).fillMaxWidth()
+                                    Text("Прайс - ${item.price ?: 0}")
 
-                                        .background(Color.Gray)
-                                )
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    when (item.statusid) {
+
+                                        0 -> Text("Статус - Завершена")
+
+                                        1 -> Text("Статус - Активна")
+
+                                        2 -> Text("Статус - В работе")
+
+                                        3 -> Text("Статус - Срочная")
+
+                                        4 -> Text("Статус - Не выполнена")
+
+                                        5 -> Text("Статус - Выполнена не до конца")
+
+                                        6 -> Text("Статус - Отложена")
+
+                                    }
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Box(
+                                        modifier = Modifier.height(1.dp).fillMaxWidth()
+
+                                            .background(Color.Gray)
+                                    )
+
+                                }
+
+
+                                    Image(painter = painterResource(Res.drawable.update_pencil),
+                                        contentDescription = null,
+                                        modifier = Modifier.padding(8.dp)
+                                            .size(17.dp).align(Alignment.TopEnd)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember {
+
+                                                    MutableInteractionSource() })
+                                            { viewModel.processIntents(
+
+                                                CRMIntents.OpenUpdateDataEntryComponent( item,scope )) })
+
 
                             }
 
@@ -243,7 +311,7 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                 PlusButton {
 
-                    viewModel.processIntents(CRMIntents.OpenDataEntryComponent( scope ))
+                    viewModel.processIntents(CRMIntents.OpenCreateDataEntryComponent( scope ))
 
                 }
 
@@ -269,23 +337,51 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                 listCargo = viewModel.state.listCargo,
 
-                onClickCreate = { scope: CoroutineScope ,serviceId: Int?, statusPay: Int?,
+                listGroupEntity = viewModel.state.listGroupEntity,
 
-                                  verifyPay: Int?, task: String?, status: String?,
+                item = viewModel.state.updateItem,
+
+                onClickCreate = { scope: CoroutineScope, serviceId: Int?, statusPay: Int?,
+
+                                  verifyPay: Int?, task: String?, to_local_id:Int?,
+
+                                  group_entity_id:Int?, from_local_id:Int?, status: String?,
 
                                   price: String?, arendaId: Int?, specificationId: Int?,
 
-                                  projectId: Int?, entityId: Int?,
-
-                                  ourEntityId: Int?, text: String?,
+                                  projectId: Int?, entityId: Int?, ourEntityId: Int?, text: String?,
 
                                   statusId: Int?, items: List<ServiceItemCreateCRMModel>? ->
 
                     viewModel.processIntents( CRMIntents.CreateCRM( scope, serviceId, statusPay,
 
-                        verifyPay, task,status, price, arendaId, specificationId, projectId, entityId,
+                        verifyPay, task, to_local_id, group_entity_id, from_local_id, status, price,
 
-                        ourEntityId, text, statusId, items ))
+                        arendaId, specificationId, projectId, entityId, ourEntityId, text,
+
+                         statusId, items ))
+
+                }, onClickUpdate = { scope: CoroutineScope, ui: String, serviceId: Int?,
+
+                                     statusPay: Int?, verifyPay: Int?, task: String?,
+
+                                     to_local_id: Int?, group_entity_id: Int?, from_local_id: Int?,
+
+                                     status: String?, price: String?, arendaId: Int?,
+
+                                     specificationId: Int?, projectId: Int?, entityId: Int?,
+
+                                     ourEntityId: Int?, text: String?, statusId: Int?,
+
+                                     items: List<ServiceItemCreateCRMModel>? ->
+
+                    viewModel.processIntents( CRMIntents.UpdateCRM( scope, ui, serviceId, statusPay,
+
+                        verifyPay, task, to_local_id, group_entity_id, from_local_id, status, price,
+
+                        arendaId, specificationId, projectId, entityId, ourEntityId, text,
+
+                        statusId, items ))
 
                 }).Content()
 

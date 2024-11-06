@@ -37,14 +37,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import component.data_entry.viewmodel.DataEntryIntents
 import component.data_entry.viewmodel.DataEntryViewModel
 import kotlinx.coroutines.CoroutineScope
+import model.ApiResponseCRMModel
 import model.CargoResponseModel
 import model.ContragentResponseModel
+import model.GroupEntityResponseModel
 import model.LocationResponseModel
 import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
@@ -72,6 +77,10 @@ class DataEntryComponent (
 
     val listCargo: List<CargoResponseModel>,
 
+    val listGroupEntity: List<GroupEntityResponseModel>,
+
+    val item: ApiResponseCRMModel?,
+
     val onClickCreate: (
 
         scope: CoroutineScope,
@@ -83,6 +92,54 @@ class DataEntryComponent (
         verifyPay: Int?,
 
         task: String?,
+
+        to_local_id:Int?,
+
+        group_entity_id:Int?,
+
+        from_local_id:Int?,
+
+        status: String?,
+
+        price: String?,
+
+        arendaId: Int?,
+
+        specificationId: Int?,
+
+        projectId: Int?,
+
+        entityId: Int?,
+
+        ourEntityId: Int?,
+
+        text: String?,
+
+        statusId: Int?,
+
+        items: List<ServiceItemCreateCRMModel>?
+
+    ) -> Unit,
+
+    val onClickUpdate: (
+
+        scope: CoroutineScope,
+
+        ui:String,
+
+        serviceId: Int?,
+
+        statusPay: Int?,
+
+        verifyPay: Int?,
+
+        task: String?,
+
+        to_local_id:Int?,
+
+        group_entity_id:Int?,
+
+        from_local_id:Int?,
 
         status: String?,
 
@@ -116,7 +173,7 @@ class DataEntryComponent (
 
         viewModel.processIntents(DataEntryIntents.SetScreen ( listSpecifications, listServices,
 
-            listEmployee, listContragents, listLocations, listCargo ))
+            listEmployee, listContragents, listLocations, listCargo, listGroupEntity, item ))
 
         val scrollState = rememberScrollState() // Состояние прокрутки
 
@@ -208,18 +265,23 @@ class DataEntryComponent (
                                 Alignment.CenterStart
                             )
                         )
-                        Image(painter = painterResource(Res.drawable.cancel),
-                            contentDescription = null,
-                            modifier = Modifier.padding(8.dp).size(10.dp).align(Alignment.TopEnd)
-                                .clickable(
-                                    indication = null, // Отключение эффекта затемнения
-                                    interactionSource = remember { MutableInteractionSource() })
 
-                                {
+                        if ( item == null ) {
 
-                                    viewModel.processIntents(DataEntryIntents.DeleteSelectedService)
+                            Image(painter = painterResource(Res.drawable.cancel),
+                                contentDescription = null,
+                                modifier = Modifier.padding(8.dp).size(10.dp)
+                                    .align(Alignment.TopEnd)
+                                    .clickable(
+                                        indication = null, // Отключение эффекта затемнения
+                                        interactionSource = remember { MutableInteractionSource() })
 
-                                })
+                                    {
+
+                                        viewModel.processIntents(DataEntryIntents.DeleteSelectedService)
+
+                                    })
+                        }
                     }
                 }
 
@@ -256,19 +318,14 @@ class DataEntryComponent (
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+
                 OutlinedTextField(
 
-                    value = viewModel.state.status,
+                    enabled = false,
+
+                    value = "",
 
                     onValueChange = { inputText ->
-
-                        viewModel.processIntents(DataEntryIntents.InputTextStatus( inputText,
-
-                            listOf(
-                                "Оплачено","Не оплачено"
-                            ).filter {
-
-                                it.contains(inputText, ignoreCase = true) } ))
 
                     },
 
@@ -278,7 +335,7 @@ class DataEntryComponent (
                         //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
                     ),
 
-                    label = { Text("Оплачено") },
+                    label = { Text("Оплачено", color = Color.DarkGray) },
 
                     trailingIcon = {
 
@@ -286,7 +343,6 @@ class DataEntryComponent (
 
                             onClick = {
 
-                                viewModel.processIntents(DataEntryIntents.MenuPaidFor)
 
                             }
                         ) {
@@ -303,7 +359,8 @@ class DataEntryComponent (
                         .clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-                        { }// Стандартная высота TextField
+
+                        {  viewModel.processIntents(DataEntryIntents.MenuPaidFor) }// Стандартная высота TextField
                 )
                 if ( viewModel.state.selectedPaidFor != null &&
 
@@ -375,18 +432,11 @@ class DataEntryComponent (
 
                 OutlinedTextField(
 
-                    value = viewModel.state.status,
+                    enabled = false,
+
+                    value = "",
 
                     onValueChange = { inputText ->
-
-                        viewModel.processIntents(DataEntryIntents.InputTextStatus( inputText,
-
-                            listOf(
-                                "Не подтвержен","подтвержден"
-
-                            ).filter {
-
-                                it.contains(inputText, ignoreCase = true) } ))
 
                     },
 
@@ -396,7 +446,7 @@ class DataEntryComponent (
                         //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
                     ),
 
-                    label = { Text("Платеж подтвержден") },
+                    label = { Text("Платеж подтвержден", color = Color.DarkGray) },
 
                     trailingIcon = {
 
@@ -404,7 +454,6 @@ class DataEntryComponent (
 
                             onClick = {
 
-                                viewModel.processIntents(DataEntryIntents.MenuVerified)
 
                             }
                         ) {
@@ -421,7 +470,7 @@ class DataEntryComponent (
                         .clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-                        { }// Стандартная высота TextField
+                        { viewModel.processIntents(DataEntryIntents.MenuVerified) }// Стандартная высота TextField
                 )
                 if ( viewModel.state.selectedVerified != null &&
 
@@ -645,7 +694,7 @@ class DataEntryComponent (
                             }
                         }
 
-                       /* Spacer(modifier = Modifier.height(10.dp))
+                        /*Spacer(modifier = Modifier.height(10.dp))
 
                         OutlinedTextField(
 
@@ -770,7 +819,7 @@ class DataEntryComponent (
                                     }
                                 }
                             }
-                        }
+                        }*/
 
                         Spacer(modifier = Modifier.height(10.dp))
 
@@ -896,7 +945,126 @@ class DataEntryComponent (
                                     }
                                 }
                             }
-                        }*/
+                        }
+
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        OutlinedTextField (
+
+                            value = viewModel.state.groupEntity,
+
+                            onValueChange = { inputText ->
+
+                                viewModel.processIntents(DataEntryIntents.InputTextGroupEntity( inputText,
+
+                                    listGroupEntity.filter {
+
+                                        it.name!!.contains(inputText, ignoreCase = true) }))
+
+                            },
+
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                // focusedBorderColor = viewModel.state.borderServiceColor, // Цвет границы при фокусе
+                                // unfocusedBorderColor = viewModel.state.borderServiceColor, // Цвет границы в неактивном состоянии
+                                // backgroundColor = viewModel.state.containerServiceColor.copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                            ),
+
+                            label = { Text("Группы юр.лиц") },
+
+                            trailingIcon = {
+
+                                IconButton(
+
+                                    onClick = {
+
+                                        viewModel.processIntents(DataEntryIntents.MenuGroupEntity)
+
+                                    }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(Res.drawable.down_arrow),
+                                        contentDescription = "Поиск",
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+                                { }// Стандартная высота TextField
+                        )
+
+                        if ( viewModel.state.selectedGroupEntity != null ) {
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Box(
+                                modifier = Modifier.padding(vertical = 5.dp).clip(RoundedCornerShape(10.dp))
+                                    .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
+                            ) {
+                                Text(
+                                    text = viewModel.state.selectedGroupEntity!!.name?:"нет имени",
+                                    color = Color.White,
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.padding(8.dp).align(
+                                        Alignment.CenterStart
+                                    )
+                                )
+                                Image(painter = painterResource(Res.drawable.cancel),
+                                    contentDescription = null,
+                                    modifier = Modifier.padding(8.dp).size(10.dp).align(Alignment.TopEnd)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryIntents.DeleteSelectedGroupEntity)
+
+                                        })
+                            }
+                        }
+
+                        if ( viewModel.state.expendedGroupEntity ) {
+
+                            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                                Card(
+                                    modifier = Modifier.fillMaxSize()
+                                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                                    backgroundColor = Color.White,
+                                    shape = RoundedCornerShape(8.dp)
+                                ) {}
+                                LazyColumn {
+                                    itemsIndexed( viewModel.state.filteredListGroupEntity )
+
+                                    { index, item ->
+
+                                        Text(item.name?:"нет имени",
+                                            fontSize = 20.sp,
+                                            modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                                .clickable(
+                                                    indication = null, // Отключение эффекта затемнения
+                                                    interactionSource = remember {
+
+                                                        MutableInteractionSource() })
+
+                                                {
+
+                                                    viewModel.processIntents(
+
+                                                        DataEntryIntents.SelectGroupEntity( item ))
+
+                                                })
+                                    }
+                                }
+                            }
+                        }
 
                     }
                 }
@@ -1036,9 +1204,9 @@ class DataEntryComponent (
                     }
                 }
 
-              //  Spacer(modifier = Modifier.height(10.dp))
+                /*Spacer(modifier = Modifier.height(10.dp))
 
-               /* OutlinedTextField(
+                OutlinedTextField(
 
                     value = viewModel.state.employeePerformer,
 
@@ -1159,7 +1327,7 @@ class DataEntryComponent (
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-               /* OutlinedTextField(
+                OutlinedTextField(
 
                     value = viewModel.state.locationPerformer,
 
@@ -1274,7 +1442,7 @@ class DataEntryComponent (
                             }
                         }
                     }
-                }*/
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -1397,19 +1565,9 @@ class DataEntryComponent (
 
                 OutlinedTextField(
 
-                    value = viewModel.state.status,
+                    value = "",
 
                     onValueChange = { inputText ->
-
-                        viewModel.processIntents(DataEntryIntents.InputTextStatus( inputText,
-
-                            listOf(
-                                "Завершена", "Активна", "В работе", "Срочная", "Не выполнена",
-
-                                "Выполнена не до конца", "Отложена"
-                            ).filter {
-
-                                it.contains(inputText, ignoreCase = true) } ))
 
                     },
 
@@ -1419,7 +1577,7 @@ class DataEntryComponent (
                         //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
                     ),
 
-                    label = { Text("Статус") },
+                    label = { Text("Статус", color = Color.DarkGray) },
 
                     trailingIcon = {
 
@@ -1427,7 +1585,7 @@ class DataEntryComponent (
 
                             onClick = {
 
-                                viewModel.processIntents(DataEntryIntents.MenuStatus)
+
 
                             }
                         ) {
@@ -1444,7 +1602,9 @@ class DataEntryComponent (
                         .clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-                        { }// Стандартная высота TextField
+                        { viewModel.processIntents(DataEntryIntents.MenuStatus) },
+
+                    enabled = false// Стандартная высота TextField
                 )
 
                 if ( viewModel.state.selectedStatus.first != "" ) {
@@ -1488,7 +1648,11 @@ class DataEntryComponent (
                             shape = RoundedCornerShape(8.dp)
                         ) {}
                         LazyColumn {
-                            itemsIndexed ( viewModel.state.filteredListStatus )
+                            itemsIndexed ( listOf(
+                                "Завершена", "Активна", "В работе", "Срочная", "Не выполнена",
+
+                                "Выполнена не до конца", "Отложена"
+                            ) )
 
                             { index, item ->
 
@@ -1509,9 +1673,9 @@ class DataEntryComponent (
                     }
                 }
 
-               // Spacer(modifier = Modifier.height(10.dp))
+                /*Spacer(modifier = Modifier.height(10.dp))
 
-               /* OutlinedTextField(
+                OutlinedTextField(
 
                     value = viewModel.state.cargo,
 
@@ -1735,70 +1899,171 @@ class DataEntryComponent (
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Button(
+                if ( item == null ) {
 
-                    onClick = {
+                    Button(
 
-                        if (viewModel.state.selectedService != null) {
+                        onClick = {
 
-                            viewModel.processIntents(DataEntryIntents.TotalPrice)
+                            if (viewModel.state.selectedService != null) {
 
-                            onClickCreate(
+                                viewModel.processIntents(DataEntryIntents.TotalPrice)
 
-                                scope,
+                                onClickCreate(
 
-                                viewModel.state.selectedService!!.id,
+                                    scope,
 
-                                if ( viewModel.state.selectedPaidFor != null ) viewModel.state.selectedPaidFor!!.second else 0,
+                                    viewModel.state.selectedService!!.id,
 
-                                if ( viewModel.state.selectedVerified != null ) viewModel.state.selectedVerified!!.second else 0,
+                                    if (viewModel.state.selectedPaidFor != null) viewModel.state.selectedPaidFor!!.second else 0,
 
-                                 viewModel.state.task, viewModel.state.statusText,
+                                    if (viewModel.state.selectedVerified != null) viewModel.state.selectedVerified!!.second else 0,
 
-                                "${ viewModel.state.totalPrice ?: 0.0 }", null,
+                                    viewModel.state.task,
 
-                                if (viewModel.state.selectedSpecific != null) viewModel.state.selectedSpecific!!.id else null,
+                                    if (viewModel.state.selectedLocation != null) viewModel.state.selectedLocation!!.id
+                                        ?: 0 else null,
 
-                                null,  if ( viewModel.state.selectedLegalEntity != null ) viewModel.state.selectedLegalEntity!!.id?:0 else null,
+                                    if (viewModel.state.selectedGroupEntity != null) viewModel.state.selectedGroupEntity!!.id else null,
 
-                                if (viewModel.state.selectedLegalEntityPerformer != null) viewModel.state.selectedLegalEntityPerformer!!.id else viewModel.state.selectedService!!.default_entity_id,
+                                    if (viewModel.state.selectedLocationPerformer != null) viewModel.state.selectedLocationPerformer?.id
+                                        ?: 0 else null,
 
-                                if (viewModel.state.selectedService != null) viewModel.state.selectedService!!.text else "",
+                                    viewModel.state.statusText,
 
-                                if ( viewModel.state.selectedStatus != null ) viewModel.state.selectedStatus.second else 1 ,
+                                    "${viewModel.state.totalPrice ?: 0.0}",
+                                    null,
 
-                                //emptyList()
+                                    if (viewModel.state.selectedSpecific != null) viewModel.state.selectedSpecific!!.id else null,
 
-                                viewModel.state.selectedService!!.items!!.mapIndexed { index, it ->
+                                    null,
+                                    if (viewModel.state.selectedLegalEntity != null) viewModel.state.selectedLegalEntity!!.id
+                                        ?: 0 else null,
+
+                                    if (viewModel.state.selectedLegalEntityPerformer != null) viewModel.state.selectedLegalEntityPerformer!!.id else viewModel.state.selectedService!!.default_entity_id,
+
+                                    if (viewModel.state.selectedService != null) viewModel.state.selectedService!!.text else "",
+
+                                    if (viewModel.state.selectedStatus != null) viewModel.state.selectedStatus.second else 1,
+
+                                    emptyList()
+
+                                    /*listOf(
+
                                     ServiceItemCreateCRMModel(
-                                        number = index,
-                                        type_id = it.id,
-                                        name = viewModel.state.textFieldsValues[index],
-                                        file = null,
-                                        filename = null,
-                                        req = it.req?:0,
-                                        type = it.type?:""
+
+                                        type_id = viewModel.state.selectedService!!.items!![0].id,
+
+                                        name = "какое то имя ",
+
                                     )
-                                }
 
-                            )
+                                )*/
 
-                        }
 
-                        else {
+                                )
 
-                           viewModel.processIntents(DataEntryIntents.ColorTF)
+                            } else {
 
-                        }
+                                viewModel.processIntents(DataEntryIntents.ColorTF)
 
-                    },
+                            }
 
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(70.dp))
-                        .height(40.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(text = "Создать")
+                        },
+
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(70.dp))
+                            .height(40.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(text = "Создать")
+                    }
+                }
+
+                else {
+
+                    Button(
+
+                        onClick = {
+
+                            if (viewModel.state.selectedService != null) {
+
+                                viewModel.processIntents(DataEntryIntents.TotalPrice)
+
+                                onClickUpdate( //https://delta.online/api/crm/feogw36y-p8zm1rj0-ut7v4ea6
+
+                                    scope,
+
+                                    viewModel.state.selectedService!!.ui?:"",
+
+                                    //"feogw36y-p8zm1rj0-ut7v4ea6",
+
+                                     viewModel.state.selectedService!!.id,
+
+                                    if (viewModel.state.selectedPaidFor != null) viewModel.state.selectedPaidFor!!.second else 0,
+
+                                    if (viewModel.state.selectedVerified != null) viewModel.state.selectedVerified!!.second else 0,
+
+                                    viewModel.state.task,
+
+                                    if (viewModel.state.selectedLocation != null) viewModel.state.selectedLocation!!.id
+                                        ?: 0 else null,
+
+                                    if (viewModel.state.selectedGroupEntity != null) viewModel.state.selectedGroupEntity!!.id else null,
+
+                                    if (viewModel.state.selectedLocationPerformer != null) viewModel.state.selectedLocationPerformer?.id
+                                        ?: 0 else null,
+
+                                    viewModel.state.statusText,
+
+                                    "${viewModel.state.totalPrice ?: 0.0}",
+                                    null,
+
+                                    if (viewModel.state.selectedSpecific != null) viewModel.state.selectedSpecific!!.id else null,
+
+                                    null,
+                                    if (viewModel.state.selectedLegalEntity != null) viewModel.state.selectedLegalEntity!!.id
+                                        ?: 0 else null,
+
+                                    if (viewModel.state.selectedLegalEntityPerformer != null) viewModel.state.selectedLegalEntityPerformer!!.id else viewModel.state.selectedService!!.default_entity_id,
+
+                                    if (viewModel.state.selectedService != null) viewModel.state.selectedService!!.text else "",
+
+                                    if (viewModel.state.selectedStatus != null) viewModel.state.selectedStatus.second else 1,
+
+                                    emptyList()
+
+                                    /*listOf(
+
+                                    ServiceItemCreateCRMModel(
+
+                                        type_id = viewModel.state.selectedService!!.items!![0].id,
+
+                                        name = "какое то имя ",
+
+                                    )
+
+                                )*/
+
+
+                                )
+
+                            } else {
+
+                                viewModel.processIntents(DataEntryIntents.ColorTF)
+
+                            }
+
+                        },
+
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(70.dp))
+                            .height(40.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(text = "Редактировать")
+                    }
+
                 }
 
             }

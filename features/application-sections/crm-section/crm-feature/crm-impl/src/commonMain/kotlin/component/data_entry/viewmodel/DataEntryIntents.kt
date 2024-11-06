@@ -1,8 +1,10 @@
 package component.data_entry.viewmodel
 
+import model.ApiResponseCRMModel
 import model.CargoResponseModel
 import model.ContragentResponseModel
 import model.EntityContragentModel
+import model.GroupEntityResponseModel
 import model.LocationResponseModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
@@ -14,6 +16,8 @@ sealed class DataEntryIntents {
     object MenuLegalEntity : DataEntryIntents()
 
     object MenuStatus : DataEntryIntents()
+
+    object MenuGroupEntity : DataEntryIntents()
 
     object MenuVerified : DataEntryIntents()
 
@@ -37,6 +41,8 @@ sealed class DataEntryIntents {
 
 
     data class SelectGoodsAndServices(val item: SpecificResponseModel) : DataEntryIntents()
+
+    data class SelectGroupEntity(val item: GroupEntityResponseModel) : DataEntryIntents()
 
     data class SelectService(val item: ServiceResponseModel) : DataEntryIntents()
 
@@ -95,7 +101,11 @@ sealed class DataEntryIntents {
 
     object DeleteSelectedService : DataEntryIntents()
     object DeleteSelectedPaidFor : DataEntryIntents()
+
     object DeleteSelectedVerified : DataEntryIntents()
+
+    object DeleteSelectedGroupEntity : DataEntryIntents()
+
     object DeleteSelectedCargo : DataEntryIntents()
 
 
@@ -105,6 +115,14 @@ sealed class DataEntryIntents {
         val text: String,
 
         val list: List<ServiceResponseModel>
+
+    ) : DataEntryIntents()
+
+    data class InputTextGroupEntity(
+
+        val text: String,
+
+        val list: List<GroupEntityResponseModel>
 
     ) : DataEntryIntents()
 
@@ -164,15 +182,6 @@ sealed class DataEntryIntents {
 
     ) : DataEntryIntents()
 
-
-    data class InputTextStatus(
-
-        val text: String,
-
-        val list: List<String>
-
-    ) : DataEntryIntents()
-
     data class InputTextCargo(
 
         val text: String,
@@ -200,7 +209,11 @@ sealed class DataEntryIntents {
 
         val listLocations: List<LocationResponseModel>,
 
-        val listCargo: List<CargoResponseModel>
+        val listCargo: List<CargoResponseModel>,
+
+        val listGroupEntity: List<GroupEntityResponseModel>,
+
+        val item: ApiResponseCRMModel?
 
     ) : DataEntryIntents()
 

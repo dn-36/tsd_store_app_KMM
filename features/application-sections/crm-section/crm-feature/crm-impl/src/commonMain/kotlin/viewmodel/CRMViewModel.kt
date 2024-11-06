@@ -15,8 +15,10 @@ import domain.usecases.GetOutgoingCRMUseCase
 import domain.usecases.GetServicesUseCase
 import domain.usecases.GetSpecificationsUseCase
 import domain.usecases.GetEmployeeUseCase
+import domain.usecases.GetGroupEntityUseCase
 import domain.usecases.GetLocationsUseCase
 import domain.usecases.GetProjectsUseCase
+import domain.usecases.UpdateCRMUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -42,7 +44,11 @@ class CRMViewModel (
 
     val createCRMUseCase: CreateCRMUseCase,
 
-    val getCargoUseCase: GetCargoUseCase
+    val getCargoUseCase: GetCargoUseCase,
+
+    val getGroupEntityUseCase: GetGroupEntityUseCase,
+
+    val updateCRMUseCase: UpdateCRMUseCase
 
 ): NetworkViewModel() {
 
@@ -83,7 +89,7 @@ class CRMViewModel (
 
             is CRMIntents.BackToCRMComponent ->  backToCRMComponent()
 
-            is CRMIntents.OpenDataEntryComponent -> {
+            is CRMIntents.OpenCreateDataEntryComponent -> {
 
                 setStatusNetworkScreen(StatusNetworkScreen.LOADING)
 
@@ -103,6 +109,8 @@ class CRMViewModel (
 
                      listCargo = getCargoUseCase.execute(),
 
+                     listGroupEntity = getGroupEntityUseCase.execute(),
+
                      isVisibilityDataEntryComponent = 1f
 
                  )
@@ -110,6 +118,40 @@ class CRMViewModel (
                  setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
              }
+
+            }
+
+            is CRMIntents.OpenUpdateDataEntryComponent -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                    state = state.copy(
+
+                        listServices = getServicesUseCase.execute(),
+
+                        listSpecifications = getSpecificationsUseCase.execute(),
+
+                        listEmployee = getUsersUseCase.execute(),
+
+                        listContragents = getContragentsUseCase.execute(),
+
+                        listLocations = getLocationsUseCase.execute(),
+
+                        listCargo = getCargoUseCase.execute(),
+
+                        listGroupEntity = getGroupEntityUseCase.execute(),
+
+                        updateItem = intent.item,
+
+                        isVisibilityDataEntryComponent = 1f
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
 
             }
 
@@ -121,15 +163,15 @@ class CRMViewModel (
 
                     statusPay = intent.statusPay, verifyPay = intent.verifyPay,
 
-                    task = intent.task, status = intent.status,
+                    task = intent.task, to_local_id = intent.to_local_id,
 
-                    price = intent.price, arendaId = intent.arendaId,
+                    group_entity_id = intent.group_entity_id, from_local_id = intent.from_local_id,
+
+                    status = intent.status, price = intent.price, arendaId = intent.arendaId,
 
                     specificationId = intent.specificationId,projectId = intent.projectId,
 
-                    entityId = intent.entityId,
-
-                    ourEntityId = intent.ourEntityId,
+                    entityId = intent.entityId, ourEntityId = intent.ourEntityId,
 
                     text = intent.text, statusId = intent.statusId, items = intent.items )
 
@@ -142,6 +184,40 @@ class CRMViewModel (
                 )
 
             }
+
+            }
+
+            is CRMIntents.UpdateCRM -> {
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                    updateCRMUseCase.execute ( ui = intent.ui, serviceId = intent.serviceId,
+
+                        statusPay = intent.statusPay, verifyPay = intent.verifyPay,
+
+                        task = intent.task, to_local_id = intent.to_local_id,
+
+                        group_entity_id = intent.group_entity_id, from_local_id = intent.from_local_id,
+
+                        status = intent.status, price = intent.price, arendaId = intent.arendaId,
+
+                        specificationId = intent.specificationId,projectId = intent.projectId,
+
+                        entityId = intent.entityId, ourEntityId = intent.ourEntityId,
+
+                        text = intent.text, statusId = intent.statusId, items = intent.items )
+
+                    state = state.copy(
+
+                        isVisibilityDataEntryComponent = 0f,
+
+                        updateItem = null,
+
+                        listOutgoingCRM = getOutgoingCRMUseCase.execute().toMutableList()
+
+                    )
+
+                }
 
             }
 
@@ -164,6 +240,10 @@ class CRMViewModel (
          println(" CHECK CONTRGENTS: ${state.listContragents} ")
 
          println(" CHECK EMPLOYEE: ${state.listEmployee} ")
+
+         println(" CHECK CARGO: ${state.listCargo} ")
+
+         println(" CHECK CARGO: ${state.listGroupEntity} ")
 
         val menuScreen: MenuCrmScreenApi = KoinPlatform.getKoin().get()
 
@@ -199,10 +279,13 @@ class CRMViewModel (
 
         state = state.copy(
 
-            isVisibilityDataEntryComponent = 0f
+            isVisibilityDataEntryComponent = 0f,
+
+            updateItem = null
 
         )
 
     }
+
 
 }

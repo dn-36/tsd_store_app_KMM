@@ -3,7 +3,7 @@ package domain.usecases
 import domain.repository.CRMClientApi
 import model.ServiceItemCreateCRMModel
 
-class CreateCRMUseCase(
+class UpdateCRMUseCase (
 
     private val client: CRMClientApi,
 
@@ -11,6 +11,7 @@ class CreateCRMUseCase(
 
     suspend fun execute(
 
+        ui:String,
         serviceId: Int?,
         statusPay: Int?,
         verifyPay: Int?,
@@ -31,13 +32,13 @@ class CreateCRMUseCase(
 
     ) {
 
-        client.createCRM(
+        client.updateCRM(
 
-            serviceId, statusPay, verifyPay, task, to_local_id, group_entity_id, from_local_id,
+            ui, serviceId, statusPay, verifyPay, task, to_local_id, group_entity_id, from_local_id,
 
             status, price, arendaId, specificationId, projectId, entityId, ourEntityId, text,
 
-             statusId, items
+            statusId, items
         )
     }
 }

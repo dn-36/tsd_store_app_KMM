@@ -5,6 +5,7 @@ import com.project.network.cargo_network.CargoClient
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.crm_network.CRMClient
 import com.project.network.crm_network.model.ServiceItem
+import com.project.network.group_entity_network.GroupEntityClient
 import com.project.network.locations_network.LocationsClient
 import com.project.network.projects_network.ProjectsClient
 import com.project.network.services_network.ServicesClient
@@ -12,23 +13,27 @@ import com.project.network.specifications_network.SpecificationsClient
 import com.project.network.users_network.UsersClient
 import domain.repository.CRMClientApi
 import model.ApiResponseCRMModel
+import model.CargoModel
 import model.CargoResponseModel
 import model.ContragentLocationModel
 import model.ContragentResponseModel
 import model.EntityContragentModel
 import model.EntityModel
 import model.EntityOurModel
+import model.GroupEntityModel
+import model.GroupEntityResponseModel
 import model.LocationResponseModel
 import model.ProjectModel
 import model.ServiceItemModel
 import model.ServiceResponseModel
 import model.ServiceItemCreateCRMModel
+import model.ServiceModel
 import model.SpecItemModel
 import model.SpecificResponseModel
 import model.SpecsModel
 import model.UserCRMModel
 
-class CRMClientImpl(
+class CRMClientImpl (
 
     private val crmClient: CRMClient,
 
@@ -46,7 +51,9 @@ class CRMClientImpl(
 
     private val projectsClient: ProjectsClient,
 
-    private val cargoClient: CargoClient
+    private val cargoClient: CargoClient,
+
+    private val groupEntityClient: GroupEntityClient
 
 ) : CRMClientApi {
 
@@ -62,6 +69,17 @@ class CRMClientImpl(
                 company_id = it.company_id,
                 project_id = it.project_id,
                 organization_id = it.organization_id,
+                cargos = it.cargos?.map {
+
+                    CargoModel(
+
+                        id = it.id,
+                        company_id = it.company_id,
+                        name = it.name,
+                        ui = it.ui
+
+                    )
+                },
                 user_id = it.user_id,
                 active_company_id = it.active_company_id,
                 company_work = it.company_work ?: "",
@@ -126,13 +144,35 @@ class CRMClientImpl(
                 projects = if (it.projects != null) ProjectModel(
                     id = it.projects!!.id,
                     name = it.projects!!.name
+                ) else null ,
+
+                groupentits = if ( it.groupentits != null ) GroupEntityModel(
+
+                    id = it.groupentits!!.id,
+                    name = it.groupentits!!.name
+
+                ) else null,
+
+                service = if (it.service != null) ServiceModel(
+
+                    id = it.service!!.id,
+                    name = it.service!!.name,
+                    text = it.service!!.text,
+                    doc = it.service!!.doc,
+                    ui = it.service!!.ui,
+                    system = it.service!!.system,
+                    width = it.service!!.width,
+                    height = it.service!!.height,
+                    service_type_doc = it.service!!.service_type_doc,
+                    comp_project = it.service!!.comp_project
+
+
                 ) else null
                 /*projects = it.projects,
                 service = it.service,
                 company = it.company,
                 companactiv = it.companactiv ?: "",
                 entity = it.entity,
-                groupentits = it.groupentits,
                 entity_our = it.entity_our,
                 specs = if ( it.specs != null) SpecsModel( id = it.specs!!.id,
 
@@ -157,6 +197,17 @@ class CRMClientImpl(
                 company_id = it.company_id,
                 project_id = it.project_id,
                 organization_id = it.organization_id,
+                cargos = it.cargos?.map {
+
+                    CargoModel(
+
+                        id = it.id,
+                        company_id = it.company_id,
+                        name = it.name,
+                        ui = it.ui
+
+                    )
+                },
                 user_id = it.user_id,
                 active_company_id = it.active_company_id,
                 company_work = it.company_work ?: "",
@@ -221,7 +272,31 @@ class CRMClientImpl(
                 projects = if (it.projects != null) ProjectModel(
                     id = it.projects!!.id,
                     name = it.projects!!.name
+                ) else null,
+
+                groupentits = if ( it.groupentits != null ) GroupEntityModel(
+
+                        id = it.groupentits!!.id,
+                        name = it.groupentits!!.name
+
+                    ) else null,
+
+                service = if (it.service != null) ServiceModel(
+
+                    id = it.service!!.id,
+                    name = it.service!!.name,
+                    text = it.service!!.text,
+                    doc = it.service!!.doc,
+                    ui = it.service!!.ui,
+                    system = it.service!!.system,
+                    width = it.service!!.width,
+                    height = it.service!!.height,
+                    service_type_doc = it.service!!.service_type_doc,
+                    comp_project = it.service!!.comp_project
+
+
                 ) else null
+
 
             )
 
@@ -467,6 +542,9 @@ class CRMClientImpl(
         statusPay: Int?,
         verifyPay: Int?,
         task: String?,
+        to_local_id:Int?,
+        group_entity_id:Int?,
+        from_local_id:Int?,
         status: String?,
         price: String?,
         arendaId: Int?,
@@ -482,28 +560,19 @@ class CRMClientImpl(
 
         crmClient.init(sharedPrefsApi.getToken() ?: "")
 
-        crmClient.createCRM(serviceId, statusPay, verifyPay, task, status, price, arendaId,
+        crmClient.createCRM(serviceId, statusPay, verifyPay, task, to_local_id, group_entity_id,
 
-            specificationId, projectId, entityId,
+        from_local_id, status, price, arendaId, specificationId, projectId, entityId,
 
-            ourEntityId, text, statusId, items = items!!.map {
+            ourEntityId, text,
+
+            statusId, items = items!!.map {
 
                 ServiceItem(
-
-                    number = it.number,
 
                     type_id = it.type_id,
 
                     name = it.name,
-
-                    file = null,
-
-                    filename = null,
-
-                    req = it.req?:0,
-
-                    type = it.type?:""
-
 
                 )
 
@@ -547,6 +616,71 @@ class CRMClientImpl(
         }
 
         return newList
+
+    }
+
+    override suspend fun getGroupEntity(): List<GroupEntityResponseModel> {
+
+        groupEntityClient.init(sharedPrefsApi.getToken() ?: "")
+
+        val newList = groupEntityClient.getGroupEntity().map {
+
+            GroupEntityResponseModel(
+
+                id = it.id,
+                name = it.name,
+                company_id = it.company_id,
+                ui = it.ui,
+                created_at = it.created_at,
+                updated_at = it.updated_at
+
+            )
+
+        }
+
+        return newList
+
+    }
+
+    override suspend fun updateCRM(
+        ui:String,
+        serviceId: Int?,
+        statusPay: Int?,
+        verifyPay: Int?,
+        task: String?,
+        to_local_id: Int?,
+        group_entity_id: Int?,
+        from_local_id: Int?,
+        status: String?,
+        price: String?,
+        arendaId: Int?,
+        specificationId: Int?,
+        projectId: Int?,
+        entityId: Int?,
+        ourEntityId: Int?,
+        text: String?,
+        statusId: Int?,
+        items: List<ServiceItemCreateCRMModel>?
+    ) {
+
+
+        crmClient.init(sharedPrefsApi.getToken() ?: "")
+
+        crmClient.updateCRM ( ui, serviceId, statusPay, verifyPay, task, to_local_id,
+
+            group_entity_id, from_local_id, status, price, arendaId, specificationId, projectId,
+
+            entityId, ourEntityId, text, statusId, items = items!!.map {
+
+                ServiceItem(
+
+                    type_id = it.type_id,
+
+                    name = it.name,
+
+                    )
+
+            })
 
     }
 

@@ -51,15 +51,15 @@ data class ApiResponseCRMModel(
     val is_order_creater: Int?,
     val to_local_id: Int?,
     val from_local_id: Int?,
+    val cargos: List<CargoModel>?,
     val entity_our: EntityOurModel?,
     val specs: SpecsModel?,
     val entity: EntityModel?,
     val projects: ProjectModel?,
-    /*val service: ServiceModel?,
-    val company: CompanyModel?,
-    val companactiv: String?,
-    val entity: EntityModel?,
-    val groupentits: GroupEntityModel?*/
+    val groupentits: GroupEntityModel?,
+    val service: ServiceModel?,
+    /*val company: CompanyModel?,
+    val companactiv: String?*/
 )
 
 data class ServiceModel(
@@ -73,7 +73,7 @@ data class ServiceModel(
     val height: Int?,
     val service_type_doc: Int?,
     val comp_project: String?,
-    val view: Int?,
+    /*val view: Int?,
     val view_comp_project: String?,
     val store: Int?,
     val delete_status: Int?,
@@ -90,7 +90,7 @@ data class ServiceModel(
     val image: String?,
     val items_value: List<ItemValueModel>?,
     val all_check_users_id: List<Int>?,
-    val all_check_users_other: List<String>?
+    val all_check_users_other: List<String>?*/
 )
 
 data class ItemValueModel(
@@ -171,4 +171,12 @@ data class ProjectModel(
 data class GroupEntityModel(
     val id: Int,
     val name: String
+)
+
+data class CargoModel(
+    val id: Int,
+    val company_id: Int,
+    val name: String,
+    val ui: String,
+
 )

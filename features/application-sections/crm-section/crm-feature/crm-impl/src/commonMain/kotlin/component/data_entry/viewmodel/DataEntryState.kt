@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import model.CargoResponseModel
 import model.ContragentResponseModel
 import model.EntityContragentModel
+import model.GroupEntityResponseModel
 import model.LocationResponseModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
@@ -12,6 +13,8 @@ import model.UserCRMModel
 data class DataEntryState (
 
     val expendedService: Boolean = false,
+
+    val expendedGroupEntity: Boolean = false,
 
     val expendedPaidFor: Boolean = false,
 
@@ -40,6 +43,8 @@ data class DataEntryState (
 
     val service: String = "",
 
+    val groupEntity: String = "",
+
     val cargo: String = "",
 
     val legalEntityPerformer: String = "",
@@ -58,13 +63,13 @@ data class DataEntryState (
 
     val statusText: String = "",
 
-    val status: String = "",
-
     val task: String = "",
 
 
 
     val selectedService: ServiceResponseModel? = null,
+
+    val selectedGroupEntity: GroupEntityResponseModel? = null,
 
     val selectedCargo: CargoResponseModel? = null,
 
@@ -102,6 +107,8 @@ data class DataEntryState (
 
     val filteredListCargo: List<CargoResponseModel> = emptyList(),
 
+    val filteredListGroupEntity: List<GroupEntityResponseModel> = emptyList(),
+
     val filteredListGoodsAndServices: List<SpecificResponseModel> = emptyList(),
 
     val filteredListServices: List<ServiceResponseModel> = emptyList(),
@@ -111,8 +118,6 @@ data class DataEntryState (
     val filteredListContragents: List<ContragentResponseModel> = emptyList(),
 
     val filteredListLocations: List<LocationResponseModel> = emptyList(),
-
-    val filteredListStatus: List<String> = emptyList(),
 
     val isSet: Boolean = true,
 
@@ -125,6 +130,6 @@ data class DataEntryState (
     val containerServiceColor: Color = Color.White,
 
 
-    val textFieldsValues: List<String> =  emptyList()
+    val textFieldsValues: List<String> =  listOf("")
 
     )
