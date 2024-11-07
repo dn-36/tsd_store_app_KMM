@@ -125,6 +125,8 @@ class CRMViewModel (
 
                 setStatusNetworkScreen(StatusNetworkScreen.LOADING)
 
+                println("ITEM ${intent.item}")
+
                 intent.coroutineScope.launch ( Dispatchers.IO ) {
 
                     state = state.copy(

@@ -62,7 +62,32 @@ data class ApiResponseCRMOutgoing(
     val entity: Entity?,
     val groupentits: GroupEntity?,
     val entity_our: EntityOur?,
-    val specs: Specs?
+    val specs: Specs?,
+    @SerialName("val")val value:List<Value>?
+)
+
+@Serializable
+data class Value(
+    val id: Int?,
+    val arenda_id: Int?,
+    val type_id: Int?,
+    @SerialName("val")val value: JsonElement?,
+    val created_at: String?,
+    val updated_at: String?,
+    val items_type: ItemsType?
+)
+
+@Serializable
+data class ItemsType(
+    val id: Int?,
+    val service_id: Int?,
+    val name: String?,
+    val type: String?,
+    val metka: String?,
+    val search: Int?,
+    val req: Int?,
+    val created_at: String?,
+    val updated_at: String?
 )
 
 @Serializable

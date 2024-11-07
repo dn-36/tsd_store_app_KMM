@@ -8,7 +8,7 @@ data class ServiceResponseModel(
     val name: String?,
     val text: String? = null,
     val doc: String? = null,
-    val ui: String?,
+    var ui: String?,
     val system: Int?,
     val width: Int?,
     val height: Int?,

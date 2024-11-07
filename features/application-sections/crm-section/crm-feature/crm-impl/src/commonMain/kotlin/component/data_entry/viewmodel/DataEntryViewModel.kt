@@ -959,6 +959,32 @@ class DataEntryViewModel (): ViewModel() {
 
         if ( state.isSet ) {
 
+            var service:ServiceResponseModel? = null
+
+           listServices.forEach {
+
+               if ( it.id == item?.service_id ) {
+
+
+               service = it
+
+
+               }
+
+           }
+
+            val newList = mutableListOf<String>()
+
+             if ( item?.value != null  ) {
+
+                 item.value.forEach {
+
+                 newList.add(it.value.toString())
+
+                 }
+
+             } else null
+
             state = state.copy(
 
                 filteredListEmployee = listEmployee,
@@ -1036,17 +1062,40 @@ class DataEntryViewModel (): ViewModel() {
                     item?.statusid ?: 1
                 ),
 
-                selectedService = if ( item?.service_id != null )
+                selectedService = if ( service != null ) ServiceResponseModel(
 
-                    listServices.find { it.id == item.service_id } else null,
+                    id = service!!.id,
+                    name = service!!.name,
+                    text = service!!.text,
+                    doc = service!!.doc,
+                    ui = item?.ui,
+                    system = null,
+                    width = null,
+                    height = null,
+                    service_type_doc = null,
+                    comp_project = service!!.comp_project,
+                    view = null,
+                    view_comp_project = null,
+                    store = null,
+                    delete_status = null,
+                    company_id = null,
+                    created_at = null,
+                    updated_at = null,
+                    need_check = null,
+                    need_check_our = null,
+                    limit_group_entity_id = null,
+                    default_entity_id = null,
+                    background = null,
+                    image = null,
+                    items = service!!.items
 
+                ) else null,
 
-                isSet = false
+                isSet = false,
+
+                textFieldsValues = newList
 
             )
-
-            println("SELECTED SERVICES ${state.selectedService}")
-
 
         }
 

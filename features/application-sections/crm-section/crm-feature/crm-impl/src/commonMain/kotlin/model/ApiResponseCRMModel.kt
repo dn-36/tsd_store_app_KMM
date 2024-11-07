@@ -1,5 +1,7 @@
 package model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
 data class ApiResponseCRMModel(
@@ -58,8 +60,27 @@ data class ApiResponseCRMModel(
     val projects: ProjectModel?,
     val groupentits: GroupEntityModel?,
     val service: ServiceModel?,
-    /*val company: CompanyModel?,
-    val companactiv: String?*/
+    val value:List<ValueModel>?
+)
+data class ValueModel(
+    val id: Int?,
+    val arenda_id: Int?,
+    val type_id: Int?,
+    val value: JsonElement?,
+    val created_at: String?,
+    val updated_at: String?,
+    val items_type: ItemsTypeModel?
+)
+data class ItemsTypeModel(
+    val id: Int?,
+    val service_id: Int?,
+    val name: String?,
+    val type: String?,
+    val metka: String?,
+    val search: Int?,
+    val req: Int?,
+    val created_at: String?,
+    val updated_at: String?
 )
 
 data class ServiceModel(

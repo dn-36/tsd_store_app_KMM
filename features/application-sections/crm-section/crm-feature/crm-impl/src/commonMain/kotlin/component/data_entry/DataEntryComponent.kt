@@ -195,7 +195,16 @@ class DataEntryComponent (
 
                     Spacer(modifier = Modifier.width(10.dp))
 
-                    Text("Создание", color = Color.Black, fontSize = 20.sp)
+                    if (viewModel.state.selectedService == null) {
+
+                        Text("Создание", color = Color.Black, fontSize = 20.sp)
+
+                    }
+                    else {
+
+                        Text("Редактирование", color = Color.Black, fontSize = 20.sp)
+
+                    }
 
                 }
 
@@ -1835,6 +1844,16 @@ class DataEntryComponent (
                             )
                         }
 
+                        else if ( it.type == "man" || it.type == "specification" ||
+
+                            it.type == "local" || it.type == "product" || it.type == "project" ||
+
+                            it.type == "company" || it.type == "cargo" ) {
+
+
+
+                        }
+
                     }
                 }
 
@@ -1946,19 +1965,16 @@ class DataEntryComponent (
 
                                     if (viewModel.state.selectedStatus != null) viewModel.state.selectedStatus.second else 1,
 
-                                    emptyList()
+                                    listOf(
 
-                                    /*listOf(
+                                        ServiceItemCreateCRMModel(
 
-                                    ServiceItemCreateCRMModel(
+                                            type_id = 215,
+                                            name = "что то новое"
 
-                                        type_id = viewModel.state.selectedService!!.items!![0].id,
-
-                                        name = "какое то имя ",
+                                        )
 
                                     )
-
-                                )*/
 
 
                                 )
@@ -1990,13 +2006,11 @@ class DataEntryComponent (
 
                                 viewModel.processIntents(DataEntryIntents.TotalPrice)
 
-                                onClickUpdate( //https://delta.online/api/crm/feogw36y-p8zm1rj0-ut7v4ea6
+                                onClickUpdate(
 
                                     scope,
 
                                     viewModel.state.selectedService!!.ui?:"",
-
-                                    //"feogw36y-p8zm1rj0-ut7v4ea6",
 
                                      viewModel.state.selectedService!!.id,
 
@@ -2031,22 +2045,21 @@ class DataEntryComponent (
 
                                     if (viewModel.state.selectedStatus != null) viewModel.state.selectedStatus.second else 1,
 
-                                    emptyList()
+                                    viewModel.state.selectedService!!.items?.mapIndexed { index,it ->
 
-                                    /*listOf(
+                                     ServiceItemCreateCRMModel(
 
-                                    ServiceItemCreateCRMModel(
+                                         type_id = item.value!![index].id?:0,
 
-                                        type_id = viewModel.state.selectedService!!.items!![0].id,
+                                         name = viewModel.state.textFieldsValues[index]
 
-                                        name = "какое то имя ",
+                                     )
 
-                                    )
-
-                                )*/
+                                    }
 
 
                                 )
+
 
                             } else {
 

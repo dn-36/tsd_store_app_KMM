@@ -22,6 +22,7 @@ import model.EntityModel
 import model.EntityOurModel
 import model.GroupEntityModel
 import model.GroupEntityResponseModel
+import model.ItemsTypeModel
 import model.LocationResponseModel
 import model.ProjectModel
 import model.ServiceItemModel
@@ -32,6 +33,7 @@ import model.SpecItemModel
 import model.SpecificResponseModel
 import model.SpecsModel
 import model.UserCRMModel
+import model.ValueModel
 
 class CRMClientImpl (
 
@@ -167,7 +169,29 @@ class CRMClientImpl (
                     comp_project = it.service!!.comp_project
 
 
-                ) else null
+                ) else null,
+
+                value = it.value?.map { item ->
+                    ValueModel(
+                        id = item.id,
+                        arenda_id = item.arenda_id,
+                        type_id = item.type_id,
+                        value = item.value , // Обработка null
+                        created_at = item.created_at,
+                        updated_at = item.updated_at,
+                        items_type = ItemsTypeModel(
+                            id = item.items_type?.id ?: 0, // Если null, подставляется 0
+                            service_id = item.items_type?.service_id ?: 0,
+                            name = item.items_type?.name ?: "",
+                            type = item.items_type?.type ?: "",
+                            metka = item.items_type?.metka ?: "",
+                            search = item.items_type?.search ?: 0,
+                            req = item.items_type?.req ?: 0,
+                            created_at = item.items_type?.created_at ?: "",
+                            updated_at = item.items_type?.updated_at ?: ""
+                        )
+                    )
+                } ?: emptyList()
                 /*projects = it.projects,
                 service = it.service,
                 company = it.company,
@@ -295,7 +319,29 @@ class CRMClientImpl (
                     comp_project = it.service!!.comp_project
 
 
-                ) else null
+                ) else null,
+
+                value = it.value?.map { item ->
+                    ValueModel(
+                        id = item.id,
+                        arenda_id = item.arenda_id,
+                        type_id = item.type_id,
+                        value = item.value , // Обработка null
+                        created_at = item.created_at,
+                        updated_at = item.updated_at,
+                        items_type = ItemsTypeModel(
+                            id = item.items_type?.id ?: 0, // Если null, подставляется 0
+                            service_id = item.items_type?.service_id ?: 0,
+                            name = item.items_type?.name ?: "",
+                            type = item.items_type?.type ?: "",
+                            metka = item.items_type?.metka ?: "",
+                            search = item.items_type?.search ?: 0,
+                            req = item.items_type?.req ?: 0,
+                            created_at = item.items_type?.created_at ?: "",
+                            updated_at = item.items_type?.updated_at ?: ""
+                        )
+                    )
+                } ?: emptyList()
 
 
             )
@@ -570,9 +616,9 @@ class CRMClientImpl (
 
                 ServiceItem(
 
-                    type_id = it.type_id,
+                   type_id = it.type_id,
 
-                    name = it.name,
+                    name = it.name
 
                 )
 

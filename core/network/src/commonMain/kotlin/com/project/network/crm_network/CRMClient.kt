@@ -1,7 +1,6 @@
 package com.project.network.crm_network
 
 import com.project.network.crm_network.model.ApiResponseCRMOutgoing
-import com.project.network.crm_network.model.CreateCRM
 import com.project.network.crm_network.model.ServiceItem
 import com.project.network.httpClientEngine
 import io.ktor.client.HttpClient
@@ -10,6 +9,10 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.forms.FormDataContent
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.append
+import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -18,8 +21,10 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.Parameters
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.utils.io.InternalAPI
 import kotlinx.serialization.json.Json
 
 class CRMClient {
@@ -77,13 +82,14 @@ class CRMClient {
 
     // создание услуги
     suspend fun createCRM(
+
         serviceId: Int?,
         statusPay: Int?,
         verifyPay: Int?,
         task: String?,
-        to_local_id:Int?,
-        group_entity_id:Int?,
-        from_local_id:Int?,
+        toLocalId: Int?,
+        groupEntityId: Int?,
+        fromLocalId: Int?,
         status: String?,
         price: String?,
         arendaId: Int?,
@@ -93,44 +99,52 @@ class CRMClient {
         ourEntityId: Int?,
         text: String?,
         statusId: Int?,
-        items: List<ServiceItem>
+        items: List<ServiceItem>, // Список элементов услуги
+
     ): String {
         return try {
-            val requestBody = CreateCRM(
-                service_id = serviceId,
-                status_pay = statusPay,
-                verify_pay = verifyPay,
-                task = task,
-                to_local_id = to_local_id,
-                group_entity_id = group_entity_id,
-                from_local_id = from_local_id,
-                status = status,
-                price = price,
-                arenda_id = arendaId,
-                specification_id = specificationId,
-                project_id = projectId,
-                entity_id = entityId,
-                our_entity_id = ourEntityId,
-                text = text,
-                statusid = statusId,
-                items = items
-            )
 
-            val response: HttpResponse = client.post("https://delta.online/api/crm") {
-                contentType(ContentType.Application.Json)
-                setBody(requestBody) // Используем setBody для передачи сериализованного объекта
+            val parametrs = Parameters.build {
+                append("service_id", serviceId?.toString() ?: "")
+                append("status_pay", statusPay?.toString() ?: "0")
+                append("verify_pay", verifyPay?.toString() ?: "0")
+                append("task", task ?: "")
+                append("to_local_id", toLocalId?.toString() ?: "")
+                append("group_entity_id", groupEntityId?.toString() ?: "")
+                append("from_local_id", fromLocalId?.toString() ?: "")
+                append("status", status ?: "")
+                append("price", price ?: "")
+                append("arenda_id", arendaId?.toString() ?: "")
+                append("specification_id", specificationId?.toString() ?: "")
+                append("project_id", projectId?.toString() ?: "")
+                append("entity_id", entityId?.toString() ?: "")
+                append("our_entity_id", ourEntityId?.toString() ?: "")
+                append("text", text ?: "")
+                append("statusid", statusId?.toString() ?: "1")
+                // Добавляем элементы из списка items с индексами
+                items.forEachIndexed { index, item ->
+                    append("name[$index]", item.name)
+                    append("type_id[$index]", item.type_id.toString())
+                }
             }
 
-            println("333")
-            println("333")
-            println("${requestBody}")
-            println("333")
-            println("333")
 
-            response.body() // Возвращаем статус ответа
+            // Отправляем JSON
+            val response: HttpResponse = client.post("https://delta.online/api/crm") {
+                contentType(ContentType.Application.FormUrlEncoded) // Указываем Content-Type
+                setBody(FormDataContent(parametrs))
+            }
+
+            println("Создание crm: ${parametrs}")
+
+            println("Создание crm: ${response}")
+
+            response.bodyAsText() // Возвращаем ответ от сервера
         } catch (e: Exception) {
+            println("Error: ${e.message}")
             e.message.toString() // Возвращаем сообщение об ошибке
         }
+
     }
 
     suspend fun updateCRM(
@@ -152,42 +166,50 @@ class CRMClient {
         ourEntityId: Int?,
         text: String?,
         statusId: Int?,
-        items: List<ServiceItem>
+        items: List<ServiceItem>, // Список элементов услуги
     ): String {
         return try {
-            val requestBody = CreateCRM(
-                service_id = serviceId,
-                status_pay = statusPay,
-                verify_pay = verifyPay,
-                task = task,
-                to_local_id = to_local_id,
-                group_entity_id = group_entity_id,
-                from_local_id = from_local_id,
-                status = status,
-                price = price,
-                arenda_id = arendaId,
-                specification_id = specificationId,
-                project_id = projectId,
-                entity_id = entityId,
-                our_entity_id = ourEntityId,
-                text = text,
-                statusid = statusId,
-                items = items
-            )
 
-            val response: HttpResponse = client.put("https://delta.online/api/crm/${ui}") {
-                contentType(ContentType.Application.Json)
-                setBody(requestBody) // Используем setBody для передачи сериализованного объекта
+            val parametrs = Parameters.build {
+                append("service_id", serviceId?.toString() ?: "")
+                append("status_pay", statusPay?.toString() ?: "0")
+                append("verify_pay", verifyPay?.toString() ?: "0")
+                append("task", task ?: "")
+                append("to_local_id", to_local_id?.toString() ?: "")
+                append("group_entity_id", group_entity_id?.toString() ?: "")
+                append("from_local_id", from_local_id?.toString() ?: "")
+                append("status", status ?: "")
+                append("price", price ?: "")
+                append("arenda_id", arendaId?.toString() ?: "")
+                append("specification_id", specificationId?.toString() ?: "")
+                append("project_id", projectId?.toString() ?: "")
+                append("entity_id", entityId?.toString() ?: "")
+                append("our_entity_id", ourEntityId?.toString() ?: "")
+                append("text", text ?: "")
+                append("statusid", statusId?.toString() ?: "1")
+                // Добавляем элементы из списка items с индексами
+                items.forEachIndexed { index, item ->
+                    append("name[$index]", item.name)
+                    append("type_id[$index]", item.type_id.toString())
+                }
+                append("_method", "put")
             }
 
-            println("444")
-            println("444")
-            println("${response}")
-            println("444")
-            println("444")
+            // Отправляем JSON
+            val response: HttpResponse = client.put("https://delta.online/api/crm/${ui}") {
+                contentType(ContentType.Application.FormUrlEncoded) // Указываем Content-Type
+                setBody(FormDataContent(parametrs))
+            }
 
-            response.body() // Возвращаем статус ответа
+            println("Обновление crm ${parametrs}")
+
+            println("Обновление crm ${response}")
+
+
+            response.bodyAsText() // Возвращаем статус ответа
+
         } catch (e: Exception) {
+
             e.message.toString() // Возвращаем сообщение об ошибке
         }
     }
