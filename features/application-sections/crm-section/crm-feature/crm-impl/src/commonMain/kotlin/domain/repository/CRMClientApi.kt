@@ -5,6 +5,8 @@ import model.CargoResponseModel
 import model.ContragentResponseModel
 import model.GroupEntityResponseModel
 import model.LocationResponseModel
+import model.ProductModel
+import model.ProjectResponseModel
 import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
@@ -17,11 +19,12 @@ interface CRMClientApi {
     suspend fun getOutgoingCRM(): List<ApiResponseCRMModel>
     suspend fun getSpecifications(): List<SpecificResponseModel>
     suspend fun getServices(): List<ServiceResponseModel>
+    suspend fun getProducts(): List<ProductModel>
     suspend fun getUsers(): List<UserCRMModel>
     suspend fun getCargo(): List<CargoResponseModel>
     suspend fun getContragents(): List<ContragentResponseModel>
     suspend fun getLocations(): List<LocationResponseModel>
-    suspend fun getProjects(): String
+    suspend fun getProjects(): List<ProjectResponseModel>
     suspend fun createCRM (
 
         serviceId: Int?,

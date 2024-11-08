@@ -60,7 +60,7 @@ data class ApiResponseCRMModel(
     val projects: ProjectModel?,
     val groupentits: GroupEntityModel?,
     val service: ServiceModel?,
-    val value:List<ValueModel>?
+   // val value:List<ValueModel>?
 )
 data class ValueModel(
     val id: Int?,

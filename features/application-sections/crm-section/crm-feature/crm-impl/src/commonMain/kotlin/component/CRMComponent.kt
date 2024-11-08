@@ -339,6 +339,10 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                 listGroupEntity = viewModel.state.listGroupEntity,
 
+                listProjects = viewModel.state.listProjects,
+
+                listProducts = viewModel.state.listProducts,
+
                 item = viewModel.state.updateItem,
 
                 onClickCreate = { scope: CoroutineScope, serviceId: Int?, statusPay: Int?,

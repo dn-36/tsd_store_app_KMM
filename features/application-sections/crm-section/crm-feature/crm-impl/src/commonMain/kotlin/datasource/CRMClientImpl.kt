@@ -24,7 +24,9 @@ import model.GroupEntityModel
 import model.GroupEntityResponseModel
 import model.ItemsTypeModel
 import model.LocationResponseModel
+import model.ProductModel
 import model.ProjectModel
+import model.ProjectResponseModel
 import model.ServiceItemModel
 import model.ServiceResponseModel
 import model.ServiceItemCreateCRMModel
@@ -34,6 +36,7 @@ import model.SpecificResponseModel
 import model.SpecsModel
 import model.UserCRMModel
 import model.ValueModel
+import product_network.ProductApiClient
 
 class CRMClientImpl (
 
@@ -55,7 +58,9 @@ class CRMClientImpl (
 
     private val cargoClient: CargoClient,
 
-    private val groupEntityClient: GroupEntityClient
+    private val groupEntityClient: GroupEntityClient,
+
+   // private val productsClient: ProductApiClient
 
 ) : CRMClientApi {
 
@@ -171,12 +176,12 @@ class CRMClientImpl (
 
                 ) else null,
 
-                value = it.value?.map { item ->
+                /*value = it.value?.map { item ->
                     ValueModel(
                         id = item.id,
                         arenda_id = item.arenda_id,
                         type_id = item.type_id,
-                        value = item.value , // Обработка null
+                        value = null,//item.value , // Обработка null
                         created_at = item.created_at,
                         updated_at = item.updated_at,
                         items_type = ItemsTypeModel(
@@ -191,7 +196,7 @@ class CRMClientImpl (
                             updated_at = item.items_type?.updated_at ?: ""
                         )
                     )
-                } ?: emptyList()
+                } ?: emptyList()*/
                 /*projects = it.projects,
                 service = it.service,
                 company = it.company,
@@ -321,12 +326,12 @@ class CRMClientImpl (
 
                 ) else null,
 
-                value = it.value?.map { item ->
+                /*value = it.value?.map { item ->
                     ValueModel(
                         id = item.id,
                         arenda_id = item.arenda_id,
                         type_id = item.type_id,
-                        value = item.value , // Обработка null
+                        value = null,//item.value , // Обработка null
                         created_at = item.created_at,
                         updated_at = item.updated_at,
                         items_type = ItemsTypeModel(
@@ -341,7 +346,7 @@ class CRMClientImpl (
                             updated_at = item.items_type?.updated_at ?: ""
                         )
                     )
-                } ?: emptyList()
+                } ?: emptyList()*/
 
 
             )
@@ -574,11 +579,27 @@ class CRMClientImpl (
 
     }
 
-    override suspend fun getProjects(): String {
+    override suspend fun getProjects(): List<ProjectResponseModel> {
 
         projectsClient.init(sharedPrefsApi.getToken() ?: "")
 
-        return projectsClient.getProjects()
+        return projectsClient.getProjects().map {
+
+            ProjectResponseModel(
+
+                id = it.id,
+                name = it.name,
+                creater_id = it.creater_id,
+                created_at = it.created_at,
+                updated_at = it.updated_at,
+                company_id = it.company_id,
+                entity_id = it.entity_id,
+                active = it.active,
+                entity_client_id = it.entity_client_id
+
+            )
+
+        }
 
     }
 
@@ -727,6 +748,25 @@ class CRMClientImpl (
                     )
 
             })
+
+    }
+
+    override suspend fun getProducts(): List<ProductModel> {
+
+        return ProductApiClient(sharedPrefsApi.getToken() ?: "").getProductNames().map {
+
+            ProductModel(
+
+                id = it.id,
+                name = it.name,
+                text = it.text,
+                price = it.price,
+                sku = it.sku,
+                ui = it.ui
+
+            )
+
+        }
 
     }
 

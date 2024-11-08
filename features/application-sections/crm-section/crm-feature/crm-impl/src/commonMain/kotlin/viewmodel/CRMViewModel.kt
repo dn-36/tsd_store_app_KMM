@@ -17,6 +17,7 @@ import domain.usecases.GetSpecificationsUseCase
 import domain.usecases.GetEmployeeUseCase
 import domain.usecases.GetGroupEntityUseCase
 import domain.usecases.GetLocationsUseCase
+import domain.usecases.GetProductsUseCase
 import domain.usecases.GetProjectsUseCase
 import domain.usecases.UpdateCRMUseCase
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +49,9 @@ class CRMViewModel (
 
     val getGroupEntityUseCase: GetGroupEntityUseCase,
 
-    val updateCRMUseCase: UpdateCRMUseCase
+    val updateCRMUseCase: UpdateCRMUseCase,
+
+    val getProductsUseCase: GetProductsUseCase
 
 ): NetworkViewModel() {
 
@@ -111,6 +114,8 @@ class CRMViewModel (
 
                      listGroupEntity = getGroupEntityUseCase.execute(),
 
+                     listProducts = getProductsUseCase.execute(),
+
                      isVisibilityDataEntryComponent = 1f
 
                  )
@@ -144,6 +149,8 @@ class CRMViewModel (
                         listCargo = getCargoUseCase.execute(),
 
                         listGroupEntity = getGroupEntityUseCase.execute(),
+
+                        listProducts = getProductsUseCase.execute(),
 
                         updateItem = intent.item,
 
@@ -237,6 +244,8 @@ class CRMViewModel (
 
          println(" CHECK SERVICES: ${state.listServices} ")
 
+         println(" CHECK PRODUCTS: ${state.listProducts} ")
+
          println(" CHECK PROJECTS: ${state.listProjects} ")
 
          println(" CHECK CONTRGENTS: ${state.listContragents} ")
@@ -245,7 +254,7 @@ class CRMViewModel (
 
          println(" CHECK CARGO: ${state.listCargo} ")
 
-         println(" CHECK CARGO: ${state.listGroupEntity} ")
+         println(" CHECK GROUP ENTITY: ${state.listGroupEntity} ")
 
         val menuScreen: MenuCrmScreenApi = KoinPlatform.getKoin().get()
 

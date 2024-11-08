@@ -43,6 +43,7 @@ class CRMClient {
                 ignoreUnknownKeys = true // Игнорировать неизвестные поля
                 isLenient = true// Быть гибким с форматом JSON
                 explicitNulls = false
+
             })
         }
         install(Logging) {

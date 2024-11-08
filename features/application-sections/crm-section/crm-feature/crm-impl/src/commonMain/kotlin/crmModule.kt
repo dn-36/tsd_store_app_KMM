@@ -1,3 +1,4 @@
+import com.project.network.ConstData
 import com.project.network.cargo_network.CargoClient
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.crm_network.CRMClient
@@ -19,9 +20,11 @@ import domain.usecases.GetSpecificationsUseCase
 import domain.usecases.GetEmployeeUseCase
 import domain.usecases.GetGroupEntityUseCase
 import domain.usecases.GetLocationsUseCase
+import domain.usecases.GetProductsUseCase
 import domain.usecases.GetProjectsUseCase
 import domain.usecases.UpdateCRMUseCase
 import org.koin.dsl.module
+import product_network.ProductApiClient
 import viewmodel.CRMViewModel
 
 val crmModule = module {
@@ -42,6 +45,8 @@ val crmModule = module {
 
     factory { GetServicesUseCase(get()) }
 
+    factory { GetProductsUseCase(get()) }
+
     factory { GetContragentsUseCase(get()) }
 
     factory { GetEmployeeUseCase(get()) }
@@ -54,7 +59,7 @@ val crmModule = module {
 
     factory { CRMViewModel( get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
 
-        get(), get() ) }
+        get(), get(), get() ) }
 
     factory { CRMClient() }
 
@@ -69,6 +74,8 @@ val crmModule = module {
     factory { ContragentClient() }
 
     factory { CargoClient() }
+
+    factory { ProductApiClient(ConstData.TOKEN) }
 
     factory { GroupEntityClient() }
 

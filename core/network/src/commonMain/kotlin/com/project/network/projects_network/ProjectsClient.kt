@@ -3,6 +3,7 @@ package com.project.network.projects_network
 import com.project.network.crm_network.CRMClient
 import com.project.network.crm_network.model.ApiResponseCRMOutgoing
 import com.project.network.httpClientEngine
+import com.project.network.projects_network.model.ProjectResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -42,15 +43,15 @@ class ProjectsClient {
 
     // получение всех проектов
 
-    suspend fun getProjects (): String {
+    suspend fun getProjects (): List<ProjectResponse> {
 
-        val response = client.get("https://delta.online/api/project") {
+        val response = client.get("https://delta.online/api/project?active=1&all=0") {
 
         }
         println(" ////////////////////++++++++++")
         println("получение проектов :  ${response.bodyAsText()}")
         println(" ////////////////////++++++++++")
-        return response.bodyAsText()
+        return response.body<List<ProjectResponse>>()
     }
 
 }

@@ -1,8 +1,17 @@
 package com.project.network.crm_network.model
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
 @Serializable
 data class ApiResponseCRMOutgoing(
@@ -63,7 +72,7 @@ data class ApiResponseCRMOutgoing(
     val groupentits: GroupEntity?,
     val entity_our: EntityOur?,
     val specs: Specs?,
-    @SerialName("val")val value:List<Value>?
+    val `val`: List<Val>
 )
 
 @Serializable
@@ -71,7 +80,7 @@ data class Value(
     val id: Int?,
     val arenda_id: Int?,
     val type_id: Int?,
-    @SerialName("val")val value: JsonElement?,
+    @SerialName("val")val value: String?,
     val created_at: String?,
     val updated_at: String?,
     val items_type: ItemsType?
@@ -235,3 +244,65 @@ data class Cargo(
     val delivery_id: Int?, // Может быть null
     val laravel_through_key: Int
 )
+
+@Serializable
+data class Val(
+    val id: Int,
+    val arenda_id: Int,
+    val type_id: Int,
+    @Serializable(with = ValDetailSerializer::class)
+    val `val`: ValDetailOrString? = null,
+    val created_at: String,
+    val updated_at: String,
+    val items_type: ItemValue
+)
+
+@Serializable
+data class ValDetailOrString(
+    val detail: ValDetail? = null,
+    val raw: String? = null
+)
+
+@Serializable
+data class ValDetail(
+    val id: Int,
+    val name: String? = null,
+    val email: String? = null,
+    val email_verified_at: String? = null,
+    val phone: String? = null,
+    val ui: String? = null,
+    val policy: Int? = null, // Сделано необязательным
+    val created_at: String? = null,
+    val updated_at: String? = null,
+    val tema: String? = null,
+    val active: Int? = null, // Сделано необязательным
+    val inn: String? = null,
+    val image: String? = null,
+    val contragents: Int? = null, // Сделано необязательным
+    val price: Double? = null,
+    val lang_id: Int? = null, // Сделано необязательным
+    val company: List<Company>? = null
+)
+object ValDetailSerializer : KSerializer<ValDetailOrString> {
+    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("ValDetailOrString")
+
+    override fun serialize(encoder: Encoder, value: ValDetailOrString) {
+        when {
+            value.detail != null -> encoder.encodeSerializableValue(ValDetail.serializer(), value.detail)
+            value.raw != null -> encoder.encodeString(value.raw)
+        }
+    }
+
+    override fun deserialize(decoder: Decoder): ValDetailOrString {
+        val input = decoder as? JsonDecoder ?: throw SerializationException("Expected JsonDecoder")
+        val element = input.decodeJsonElement()
+
+        return if (element is JsonObject) {
+            ValDetailOrString(detail = input.json.decodeFromJsonElement(ValDetail.serializer(), element))
+        } else if (element is JsonPrimitive && element.isString) {
+            ValDetailOrString(raw = element.content)
+        } else {
+            throw SerializationException("Unexpected JSON for ValDetailOrString: $element")
+        }
+    }
+}

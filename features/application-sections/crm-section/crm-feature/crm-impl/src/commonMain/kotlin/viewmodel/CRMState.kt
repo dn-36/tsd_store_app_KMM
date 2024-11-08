@@ -5,6 +5,8 @@ import model.CargoResponseModel
 import model.ContragentResponseModel
 import model.GroupEntityResponseModel
 import model.LocationResponseModel
+import model.ProductModel
+import model.ProjectResponseModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
 import model.UserCRMModel
@@ -14,6 +16,8 @@ data class CRMState(
     val listIncomingCRM: List<ApiResponseCRMModel> = emptyList(),
 
     val listOutgoingCRM: MutableList<ApiResponseCRMModel> = mutableListOf(),
+
+    val listProducts: List<ProductModel> = emptyList(),
 
     val listSpecifications: List<SpecificResponseModel> = emptyList(),
 
@@ -29,7 +33,7 @@ data class CRMState(
 
     val listLocations: List<LocationResponseModel> = emptyList(),
 
-    val listProjects: String = String(),
+    val listProjects: List<ProjectResponseModel> = emptyList(),
 
 
     val isIncoming: Boolean = true,

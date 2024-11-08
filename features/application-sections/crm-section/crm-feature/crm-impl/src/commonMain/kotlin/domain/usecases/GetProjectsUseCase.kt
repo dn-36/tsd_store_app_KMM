@@ -1,6 +1,7 @@
 package domain.usecases
 
 import domain.repository.CRMClientApi
+import model.ProjectResponseModel
 import model.ServiceResponseModel
 
 class GetProjectsUseCase (
@@ -9,7 +10,7 @@ class GetProjectsUseCase (
 
     ) {
 
-    suspend fun execute(  ): String {
+    suspend fun execute(  ): List<ProjectResponseModel> {
 
         return client.getProjects ()
     }

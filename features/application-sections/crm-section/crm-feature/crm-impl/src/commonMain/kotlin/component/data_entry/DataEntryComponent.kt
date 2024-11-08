@@ -51,6 +51,8 @@ import model.CargoResponseModel
 import model.ContragentResponseModel
 import model.GroupEntityResponseModel
 import model.LocationResponseModel
+import model.ProductModel
+import model.ProjectResponseModel
 import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
@@ -78,6 +80,10 @@ class DataEntryComponent (
     val listCargo: List<CargoResponseModel>,
 
     val listGroupEntity: List<GroupEntityResponseModel>,
+
+    val listProjects: List<ProjectResponseModel>,
+
+    val listProducts: List<ProductModel>,
 
     val item: ApiResponseCRMModel?,
 
@@ -1803,26 +1809,24 @@ class DataEntryComponent (
 
                     viewModel.state.selectedService!!.items != null ) {
 
-                    viewModel.state.selectedService!!.items!!.forEachIndexed { index,it ->
+                    viewModel.state.selectedService!!.items!!.forEachIndexed { mainIndex,it ->
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        if (it.type == "text" ||
+                        if (it.type == "text" || it.type == "alltext" || it.type == "number" ||
 
-                            it.type == "alltext" || it.type == "number" || it.type == "date" ||
-
-                            it.type == "coordinate"
+                            it.type == "date" || it.type == "coordinate"
                         ) {
 
                             OutlinedTextField(
 
-                                value = viewModel.state.textFieldsValues[index],
+                                value = viewModel.state.textFieldsValues[mainIndex],
 
                                 onValueChange = {
 
                                     viewModel.processIntents(
 
-                                        DataEntryIntents.InputTextAdditionalFields( it, index ))
+                                        DataEntryIntents.InputTextAdditionalFields( it, mainIndex ))
 
                                 },
 
@@ -1850,7 +1854,218 @@ class DataEntryComponent (
 
                             it.type == "company" || it.type == "cargo" ) {
 
+                            var expendedMenu by remember { mutableStateOf(false) }
 
+                            var selectedItem by remember { mutableStateOf<Any?>(null) }
+
+                            if ( item != null ) {
+
+                                when (it.type) {
+
+                                    "man" -> { selectedItem = listEmployee }
+                                    "specification" -> {
+                                        (selectedItem as? SpecificResponseModel)?.text
+                                            ?: "нет имени"
+                                    }
+
+                                    "local" -> {
+                                        (selectedItem as? LocationResponseModel)?.name
+                                            ?: "нет имени"
+                                    }
+
+                                    "product" -> {
+                                        (selectedItem as? ProductModel)?.name ?: "нет имени"
+                                    }
+
+                                    "project" -> {
+                                        (selectedItem as? ProjectResponseModel)?.name ?: "нет имени"
+                                    }
+
+                                    "company" -> {
+                                        (selectedItem as? ContragentResponseModel)?.name
+                                            ?: "нет имени"
+                                    }
+
+                                    "cargo" -> {
+                                        (selectedItem as? CargoResponseModel)?.name ?: "нет имени"
+                                    }
+
+                                    else -> ""
+
+                                }
+                            }
+
+                            OutlinedTextField(
+
+                                value = "",
+
+                                onValueChange = {
+
+
+                                },
+
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
+                                    //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                                    backgroundColor = Color.LightGray.copy(alpha = 0.5f)  // Цвет фона с легкой прозрачностью
+                                ),
+
+                                label = { Text(it.name?:"") },
+
+                                trailingIcon = {
+
+                                    IconButton(
+
+                                        onClick = {
+
+                                            expendedMenu = !expendedMenu
+
+                                        }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(Res.drawable.down_arrow),
+                                            contentDescription = "Поиск",
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                    }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(min = 40.dp)
+                                    .clickable(
+                                        indication = null, // Отключение эффекта затемнения
+                                        interactionSource = remember { MutableInteractionSource() })
+                                    { }// Стандартная высота TextField
+                            )
+
+                            if ( selectedItem != null ) {
+
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                Box(
+                                    modifier = Modifier.padding(vertical = 5.dp).clip(RoundedCornerShape(10.dp))
+                                        .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
+                                ) {
+                                    Text(
+                                        text = when (it.type) {
+
+                                            "man" -> {// Здесь предполагается, что item - это объект из listEmployee
+                                                (selectedItem as? UserCRMModel)?.name ?: "нет имени"}
+                                            "specification" -> { (selectedItem as? SpecificResponseModel)?.text ?: "нет имени" }
+                                            "local" -> { (selectedItem as? LocationResponseModel)?.name ?: "нет имени" }
+                                            "product" -> { (selectedItem as? ProductModel)?.name ?: "нет имени" }
+                                            "project" -> { (selectedItem as? ProjectResponseModel)?.name ?: "нет имени" }
+                                            "company" -> { (selectedItem as? ContragentResponseModel)?.name ?: "нет имени" }
+                                            "cargo" -> { (selectedItem as? CargoResponseModel)?.name ?: "нет имени"}
+                                            else -> ""
+
+                                        },
+                                        color = Color.White,
+                                        fontSize = 15.sp,
+                                        modifier = Modifier.padding(8.dp).align(
+                                            Alignment.CenterStart
+                                        )
+                                    )
+                                    Image(painter = painterResource(Res.drawable.cancel),
+                                        contentDescription = null,
+                                        modifier = Modifier.padding(8.dp).size(10.dp).align(Alignment.TopEnd)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
+
+                                            {
+                                                selectedItem = null
+
+                                            })
+                                }
+                            }
+
+                            if ( expendedMenu ) {
+
+                                Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                                    Card(
+                                        modifier = Modifier.fillMaxSize()
+                                            .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                                        backgroundColor = Color.White,
+                                        shape = RoundedCornerShape(8.dp)
+                                    ) {}
+
+                                    it.type == "man" || it.type == "specification" ||
+
+                                            it.type == "local" || it.type == "product" || it.type == "project" ||
+
+                                            it.type == "company" || it.type == "cargo"
+
+                                    LazyColumn {
+
+                                        itemsIndexed(
+                                            when (it.type) {
+
+                                                "man" -> listEmployee
+                                                "specification" -> listSpecifications
+                                                "local" -> listLocations
+                                                "product" -> listProducts
+                                                "project" -> listProjects
+                                                "company" -> listContragents
+                                                "cargo" -> listCargo
+                                                else -> emptyList()
+
+                                            }
+                                        )
+
+                                        { index, item ->
+
+                                            Text(when (it.type) {
+
+                                                "man" -> {// Здесь предполагается, что item - это объект из listEmployee
+                                                    (item as? UserCRMModel)?.name ?: "нет имени"}
+                                                "specification" -> { (item as? SpecificResponseModel)?.text ?: "нет имени" }
+                                                "local" -> { (item as? LocationResponseModel)?.name ?: "нет имени" }
+                                                "product" -> { (item as? ProductModel)?.name ?: "нет имени" }
+                                                "project" -> { (item as? ProjectResponseModel)?.name ?: "нет имени" }
+                                                "company" -> { (item as? ContragentResponseModel)?.name ?: "нет имени" }
+                                                "cargo" -> { (item as? CargoResponseModel)?.name ?: "нет имени"}
+                                                else -> ""
+
+                                            },
+                                                fontSize = 20.sp,
+                                                modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                                    .clickable(
+                                                        indication = null, // Отключение эффекта затемнения
+                                                        interactionSource = remember { MutableInteractionSource() })
+
+                                                    {
+
+                                                        selectedItem = item
+                                                        expendedMenu = false
+
+                                                        val newList = viewModel.state.textFieldsValues.toMutableList()
+
+                                                        newList[mainIndex] = "${when (it.type) {
+
+                                                            "man" -> {// Здесь предполагается, что item - это объект из listEmployee
+                                                                (item as? UserCRMModel)?.id ?:0}
+                                                            "specification" -> { (item as? SpecificResponseModel)?.id ?:0 }
+                                                            "local" -> { (item as? LocationResponseModel)?.id ?:0 }
+                                                            "product" -> { (item as? ProductModel)?.id ?:0 }
+                                                            "project" -> { (item as? ProjectResponseModel)?.id ?:0 }
+                                                            "company" -> { (item as? ContragentResponseModel)?.id ?:0 }
+                                                            "cargo" -> { (item as? CargoResponseModel)?.id ?:0}
+                                                            else -> ""
+
+                                                        }}"
+
+                                                        viewModel.state = viewModel.state.copy(
+
+                                                            textFieldsValues = newList
+
+                                                        )
+
+                                                    })
+                                        }
+                                    }
+                                }
+                            }
 
                         }
 
@@ -1965,16 +2180,17 @@ class DataEntryComponent (
 
                                     if (viewModel.state.selectedStatus != null) viewModel.state.selectedStatus.second else 1,
 
-                                    listOf(
+                                    viewModel.state.selectedService!!.items?.mapIndexed { index,it ->
 
                                         ServiceItemCreateCRMModel(
 
-                                            type_id = 215,
-                                            name = "что то новое"
+                                            type_id = it.id,
+
+                                            name = viewModel.state.textFieldsValues[index]
 
                                         )
 
-                                    )
+                                    }
 
 
                                 )
@@ -2049,7 +2265,7 @@ class DataEntryComponent (
 
                                      ServiceItemCreateCRMModel(
 
-                                         type_id = item.value!![index].id?:0,
+                                         type_id = 0,//item.value!![index].id?:0,
 
                                          name = viewModel.state.textFieldsValues[index]
 

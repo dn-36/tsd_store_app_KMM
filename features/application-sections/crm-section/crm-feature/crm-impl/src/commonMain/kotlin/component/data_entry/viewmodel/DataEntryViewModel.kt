@@ -476,7 +476,7 @@ class DataEntryViewModel (): ViewModel() {
 
     )
 
-
+        println("SELECT SERVICE :  ${state.selectedService}")
 
     }
 
@@ -975,7 +975,7 @@ class DataEntryViewModel (): ViewModel() {
 
             val newList = mutableListOf<String>()
 
-             if ( item?.value != null  ) {
+             /*if ( item?.value != null  ) {
 
                  item.value.forEach {
 
@@ -983,7 +983,7 @@ class DataEntryViewModel (): ViewModel() {
 
                  }
 
-             } else null
+             } else null*/
 
             state = state.copy(
 
@@ -1096,6 +1096,8 @@ class DataEntryViewModel (): ViewModel() {
                 textFieldsValues = newList
 
             )
+
+            println("NEW LIST :  ${newList}")
 
         }
 
