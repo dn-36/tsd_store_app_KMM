@@ -61,6 +61,8 @@ class ContragentsViewModel (
 
           is ContragentsIntents.DeleteContragent -> {
 
+              setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
               intent.coroutineScope.launch ( Dispatchers.IO ) {
 
                   deleteContragentUseCase.execute( state.updatedItem!!.id!! )
@@ -87,6 +89,8 @@ class ContragentsViewModel (
 
           is ContragentsIntents.Create -> {
 
+              setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
               intent.coroutineScope.launch ( Dispatchers.IO ) {
 
                   createContragentsUseCase.execute( intent.name )
@@ -108,6 +112,8 @@ class ContragentsViewModel (
           }
 
           is ContragentsIntents.Update -> {
+
+              setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
               intent.coroutineScope.launch ( Dispatchers.IO ) {
 

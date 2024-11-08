@@ -1,6 +1,6 @@
 package com.project.network.users_network
 
-import com.project.network.common.httpClientEngine
+import com.project.network.httpClientEngine
 import com.project.network.users_network.model.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -13,12 +13,12 @@ import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-class UsersApi {
+class UsersClient {
     companion object {
         private var _token: String? = null
     }
 
-    fun init(token:String?):UsersApi{
+    fun init(token:String?):UsersClient{
         _token = token
         return this
     }

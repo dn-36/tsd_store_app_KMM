@@ -9,7 +9,7 @@ class GetOutgoingCRMUseCase (
 
     ) {
 
-    suspend fun execute(  ): String {
+    suspend fun execute ( ): List<ApiResponseCRMModel> {
 
         return client.getOutgoingCRM ()
     }

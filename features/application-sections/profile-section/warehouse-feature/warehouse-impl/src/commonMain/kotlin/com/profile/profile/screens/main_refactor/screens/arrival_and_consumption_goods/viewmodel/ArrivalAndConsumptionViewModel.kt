@@ -48,6 +48,8 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.ArrivalOrConsumption -> {
 
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
                     getContagentsUseCase.execute ( onGet = { newListContragents ->
@@ -139,6 +141,8 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.DeleteArrivalOrConsumption -> {
 
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
                     deleteArrivalOrConsumptionUseCase.execute( ui = state.updatedItem!!.ui!! )
@@ -164,6 +168,8 @@ class ArrivalAndConsumptionViewModel (
             is ArrivalAndConsumptionIntents.Update -> {
 
                 if ( state.listSelectedProducts.size != 0 ) {
+
+                    setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
@@ -213,6 +219,8 @@ class ArrivalAndConsumptionViewModel (
             }
 
             is ArrivalAndConsumptionIntents.UpdateButton -> {
+
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
@@ -395,6 +403,8 @@ class ArrivalAndConsumptionViewModel (
             is ArrivalAndConsumptionIntents.CreateArrivalOrConsumption ->  {
 
                 if ( state.listSelectedProducts.size != 0) {
+
+                    setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 

@@ -129,6 +129,8 @@ class EditNoteViewModel (
                     local_id = "null"
                 )
 
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
                     updateNoteUseCase.execute( intent.note ,updatedNote = updatedNote ,
@@ -166,6 +168,8 @@ class EditNoteViewModel (
                     local_id = "null"
                 )
 
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
                     updateNoteUseCase.execute(intent.note, onUpdate = {}, updatedNote = updatedNote)
@@ -187,14 +191,18 @@ class EditNoteViewModel (
             }
 
             is EditNoteIntents.Cancel -> {
+
                 cancel()
             }
 
             is EditNoteIntents.SelectingEditableCategory -> {
+
                 selectingEditableCategory(intent.index)
             }
 
             is EditNoteIntents.DeleteNote -> {
+
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
@@ -250,6 +258,8 @@ class EditNoteViewModel (
                 editNoteState = editNoteState.copy(
                     status = status
                 )
+
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
@@ -309,6 +319,8 @@ class EditNoteViewModel (
                     local_id = "null"
                 )
 
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
                     updateNoteUseCase.execute(intent.note, onUpdate = {}, updatedNote = updatedNote)
@@ -330,6 +342,7 @@ class EditNoteViewModel (
             }
 
             is EditNoteIntents.DeleteUserNote -> {
+
                 deleteUsersNote(intent.user)
             }
         }
