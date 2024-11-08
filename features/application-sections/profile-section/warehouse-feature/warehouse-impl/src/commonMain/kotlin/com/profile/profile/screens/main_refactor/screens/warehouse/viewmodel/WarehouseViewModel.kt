@@ -40,6 +40,8 @@ class WarehouseViewModel (
 
             is WarehouseIntents.OpenWindowAddWarehouse -> {
 
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
                     getLocationsUseCase.execute ( onGet = {listAllLocations ->
@@ -79,6 +81,8 @@ class WarehouseViewModel (
             }
 
             is WarehouseIntents.OpenWindowUpdateWarehouse -> {
+
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
@@ -152,6 +156,8 @@ class WarehouseViewModel (
 
                 if ( intent.name.isNotBlank() && intent.localId.isNotBlank() ) {
 
+                    setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
                         createWarehouseUseCase.execute(intent.name, intent.localId, onCreate = {
@@ -169,6 +175,8 @@ class WarehouseViewModel (
             }
 
             is WarehouseIntents.DeleteWarehouse -> {
+
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                 intent.coroutineScope.launch (Dispatchers.IO) {
 
@@ -194,6 +202,8 @@ class WarehouseViewModel (
             is WarehouseIntents.UpdateWarehouse -> {
 
                 if (intent.name.isNotBlank() && intent.localId.isNotBlank()) {
+
+                    setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 

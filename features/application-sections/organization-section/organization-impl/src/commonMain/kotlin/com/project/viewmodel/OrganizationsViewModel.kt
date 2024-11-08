@@ -69,6 +69,8 @@ class OrganizationsViewModel(
 
             is OrganizationsIntents.ChoosingActiveOrganization -> {
 
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
                 intent.coroutineScope.launch(Dispatchers.IO) {
 
                     choosingActiveOrganization.execute(intent.ui,
@@ -88,6 +90,8 @@ class OrganizationsViewModel(
             }
 
             is OrganizationsIntents.DeleteOrganization -> {
+
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                 intent.coroutineScope.launch(Dispatchers.IO) {
 
@@ -110,6 +114,8 @@ class OrganizationsViewModel(
             is OrganizationsIntents.CreateOrganization -> {
 
                 if( intent.name.isNotBlank() && intent.url.isNotBlank() ) {
+
+                    setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
@@ -136,6 +142,8 @@ class OrganizationsViewModel(
             is OrganizationsIntents.OpenWindowAddOrganization -> openWindowAddOrganization()
 
             is OrganizationsIntents.UpdateOrganization -> {
+
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 

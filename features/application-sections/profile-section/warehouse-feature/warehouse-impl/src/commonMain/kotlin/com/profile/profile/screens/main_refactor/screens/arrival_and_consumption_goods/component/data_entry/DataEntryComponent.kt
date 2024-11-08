@@ -282,7 +282,9 @@ class DataEntryComponent(
 
                                 println("checkkkk ${ validEntities }")
 
-                                itemsIndexed( vm.state.selectedContragentParish!!.entits!! ) { index, item ->
+                                itemsIndexed( if (validEntities != null && validEntities.isNotEmpty()) vm.state.selectedContragentParish!!.entits!! else
+
+                                    listOf<EntityArrivalAndConsumption>( EntityArrivalAndConsumption(id = 0,name = "Юр.лицо не найдено", ui = "" ) ) ) { index, item ->
 
                                         Text(item.name!!,
                                             fontSize = 20.sp,
@@ -295,7 +297,9 @@ class DataEntryComponent(
                                                     if( item.name != "Юр.лицо не найдено" ) {
 
                                                         vm.processIntents(
+
                                                             DataEntryIntents.SelectLegalEntityParish(
+
                                                                 item
                                                             )
                                                         )
@@ -732,7 +736,9 @@ class DataEntryComponent(
                         .height(40.dp)
                         .fillMaxWidth()
                 ) {
+
                     Text(text = "Далее")
+
                 }
             }
         }

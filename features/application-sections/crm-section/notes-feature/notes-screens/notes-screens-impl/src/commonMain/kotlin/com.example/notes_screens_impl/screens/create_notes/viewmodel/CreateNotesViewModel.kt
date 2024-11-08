@@ -51,6 +51,8 @@ class CreateNotesViewModel (
                     idUsers.add(it.id)
                 }
 
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+
                 intents.coroutineScope.launch(Dispatchers.IO) {
 
                     val note = Note(
@@ -91,6 +93,8 @@ class CreateNotesViewModel (
                 if(createNotesState.isUsed.value) {
 
                     createNotesState.isUsed.value = false
+
+                    setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                     intents.coroutineScope.launch (Dispatchers.IO) {
 
