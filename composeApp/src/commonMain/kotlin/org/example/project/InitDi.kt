@@ -10,7 +10,7 @@ import org.example.project.app.moduls_di.appModule
 import com.project.`local-storage`.`profile-storage`.localStorageModule
 import com.project.organizationScreenModule
 import com.project.`menu-crm-impl`.menuCrmModule
-import com.project.network.networkModule
+import com.project.network.common.networkModule
 import com.project.`outhorization-screen-impl`.authorizationModule
 import com.project.tape.tapeScreenModule
 import contactProviderModule

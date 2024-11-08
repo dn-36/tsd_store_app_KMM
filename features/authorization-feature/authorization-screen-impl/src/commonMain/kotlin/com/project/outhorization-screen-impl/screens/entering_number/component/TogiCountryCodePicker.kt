@@ -22,7 +22,7 @@ import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.project.core_app.menu_bottom_bar.model.CountryData
+import com.project.core_app.components.menu_bottom_bar.model.CountryData
 import com.project.`outhorization-screen-impl`.screens.entering_number.component.TogiCodeDialog
 
 

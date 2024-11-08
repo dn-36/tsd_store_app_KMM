@@ -1,4 +1,4 @@
-package com.project.core_app.menu_bottom_bar.viewmodel
+package com.project.core_app.components.menu_bottom_bar.viewmodel
 
 import cafe.adriel.voyager.core.screen.Screen
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection

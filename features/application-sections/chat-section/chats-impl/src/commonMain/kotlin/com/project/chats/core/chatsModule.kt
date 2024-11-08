@@ -22,6 +22,7 @@ import com.project.chats.screens.titile_chat.domain.CreateChatUseCase
 import com.project.chats.screens.titile_chat.domain.TitleChatRepositoryApi
 import com.project.chats.screens.titile_chat.viewmodel.TitleChatViewModel
 import com.project.network.users_network.UsersApi
+import kotlinx.serialization.Transient
 import org.koin.dsl.module
 
 val chatsModule = module{

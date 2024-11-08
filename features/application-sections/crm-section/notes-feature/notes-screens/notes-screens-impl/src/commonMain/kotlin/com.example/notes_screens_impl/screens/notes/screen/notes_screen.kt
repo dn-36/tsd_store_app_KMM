@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.example.notes_screens_impl.screens.notes.component.NotesComponent
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.components.menu_bottom_bar.ui.MenuBottomBar
 import org.example.project.presentation.crm_feature.notes_screen.model.Notes
 import org.example.project.presentation.crm_feature.notes_screen.util.formatDateTime
 import org.example.project.presentation.crm_feature.notes_screen.viewmodel.NotesIntents

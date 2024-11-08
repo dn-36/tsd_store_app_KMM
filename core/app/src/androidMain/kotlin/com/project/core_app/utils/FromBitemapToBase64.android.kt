@@ -3,6 +3,7 @@ package com.project.core_app.utils
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
+import io.ktor.util.encodeBase64
 import java.io.ByteArrayOutputStream
 
 

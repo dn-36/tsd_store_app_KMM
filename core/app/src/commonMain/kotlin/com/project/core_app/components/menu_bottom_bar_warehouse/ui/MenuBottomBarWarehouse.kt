@@ -26,7 +26,7 @@ import cafe.adriel.voyager.core.screen.Screen
 
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseIntents
 import com.profile.profile.screens.warehouse_feature.core.menu_bottom_bar_warehouse.viewmodel.MenuBottomBarWarehouseViewModel
-import com.project.core_app.menu_bottom_bar.viewmodel.MenuBottomBarIntents
+import com.project.core_app.components.menu_bottom_bar.viewmodel.MenuBottomBarIntents
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
 

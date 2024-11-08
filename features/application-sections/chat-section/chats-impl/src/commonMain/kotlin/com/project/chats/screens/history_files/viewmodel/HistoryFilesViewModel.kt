@@ -1,8 +1,8 @@
-package org.example.project.nika_screens_chats.history_files_feature.viewmodel
+package com.project.chats.screens.history_files.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.project.network.Navigation
-import com.project.chats.screens.dialog.screen.DialogScreen
+import org.example.project.nika_screens_chats.history_files_feature.viewmodel.HistoryFilesIntents
 
 class HistoryFilesViewModel : ViewModel() {
 
@@ -16,7 +16,7 @@ class HistoryFilesViewModel : ViewModel() {
 
     fun back() {
 
-       // Navigation.navigator.push(DialogScreen())
+        Navigation.navigator.pop()
 
     }
 

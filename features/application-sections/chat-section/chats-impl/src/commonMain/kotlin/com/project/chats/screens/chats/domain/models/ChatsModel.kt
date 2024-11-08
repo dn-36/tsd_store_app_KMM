@@ -8,5 +8,5 @@ data class ChatsModel(
     val lastMassage:String = "последние сообщение",
     val timeEndDate:DataEndTime,
     val uiChat:String,
-    val countNewMessage:Int = 0
+    val countNewMessage:Int?
 )

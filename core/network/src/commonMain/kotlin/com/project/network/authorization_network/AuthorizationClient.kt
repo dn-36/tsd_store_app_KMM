@@ -1,6 +1,6 @@
 package com.project.network.authorization_network
 
-import com.project.network.ConstData
+import com.project.network.common.ConstData
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody

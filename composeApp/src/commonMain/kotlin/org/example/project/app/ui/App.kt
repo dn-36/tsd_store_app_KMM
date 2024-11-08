@@ -2,36 +2,45 @@ package org.example.project.app.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.project.menu.screen.OrganizationScreenApi
 import com.project.network.Navigation
 import com.project.`outhorization-screen-api`.AuthorizationScreensApi
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.serialization.Transient
 import org.example.project.app.domain.AuthorizationStatus
 import org.example.project.app.viewmodel.AppIntent
 import org.example.project.app.viewmodel.AppViewModel
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.mp.KoinPlatform.getKoin
 
+class App {
 
-object App {
 
-    private val viewModel = AppViewModel(getKoin().get())
+  //  @Transient
+    val viewModel = AppViewModel(getKoin().get())
+  //  @Transient
+    val authorization: AuthorizationScreensApi = getKoin().get()
+ //   @Transient
+    val organizationScreen: OrganizationScreenApi = getKoin().get()
 
     @Composable
-    @Preview
-    fun Content(){
+    fun AppContent() {
+
+
         val state by viewModel.state.collectAsState()
-        val authorization: AuthorizationScreensApi = getKoin().get()
-        val organizationScreen: OrganizationScreenApi = getKoin().get()
+
         val scope: CoroutineScope = rememberCoroutineScope()
         viewModel.proccesIntent(AppIntent.SetScreenIntent(scope))
         when (state.authorizationStatus) {
             AuthorizationStatus.LOADING -> {
                 Box(modifier = Modifier.fillMaxSize()) {
 
-                    // CircularProgressIndicator(modifier = Modifier.size(40.dp).align(Alignment.Center))
+                     CircularProgressIndicator(modifier = Modifier.size(40.dp).align(Alignment.Center))
                 }
             }
 
@@ -46,4 +55,5 @@ object App {
         }
     }
 }
+
 

@@ -35,7 +35,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.components.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.menu.screen.OrganizationScreenApi
@@ -50,6 +50,7 @@ import project.core.resources.Res
 import project.core.resources.cancel
 import project.core.resources.plus
 import project.core.resources.update_pencil
+import kotlin.jvm.Transient
 
 class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) : NetworkComponent {
 
@@ -57,7 +58,7 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
     override fun Component () {
 
         val organizationScreens : OrganizationScreenApi = KoinPlatform.getKoin().get()
-        val chatsScreens : ChatScreensApi = KoinPlatform.getKoin().get()
+         val chatsScreens : ChatScreensApi = KoinPlatform.getKoin().get()
         val menuCrmScreens : MenuCrmScreenApi = KoinPlatform.getKoin().get()
         val tapeScreens : TapeScreenApi = KoinPlatform.getKoin().get()
         val profileScreens : ProfileScreensApi = KoinPlatform.getKoin().get()

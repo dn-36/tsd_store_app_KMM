@@ -18,14 +18,12 @@ class ChatRepositoryImpl(
                if(!it.image.isNullOrBlank())
                 "https://delta.online/storage/"+
                it.image
-               else
-                   null
-               ,
+               else null,
                it?.name?:"",
                it?.message?:"",
                Utils.parseDateTimeManually(it.created_at?:""),
                it?.ui?:"",
-               it.count_new_message?:0
+               it.count_new_message
            )
        }
         return Utils.sortByNearestDate(listChats)
