@@ -6,6 +6,7 @@ import model.ContragentResponseModel
 import model.EntityContragentModel
 import model.GroupEntityResponseModel
 import model.LocationResponseModel
+import model.ProjectResponseModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
 import model.UserCRMModel
@@ -14,6 +15,8 @@ import model.ValDetailModel
 data class DataEntryState (
 
     val expendedService: Boolean = false,
+
+    val expendedProject: Boolean = false,
 
     val expendedGroupEntity: Boolean = false,
 
@@ -43,6 +46,8 @@ data class DataEntryState (
     val service: String = "",
 
     val groupEntity: String = "",
+
+    val project: String = "",
 
     val cargo: String = "",
 
@@ -78,6 +83,8 @@ data class DataEntryState (
 
     val selectedSpecific: SpecificResponseModel? = null,
 
+    val selectedProject: ProjectResponseModel? = null,
+
     val selectedLegalEntityPerformer: EntityContragentModel? = null,
 
     val selectedContragentPerformer: ContragentResponseModel? = null,
@@ -100,6 +107,8 @@ data class DataEntryState (
 
 
     val filteredListSpecifications: List<SpecificResponseModel> = emptyList(),
+
+    val filteredListProjects: List<ProjectResponseModel> = emptyList(),
 
     val filteredListCargo: List<CargoResponseModel> = emptyList(),
 

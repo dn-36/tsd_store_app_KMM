@@ -22,6 +22,7 @@ import model.EntityModel
 import model.EntityOurModel
 import model.GroupEntityModel
 import model.GroupEntityResponseModel
+import model.ItemValueModel
 import model.ItemsTypeModel
 import model.LocationResponseModel
 import model.ProductModel
@@ -169,11 +170,24 @@ class CRMClientImpl(
                     text = it.service!!.text,
                     doc = it.service!!.doc,
                     ui = it.service!!.ui,
-                    system = it.service!!.system,
-                    width = it.service!!.width,
-                    height = it.service!!.height,
-                    service_type_doc = it.service!!.service_type_doc,
-                    comp_project = it.service!!.comp_project
+                    comp_project = it.service!!.comp_project,
+                    items_value = if ( it.service!!.items_value != null ) it.service!!.items_value!!.map {
+
+                        ItemValueModel(
+
+                            id = it.id,
+                            service_id = it.service_id,
+                            name = it.name,
+                            type = it.type,
+                            metka = it.metka,
+                            search = it.search,
+                            req = it.req,
+                            created_at = it.created_at,
+                            updated_at = it.updated_at
+
+                        )
+
+                    } else null,
 
 
                 ) else null,
@@ -344,11 +358,24 @@ class CRMClientImpl(
                     text = it.service!!.text,
                     doc = it.service!!.doc,
                     ui = it.service!!.ui,
-                    system = it.service!!.system,
-                    width = it.service!!.width,
-                    height = it.service!!.height,
-                    service_type_doc = it.service!!.service_type_doc,
-                    comp_project = it.service!!.comp_project
+                    comp_project = it.service!!.comp_project,
+                    items_value = if ( it.service!!.items_value != null ) it.service!!.items_value!!.map {
+
+                        ItemValueModel(
+
+                            id = it.id,
+                            service_id = it.service_id,
+                            name = it.name,
+                            type = it.type,
+                            metka = it.metka,
+                            search = it.search,
+                            req = it.req,
+                            created_at = it.created_at,
+                            updated_at = it.updated_at
+
+                        )
+
+                    } else null,
 
 
                 ) else null,

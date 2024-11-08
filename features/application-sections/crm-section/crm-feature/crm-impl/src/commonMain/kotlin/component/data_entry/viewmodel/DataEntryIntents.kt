@@ -6,6 +6,7 @@ import model.ContragentResponseModel
 import model.EntityContragentModel
 import model.GroupEntityResponseModel
 import model.LocationResponseModel
+import model.ProjectResponseModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
 import model.UserCRMModel
@@ -13,7 +14,10 @@ import model.UserCRMModel
 sealed class DataEntryIntents {
 
     object MenuLegalEntityPerformer : DataEntryIntents()
+
     object MenuLegalEntity : DataEntryIntents()
+
+    object MenuProject : DataEntryIntents()
 
     object MenuStatus : DataEntryIntents()
 
@@ -39,6 +43,8 @@ sealed class DataEntryIntents {
 
 
     data class SelectGroupEntity(val item: GroupEntityResponseModel) : DataEntryIntents()
+
+    data class SelectProject(val item: ProjectResponseModel) : DataEntryIntents()
 
     data class SelectService(val item: ServiceResponseModel) : DataEntryIntents()
 
@@ -80,6 +86,8 @@ sealed class DataEntryIntents {
 
     object DeleteSelectedSpecification : DataEntryIntents()
 
+    object DeleteSelectedProject : DataEntryIntents()
+
     object DeleteSelectedStatus : DataEntryIntents()
 
     object DeleteSelectedEmployeePerformer : DataEntryIntents()
@@ -111,6 +119,14 @@ sealed class DataEntryIntents {
         val text: String,
 
         val list: List<ServiceResponseModel>
+
+    ) : DataEntryIntents()
+
+    data class InputTextProject(
+
+        val text: String,
+
+        val list: List<ProjectResponseModel>
 
     ) : DataEntryIntents()
 
@@ -208,6 +224,8 @@ sealed class DataEntryIntents {
         val listCargo: List<CargoResponseModel>,
 
         val listGroupEntity: List<GroupEntityResponseModel>,
+
+        val listProjects: List<ProjectResponseModel>,
 
         val item: ApiResponseCRMModel?
 

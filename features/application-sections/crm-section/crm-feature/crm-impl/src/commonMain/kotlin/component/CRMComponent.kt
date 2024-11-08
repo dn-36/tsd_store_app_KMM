@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.core_app.components.PlusButton
@@ -140,7 +141,7 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
                                 Spacer(modifier = Modifier.height(10.dp))
 
                                 Text(
-                                    "Клиент/Проект - ${
+                                    "Клиент/Проект : ${
                                         if (item.entity != null)
 
                                             item.entity.name else "Не указано"
@@ -153,44 +154,54 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
                                         if (item.projects != null)
 
                                             item.projects.name else "Не указано"
-                                    } "
+                                    } ", fontSize = 16.sp, modifier = Modifier
+
+                                        .fillMaxWidth(0.9f)
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
                                 Text(
-                                    "Юр.лицо исполнитель - ${
+                                    "Юр.лицо исполнитель : ${
                                         if (item.entity_our != null)
 
                                             item.entity_our.name else "Не указано"
-                                    }"
+                                    }", fontSize = 16.sp
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
-                                Text("Дата - ${formatDateTime(item.created_at)}")
+                                Text("Дата : ${formatDateTime(item.created_at)}",
+
+                                    fontSize = 16.sp)
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
-                                Text("Прайс - ${item.price}")
+                                Text("Прайс : ${item.price ?: 0}", fontSize = 16.sp)
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
                                 when ( item.statusid ) {
 
-                                    0 -> Text("Статус - Завершена")
+                                    0 -> Text("Статус : Завершена", fontSize = 16.sp,
 
-                                    1 -> Text("Статус - Активна")
+                                        color = Color(0xFF228B22),
 
-                                    2 -> Text("Статус - В работе")
+                                        fontWeight = FontWeight.Bold )
 
-                                    3 -> Text("Статус - Срочная")
+                                    1 -> Text("Статус : Активна", fontSize = 16.sp)
 
-                                    4 -> Text("Статус - Не выполнена")
+                                    2 -> Text("Статус : В работе", fontSize = 16.sp)
 
-                                    5 -> Text("Статус - Выполнена не до конца")
+                                    3 -> Text("Статус : Срочная", fontSize = 16.sp)
 
-                                    6 -> Text("Статус - Отложена")
+                                    4 -> Text("Статус : Не выполнена", fontSize = 16.sp)
+
+                                    5 -> Text("Статус : Выполнена не до конца",
+
+                                        fontSize = 16.sp)
+
+                                    6 -> Text("Статус : Отложена", fontSize = 16.sp)
 
                                 }
 
@@ -218,7 +229,7 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
                                 Column() {
 
                                     Text(
-                                        "Клиент/Проект - ${
+                                        "Клиент/Проект : ${
                                             if (item.entity != null)
 
                                                 item.entity.name else "Не указано"
@@ -231,44 +242,56 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
                                             if (item.projects != null)
 
                                                 item.projects.name else "Не указано"
-                                        }"
+                                        }", fontSize = 16.sp, modifier = Modifier
+
+                                            .fillMaxWidth(0.9f)
                                     )
 
                                     Spacer(modifier = Modifier.height(8.dp))
 
                                     Text(
-                                        "Юр.лицо исполнитель - ${
+                                        "Юр.лицо исполнитель : ${
                                             if (item.entity_our != null)
 
                                                 item.entity_our.name else "Не указано"
-                                        }"
+                                        }", fontSize = 16.sp
                                     )
 
                                     Spacer(modifier = Modifier.height(8.dp))
 
-                                    Text("Дата - ${formatDateTime(item.created_at)}")
+                                    Text("Дата : ${formatDateTime(item.created_at)}",
+
+                                        fontSize = 16.sp)
 
                                     Spacer(modifier = Modifier.height(8.dp))
 
-                                    Text("Прайс - ${item.price ?: 0}")
+                                    Text("Прайс : ${item.price ?: 0}",
+
+                                        fontSize = 16.sp)
 
                                     Spacer(modifier = Modifier.height(8.dp))
 
                                     when (item.statusid) {
 
-                                        0 -> Text("Статус - Завершена")
+                                        0 -> Text("Статус : Завершена", fontSize = 16.sp,
 
-                                        1 -> Text("Статус - Активна")
+                                            color = Color(0xFF228B22),
 
-                                        2 -> Text("Статус - В работе")
+                                            fontWeight = FontWeight.Bold)
 
-                                        3 -> Text("Статус - Срочная")
+                                        1 -> Text("Статус : Активна", fontSize = 16.sp)
 
-                                        4 -> Text("Статус - Не выполнена")
+                                        2 -> Text("Статус : В работе", fontSize = 16.sp)
 
-                                        5 -> Text("Статус - Выполнена не до конца")
+                                        3 -> Text("Статус : Срочная", fontSize = 16.sp)
 
-                                        6 -> Text("Статус - Отложена")
+                                        4 -> Text("Статус : Не выполнена", fontSize = 16.sp)
+
+                                        5 -> Text("Статус : Выполнена не до конца",
+
+                                            fontSize = 16.sp)
+
+                                        6 -> Text("Статус : Отложена", fontSize = 16.sp)
 
                                     }
 

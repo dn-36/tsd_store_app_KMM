@@ -180,7 +180,9 @@ class DataEntryComponent (
 
         viewModel.processIntents(DataEntryIntents.SetScreen ( listSpecifications, listServices,
 
-            listEmployee, listContragents, listLocations, listCargo, listGroupEntity, item ))
+            listEmployee, listContragents, listLocations, listCargo, listGroupEntity,
+
+            listProjects, item ))
 
         val scrollState = rememberScrollState() // Состояние прокрутки
 
@@ -345,30 +347,8 @@ class DataEntryComponent (
 
                     },
 
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
+                    label = { Text("Оплачено", color = Color.Gray) },
 
-                    label = { Text("Оплачено", color = Color.DarkGray) },
-
-                    trailingIcon = {
-
-                        IconButton(
-
-                            onClick = {
-
-
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(Res.drawable.down_arrow),
-                                contentDescription = "Статус",
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 40.dp)
@@ -456,36 +436,15 @@ class DataEntryComponent (
 
                     },
 
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
+                    label = { Text("Платеж подтвержден", color = Color.Gray) },
 
-                    label = { Text("Платеж подтвержден", color = Color.DarkGray) },
-
-                    trailingIcon = {
-
-                        IconButton(
-
-                            onClick = {
-
-
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(Res.drawable.down_arrow),
-                                contentDescription = "Подтвержен",
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 40.dp)
                         .clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
+
                         { viewModel.processIntents(DataEntryIntents.MenuVerified) }// Стандартная высота TextField
                 )
                 if ( viewModel.state.selectedVerified != null &&
@@ -591,12 +550,6 @@ class DataEntryComponent (
                                     ))
 
                             },
-
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                                //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                                //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                            ),
 
                             label = { Text("Юр.лица") },
 
@@ -855,12 +808,6 @@ class DataEntryComponent (
 
                             },
 
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                                //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                                //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                            ),
-
                             label = { Text("Юр.лица \nЛокация") },
 
                             trailingIcon = {
@@ -964,7 +911,7 @@ class DataEntryComponent (
                         }
 
 
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
 
                         OutlinedTextField (
 
@@ -976,15 +923,9 @@ class DataEntryComponent (
 
                                     listGroupEntity.filter {
 
-                                        it.name!!.contains(inputText, ignoreCase = true) }))
+                                        it.name.contains(inputText, ignoreCase = true) }))
 
                             },
-
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                // focusedBorderColor = viewModel.state.borderServiceColor, // Цвет границы при фокусе
-                                // unfocusedBorderColor = viewModel.state.borderServiceColor, // Цвет границы в неактивном состоянии
-                                // backgroundColor = viewModel.state.containerServiceColor.copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                            ),
 
                             label = { Text("Группы юр.лиц") },
 
@@ -1061,7 +1002,7 @@ class DataEntryComponent (
 
                                     { index, item ->
 
-                                        Text(item.name?:"нет имени",
+                                        Text(item.name,
                                             fontSize = 20.sp,
                                             modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
                                                 .clickable(
@@ -1077,6 +1018,134 @@ class DataEntryComponent (
                                                         DataEntryIntents.SelectGroupEntity( item ))
 
                                                 })
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                    if ( checkProject != null ) {
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        OutlinedTextField(
+
+                            value = viewModel.state.project,
+
+                            onValueChange = { inputText ->
+
+                                viewModel.processIntents(
+
+                                    DataEntryIntents.InputTextProject(inputText,
+
+                                        listProjects.filter {
+
+                                            it.name.contains(inputText, ignoreCase = true) } ))
+
+                            },
+
+                            label = { Text("Проект") },
+
+                            trailingIcon = {
+
+                                IconButton(
+
+                                    onClick = {
+
+                                        viewModel.processIntents(DataEntryIntents.MenuProject)
+
+                                    }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(Res.drawable.down_arrow),
+                                        contentDescription = "Поиск",
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 40.dp)
+
+                        )
+
+                        if (viewModel.state.selectedProject != null) {
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Box(
+                                modifier = Modifier.padding(vertical = 5.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
+                            ) {
+
+                                Text(
+                                    text = viewModel.state.selectedProject!!.name,
+                                    color = Color.White,
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.padding(8.dp).align(
+                                        Alignment.CenterStart
+                                    )
+                                )
+
+                                Image(painter = painterResource(Res.drawable.cancel),
+                                    contentDescription = null,
+                                    modifier = Modifier.padding(8.dp).size(10.dp)
+                                        .align(Alignment.TopEnd)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryIntents.DeleteSelectedProject
+                                            )
+
+                                        })
+                            }
+                        }
+
+                        if (viewModel.state.expendedProject) {
+
+                            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                                Card(
+                                    modifier = Modifier.fillMaxSize()
+                                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                                    backgroundColor = Color.White,
+                                    shape = RoundedCornerShape(8.dp)
+                                ) {}
+                                LazyColumn {
+                                    itemsIndexed(viewModel.state.filteredListProjects)
+
+                                    { index, item ->
+
+                                            if (  item.name != "" ) {
+
+                                                Text(item.name,
+                                                    fontSize = 20.sp,
+                                                    modifier = Modifier.fillMaxWidth(0.9f)
+                                                        .padding(16.dp)
+                                                        .clickable(
+                                                            indication = null, // Отключение эффекта затемнения
+                                                            interactionSource = remember { MutableInteractionSource() })
+
+                                                        {
+
+                                                            viewModel.processIntents(
+
+                                                                DataEntryIntents.SelectProject(
+
+                                                                    item
+                                                                )
+                                                            )
+
+                                                        })
+
+                                            }
+
                                     }
                                 }
                             }
@@ -1105,12 +1174,6 @@ class DataEntryComponent (
                                 } ))
 
                     },
-
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
 
                     label = { Text("Юр.лицо исполнитель") },
 
@@ -1357,12 +1420,6 @@ class DataEntryComponent (
 
                     },
 
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
-
                     label = { Text("Юр.лицо исполнитель \nЛокация") },
 
                     trailingIcon = {
@@ -1478,12 +1535,6 @@ class DataEntryComponent (
 
                     },
 
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
-
                     label = { Text("Спецификация") },
 
                     trailingIcon = {
@@ -1587,31 +1638,8 @@ class DataEntryComponent (
 
                     },
 
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
+                    label = { Text("Статус", color = Color.Gray) },
 
-                    label = { Text("Статус", color = Color.DarkGray) },
-
-                    trailingIcon = {
-
-                        IconButton(
-
-                            onClick = {
-
-
-
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(Res.drawable.down_arrow),
-                                contentDescription = "Статус",
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 40.dp)
@@ -1832,8 +1860,7 @@ class DataEntryComponent (
                                 },
 
                                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                                    //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+
                                     backgroundColor = Color.LightGray.copy(alpha = 0.5f) // Цвет фона с легкой прозрачностью
                                 ),
 
@@ -1842,10 +1869,6 @@ class DataEntryComponent (
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .heightIn(min = 40.dp)
-                                    .clickable(
-                                        indication = null, // Отключение эффекта затемнения
-                                        interactionSource = remember { MutableInteractionSource() })
-                                    { }// Стандартная высота TextField
                             )
                         }
 
@@ -1868,12 +1891,6 @@ class DataEntryComponent (
 
                                 },
 
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                                    //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                                    backgroundColor = Color.LightGray.copy(alpha = 0.5f)  // Цвет фона с легкой прозрачностью
-                                ),
-
                                 label = { Text(it.name?:"") },
 
                                 trailingIcon = {
@@ -1893,6 +1910,12 @@ class DataEntryComponent (
                                         )
                                     }
                                 },
+
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+
+                                    backgroundColor = Color.LightGray.copy(alpha = 0.5f) // Цвет фона с легкой прозрачностью
+                                ),
+
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .heightIn(min = 40.dp)
@@ -2047,21 +2070,12 @@ class DataEntryComponent (
 
                     },
 
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
-
                     label = { Text("Статус") },
 
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 40.dp)
-                        .clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { }// Стандартная высота TextField
+
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -2076,21 +2090,12 @@ class DataEntryComponent (
 
                     },
 
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы при фокусе
-                        //unfocusedBorderColor = vm.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
-                        //backgroundColor = vm.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
-                    ),
-
                     label = { Text("Задача") },
 
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 40.dp)
-                        .clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
-                        { }// Стандартная высота TextField
+
                 )
 
 
@@ -2133,7 +2138,8 @@ class DataEntryComponent (
 
                                     if (viewModel.state.selectedSpecific != null) viewModel.state.selectedSpecific!!.id else null,
 
-                                    null,
+                                    if (viewModel.state.selectedProject != null) viewModel.state.selectedProject!!.id else null,
+
                                     if (viewModel.state.selectedLegalEntity != null) viewModel.state.selectedLegalEntity!!.id
                                         ?: 0 else null,
 
@@ -2214,7 +2220,8 @@ class DataEntryComponent (
 
                                     if (viewModel.state.selectedSpecific != null) viewModel.state.selectedSpecific!!.id else null,
 
-                                    null,
+                                    if (viewModel.state.selectedProject != null) viewModel.state.selectedProject!!.id else null,
+
                                     if (viewModel.state.selectedLegalEntity != null) viewModel.state.selectedLegalEntity!!.id
                                         ?: 0 else null,
 

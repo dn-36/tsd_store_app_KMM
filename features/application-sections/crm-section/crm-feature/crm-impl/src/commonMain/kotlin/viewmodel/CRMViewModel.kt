@@ -152,6 +152,8 @@ class CRMViewModel (
 
                         listProducts = getProductsUseCase.execute(),
 
+                        listProjects = getProjectsUseCase.execute(),
+
                         updateItem = intent.item,
 
                         isVisibilityDataEntryComponent = 1f
@@ -166,7 +168,9 @@ class CRMViewModel (
 
             is CRMIntents.CreateCRM -> {
 
-            intent.coroutineScope.launch ( Dispatchers.IO ) {
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
 
                 createCRMUseCase.execute ( serviceId = intent.serviceId,
 
@@ -192,11 +196,15 @@ class CRMViewModel (
 
                 )
 
-            }
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
 
             }
 
             is CRMIntents.UpdateCRM -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
 
                 intent.coroutineScope.launch ( Dispatchers.IO ) {
 
@@ -225,6 +233,8 @@ class CRMViewModel (
                         listOutgoingCRM = getOutgoingCRMUseCase.execute().toMutableList()
 
                     )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                 }
 

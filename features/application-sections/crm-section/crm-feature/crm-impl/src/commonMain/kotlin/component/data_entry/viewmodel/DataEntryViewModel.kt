@@ -11,6 +11,7 @@ import model.ContragentResponseModel
 import model.EntityContragentModel
 import model.GroupEntityResponseModel
 import model.LocationResponseModel
+import model.ProjectResponseModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
 import model.UserCRMModel
@@ -25,6 +26,8 @@ class DataEntryViewModel (): ViewModel() {
         when ( intent ) {
 
             is DataEntryIntents.MenuEmployeePerformer -> menuEmployeePerformer()
+
+            is DataEntryIntents.MenuProject -> menuProject()
 
             is DataEntryIntents.MenuGroupEntity -> menuGroupEntity()
 
@@ -52,6 +55,8 @@ class DataEntryViewModel (): ViewModel() {
 
 
             is DataEntryIntents.SelectEmployeePerformer -> selectEmployeePerformer( intent.item )
+
+            is DataEntryIntents.SelectProject -> selectProject( intent.item )
 
             is DataEntryIntents.SelectEmployee -> selectEmployee( intent.item )
 
@@ -86,6 +91,8 @@ class DataEntryViewModel (): ViewModel() {
 
             is DataEntryIntents.DeleteSelectedEmployee -> deleteSelectedEmployee()
 
+            is DataEntryIntents.DeleteSelectedProject -> deleteSelectedProject()
+
             is DataEntryIntents.DeleteSelectedGroupEntity -> deleteSelectedGroupEntity()
 
             is DataEntryIntents.DeleteSelectedPaidFor -> deleteSelectedPaidFor()
@@ -117,6 +124,8 @@ class DataEntryViewModel (): ViewModel() {
                 intent.text, intent.list )
 
             is DataEntryIntents.InputTextCargo -> inputTextCargo( intent.text, intent.list )
+
+            is DataEntryIntents.InputTextProject -> inputTextProject( intent.text, intent.list )
 
             is DataEntryIntents.InputTextGroupEntity -> inputTextGroupEntity( intent.text, intent.list )
 
@@ -153,7 +162,9 @@ class DataEntryViewModel (): ViewModel() {
 
                 intent.listServices, intent.listEmployee, intent.listLegalEntities,
 
-                intent.listLocations, intent.listCargo, intent.listGroupEntity, intent.item)
+                intent.listLocations, intent.listCargo, intent.listGroupEntity, intent.listProjects,
+
+                intent.item)
 
             }
 
@@ -172,6 +183,27 @@ class DataEntryViewModel (): ViewModel() {
         state = state.copy(
 
             expendedService = !state.expendedService,
+            expendedStatus = false,
+            expendedEmployeePerformer = false,
+            expendedLegalEntityPerformer = false,
+            expendedSpecifications = false,
+            expendedLocationsPerformer = false,
+            expendedEmployee = false,
+            expendedLocations = false,
+            expendedLegalEntity = false,
+            expendedProject = false,
+            expendedCargo = false
+
+        )
+
+    }
+
+    fun menuProject () {
+
+        state = state.copy(
+
+            expendedProject = !state.expendedProject,
+            expendedService = false,
             expendedStatus = false,
             expendedEmployeePerformer = false,
             expendedLegalEntityPerformer = false,
@@ -199,6 +231,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -218,6 +251,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedLocations = false,
             expendedEmployee = false,
             expendedLegalEntityPerformer = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -237,6 +271,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -256,6 +291,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedLegalEntity = false,
             expendedLocations = false,
             expendedEmployeePerformer = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -276,6 +312,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedLegalEntity = false,
             expendedLocations = false,
             expendedEmployeePerformer = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -296,6 +333,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -315,6 +353,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = false,
             expendedLegalEntity = false,
             expendedLocationsPerformer = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -334,6 +373,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
+            expendedProject = false,
             expendedCargo = false
 
 
@@ -354,6 +394,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -375,6 +416,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -396,6 +438,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
+            expendedProject = false,
             expendedCargo = false
 
         )
@@ -417,6 +460,7 @@ class DataEntryViewModel (): ViewModel() {
             expendedLocationsPerformer = false,
             expendedEmployee = false,
             expendedLocations = false,
+            expendedProject = false,
             expendedLegalEntity = false
 
         )
@@ -594,6 +638,17 @@ class DataEntryViewModel (): ViewModel() {
 
     }
 
+    fun selectProject (item: ProjectResponseModel ) {
+
+        state = state.copy(
+
+            selectedProject = item,
+
+            expendedProject = false
+
+        )
+
+    }
 
     fun deleteSelectedService ( ) {
 
@@ -720,6 +775,16 @@ class DataEntryViewModel (): ViewModel() {
         state = state.copy(
 
             selectedEmployee = null
+
+        )
+
+    }
+
+    fun deleteSelectedProject (  ) {
+
+        state = state.copy(
+
+            selectedProject = null
 
         )
 
@@ -861,6 +926,18 @@ class DataEntryViewModel (): ViewModel() {
 
     }
 
+    fun inputTextProject( text: String, list: List<ProjectResponseModel> ) {
+
+        state = state.copy(
+
+            project = text,
+
+            filteredListProjects = list
+
+            )
+
+    }
+
     fun inputTextStatusText ( text: String ) {
 
         state = state.copy(
@@ -894,6 +971,8 @@ class DataEntryViewModel (): ViewModel() {
                     listCargo: List<CargoResponseModel>,
 
                     listGroupEntity: List<GroupEntityResponseModel>,
+
+                    listProjects: List<ProjectResponseModel>,
 
                     item: ApiResponseCRMModel? ) {
 
@@ -929,13 +1008,11 @@ class DataEntryViewModel (): ViewModel() {
 
                      } else if ( item.value[index].`val`?.detail != null &&
 
-                         item.value[index].`val`?.detail!!.id != null &&
-
-                         item.value[index].`val`?.detail!!.name != null) {
+                         item.value[index].`val`?.detail!!.id != 0 ) {
 
                          newListValues.add(item.value[index].`val`?.detail?.id.toString() ?: "")
 
-                         newSelectedItems = item.value[index].`val`?.detail ?: null
+                         newSelectedItems = item.value[index].`val`?.detail
                      }
 
                  }
@@ -957,6 +1034,8 @@ class DataEntryViewModel (): ViewModel() {
                 filteredListCargo = listCargo,
 
                 filteredListGroupEntity = listGroupEntity,
+
+                filteredListProjects = listProjects,
 
                 selectedGroupEntity = if ( item?.groupentits != null ) GroupEntityResponseModel(
 
@@ -985,6 +1064,10 @@ class DataEntryViewModel (): ViewModel() {
 
                 ) else null,
 
+                selectedProject = if ( item?.project_id != null )
+
+                    listProjects.find { it.id == item.project_id } else null,
+
                 selectedLocation = if ( item?.to_local_id != null )
 
                     listLocations.find { it.id == item.to_local_id } else null,
@@ -994,21 +1077,26 @@ class DataEntryViewModel (): ViewModel() {
 
                     listLocations.find { it.id == item.from_local_id } else null,
 
-                selectedPaidFor = item?.status_pay?.toInt()?.let {
+                selectedPaidFor =  if ( item?.status_pay != null && item.status_pay.isNotBlank() )
+
+                    item.status_pay.toInt().let {
+
                     when (it) {
                         0 -> Pair("Не оплачено", 0)
                         1 -> Pair("Оплачено", 1)
                         else -> null
                     }
-                } ,
+                } else null ,
 
-                selectedVerified = item?.verify_pay?.toInt()?.let {
+                selectedVerified = if ( item?.verify_pay != null && item.verify_pay.isNotBlank() )
+
+                    item.verify_pay.toInt().let {
                     when (it) {
-                        0 -> Pair("Не подтверждено", 0)
-                        1 -> Pair("Подтверждено", 1)
+                        0 -> Pair("Не подтвержден", 0)
+                        1 -> Pair("Подтвержден", 1)
                         else -> null
                     }
-                } ,
+                } else null ,
 
                 task = item?.task?:"",
 
@@ -1070,7 +1158,7 @@ class DataEntryViewModel (): ViewModel() {
 
             )
 
-            println("NEW LIST :  ${newListValues}")
+            println("SELECTED PROJECT :  ${state.selectedProject}")
 
         }
 
