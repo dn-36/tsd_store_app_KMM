@@ -1,8 +1,8 @@
 package com.project.network.crm_network
 
+import com.project.network.common.httpClientEngine
 import com.project.network.crm_network.model.ApiResponseCRMOutgoing
 import com.project.network.crm_network.model.ServiceItem
-import com.project.network.httpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation

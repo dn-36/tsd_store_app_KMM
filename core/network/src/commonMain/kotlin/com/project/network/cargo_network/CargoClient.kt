@@ -1,7 +1,7 @@
 package com.project.network.cargo_network
 
 import com.project.network.cargo_network.model.CargoResponse
-import com.project.network.httpClientEngine
+import com.project.network.common.httpClientEngine
 import com.project.network.services_network.ServicesClient
 import com.project.network.services_network.model.ServiceResponse
 import io.ktor.client.HttpClient

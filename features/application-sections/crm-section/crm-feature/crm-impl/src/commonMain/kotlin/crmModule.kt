@@ -1,4 +1,4 @@
-import com.project.network.ConstData
+import com.project.core_app.ConstData
 import com.project.network.cargo_network.CargoClient
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.crm_network.CRMClient
