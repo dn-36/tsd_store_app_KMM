@@ -11,10 +11,10 @@ import model.ContragentResponseModel
 import model.EntityContragentModel
 import model.GroupEntityResponseModel
 import model.LocationResponseModel
-import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
 import model.UserCRMModel
+import model.ValDetailModel
 
 class DataEntryViewModel (): ViewModel() {
 
@@ -43,8 +43,6 @@ class DataEntryViewModel (): ViewModel() {
             is DataEntryIntents.MenuLegalEntity -> menuLegalEntity()
 
             is DataEntryIntents.MenuServices -> menuServices()
-
-            is DataEntryIntents.MenuGoodsAndServices -> menuGoodsAndServices()
 
             is DataEntryIntents.MenuSpecifications -> menuSpecifications()
 
@@ -76,8 +74,6 @@ class DataEntryViewModel (): ViewModel() {
             is DataEntryIntents.SelectSpecification -> selectSpecific( intent.item )
 
             is DataEntryIntents.SelectCargo -> selectCargo( intent.item )
-
-            is DataEntryIntents.SelectGoodsAndServices -> selectArrivalAndServices( intent.item )
 
             is DataEntryIntents.SelectStatus -> selectStatus( intent.item, intent.index )
 
@@ -114,8 +110,6 @@ class DataEntryViewModel (): ViewModel() {
             is DataEntryIntents.DeleteSelectedService -> deleteSelectedService()
 
             is DataEntryIntents.DeleteSelectedCargo -> deleteSelectedCargo()
-
-            is DataEntryIntents.DeleteSelectedGoodsAndServices -> deleteSelectedGoodsAndServices()
 
 
             is DataEntryIntents.InputTextLocationPerformer -> inputTextLocationPerfomer(
@@ -183,7 +177,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedLegalEntityPerformer = false,
             expendedSpecifications = false,
             expendedLocationsPerformer = false,
-            expendedGoodsAndServices = false,
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
@@ -202,7 +195,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployeePerformer = false,
             expendedSpecifications = false,
             expendedLocationsPerformer = false,
-            expendedGoodsAndServices = false,
             expendedService = false,
             expendedEmployee = false,
             expendedLocations = false,
@@ -222,7 +214,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployeePerformer = false,
             expendedSpecifications = false,
             expendedLocationsPerformer = false,
-            expendedGoodsAndServices = false,
             expendedService = false,
             expendedLocations = false,
             expendedEmployee = false,
@@ -240,7 +231,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployeePerformer = !state.expendedEmployeePerformer,
             expendedStatus = false,
             expendedLegalEntityPerformer = false,
-            expendedGoodsAndServices = false,
             expendedSpecifications = false,
             expendedLocationsPerformer = false,
             expendedService = false,
@@ -260,7 +250,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = !state.expendedEmployee,
             expendedStatus = false,
             expendedLegalEntityPerformer = false,
-            expendedGoodsAndServices = false,
             expendedSpecifications = false,
             expendedLocationsPerformer = false,
             expendedService = false,
@@ -281,7 +270,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedEmployee = false,
             expendedStatus = false,
             expendedLegalEntityPerformer = false,
-            expendedGoodsAndServices = false,
             expendedSpecifications = false,
             expendedLocationsPerformer = false,
             expendedService = false,
@@ -302,7 +290,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedLocationsPerformer = !state.expendedLocationsPerformer,
             expendedSpecifications = false,
             expendedService = false,
-            expendedGoodsAndServices = false,
             expendedStatus = false,
             expendedEmployeePerformer = false,
             expendedLegalEntityPerformer = false,
@@ -322,7 +309,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedLocations = !state.expendedLocations,
             expendedSpecifications = false,
             expendedService = false,
-            expendedGoodsAndServices = false,
             expendedStatus = false,
             expendedEmployeePerformer = false,
             expendedLegalEntityPerformer = false,
@@ -342,7 +328,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedStatus = !state.expendedStatus,
             expendedEmployeePerformer = false,
             expendedLegalEntityPerformer = false,
-            expendedGoodsAndServices = false,
             expendedService = false,
             expendedSpecifications = false,
             expendedLocationsPerformer = false,
@@ -351,26 +336,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedLegalEntity = false,
             expendedCargo = false
 
-
-        )
-
-    }
-
-    fun menuGoodsAndServices () {
-
-        state = state.copy(
-
-            expendedGoodsAndServices = !state.expendedGoodsAndServices,
-            expendedSpecifications = false,
-            expendedLocationsPerformer = false,
-            expendedService = false,
-            expendedLegalEntityPerformer = false,
-            expendedEmployeePerformer = false,
-            expendedStatus = false,
-            expendedEmployee = false,
-            expendedLocations = false,
-            expendedLegalEntity = false,
-            expendedCargo = false
 
         )
 
@@ -386,7 +351,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedLegalEntityPerformer = false,
             expendedService = false,
             expendedLocationsPerformer = false,
-            expendedGoodsAndServices = false,
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
@@ -408,7 +372,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedLegalEntityPerformer = false,
             expendedService = false,
             expendedLocationsPerformer = false,
-            expendedGoodsAndServices = false,
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
@@ -430,7 +393,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedLegalEntityPerformer = false,
             expendedService = false,
             expendedLocationsPerformer = false,
-            expendedGoodsAndServices = false,
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false,
@@ -453,7 +415,6 @@ class DataEntryViewModel (): ViewModel() {
             expendedLegalEntityPerformer = false,
             expendedService = false,
             expendedLocationsPerformer = false,
-            expendedGoodsAndServices = false,
             expendedEmployee = false,
             expendedLocations = false,
             expendedLegalEntity = false
@@ -608,17 +569,6 @@ class DataEntryViewModel (): ViewModel() {
 
     }
 
-    fun selectArrivalAndServices ( item: SpecificResponseModel ) {
-
-        state = state.copy(
-
-            selectedGoodsAndServices = item,
-
-            expendedGoodsAndServices = false
-
-        )
-
-    }
 
     fun selectEmployeePerformer (item: UserCRMModel ) {
 
@@ -750,16 +700,6 @@ class DataEntryViewModel (): ViewModel() {
         state = state.copy(
 
             selectedStatus = Pair("",0)
-
-        )
-
-    }
-
-    fun deleteSelectedGoodsAndServices ( ) {
-
-        state = state.copy(
-
-            selectedGoodsAndServices = null
 
         )
 
@@ -973,17 +913,34 @@ class DataEntryViewModel (): ViewModel() {
 
            }
 
-            val newList = mutableListOf<String>()
+            val newListValues = mutableListOf<String>()
 
-             /*if ( item?.value != null  ) {
+            var newSelectedItems: ValDetailModel? = null
 
-                 item.value.forEach {
+             if ( item?.value != null  ) {
 
-                 newList.add(it.value.toString())
+                 item.value.forEachIndexed() { index, it ->
+
+                 newListValues.add(item.value[index].`val`?.raw ?: "")
+
+                     if (item.value[index].`val`?.raw  != null) {
+
+                         newListValues.add(item.value[index].`val`?.raw ?: "")
+
+                     } else if ( item.value[index].`val`?.detail != null &&
+
+                         item.value[index].`val`?.detail!!.id != null &&
+
+                         item.value[index].`val`?.detail!!.name != null) {
+
+                         newListValues.add(item.value[index].`val`?.detail?.id.toString() ?: "")
+
+                         newSelectedItems = item.value[index].`val`?.detail ?: null
+                     }
 
                  }
 
-             } else null*/
+             }
 
             state = state.copy(
 
@@ -1000,8 +957,6 @@ class DataEntryViewModel (): ViewModel() {
                 filteredListCargo = listCargo,
 
                 filteredListGroupEntity = listGroupEntity,
-
-                filteredListGoodsAndServices = listSpecifications,
 
                 selectedGroupEntity = if ( item?.groupentits != null ) GroupEntityResponseModel(
 
@@ -1038,6 +993,22 @@ class DataEntryViewModel (): ViewModel() {
                 selectedLocationPerformer = if ( item?.from_local_id != null )
 
                     listLocations.find { it.id == item.from_local_id } else null,
+
+                selectedPaidFor = item?.status_pay?.toInt()?.let {
+                    when (it) {
+                        0 -> Pair("Не оплачено", 0)
+                        1 -> Pair("Оплачено", 1)
+                        else -> null
+                    }
+                } ,
+
+                selectedVerified = item?.verify_pay?.toInt()?.let {
+                    when (it) {
+                        0 -> Pair("Не подтверждено", 0)
+                        1 -> Pair("Подтверждено", 1)
+                        else -> null
+                    }
+                } ,
 
                 task = item?.task?:"",
 
@@ -1093,11 +1064,13 @@ class DataEntryViewModel (): ViewModel() {
 
                 isSet = false,
 
-                textFieldsValues = newList
+                updatedSelectItem = newSelectedItems,
+
+                textFieldsValues = newListValues
 
             )
 
-            println("NEW LIST :  ${newList}")
+            println("NEW LIST :  ${newListValues}")
 
         }
 

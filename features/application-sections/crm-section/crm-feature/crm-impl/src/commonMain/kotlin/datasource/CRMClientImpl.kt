@@ -35,10 +35,12 @@ import model.SpecItemModel
 import model.SpecificResponseModel
 import model.SpecsModel
 import model.UserCRMModel
-import model.ValueModel
+import model.ValDetailModel
+import model.ValDetailOrStringModel
+import model.ValModel
 import product_network.ProductApiClient
 
-class CRMClientImpl (
+class CRMClientImpl(
 
     private val crmClient: CRMClient,
 
@@ -60,7 +62,7 @@ class CRMClientImpl (
 
     private val groupEntityClient: GroupEntityClient,
 
-   // private val productsClient: ProductApiClient
+    // private val productsClient: ProductApiClient
 
 ) : CRMClientApi {
 
@@ -151,9 +153,9 @@ class CRMClientImpl (
                 projects = if (it.projects != null) ProjectModel(
                     id = it.projects!!.id,
                     name = it.projects!!.name
-                ) else null ,
+                ) else null,
 
-                groupentits = if ( it.groupentits != null ) GroupEntityModel(
+                groupentits = if (it.groupentits != null) GroupEntityModel(
 
                     id = it.groupentits!!.id,
                     name = it.groupentits!!.name
@@ -176,12 +178,37 @@ class CRMClientImpl (
 
                 ) else null,
 
-                /*value = it.value?.map { item ->
-                    ValueModel(
+                value = it.`val`?.map { item ->
+                    ValModel(
                         id = item.id,
                         arenda_id = item.arenda_id,
                         type_id = item.type_id,
-                        value = null,//item.value , // Обработка null
+                        `val` = ValDetailOrStringModel(
+
+                            detail = ValDetailModel(
+                                id = item.`val`?.detail?.id ?: 0,
+                                name = item.`val`?.detail?.name,
+                                text = item.`val`?.detail?.text,
+                                email = item.`val`?.detail?.email,
+                                email_verified_at = item.`val`?.detail?.email_verified_at,
+                                phone = item.`val`?.detail?.phone,
+                                ui = item.`val`?.detail?.ui,
+                                policy = item.`val`?.detail?.policy,
+                                created_at = item.`val`?.detail?.created_at,
+                                updated_at = item.`val`?.detail?.updated_at,
+                                tema = item.`val`?.detail?.tema,
+                                active = item.`val`?.detail?.active,
+                                inn = item.`val`?.detail?.inn,
+                                image = item.`val`?.detail?.image,
+                                contragents = item.`val`?.detail?.contragents,
+                                price = item.`val`?.detail?.price,
+                                lang_id = item.`val`?.detail?.lang_id
+
+
+                            ),
+                            raw = item.`val`?.raw
+
+                        ),
                         created_at = item.created_at,
                         updated_at = item.updated_at,
                         items_type = ItemsTypeModel(
@@ -196,7 +223,7 @@ class CRMClientImpl (
                             updated_at = item.items_type?.updated_at ?: ""
                         )
                     )
-                } ?: emptyList()*/
+                }
                 /*projects = it.projects,
                 service = it.service,
                 company = it.company,
@@ -303,12 +330,12 @@ class CRMClientImpl (
                     name = it.projects!!.name
                 ) else null,
 
-                groupentits = if ( it.groupentits != null ) GroupEntityModel(
+                groupentits = if (it.groupentits != null) GroupEntityModel(
 
-                        id = it.groupentits!!.id,
-                        name = it.groupentits!!.name
+                    id = it.groupentits!!.id,
+                    name = it.groupentits!!.name
 
-                    ) else null,
+                ) else null,
 
                 service = if (it.service != null) ServiceModel(
 
@@ -326,12 +353,37 @@ class CRMClientImpl (
 
                 ) else null,
 
-                /*value = it.value?.map { item ->
-                    ValueModel(
+                value = it.`val`?.map { item ->
+                    ValModel(
                         id = item.id,
                         arenda_id = item.arenda_id,
                         type_id = item.type_id,
-                        value = null,//item.value , // Обработка null
+                        `val` = ValDetailOrStringModel(
+
+                            detail = ValDetailModel(
+                                id = item.`val`?.detail?.id ?: 0,
+                                name = item.`val`?.detail?.name,
+                                text = item.`val`?.detail?.text,
+                                email = item.`val`?.detail?.email,
+                                email_verified_at = item.`val`?.detail?.email_verified_at,
+                                phone = item.`val`?.detail?.phone,
+                                ui = item.`val`?.detail?.ui,
+                                policy = item.`val`?.detail?.policy,
+                                created_at = item.`val`?.detail?.created_at,
+                                updated_at = item.`val`?.detail?.updated_at,
+                                tema = item.`val`?.detail?.tema,
+                                active = item.`val`?.detail?.active,
+                                inn = item.`val`?.detail?.inn,
+                                image = item.`val`?.detail?.image,
+                                contragents = item.`val`?.detail?.contragents,
+                                price = item.`val`?.detail?.price,
+                                lang_id = item.`val`?.detail?.lang_id
+
+
+                            ),
+                            raw = item.`val`?.raw
+
+                        ),
                         created_at = item.created_at,
                         updated_at = item.updated_at,
                         items_type = ItemsTypeModel(
@@ -346,7 +398,7 @@ class CRMClientImpl (
                             updated_at = item.items_type?.updated_at ?: ""
                         )
                     )
-                } ?: emptyList()*/
+                } ?: emptyList()
 
 
             )
@@ -483,30 +535,28 @@ class CRMClientImpl (
 
         val newList = contragentsClient.getContragents().map {
 
-               ContragentResponseModel(
+            ContragentResponseModel(
 
-                   id = it.id?:0,
-                   name = it.name?:"",
-                   ui = it.ui?:"",
-                   own = it.own?:0,
-                   entities = if ( it.entits != null ) {
+                id = it.id ?: 0,
+                name = it.name ?: "",
+                ui = it.ui ?: "",
+                own = it.own ?: 0,
+                entities = if (it.entits != null) {
 
-                       it.entits!!.map {
+                    it.entits!!.map {
 
-                           EntityContragentModel(
+                        EntityContragentModel(
 
-                               id = it.id ?: 0,
-                               name = it.name ?: "",
-                               ui = it.ui ?: ""
+                            id = it.id ?: 0,
+                            name = it.name ?: "",
+                            ui = it.ui ?: ""
 
-                           )
+                        )
 
-                       }
-                   }
+                    }
+                } else emptyList()
 
-                   else emptyList()
-
-               )
+            )
 
 
         }
@@ -558,7 +608,7 @@ class CRMClientImpl (
                 email = it.email,
                 phone = it.phone,
                 text = it.text,
-                contragent = if ( it.contragent != null ) {
+                contragent = if (it.contragent != null) {
 
                     ContragentLocationModel(
 
@@ -568,8 +618,7 @@ class CRMClientImpl (
                         own = it.contragent!!.own ?: 0
 
                     )
-                }
-                else null
+                } else null
 
             )
 
@@ -609,9 +658,9 @@ class CRMClientImpl (
         statusPay: Int?,
         verifyPay: Int?,
         task: String?,
-        to_local_id:Int?,
-        group_entity_id:Int?,
-        from_local_id:Int?,
+        to_local_id: Int?,
+        group_entity_id: Int?,
+        from_local_id: Int?,
         status: String?,
         price: String?,
         arendaId: Int?,
@@ -629,7 +678,7 @@ class CRMClientImpl (
 
         crmClient.createCRM(serviceId, statusPay, verifyPay, task, to_local_id, group_entity_id,
 
-        from_local_id, status, price, arendaId, specificationId, projectId, entityId,
+            from_local_id, status, price, arendaId, specificationId, projectId, entityId,
 
             ourEntityId, text,
 
@@ -637,7 +686,7 @@ class CRMClientImpl (
 
                 ServiceItem(
 
-                   type_id = it.type_id,
+                    type_id = it.type_id,
 
                     name = it.name
 
@@ -663,8 +712,8 @@ class CRMClientImpl (
                 ui = it.ui,
                 text = it.text,
                 from = it.from,
-                to = it.to?:"",
-                from_point  = it.from_point,
+                to = it.to ?: "",
+                from_point = it.from_point,
                 to_point = it.to_point,
                 cargo_type_id = it.cargo_type_id,
                 archive = it.archive,
@@ -710,7 +759,7 @@ class CRMClientImpl (
     }
 
     override suspend fun updateCRM(
-        ui:String,
+        ui: String,
         serviceId: Int?,
         statusPay: Int?,
         verifyPay: Int?,
@@ -733,7 +782,7 @@ class CRMClientImpl (
 
         crmClient.init(sharedPrefsApi.getToken() ?: "")
 
-        crmClient.updateCRM ( ui, serviceId, statusPay, verifyPay, task, to_local_id,
+        crmClient.updateCRM(ui, serviceId, statusPay, verifyPay, task, to_local_id,
 
             group_entity_id, from_local_id, status, price, arendaId, specificationId, projectId,
 

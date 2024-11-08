@@ -35,12 +35,8 @@ sealed class DataEntryIntents {
 
     object MenuEmployee : DataEntryIntents()
 
-    object MenuGoodsAndServices : DataEntryIntents()
-
     object MenuCargo : DataEntryIntents()
 
-
-    data class SelectGoodsAndServices(val item: SpecificResponseModel) : DataEntryIntents()
 
     data class SelectGroupEntity(val item: GroupEntityResponseModel) : DataEntryIntents()
 
@@ -81,7 +77,6 @@ sealed class DataEntryIntents {
     data class SelectCargo(val item: CargoResponseModel) : DataEntryIntents()
 
 
-    object DeleteSelectedGoodsAndServices : DataEntryIntents()
 
     object DeleteSelectedSpecification : DataEntryIntents()
 
@@ -100,6 +95,7 @@ sealed class DataEntryIntents {
     object DeleteSelectedLocation : DataEntryIntents()
 
     object DeleteSelectedService : DataEntryIntents()
+
     object DeleteSelectedPaidFor : DataEntryIntents()
 
     object DeleteSelectedVerified : DataEntryIntents()

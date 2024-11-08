@@ -57,6 +57,7 @@ import model.ServiceItemCreateCRMModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
 import model.UserCRMModel
+import model.ValDetailModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
@@ -1820,7 +1821,7 @@ class DataEntryComponent (
 
                             OutlinedTextField(
 
-                                value = viewModel.state.textFieldsValues[mainIndex],
+                                value = (viewModel.state.textFieldsValues[mainIndex] as? String)?: "",
 
                                 onValueChange = {
 
@@ -1856,44 +1857,7 @@ class DataEntryComponent (
 
                             var expendedMenu by remember { mutableStateOf(false) }
 
-                            var selectedItem by remember { mutableStateOf<Any?>(null) }
-
-                            if ( item != null ) {
-
-                                when (it.type) {
-
-                                    "man" -> { selectedItem = listEmployee }
-                                    "specification" -> {
-                                        (selectedItem as? SpecificResponseModel)?.text
-                                            ?: "нет имени"
-                                    }
-
-                                    "local" -> {
-                                        (selectedItem as? LocationResponseModel)?.name
-                                            ?: "нет имени"
-                                    }
-
-                                    "product" -> {
-                                        (selectedItem as? ProductModel)?.name ?: "нет имени"
-                                    }
-
-                                    "project" -> {
-                                        (selectedItem as? ProjectResponseModel)?.name ?: "нет имени"
-                                    }
-
-                                    "company" -> {
-                                        (selectedItem as? ContragentResponseModel)?.name
-                                            ?: "нет имени"
-                                    }
-
-                                    "cargo" -> {
-                                        (selectedItem as? CargoResponseModel)?.name ?: "нет имени"
-                                    }
-
-                                    else -> ""
-
-                                }
-                            }
+                            var selectedItem by remember { mutableStateOf<Any?>(viewModel.state.updatedSelectItem) }
 
                             OutlinedTextField(
 
@@ -1947,18 +1911,17 @@ class DataEntryComponent (
                                         .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
                                 ) {
                                     Text(
-                                        text = when (it.type) {
-
-                                            "man" -> {// Здесь предполагается, что item - это объект из listEmployee
-                                                (selectedItem as? UserCRMModel)?.name ?: "нет имени"}
-                                            "specification" -> { (selectedItem as? SpecificResponseModel)?.text ?: "нет имени" }
-                                            "local" -> { (selectedItem as? LocationResponseModel)?.name ?: "нет имени" }
-                                            "product" -> { (selectedItem as? ProductModel)?.name ?: "нет имени" }
-                                            "project" -> { (selectedItem as? ProjectResponseModel)?.name ?: "нет имени" }
-                                            "company" -> { (selectedItem as? ContragentResponseModel)?.name ?: "нет имени" }
-                                            "cargo" -> { (selectedItem as? CargoResponseModel)?.name ?: "нет имени"}
-                                            else -> ""
-
+                                        text = when {
+                                            selectedItem is ValDetailModel && it.type == "specification" -> (selectedItem as? ValDetailModel)?.text ?: "нет имени"
+                                            selectedItem is ValDetailModel && it.type != "specification" -> (selectedItem as? ValDetailModel)?.name ?: "нет имени"
+                                            selectedItem is UserCRMModel && it.type == "man" -> (selectedItem as? UserCRMModel)?.name ?: "нет имени"
+                                            selectedItem is SpecificResponseModel && it.type == "specification" -> (selectedItem as? SpecificResponseModel)?.text ?: "нет имени"
+                                            selectedItem is LocationResponseModel && it.type == "local" -> (selectedItem as? LocationResponseModel)?.name ?: "нет имени"
+                                            selectedItem is ProductModel && it.type == "product" -> (selectedItem as? ProductModel)?.name ?: "нет имени"
+                                            selectedItem is ProjectResponseModel && it.type == "project" -> (selectedItem as? ProjectResponseModel)?.name ?: "нет имени"
+                                            selectedItem is ContragentResponseModel && it.type == "company" -> (selectedItem as? ContragentResponseModel)?.name ?: "нет имени"
+                                            selectedItem is CargoResponseModel && it.type == "cargo" -> (selectedItem as? CargoResponseModel)?.name ?: "нет имени"
+                                            else -> "нет имени"
                                         },
                                         color = Color.White,
                                         fontSize = 15.sp,
@@ -2263,9 +2226,9 @@ class DataEntryComponent (
 
                                     viewModel.state.selectedService!!.items?.mapIndexed { index,it ->
 
-                                     ServiceItemCreateCRMModel(
+                                     ServiceItemCreateCRMModel (
 
-                                         type_id = 0,//item.value!![index].id?:0,
+                                         type_id = item.value!![index].id,
 
                                          name = viewModel.state.textFieldsValues[index]
 

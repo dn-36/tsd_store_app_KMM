@@ -1,7 +1,6 @@
 package model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+
 import kotlinx.serialization.json.JsonElement
 
 data class ApiResponseCRMModel(
@@ -60,16 +59,42 @@ data class ApiResponseCRMModel(
     val projects: ProjectModel?,
     val groupentits: GroupEntityModel?,
     val service: ServiceModel?,
-   // val value:List<ValueModel>?
+    val value:List<ValModel>?
 )
-data class ValueModel(
-    val id: Int?,
-    val arenda_id: Int?,
-    val type_id: Int?,
-    val value: JsonElement?,
-    val created_at: String?,
-    val updated_at: String?,
-    val items_type: ItemsTypeModel?
+data class ValModel(
+    val id: Int,
+    val arenda_id: Int,
+    val type_id: Int,
+    val `val`: ValDetailOrStringModel? = null,
+    val created_at: String,
+    val updated_at: String,
+    val items_type: ItemsTypeModel
+)
+
+data class ValDetailOrStringModel(
+    val detail: ValDetailModel? = null,
+    val raw: String? = null
+)
+
+data class ValDetailModel(
+    val id: Int,
+    val name: String? = null,
+    val text: String? = null,
+    val email: String? = null,
+    val email_verified_at: String? = null,
+    val phone: String? = null,
+    val ui: String? = null,
+    val policy: Int? = null, // Сделано необязательным
+    val created_at: String? = null,
+    val updated_at: String? = null,
+    val tema: String? = null,
+    val active: Int? = null, // Сделано необязательным
+    val inn: String? = null,
+    val image: String? = null,
+    val contragents: Int? = null, // Сделано необязательным
+    val price: Double? = null,
+    val lang_id: Int? = null, // Сделано необязательным
+   // val company: List<CompanyModel>? = null
 )
 data class ItemsTypeModel(
     val id: Int?,

@@ -73,8 +73,6 @@ class CRMViewModel (
 
                             listOutgoingCRM = getOutgoingCRMUseCase.execute().toMutableList(),
 
-                            listProjects = getProjectsUseCase.execute(),
-
                             isSet = false
 
                         )
@@ -115,6 +113,8 @@ class CRMViewModel (
                      listGroupEntity = getGroupEntityUseCase.execute(),
 
                      listProducts = getProductsUseCase.execute(),
+
+                     listProjects = getProjectsUseCase.execute(),
 
                      isVisibilityDataEntryComponent = 1f
 

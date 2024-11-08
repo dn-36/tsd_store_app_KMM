@@ -9,6 +9,7 @@ import model.LocationResponseModel
 import model.ServiceResponseModel
 import model.SpecificResponseModel
 import model.UserCRMModel
+import model.ValDetailModel
 
 data class DataEntryState (
 
@@ -35,8 +36,6 @@ data class DataEntryState (
     val expendedLocations: Boolean = false,
 
     val expendedSpecifications: Boolean = false,
-
-    val expendedGoodsAndServices: Boolean = false,
 
     val expendedCargo: Boolean = false,
 
@@ -97,9 +96,6 @@ data class DataEntryState (
     val selectedLocation: LocationResponseModel? = null,
 
 
-
-    val selectedGoodsAndServices: SpecificResponseModel? = null,
-
     val selectedStatus: Pair<String,Int> = Pair("Активна",1),
 
 
@@ -108,8 +104,6 @@ data class DataEntryState (
     val filteredListCargo: List<CargoResponseModel> = emptyList(),
 
     val filteredListGroupEntity: List<GroupEntityResponseModel> = emptyList(),
-
-    val filteredListGoodsAndServices: List<SpecificResponseModel> = emptyList(),
 
     val filteredListServices: List<ServiceResponseModel> = emptyList(),
 
@@ -130,6 +124,12 @@ data class DataEntryState (
     val containerServiceColor: Color = Color.White,
 
 
-    val textFieldsValues: List<String> =  listOf("")
+    val textFieldsValues: List<String> =  listOf(),
+
+
+    val updatedSelectItem: ValDetailModel? = null,
+
+
+    val selectedItemsList: List<Any> = listOf()
 
     )
