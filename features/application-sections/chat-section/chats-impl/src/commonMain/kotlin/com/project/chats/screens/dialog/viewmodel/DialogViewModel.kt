@@ -53,6 +53,11 @@ class DialogViewModel(
                 this@DialogViewModel.scope = intent.scope
                 setScreen()
             }
+
+            is DialogIntents.AddNewPhotosGalleryOrCamera -> TODO()
+            DialogIntents.CloseSelectFileComponent -> TODO()
+            is DialogIntents.DeleteSelectedPhoto -> TODO()
+            DialogIntents.OpenSelectFileComponent -> TODO()
         }
     }
 
