@@ -1,4 +1,4 @@
-package com.project.core_app.menu_bottom_bar.model
+package com.project.core_app.components.menu_bottom_bar.model
 
 
 import com.project.core_app.ConstData

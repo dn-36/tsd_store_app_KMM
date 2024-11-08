@@ -14,8 +14,10 @@ data class Message(
     val ui:String,
     var answerMessage:ReplyMessage? = null,
     var statusMessage:StatusMessage = StatusMessage.IS_SECCUESS,
-    var url_icon:String? = null
-
+    var url_icon:String? = null,
+    var sendImage:ImageBitmap? = null,
+    var isShowSelectedMessage : Boolean = false,
+    var isSelectedMessage : Boolean = false
 )
 
 enum class WhoseMessage{

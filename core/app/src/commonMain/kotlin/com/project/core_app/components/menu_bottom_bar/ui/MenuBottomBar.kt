@@ -1,4 +1,4 @@
-package com.project.core_app.menu_bottom_bar.ui
+package com.project.core_app.components.menu_bottom_bar.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 
-import com.project.core_app.menu_bottom_bar.viewmodel.MenuBottomBarIntents
-import com.project.core_app.menu_bottom_bar.viewmodel.MenuBottomBarViewModel
+import com.project.core_app.components.menu_bottom_bar.viewmodel.MenuBottomBarIntents
+import com.project.core_app.components.menu_bottom_bar.viewmodel.MenuBottomBarViewModel
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 
 

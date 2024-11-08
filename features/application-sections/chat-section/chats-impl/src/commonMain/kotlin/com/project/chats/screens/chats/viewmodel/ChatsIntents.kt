@@ -9,7 +9,6 @@ sealed class ChatsIntents {
         val ui:String,
         val urlIcon:String?,
         val titleChat:String,
-        val countNewMessage:Int
         )
         : ChatsIntents()
 

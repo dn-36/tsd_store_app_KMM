@@ -10,13 +10,12 @@ class DialogScreen(
     private val uiChats:String,
     private val titleChat:String,
     private val urlIcon:String?,
-    private val countNewMessage:Int
 ) : NetworkScreen(
       DialogComponentScreen(
         uiChats,
         titleChat,
         urlIcon,
-      //  countNewMessage,
+       // countNewMessage,
         getKoin().get()
     )
 )

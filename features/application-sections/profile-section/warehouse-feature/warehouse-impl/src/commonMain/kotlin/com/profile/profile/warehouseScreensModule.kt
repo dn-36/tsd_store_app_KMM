@@ -19,7 +19,7 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecas
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecases.UpdateWarehouseUseCase
 import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseViewModel
 import com.project.chats.WarehouseScreensApi
-import com.project.network.ConstData
+import com.project.network.common.ConstData
 import com.project.network.arrival_goods.ArrivalGoodsClient
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.locations_network.LocationsClient

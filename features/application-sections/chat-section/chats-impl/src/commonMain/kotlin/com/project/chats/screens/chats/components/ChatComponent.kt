@@ -26,8 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.chats.screens.chats.viewmodel.ChatsIntents
 import com.project.chats.screens.chats.viewmodel.ChatsViewModel
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.components.ConfirmationDialog
+import com.project.core_app.components.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkComponent
+import com.project.core_app.utils.truncateString
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
@@ -54,13 +56,14 @@ class ChatComponent(override val viewModel: ChatsViewModel) : NetworkComponent {
                     items(state.listchats,  key = { it.uiChat }) { item ->
                         ChatItem(
                             item.urlIconChat,
-                            item.title,
-                            item.lastMassage,
-                            "${item.timeEndDate.time} ${item.timeEndDate.date}",
+                            item.title.truncateString(10),
+                            item.lastMassage.truncateString(20),
+                            item.countNewMessage,
+                            item.timeEndDate.time,//"${item.timeEndDate.date}",
                             {
                                 this@ChatComponent.viewModel.processIntent(
                                     ChatsIntents.DialogueSelection(scope, item.uiChat,
-                                        item.urlIconChat, item.title,item.countNewMessage)
+                                        item.urlIconChat, item.title)
                                 )
                             },
                             { this@ChatComponent.viewModel.processIntent(ChatsIntents.ShowDeleteDialog(item.uiChat)) }
@@ -91,7 +94,11 @@ class ChatComponent(override val viewModel: ChatsViewModel) : NetworkComponent {
             }
         }
         if(state.isShowDeleteDialog) {
-            ConfirmDeleteChatDialog(
+            ConfirmationDialog(
+                title = "Удаление чата",
+                question = "Вы уверены что хотите удалить чат?",
+                "Удалить",
+                "Отмена",
                 { this.viewModel.processIntent(ChatsIntents.DeleteChat(scope))},
                 { this.viewModel.processIntent(ChatsIntents.CancelDeleteDialog)})
         }

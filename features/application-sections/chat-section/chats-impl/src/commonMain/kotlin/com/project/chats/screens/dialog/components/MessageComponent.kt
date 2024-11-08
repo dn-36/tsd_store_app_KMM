@@ -1,9 +1,12 @@
 package com.project.chats.screens.dialog.components
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,11 +25,13 @@ import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffectScope
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,7 +41,9 @@ import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.skydoves.landscapist.coil3.CoilImage
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
+import project.core.resources.circle
 import project.core.resources.error
+import project.core.resources.icon_circle
 import project.core.resources.is_loading
 import project.core.resources.is_readed
 import project.core.resources.is_seccuess
@@ -44,12 +51,13 @@ import project.core.resources.share
 import project.core.resources.user_chats
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MessageComponent(
     message: Message,
     resendMessage:()->Unit,
     onSwipeRight:()->Unit,
+    onSelectMessage:(ui:String)->Unit,
     ) {
 
     val dismissState = rememberDismissState(
@@ -66,15 +74,37 @@ fun MessageComponent(
 
     Box(
         modifier = Modifier
+                .pointerInput(message.isShowSelectedMessage) {
+                    detectTapGestures(
+
+                        onTap = {
+                            if (message.isShowSelectedMessage ) {
+                                onSelectMessage(message.ui)
+                            }
+                            },
+                    /*    onPress = {
+                            if (message.isShowSelectedMessage ) {
+                                onSelectMessage(message.ui)
+                            }
+                        },*/
+                       onLongPress = {
+
+                            onSelectMessage(message.ui)
+                       
+                        },
+                    )
+                }
+
+
             .fillMaxWidth()
             .padding(vertical = 10.dp,)
     ) {
 
         SwipeToDismiss(
             state = dismissState,
-            directions = //if(message.whoseMessage == WhoseMessage.YOU)
-                setOf(DismissDirection.EndToStart),// else
-               // emptySet(),
+            directions =
+                setOf(DismissDirection.EndToStart),
+
             background = {
 
                 val color = when (dismissState.dismissDirection) {
@@ -86,21 +116,16 @@ fun MessageComponent(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(color),
-
                     contentAlignment = Alignment.CenterEnd
                 ) {
-
                         Image(
                             modifier = Modifier.padding(end = 9.dp, bottom = 6.dp).size(imageSize),
                             painter = painterResource(Res.drawable.share),
                             contentDescription = null
-
                         )
-
                 }
             },
             dismissContent = {
-
           Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -110,11 +135,13 @@ fun MessageComponent(
                 WhoseMessage.INTERLOCUTOR -> Arrangement.Start
             }
         ){
-        //{
             if (message.whoseMessage == WhoseMessage.INTERLOCUTOR) {
                 Column(
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(
+                            start = if(message.isShowSelectedMessage ) 35.dp
+                            else 0.dp
+                        )
                         .align(Alignment.CenterVertically)
                 ) {
                     if (false){//!message.url_icon.isNullOrBlank()) {
@@ -126,7 +153,12 @@ fun MessageComponent(
                         Image(
                             painter = painterResource(Res.drawable.user_chats),
                             contentDescription = null,
-                            modifier = Modifier.size(30.dp)
+                            modifier = Modifier.padding(
+                                start = 10.dp,
+                                end = 10.dp,
+                                top = 5.dp,
+                                bottom = 5.dp
+                            ) .size(30.dp)
                         )
                     }
                     Text(
@@ -175,23 +207,40 @@ fun MessageComponent(
 
                         .clip(RoundedCornerShape(10.dp))
                         .background(Color(0xFFD2F0B1))
-                        .padding(10.dp),
+                        .padding(10.dp)
+                        ,
                 ) {
-                    Column(
-
-                    ) {
+                    Column {
+                    if(message.sendImage != null)    {
+                        Box(
+                            modifier = Modifier
+                                .size(150.dp)
+                        ){
+                            CircularProgressIndicator(modifier =
+                            Modifier
+                                .size(20.dp)
+                                .align(Alignment.Center))
+                        }
+                    }else{
                    if(message.url_icon != null) {
                        CoilImage(
-                           imageModel = {  message.url_icon },
-                           loading = { CircularProgressIndicator(modifier = Modifier.size(10.dp)) },
+                           imageModel = { message.url_icon },
+                           loading = { CircularProgressIndicator(modifier = Modifier.size(5.dp)) },
                            modifier = Modifier.size(150.dp)
                        )
+                   }
                         }
                    if(message.answerMessage != null) {
                            Column (
                            modifier = Modifier
                            .padding(end = 10.dp)
                            .background(Color(0xFFD2F0FF))
+                               .combinedClickable(
+                                   onClick = {},
+                                   onLongClick = {
+                                       onSelectMessage(message.ui)
+                                   }
+                               )
                            ) {
 
                                Text(
@@ -279,7 +328,7 @@ fun MessageComponent(
             }
             if (message.whoseMessage == WhoseMessage.YOU) {
                 Column(modifier = Modifier.padding(4.dp).align(Alignment.CenterVertically)) {
-                    if (false){//!message.url_icon.isNullOrBlank()) {
+                    if (false){
                         CoilImage(
                             imageModel = { message.url_icon },
                             modifier = Modifier.padding(3.dp).size(30.dp)
@@ -288,7 +337,12 @@ fun MessageComponent(
                         Image(
                             painter = painterResource(Res.drawable.user_chats),
                             contentDescription = null,
-                            modifier = Modifier.size(30.dp)
+                            modifier = Modifier.padding(
+                                start = 10.dp,
+                                end = 10.dp,
+                                top = 5.dp,
+                                bottom = 5.dp
+                            ).size(30.dp)
                         )
                     }
                     Text("You", fontSize = 10.sp, modifier =
@@ -300,5 +354,18 @@ fun MessageComponent(
         }
     }
         )
-        }
+if(message.isShowSelectedMessage) {
+    Image(
+        painter = painterResource(
+            if(message.isSelectedMessage)
+            Res.drawable.icon_circle else
+            Res.drawable.circle),
+        modifier = Modifier
+            .padding(5.dp)
+            .size(20.dp)
+            .align(Alignment.CenterStart),
+        contentDescription = null
+    )
+}
+}
 }

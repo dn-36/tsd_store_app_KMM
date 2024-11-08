@@ -1,4 +1,4 @@
-package com.project.chats.screens.chats.components
+package com.project.core_app.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +24,11 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun ConfirmDeleteChatDialog(
+fun ConfirmationDialog(
+    title:String,
+    question:String,
+    agreeButtonText:String,
+    dismissedButtonText:String,
     onDelete: () -> Unit,
     onCancel: () -> Unit
 ) {
@@ -42,13 +46,12 @@ fun ConfirmDeleteChatDialog(
         ) {
             Column(
                 modifier = Modifier
-                    .height(170.dp)
                     .padding(top = 16.dp, bottom = 10.dp)
                     .wrapContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Удаление сообщений",
+                    text = title,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
@@ -57,7 +60,7 @@ fun ConfirmDeleteChatDialog(
                 )
 
                 Text(
-                    text = "Вы уверены что хотите удалить чат?",
+                    text = question,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -76,7 +79,7 @@ fun ConfirmDeleteChatDialog(
                     ) {
 
                         Text(
-                            text = "Отмена",
+                            text = dismissedButtonText,
                             modifier = Modifier
                                 .padding(25.dp),
                             color = Color.Gray
@@ -95,7 +98,7 @@ fun ConfirmDeleteChatDialog(
                     ) {
 
                         Text(
-                            text = "Удалить",
+                            text = agreeButtonText,
                             modifier = Modifier
                                 .padding(25.dp),
                             color = Color.Red

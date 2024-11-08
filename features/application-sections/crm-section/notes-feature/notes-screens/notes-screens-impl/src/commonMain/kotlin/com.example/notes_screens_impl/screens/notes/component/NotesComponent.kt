@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.notes_screens_impl.screens.notes.viewmodel.NotesViewModel
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.components.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.example.project.presentation.crm_feature.notes_screen.model.Notes

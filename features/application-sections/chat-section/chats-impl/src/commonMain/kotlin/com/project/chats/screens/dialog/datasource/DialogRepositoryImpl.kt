@@ -16,7 +16,10 @@ class DialogRepositoryImpl(
     private val profileSavedDate: SharedPrefsApi,
     ):DialogRepositoryApi {
 
-    override suspend fun getListMessages(uiChats: String,userToken:String): List<Message>? {
+    override suspend fun getListMessages(
+        uiChats: String,
+        userToken:String,
+    ): List<Message>? {
         return chatApi.getListMassengers(uiChats).messages?.data?.map {
         val replyMessage:ReplyMessage? = if(it.feedback != null){
             ReplyMessage(
@@ -38,7 +41,7 @@ class DialogRepositoryImpl(
                 ui = it.ui?:"",
                 isReaded = it.status_view == 1,
                 answerMessage = replyMessage,
-                url_icon = if(it.image != null)"https://delta.online/storage/" + it.image else null
+                url_icon = if(it.image != null)"https://delta.online/storage/" + it.image else null,
             )
         }
     }

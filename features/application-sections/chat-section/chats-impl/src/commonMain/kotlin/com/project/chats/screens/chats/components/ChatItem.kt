@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
@@ -40,6 +41,7 @@ fun ChatItem(
     urlIconChat:String?,
     titleChat:String,
     lastMassage:String,
+    countNewMessage:Int?,
     timeLastMessage:String,
     onClickDialogue:() -> Unit,
     onSwipeRight:() -> Unit
@@ -99,8 +101,29 @@ fun ChatItem(
                             modifier = Modifier.size(50.dp))
                     }
                     Spacer(modifier = Modifier.width(10.dp))
-                    Column(modifier = Modifier.height(60.dp), verticalArrangement = Arrangement.SpaceBetween) {
-                        Text(titleChat, fontSize = 18.sp)
+                    Column(
+                        modifier = Modifier.height(60.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text(titleChat, fontSize = 18.sp)
+                            if(countNewMessage != null && countNewMessage != 0 ) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(end = 10.dp)
+                                        .background(Color.Blue, shape = RoundedCornerShape(8.dp))
+                                ) {
+                                    Text(
+                                        countNewMessage.toString(),
+                                        fontSize = 15.sp,
+                                        modifier = Modifier
+                                            .padding(5.dp)
+                                            .align(Alignment.Center),
+                                        color = Color.White
+                                    )
+                                }
+                            }
+                        }
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Text(
                                 lastMassage,
@@ -108,21 +131,19 @@ fun ChatItem(
                                 color = Color.LightGray
                             )
                             Text(
-                                timeLastMessage ,
+                                timeLastMessage,
+                                modifier = Modifier.padding(end = 10.dp),
                                 fontSize = 13.sp,
                                 color = Color.LightGray
                             )
                         }
                         Box(modifier = Modifier.fillMaxWidth().height(1.dp)
                             .background(Color.LightGray))
+
                     }
                 }
+
             }
         )
     }
 
-/*
-
-
-
-}*/

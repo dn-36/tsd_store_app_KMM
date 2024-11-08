@@ -7,7 +7,10 @@ interface DialogRepositoryApi {
             val ERROR = "ERROR"
         }
 
-    suspend fun getListMessages(uiChats:String,userToken:String):List<Message>?
+    suspend fun getListMessages(
+        uiChats:String,
+        userToken:String,
+    ):List<Message>?
 
     suspend fun sendMessege(
         text:String,

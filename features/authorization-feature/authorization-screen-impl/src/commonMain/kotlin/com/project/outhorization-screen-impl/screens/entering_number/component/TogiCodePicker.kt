@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.project.core_app.ConstData
 import com.project.core_app.StringRes
-import com.project.core_app.menu_bottom_bar.model.CountryData
+import com.project.core_app.components.menu_bottom_bar.model.CountryData
 import org.example.project.presentation.feature.authorization.screens.entering_number.utils.searchCountry
 import org.jetbrains.compose.resources.painterResource
 

@@ -1,7 +1,7 @@
 package com.project.network.notes_network
 
-import com.project.network.ConstData
-import com.project.network.httpClientEngine
+import com.project.network.common.ConstData
+import com.project.network.common.httpClientEngine
 import com.project.network.notes_network.model.BodyNoteDto
 import com.project.network.notes_network.model.Note
 import com.project.network.notes_network.model.NoteResponse

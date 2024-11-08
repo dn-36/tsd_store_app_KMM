@@ -1,7 +1,8 @@
-package org.example.project.nika_screens_chats.history_files_feature.screen
+package com.project.chats.screens.history_files.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -28,19 +29,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.skydoves.landscapist.coil3.CoilImage
 import org.example.project.nika_screens_chats.history_files_feature.viewmodel.HistoryFilesIntents
-import org.example.project.nika_screens_chats.history_files_feature.viewmodel.HistoryFilesViewModel
+import com.project.chats.screens.history_files.viewmodel.HistoryFilesViewModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
-import project.core.resources.user
 
 
-class HistoryFilesScreen : Screen {
+class HistoryFilesScreen(private val listUrlImage:List<String>?) : Screen {
 
     private val vm = HistoryFilesViewModel()
 
@@ -113,7 +113,7 @@ class HistoryFilesScreen : Screen {
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 LazyColumn {
-                    itemsIndexed(listOf("", "", "", "").chunked(3)) { indexes, item ->
+                    itemsIndexed((listUrlImage?: listOf()).chunked(3)) { indexes, item ->
                         Row(
                             modifier = Modifier
                                 .padding(2.dp)
@@ -121,14 +121,20 @@ class HistoryFilesScreen : Screen {
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             item.forEachIndexed { index, image ->
-                                Image(
-                                    painter = painterResource(Res.drawable.user),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .padding(2.dp)
+
+
+                                CoilImage(
+                                    imageModel = {
+                                        println("item")
+                                        println(image)
+                                        println("item")
+                                        image },
+                                    modifier = Modifier.padding(5.dp)
+                                        .border(2.dp,Color.Black)
+
                                         .weight(1f)  // Каждое изображение равномерно заполняет доступное пространство
                                         .aspectRatio(1f),  // Сохраняет соотношение сторон 1:1
-                                    contentScale = ContentScale.Crop
+                                  //  contentScale = ContentScale.Crop
                                 )
                             }
 

@@ -5,8 +5,10 @@ import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.domain.models.ReplyMessage
 
 data class DialogState(
-    var titleChats: String = "",
-    val listImages:List<ImageBitmap>? = null,
+    val titleChats: String = "",
+    val isShowSelectMessage:Boolean = false,
+    val isShowDeleteDialog:Boolean = false,
+    val listImages:List<ImageBitmap> = listOf(),
     val listMessage:List<Message> = mutableListOf(),
-    val replyMessage: ReplyMessage? = null,
+    val replyMessage: ReplyMessage? = null
 )

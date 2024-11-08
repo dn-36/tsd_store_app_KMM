@@ -1,4 +1,4 @@
-package com.project.network
+package com.project.network.common
 
 import com.project.network.authorization_network.AuthorizationClient
 import com.project.network.authorization_network.createHttpClient

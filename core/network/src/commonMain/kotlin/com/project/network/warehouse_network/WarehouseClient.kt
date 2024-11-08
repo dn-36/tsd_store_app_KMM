@@ -1,7 +1,7 @@
 package com.project.network.warehouse_network
 
-import com.project.network.ConstData
-import com.project.network.httpClientEngine
+import com.project.network.common.ConstData
+import com.project.network.common.httpClientEngine
 import com.project.network.warehouse_network.model.Warehouse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

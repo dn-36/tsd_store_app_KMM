@@ -1,6 +1,6 @@
 package com.project.core_app
 
-import com.project.core_app.menu_bottom_bar.model.CountryData
+import com.project.core_app.components.menu_bottom_bar.model.CountryData
 
 
 object ConstData {
