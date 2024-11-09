@@ -265,7 +265,7 @@ data class ValDetailOrString(
 
 @Serializable
 data class ValDetail(
-    val id: Int,
+    val id: Int?,
     val name: String? = null,
     val text: String? = null,
     val email: String? = null,

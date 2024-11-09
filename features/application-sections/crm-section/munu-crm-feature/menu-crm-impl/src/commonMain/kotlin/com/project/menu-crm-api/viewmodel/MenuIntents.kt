@@ -4,5 +4,6 @@ sealed class MenuIntents {
     object Notes: MenuIntents()
     object Contragents: MenuIntents()
     object CRM: MenuIntents()
+    object ProjectControl: MenuIntents()
 
 }

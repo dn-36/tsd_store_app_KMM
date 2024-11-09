@@ -74,7 +74,7 @@ class DataEntryViewModel (): ViewModel() {
 
                 intent.entity, intent.contargent )
 
-            is DataEntryIntents.SelectService -> selectService( intent.item )
+            is DataEntryIntents.SelectService -> selectService( intent.item, intent.list )
 
             is DataEntryIntents.SelectSpecification -> selectSpecific( intent.item )
 
@@ -467,17 +467,34 @@ class DataEntryViewModel (): ViewModel() {
 
     }
 
-    fun selectService ( item: ServiceResponseModel ) {
+    fun selectService(item: ServiceResponseModel, list: List<ContragentResponseModel>) {
 
-        val newList = List(if ( item.items != null) item.items.size else 0) { "" }
+        val newList = List(if (item.items != null) item.items.size else 0) { "" }
 
-    state = state.copy(
+        val newSelectedEntityPerformer =  if ( item.default_entity_id != null )
+
+            list.flatMap {
+                it.entities ?: emptyList()
+            } // Разворачиваем подсписки entities в один список
+            .find { it.id == item.default_entity_id } else null
+
+        val newEntity = if (newSelectedEntityPerformer != null) EntityContragentModel(
+
+            id = newSelectedEntityPerformer.id,
+            name = newSelectedEntityPerformer.name,
+            ui = newSelectedEntityPerformer.ui
+
+        ) else state.selectedLegalEntityPerformer
+
+        state = state.copy(
 
         selectedService = item,
 
         expendedService = false,
 
-        textFieldsValues = newList
+        textFieldsValues = newList,
+
+        selectedLegalEntityPerformer = newEntity
 
     )
 
@@ -754,7 +771,7 @@ class DataEntryViewModel (): ViewModel() {
 
         state = state.copy(
 
-            selectedStatus = Pair("",0)
+            selectedStatus = Pair("Активна",1)
 
         )
 

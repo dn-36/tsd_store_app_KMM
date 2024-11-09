@@ -46,7 +46,7 @@ sealed class DataEntryIntents {
 
     data class SelectProject(val item: ProjectResponseModel) : DataEntryIntents()
 
-    data class SelectService(val item: ServiceResponseModel) : DataEntryIntents()
+    data class SelectService(val item: ServiceResponseModel, val list: List<ContragentResponseModel>) : DataEntryIntents()
 
     data class SelectLocationPerformer(val item: LocationResponseModel) : DataEntryIntents()
 

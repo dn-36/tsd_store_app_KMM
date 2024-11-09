@@ -266,6 +266,7 @@ class CRMViewModel (
 
          println(" CHECK GROUP ENTITY: ${state.listGroupEntity} ")
 
+
         val menuScreen: MenuCrmScreenApi = KoinPlatform.getKoin().get()
 
         Navigation.navigator.push( menuScreen.MenuCrm() )

@@ -43,6 +43,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import component.data_entry.util.boxGHeight
 import component.data_entry.viewmodel.DataEntryIntents
 import component.data_entry.viewmodel.DataEntryViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -247,7 +248,11 @@ class DataEntryComponent (
 
                             onClick = {
 
-                                viewModel.processIntents(DataEntryIntents.MenuServices)
+                                if ( item == null ) {
+
+                                    viewModel.processIntents(DataEntryIntents.MenuServices)
+
+                                }
 
                             }
                         ) {
@@ -305,7 +310,9 @@ class DataEntryComponent (
 
                 if ( viewModel.state.expendedService ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                    Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+
+                        viewModel.state.filteredListServices.size).dp)) {
                         Card(
                             modifier = Modifier.fillMaxSize()
                                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -326,7 +333,7 @@ class DataEntryComponent (
 
                                         {
 
-                                            viewModel.processIntents(DataEntryIntents.SelectService( item ))
+                                            viewModel.processIntents(DataEntryIntents.SelectService( item, listContragents ))
 
                                         })
                             }
@@ -619,7 +626,9 @@ class DataEntryComponent (
 
                         if (viewModel.state.expendedLegalEntity) {
 
-                            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                            Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+
+                                viewModel.state.filteredListContragents.size).dp)) {
                                 Card(
                                     modifier = Modifier.fillMaxSize()
                                         .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -654,7 +663,6 @@ class DataEntryComponent (
                                                             )
 
                                                         })
-
                                             }
                                         }
 
@@ -836,7 +844,7 @@ class DataEntryComponent (
                                 { }// Стандартная высота TextField
                         )
 
-                        if (viewModel.state.selectedLocation != null) {
+                        if ( viewModel.state.selectedLocation != null ) {
 
                             Spacer(modifier = Modifier.height(10.dp))
 
@@ -873,7 +881,9 @@ class DataEntryComponent (
 
                         if (viewModel.state.expendedLocations) {
 
-                            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                            Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+
+                                viewModel.state.filteredListLocations.size).dp)) {
                                 Card(
                                     modifier = Modifier.fillMaxSize()
                                         .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -881,11 +891,14 @@ class DataEntryComponent (
                                     shape = RoundedCornerShape(8.dp)
                                 ) {}
                                 LazyColumn {
-                                    itemsIndexed(viewModel.state.filteredListLocations)
+
+                                    itemsIndexed( viewModel.state.filteredListLocations )
 
                                     { index, item ->
 
-                                        if ( viewModel.state.selectedContragent?.name == item.contragent?.name ) {
+                                        if ( viewModel.state.selectedContragent != null &&
+
+                                            viewModel.state.selectedContragent?.name == item.contragent?.name ) {
 
                                             Text(item.name ?: "нет имени",
                                                 fontSize = 20.sp,
@@ -905,6 +918,28 @@ class DataEntryComponent (
 
                                                     })
                                         }
+
+                                        else if ( viewModel.state.selectedContragent == null ) {
+
+                                            Text(item.name ?: "нет имени",
+                                                fontSize = 20.sp,
+                                                modifier = Modifier.fillMaxWidth(0.9f)
+                                                    .padding(16.dp)
+                                                    .clickable(
+                                                        indication = null, // Отключение эффекта затемнения
+                                                        interactionSource = remember { MutableInteractionSource() })
+
+                                                    {
+
+                                                        viewModel.processIntents(
+                                                            DataEntryIntents.SelectLocation(
+                                                                item
+                                                            )
+                                                        )
+
+                                                    })
+
+                                        }
                                     }
                                 }
                             }
@@ -919,9 +954,9 @@ class DataEntryComponent (
 
                             onValueChange = { inputText ->
 
-                                viewModel.processIntents(DataEntryIntents.InputTextGroupEntity( inputText,
+                                viewModel.processIntents(DataEntryIntents.InputTextGroupEntity(
 
-                                    listGroupEntity.filter {
+                                    inputText, listGroupEntity.filter {
 
                                         it.name.contains(inputText, ignoreCase = true) }))
 
@@ -990,7 +1025,9 @@ class DataEntryComponent (
 
                         if ( viewModel.state.expendedGroupEntity ) {
 
-                            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                            Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+
+                                viewModel.state.filteredListGroupEntity.size).dp)) {
                                 Card(
                                     modifier = Modifier.fillMaxSize()
                                         .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -1110,7 +1147,9 @@ class DataEntryComponent (
 
                         if (viewModel.state.expendedProject) {
 
-                            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                            Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+
+                                viewModel.state.filteredListProjects.size).dp)) {
                                 Card(
                                     modifier = Modifier.fillMaxSize()
                                         .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -1240,7 +1279,9 @@ class DataEntryComponent (
 
                 if ( viewModel.state.expendedLegalEntityPerformer ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                    Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+
+                        viewModel.state.filteredListContragents.size).dp)) {
                         Card(
                             modifier = Modifier.fillMaxSize()
                                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -1412,7 +1453,7 @@ class DataEntryComponent (
 
                     onValueChange = { inputText ->
 
-                        viewModel.processIntents(DataEntryIntents.InputTextLocationPerformer( inputText,
+                        viewModel.processIntents( DataEntryIntents.InputTextLocationPerformer( inputText,
 
                             listLocations.filter {
 
@@ -1481,7 +1522,9 @@ class DataEntryComponent (
 
                 if ( viewModel.state.expendedLocationsPerformer ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                    Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+
+                        viewModel.state.filteredListLocations.size).dp)) {
                         Card(
                             modifier = Modifier.fillMaxSize()
                                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -1493,7 +1536,9 @@ class DataEntryComponent (
 
                             { index, item ->
 
-                                if ( viewModel.state.selectedContragentPerformer?.name == item.contragent?.name) {
+                                if ( viewModel.state.selectedContragentPerformer != null &&
+
+                                    viewModel.state.selectedContragentPerformer!!.name == item.contragent?.name) {
 
                                     Text(item.name ?: "нет имени",
                                         fontSize = 20.sp,
@@ -1511,6 +1556,27 @@ class DataEntryComponent (
                                                 )
 
                                             })
+                                }
+
+                                else if ( viewModel.state.selectedContragentPerformer == null ) {
+
+                                    Text(item.name ?: "нет имени",
+                                        fontSize = 20.sp,
+                                        modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
+
+                                            {
+
+                                                viewModel.processIntents(
+                                                    DataEntryIntents.SelectLocationPerformer(
+                                                        item
+                                                    )
+                                                )
+
+                                            })
+
                                 }
                             }
                         }
@@ -1598,7 +1664,9 @@ class DataEntryComponent (
 
                 if ( viewModel.state.expendedSpecifications ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                    Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+
+                        viewModel.state.filteredListSpecifications.size).dp)) {
                         Card(
                             modifier = Modifier.fillMaxSize()
                                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -2117,9 +2185,9 @@ class DataEntryComponent (
 
                                     viewModel.state.selectedService!!.id,
 
-                                    if (viewModel.state.selectedPaidFor != null) viewModel.state.selectedPaidFor!!.second else 0,
+                                    if (viewModel.state.selectedPaidFor != null) viewModel.state.selectedPaidFor!!.second else null,
 
-                                    if (viewModel.state.selectedVerified != null) viewModel.state.selectedVerified!!.second else 0,
+                                    if (viewModel.state.selectedVerified != null) viewModel.state.selectedVerified!!.second else null,
 
                                     viewModel.state.task,
 
@@ -2147,7 +2215,7 @@ class DataEntryComponent (
 
                                     if (viewModel.state.selectedService != null) viewModel.state.selectedService!!.text else "",
 
-                                    if (viewModel.state.selectedStatus != null) viewModel.state.selectedStatus.second else 1,
+                                    viewModel.state.selectedStatus.second ,
 
                                     viewModel.state.selectedService!!.items?.mapIndexed { index,it ->
 
@@ -2199,9 +2267,9 @@ class DataEntryComponent (
 
                                      viewModel.state.selectedService!!.id,
 
-                                    if (viewModel.state.selectedPaidFor != null) viewModel.state.selectedPaidFor!!.second else 0,
+                                    if (viewModel.state.selectedPaidFor != null) viewModel.state.selectedPaidFor!!.second else null,
 
-                                    if (viewModel.state.selectedVerified != null) viewModel.state.selectedVerified!!.second else 0,
+                                    if (viewModel.state.selectedVerified != null) viewModel.state.selectedVerified!!.second else null,
 
                                     viewModel.state.task,
 
@@ -2229,7 +2297,7 @@ class DataEntryComponent (
 
                                     if (viewModel.state.selectedService != null) viewModel.state.selectedService!!.text else "",
 
-                                    if (viewModel.state.selectedStatus != null) viewModel.state.selectedStatus.second else 1,
+                                     viewModel.state.selectedStatus.second ,
 
                                     viewModel.state.selectedService!!.items?.mapIndexed { index,it ->
 

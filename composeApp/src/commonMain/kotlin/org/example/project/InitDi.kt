@@ -12,6 +12,7 @@ import com.project.organizationScreenModule
 import com.project.`menu-crm-impl`.menuCrmModule
 import com.project.network.networkModule
 import com.project.`outhorization-screen-impl`.authorizationModule
+import com.project.project_conterol.projectControlModule
 import com.project.tape.tapeScreenModule
 import contactProviderModule
 import contragentsModule
@@ -39,7 +40,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             warehouseScreensModule,
             contactProviderModule,
             contragentsModule,
-            crmModule
+            crmModule,
+            projectControlModule
 
         )
     }

@@ -1,4 +1,5 @@
 import cafe.adriel.voyager.core.screen.Screen
+import screen.CRMScreen
 
 class CRMScreenImpl : CRMScreenApi {
 

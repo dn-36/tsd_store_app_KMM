@@ -77,7 +77,7 @@ data class ValDetailOrStringModel(
 )
 
 data class ValDetailModel(
-    val id: Int,
+    val id: Int?,
     val name: String? = null,
     val text: String? = null,
     val email: String? = null,

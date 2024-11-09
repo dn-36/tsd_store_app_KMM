@@ -4,6 +4,7 @@ import CRMScreenApi
 import ContragentsScreensApi
 import androidx.lifecycle.ViewModel
 import com.example.`notes-screens-api`.NotesScreensApi
+import com.project.`menu-crm-api`.ProjectControlScreenApi
 import com.project.network.Navigation
 import org.example.project.presentation.menu_feature.viewmodel.MenuIntents
 import org.koin.mp.KoinPlatform.getKoin
@@ -18,6 +19,8 @@ class MenuViewModel:ViewModel() {
             is MenuIntents.Contragents -> { contragents() }
 
             is MenuIntents.CRM -> { crm() }
+
+            is MenuIntents.ProjectControl -> { projectControl() }
 
         }
     }
@@ -43,6 +46,14 @@ class MenuViewModel:ViewModel() {
         val crmScreen: CRMScreenApi = getKoin().get()
 
         Navigation.navigator.push(crmScreen.crm())
+
+    }
+
+    fun projectControl () {
+
+        val projectControlScreen: ProjectControlScreenApi = getKoin().get()
+
+        Navigation.navigator.push(projectControlScreen.projectControl())
 
     }
 

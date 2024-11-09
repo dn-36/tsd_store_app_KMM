@@ -107,8 +107,8 @@ class CRMClient {
 
             val parametrs = Parameters.build {
                 append("service_id", serviceId?.toString() ?: "")
-                append("status_pay", statusPay?.toString() ?: "0")
-                append("verify_pay", verifyPay?.toString() ?: "0")
+                append("status_pay", statusPay?.toString() ?: "")
+                append("verify_pay", verifyPay?.toString() ?: "")
                 append("task", task ?: "")
                 append("to_local_id", toLocalId?.toString() ?: "")
                 append("group_entity_id", groupEntityId?.toString() ?: "")
