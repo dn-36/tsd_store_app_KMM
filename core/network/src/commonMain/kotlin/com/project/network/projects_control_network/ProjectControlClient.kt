@@ -12,6 +12,12 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -52,6 +58,52 @@ class ProjectControlClient {
         println("контроль проектов:  ${response}")
         println(" ////////////////////++++++++++")
         return response.body<ProjectControlResponse>()
+    }
+
+    // Создание нового контроля проектов
+    suspend fun createProjectControl(text:String, data: String, time: String,
+    project_id: String ): HttpResponse {
+
+        val requestBody = mapOf(
+            "text" to text,
+            "data" to data,
+            "time" to time,
+            "project_id" to project_id,
+        )
+        return try {
+            val response = client.post("https://delta.online/api/controll-projects") {
+                contentType(ContentType.Application.Json)
+                setBody(requestBody)
+            }
+            println("Создание контроля проектов: ${response.toString()}")
+            response
+        } catch (e: Exception) {
+            println("CREATE ProjectControl: Error - ${e.message}")
+            throw e
+        }
+    }
+
+    // обновление контроля проектов
+    suspend fun updateProjectControl( ui: String, text:String, data: String, time: String,
+                                     project_id: String ): HttpResponse {
+
+        val requestBody = mapOf(
+            "text" to text,
+            "data" to data,
+            "time" to time,
+            "project_id" to project_id,
+        )
+        return try {
+            val response = client.put("https://delta.online/api/controll-projects/${ui}") {
+                contentType(ContentType.Application.Json)
+                setBody(requestBody)
+            }
+            println("Обновление контроля проектов: ${response.toString()}")
+            response
+        } catch (e: Exception) {
+            println("UPDATE ProjectControl: Error - ${e.message}")
+            throw e
+        }
     }
 
 }

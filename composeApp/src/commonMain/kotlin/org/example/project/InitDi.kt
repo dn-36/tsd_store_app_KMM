@@ -17,6 +17,7 @@ import com.project.tape.tapeScreenModule
 import contactProviderModule
 import contragentsModule
 import crmModule
+import datePickerModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -41,7 +42,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             contactProviderModule,
             contragentsModule,
             crmModule,
-            projectControlModule
+            projectControlModule,
+            datePickerModule
 
         )
     }

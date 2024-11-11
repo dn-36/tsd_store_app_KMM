@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,9 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
 import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
+import com.project.project_conterol.component.data_entry.DataEntryComponent
 import org.example.project.presentation.project_control.viewmodel.ProjectControlIntents
 import org.example.project.presentation.project_control.viewmodel.ProjectControlViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -160,7 +159,9 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
                                                 indication = null, // Отключение эффекта затемнения
                                                 interactionSource = remember { MutableInteractionSource() })
 
-                                            { })
+                                            { viewModel.processIntents(ProjectControlIntents
+
+                                                .OpenUpdateDataEntryComponent(scope,item)) })
 
 
                                     Spacer(modifier = Modifier.width(20.dp))
@@ -196,9 +197,23 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
 
         }
 
-        if ( viewModel.state.isVisibilityDataEntryComponent ) {
+        if ( viewModel.state.isVisibilityDataEntryComponent.value ) {
 
-            DataEntryComponent().Content()
+            DataEntryComponent( listAllProjects = viewModel.state.listProjects,
+
+                item = viewModel.state.updatedItem,
+
+                onClickBack = {
+
+                    viewModel.processIntents(ProjectControlIntents.BackFromDataEntry) },
+
+                onClickCreate = { scope, text, data, time, project_id ->
+
+                    viewModel.processIntents(ProjectControlIntents.CreateProjectControl(scope,
+
+                        text, data, time, project_id))
+
+                }).Content()
 
         }
 

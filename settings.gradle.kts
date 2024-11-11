@@ -40,6 +40,7 @@ include(":core:barcode-scanner")
 include(":core:camera-provider")
 include(":core:network")
 include(":core:app")
+include(":core:date-picker")
 /*--*/include(":features:application-sections:crm-section:notes-features")
 
 

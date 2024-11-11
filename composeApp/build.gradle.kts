@@ -47,6 +47,7 @@ kotlin {
             implementation(project(":core:local-storage"))
             implementation(project(":core:camera-provider"))
             implementation(project(":core:contact-provider"))
+            implementation(project(":core:date-picker"))
             implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api"))
             implementation(project(":features:authorization-feature:authorization-screen-api"))
             implementation(project(":features:application-sections:organization-section:organization-api"))

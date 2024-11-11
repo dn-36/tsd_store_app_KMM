@@ -9,8 +9,10 @@ import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.network.Navigation
 import com.project.network.notes_network.model.removeHtmlTags
+import com.project.project_conterol.domain.usecases.CreateProjectControlUseCase
 import com.project.project_conterol.domain.usecases.GetProjectsControlUseCase
 import com.project.project_conterol.domain.usecases.GetProjectsUseCase
+import com.project.project_conterol.domain.usecases.UpdateProjectControlUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -20,7 +22,11 @@ class ProjectControlViewModel (
 
     val getProjectsControlUseCase: GetProjectsControlUseCase,
 
-    val getProjectsUseCase: GetProjectsUseCase
+    val getProjectsUseCase: GetProjectsUseCase,
+
+    val createProjectControlUseCase: CreateProjectControlUseCase,
+
+    val updateProjectControlUseCase: UpdateProjectControlUseCase
 
 ): NetworkViewModel() {
 
@@ -44,7 +50,29 @@ class ProjectControlViewModel (
 
                         listProjects = getProjectsUseCase.execute(),
 
-                        isVisibilityDataEntryComponent = true
+                        isVisibilityDataEntryComponent = mutableStateOf(true)
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is ProjectControlIntents.OpenUpdateDataEntryComponent -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                    state = state.copy(
+
+                        listProjects = getProjectsUseCase.execute(),
+
+                        updatedItem = intent.item,
+
+                        isVisibilityDataEntryComponent = mutableStateOf(true)
 
                     )
 
@@ -99,6 +127,48 @@ class ProjectControlViewModel (
 
             }
 
+            is ProjectControlIntents.BackFromDataEntry -> backFromDataEntry()
+
+            is ProjectControlIntents.CreateProjectControl -> {
+
+            intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+             createProjectControlUseCase.execute( text = intent.text, data = intent.data,
+
+                 time = intent.time, project_id = intent.project_id)
+
+                state = state.copy(
+
+                    listProjects = getProjectsUseCase.execute(),
+
+                    isVisibilityDataEntryComponent = mutableStateOf(false)
+
+                )
+
+            }
+
+            }
+
+            is ProjectControlIntents.UpdateProjectControl -> {
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                    updateProjectControlUseCase.execute( ui = intent.ui, text = intent.text,
+
+                        data = intent.data, time = intent.time, project_id = intent.project_id)
+
+                    state = state.copy(
+
+                        listProjects = getProjectsUseCase.execute(),
+
+                        isVisibilityDataEntryComponent = mutableStateOf(false)
+
+                    )
+
+                }
+
+            }
+
         }
 
     }
@@ -108,6 +178,16 @@ class ProjectControlViewModel (
         val menuScreen: MenuCrmScreenApi = KoinPlatform.getKoin().get()
 
         Navigation.navigator.push( menuScreen.MenuCrm() )
+
+    }
+
+    fun backFromDataEntry(){
+
+        state = state.copy(
+
+            isVisibilityDataEntryComponent = mutableStateOf(false)
+
+        )
 
     }
 

@@ -9,4 +9,9 @@ interface ProjectControlClientApi {
 
     suspend fun getProjects(): List<ProjectResponseModel>
 
+    suspend fun createProjectControl( text:String, data: String, time: String, project_id: String )
+    suspend fun updateProjectControl( ui: String,text:String, data: String, time: String,
+
+                                      project_id: String )
+
 }

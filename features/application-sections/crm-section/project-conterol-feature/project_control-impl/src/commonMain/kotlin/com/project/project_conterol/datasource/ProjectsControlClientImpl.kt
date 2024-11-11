@@ -91,4 +91,31 @@ class ProjectsControlClientImpl (
 
     }
 
+    override suspend fun createProjectControl(
+        text: String,
+        data: String,
+        time: String,
+        project_id: String
+    ) {
+
+        projectsControlClient.init(sharedPrefsApi.getToken()?:"")
+
+        projectsControlClient.createProjectControl( text, data, time, project_id )
+
+    }
+
+    override suspend fun updateProjectControl(
+        ui: String,
+        text: String,
+        data: String,
+        time: String,
+        project_id: String
+    ) {
+
+        projectsControlClient.init(sharedPrefsApi.getToken()?:"")
+
+        projectsControlClient.updateProjectControl( ui, text, data, time, project_id )
+
+    }
+
 }

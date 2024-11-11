@@ -1,5 +1,7 @@
 package org.example.project
 
+import ContextDatePicker
+import DatePickerAndroid
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -10,6 +12,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.project.network.ConstData
 import com.project.phone.PermissionManeger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,10 +22,12 @@ import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
+        ContextDatePicker.context = this@MainActivity.applicationContext
 
         initKoin {
             androidContext(this@MainActivity.applicationContext)
@@ -36,8 +41,6 @@ class MainActivity : ComponentActivity() {
             PermissionManeger.PERMISSION.CAMERA_PERMISSION,
             PermissionManeger.PERMISSION.BLUETOOTH_PERMISSION
         )
-
-
 
         setContent {
 
