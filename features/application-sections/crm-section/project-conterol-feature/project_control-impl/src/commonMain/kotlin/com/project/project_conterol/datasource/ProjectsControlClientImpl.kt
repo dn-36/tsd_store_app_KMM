@@ -105,7 +105,7 @@ class ProjectsControlClientImpl (
     }
 
     override suspend fun updateProjectControl(
-        ui: String,
+        id: Int,
         text: String,
         data: String,
         time: String,
@@ -114,7 +114,15 @@ class ProjectsControlClientImpl (
 
         projectsControlClient.init(sharedPrefsApi.getToken()?:"")
 
-        projectsControlClient.updateProjectControl( ui, text, data, time, project_id )
+        projectsControlClient.updateProjectControl( id, text, data, time, project_id )
+
+    }
+
+    override suspend fun deleteProjectControl(id: Int) {
+
+        projectsControlClient.init(sharedPrefsApi.getToken()?:"")
+
+        projectsControlClient.deleteProjectControl( id )
 
     }
 

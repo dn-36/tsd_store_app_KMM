@@ -126,7 +126,7 @@ class CreateWarehouseComponent (
                         Spacer(modifier = Modifier.height(8.dp))
 
                         OutlinedTextField(
-                            value = title,
+                            value = title?:"",
                             onValueChange = {
                                 title = it
                             },
@@ -229,7 +229,7 @@ class CreateWarehouseComponent (
 
                                     scope,
 
-                                    title,
+                                    title?:"",
 
                                     if (selectedLocation.size != 0) selectedLocation[0].id.toString() else ""
                                 )
@@ -251,7 +251,7 @@ class CreateWarehouseComponent (
 
                                     scope,
 
-                                    title,
+                                    title?:"",
 
                                     if (selectedLocation.size != 0) selectedLocation[0].id.toString() else "" ,
 

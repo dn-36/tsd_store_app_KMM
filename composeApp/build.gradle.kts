@@ -47,7 +47,6 @@ kotlin {
             implementation(project(":core:local-storage"))
             implementation(project(":core:camera-provider"))
             implementation(project(":core:contact-provider"))
-            implementation(project(":core:date-picker"))
             implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api"))
             implementation(project(":features:authorization-feature:authorization-screen-api"))
             implementation(project(":features:application-sections:organization-section:organization-api"))
@@ -56,6 +55,10 @@ kotlin {
             implementation(project(":features:application-sections:organization-section:organization-impl"))
             implementation(project(":features:application-sections:crm-section:munu-crm-feature:menu-crm-impl"))
             implementation(project(":features:application-sections:crm-section:munu-crm-feature:menu-crm-api"))
+
+            implementation(project(":features:application-sections:crm-section:specifications-feature:specifications-impl"))
+            implementation(project(":features:application-sections:crm-section:specifications-feature:specifications-api"))
+
             implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-impl"))
             implementation(project(":features:application-sections:crm-section:contragents-feature:contragents-impl"))
             implementation(project(":features:application-sections:crm-section:crm-feature:crm-impl"))

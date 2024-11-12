@@ -1,6 +1,7 @@
 package com.project.project_conterol.component.data_entry.viewmodel
 
 import com.project.project_conterol.model.ProjectResponseModel
+import com.project.project_conterol.model.ServiceModel
 
 sealed class DataEntryIntents {
 
@@ -24,6 +25,8 @@ sealed class DataEntryIntents {
 
    data class InputTextDescription ( val text:String ): DataEntryIntents()
 
-   data class SetScreen ( val listProjects: List<ProjectResponseModel> ): DataEntryIntents()
+   data class SetScreen ( val listProjects: List<ProjectResponseModel>,
+
+      val item: ServiceModel? ): DataEntryIntents()
 
 }

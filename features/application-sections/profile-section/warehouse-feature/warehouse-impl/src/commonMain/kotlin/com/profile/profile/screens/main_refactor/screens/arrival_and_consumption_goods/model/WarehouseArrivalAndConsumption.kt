@@ -10,9 +10,9 @@ data class WarehouseArrivalAndConsumption(
 
 data class StoreArrivalAndConsumption (
 
-    val id: Int,
+    val id: Int?,
 
-    val name: String,
+    val name: String?,
 
     val ui: String? = null
 

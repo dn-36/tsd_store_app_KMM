@@ -14,7 +14,9 @@ data class ProjectControlState(
 
     val isSet: Boolean = true,
 
-    val isVisibilityDataEntryComponent: MutableState<Boolean> = mutableStateOf(false),
+    val isVisibilityDataEntryComponent: Boolean = false,
+
+    val isVisibilityDeleteComponent: Boolean = false,
 
     val listExpendedDescription: List<Boolean> = emptyList(),
 

@@ -8,13 +8,13 @@ class UpdateProjectControlUseCase (
 
     ) {
 
-    suspend fun execute ( ui:String, text:String, data: String, time: String,
+    suspend fun execute ( id:Int, text:String, data: String, time: String,
 
                           project_id: String ) {
 
         return client.updateProjectControl(
 
-            ui, text, data, time, project_id
+            id, text, data, time, project_id
 
         )
     }

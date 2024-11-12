@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.project_conterol.component.calendar.CustomCalendar
+import com.project.project_conterol.component.data_entry.util.boxHeight
 import com.project.project_conterol.component.data_entry.viewmodel.DataEntryIntents
 import com.project.project_conterol.component.data_entry.viewmodel.DataEntryViewModel
 import com.project.project_conterol.model.ProjectResponseModel
@@ -63,7 +64,13 @@ class DataEntryComponent (
 
                        data: String, time: String,
 
-                       project_id: String) -> Unit
+                       project_id: String) -> Unit,
+
+    val onClickUpdate:( id: Int, coroutineScope: CoroutineScope, text:String,
+
+                        data: String, time: String,
+
+                        project_id: String) -> Unit
 
 ) {
 
@@ -75,7 +82,7 @@ class DataEntryComponent (
 
         val scope = rememberCoroutineScope()
 
-        viewModel.processIntents(DataEntryIntents.SetScreen( listAllProjects ))
+        viewModel.processIntents(DataEntryIntents.SetScreen( listAllProjects, item ))
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)
 
@@ -97,7 +104,17 @@ class DataEntryComponent (
 
                     Spacer(modifier = Modifier.width(10.dp))
 
-                    Text("Создание", color = Color.Black, fontSize = 20.sp)
+                    if ( item == null ) {
+
+                        Text("Создание", color = Color.Black, fontSize = 20.sp)
+
+                    }
+
+                    else {
+
+                        Text("Редактирование", color = Color.Black, fontSize = 20.sp)
+
+                    }
 
                 }
 
@@ -187,7 +204,9 @@ class DataEntryComponent (
 
                     if (viewModel.state.expendedProject) {
 
-                        Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                        Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
+
+                            viewModel.state.filteredListProjects.size).dp)) {
                             Card(
                                 modifier = Modifier.fillMaxSize()
                                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -402,36 +421,79 @@ class DataEntryComponent (
 
                     Spacer(modifier = Modifier.height(50.dp))
 
-                    Button(
+                    if ( item == null ) {
 
-                        onClick = {
+                        Button(
 
-                            if (viewModel.state.selectedProject != null) {
+                            onClick = {
 
-                                onClickCreate(
+                                if (viewModel.state.selectedProject != null) {
 
-                                    scope,
-                                    viewModel.state.description,
-                                    "${viewModel.state.date ?: ""}",
+                                    onClickCreate(
 
-                                    "${viewModel.state.hour}:${viewModel.state.minutes}",
+                                        scope,
+                                        viewModel.state.description,
+                                        "${viewModel.state.date ?: ""}",
 
-                                    "${viewModel.state.selectedProject!!.id}"
+                                        "${viewModel.state.hour}:${viewModel.state.minutes}",
 
-                                )
-                            }
-                        },
+                                        "${viewModel.state.selectedProject!!.id}"
 
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(70.dp))
-                            .height(40.dp)
-                            .fillMaxWidth()
+                                    )
+                                }
+                            },
 
-                    ) {
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(70.dp))
+                                .height(40.dp)
+                                .fillMaxWidth()
 
-                        Text(text = "Создать")
+                        ) {
+
+                            Text(text = "Создать")
+
+                        }
+                    }
+
+                    else {
+
+                        Button(
+
+                            onClick = {
+
+                                if (viewModel.state.selectedProject != null) {
+
+                                    onClickUpdate (
+
+                                        item.id?:0,
+
+                                        scope,
+
+                                        viewModel.state.description,
+
+                                        "${viewModel.state.date ?: ""}",
+
+                                        "${viewModel.state.hour}:${viewModel.state.minutes}",
+
+                                        "${viewModel.state.selectedProject!!.id}"
+
+                                    )
+                                }
+                            },
+
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(70.dp))
+                                .height(40.dp)
+                                .fillMaxWidth()
+
+                        ) {
+
+                            Text(text = "Редактировать")
+
+                        }
 
                     }
+
                 }
 
                 if ( viewModel.state.isVisibilityCalendar ) {

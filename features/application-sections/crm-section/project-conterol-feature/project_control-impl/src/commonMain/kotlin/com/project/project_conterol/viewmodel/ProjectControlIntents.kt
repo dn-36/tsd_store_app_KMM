@@ -21,13 +21,19 @@ sealed class ProjectControlIntents {
 
     data class OpenDescription( val index: Int ):ProjectControlIntents()
 
+    object NoDelete :ProjectControlIntents()
+
+    data class OpenDeleteComponent ( val item: ServiceModel ) :ProjectControlIntents()
+
+    data class DeleteProjectControl( val coroutineScope: CoroutineScope ):ProjectControlIntents()
+
     data class CreateProjectControl( val coroutineScope: CoroutineScope, val  text:String,
 
                                      val data: String, val time: String,
 
                                      val project_id: String  ):ProjectControlIntents()
 
-    data class UpdateProjectControl( val coroutineScope: CoroutineScope, val ui: String,
+    data class UpdateProjectControl( val coroutineScope: CoroutineScope, val id: Int,
 
                                      val  text:String, val data: String, val time: String,
 

@@ -10,6 +10,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -84,7 +85,7 @@ class ProjectControlClient {
     }
 
     // обновление контроля проектов
-    suspend fun updateProjectControl( ui: String, text:String, data: String, time: String,
+    suspend fun updateProjectControl( id: Int, text:String, data: String, time: String,
                                      project_id: String ): HttpResponse {
 
         val requestBody = mapOf(
@@ -94,7 +95,7 @@ class ProjectControlClient {
             "project_id" to project_id,
         )
         return try {
-            val response = client.put("https://delta.online/api/controll-projects/${ui}") {
+            val response = client.put("https://delta.online/api/controll-projects/${id}") {
                 contentType(ContentType.Application.Json)
                 setBody(requestBody)
             }
@@ -102,6 +103,28 @@ class ProjectControlClient {
             response
         } catch (e: Exception) {
             println("UPDATE ProjectControl: Error - ${e.message}")
+            throw e
+        }
+    }
+
+    // удаление контроля проектов
+    suspend fun deleteProjectControl( id: Int ): HttpResponse {
+
+        return try {
+
+            val response = client.delete("https://delta.online/api/controll-projects/${id}") {
+
+                contentType(ContentType.Application.Json)
+            }
+
+            println("Удаление контроля проектов: ${response.toString()}")
+
+            response
+
+        } catch (e: Exception) {
+
+            println("DELETE ProjectControl: Error - ${e.message}")
+
             throw e
         }
     }

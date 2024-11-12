@@ -40,7 +40,6 @@ include(":core:barcode-scanner")
 include(":core:camera-provider")
 include(":core:network")
 include(":core:app")
-include(":core:date-picker")
 /*--*/include(":features:application-sections:crm-section:notes-features")
 
 
@@ -93,6 +92,11 @@ include(":features:application-sections")
 /** api and impl **/
 /*------*/include(":features:application-sections:crm-section:project-conterol-feature:project_control-impl")
 /*------*/include(":features:application-sections:crm-section:project-conterol-feature:project-control-api")
+/**features**/
+/*----*/include(":features:application-sections:crm-section:specifications-feature")
+/** api and impl**/
+/*------*/include(":features:application-sections:crm-section:specifications-feature:specifications-api")
+/*------*/include(":features:application-sections:crm-section:specifications-feature:specifications-impl")
 
 /**home-section**/
 /*--*/include(":features:application-sections:organization-section")

@@ -34,6 +34,7 @@ kotlin {
             implementation(project(":features:application-sections:crm-section:contragents-feature:contragents-api"))
             implementation(project(":features:application-sections:crm-section:crm-feature:crm-api"))
             implementation(project(":features:application-sections:crm-section:project-conterol-feature:project-control-api"))
+            implementation(project(":features:application-sections:crm-section:specifications-feature:specifications-api"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

@@ -33,7 +33,6 @@ kotlin {
             implementation(project(":core:app"))
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
-            implementation(project(":core:date-picker"))
             implementation(project(":core:network"))
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -48,7 +47,7 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
 
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
 
         }
 

@@ -37,13 +37,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import component.data_entry.util.boxGHeight
+import component.data_entry.util.boxHeight
 import component.data_entry.viewmodel.DataEntryIntents
 import component.data_entry.viewmodel.DataEntryViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -310,7 +307,7 @@ class DataEntryComponent (
 
                 if ( viewModel.state.expendedService ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+                    Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
 
                         viewModel.state.filteredListServices.size).dp)) {
                         Card(
@@ -626,7 +623,7 @@ class DataEntryComponent (
 
                         if (viewModel.state.expendedLegalEntity) {
 
-                            Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+                            Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
 
                                 viewModel.state.filteredListContragents.size).dp)) {
                                 Card(
@@ -881,7 +878,7 @@ class DataEntryComponent (
 
                         if (viewModel.state.expendedLocations) {
 
-                            Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+                            Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
 
                                 viewModel.state.filteredListLocations.size).dp)) {
                                 Card(
@@ -1025,7 +1022,7 @@ class DataEntryComponent (
 
                         if ( viewModel.state.expendedGroupEntity ) {
 
-                            Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+                            Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
 
                                 viewModel.state.filteredListGroupEntity.size).dp)) {
                                 Card(
@@ -1147,7 +1144,7 @@ class DataEntryComponent (
 
                         if (viewModel.state.expendedProject) {
 
-                            Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+                            Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
 
                                 viewModel.state.filteredListProjects.size).dp)) {
                                 Card(
@@ -1279,7 +1276,7 @@ class DataEntryComponent (
 
                 if ( viewModel.state.expendedLegalEntityPerformer ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+                    Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
 
                         viewModel.state.filteredListContragents.size).dp)) {
                         Card(
@@ -1522,7 +1519,7 @@ class DataEntryComponent (
 
                 if ( viewModel.state.expendedLocationsPerformer ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+                    Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
 
                         viewModel.state.filteredListLocations.size).dp)) {
                         Card(
@@ -1664,7 +1661,7 @@ class DataEntryComponent (
 
                 if ( viewModel.state.expendedSpecifications ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(boxGHeight(
+                    Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
 
                         viewModel.state.filteredListSpecifications.size).dp)) {
                         Card(

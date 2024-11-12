@@ -4,15 +4,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.network.Navigation
 import com.project.network.notes_network.model.removeHtmlTags
 import com.project.project_conterol.domain.usecases.CreateProjectControlUseCase
+import com.project.project_conterol.domain.usecases.DeleteProjectControlUseCase
 import com.project.project_conterol.domain.usecases.GetProjectsControlUseCase
 import com.project.project_conterol.domain.usecases.GetProjectsUseCase
 import com.project.project_conterol.domain.usecases.UpdateProjectControlUseCase
+import com.project.project_conterol.model.ServiceModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -26,7 +29,9 @@ class ProjectControlViewModel (
 
     val createProjectControlUseCase: CreateProjectControlUseCase,
 
-    val updateProjectControlUseCase: UpdateProjectControlUseCase
+    val updateProjectControlUseCase: UpdateProjectControlUseCase,
+
+    val deleteProjectControlUseCase: DeleteProjectControlUseCase
 
 ): NetworkViewModel() {
 
@@ -50,7 +55,7 @@ class ProjectControlViewModel (
 
                         listProjects = getProjectsUseCase.execute(),
 
-                        isVisibilityDataEntryComponent = mutableStateOf(true)
+                        isVisibilityDataEntryComponent = true
 
                     )
 
@@ -72,7 +77,7 @@ class ProjectControlViewModel (
 
                         updatedItem = intent.item,
 
-                        isVisibilityDataEntryComponent = mutableStateOf(true)
+                        isVisibilityDataEntryComponent = true
 
                     )
 
@@ -131,6 +136,8 @@ class ProjectControlViewModel (
 
             is ProjectControlIntents.CreateProjectControl -> {
 
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
             intent.coroutineScope.launch ( Dispatchers.IO ) {
 
              createProjectControlUseCase.execute( text = intent.text, data = intent.data,
@@ -139,11 +146,15 @@ class ProjectControlViewModel (
 
                 state = state.copy(
 
-                    listProjects = getProjectsUseCase.execute(),
+                    listProjectsControl = getProjectsControlUseCase.execute(),
 
-                    isVisibilityDataEntryComponent = mutableStateOf(false)
+                    isVisibilityDataEntryComponent = false,
+
+                    updatedItem = null
 
                 )
+
+                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
             }
 
@@ -151,23 +162,56 @@ class ProjectControlViewModel (
 
             is ProjectControlIntents.UpdateProjectControl -> {
 
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
                 intent.coroutineScope.launch ( Dispatchers.IO ) {
 
-                    updateProjectControlUseCase.execute( ui = intent.ui, text = intent.text,
+                    updateProjectControlUseCase.execute( id = intent.id, text = intent.text,
 
                         data = intent.data, time = intent.time, project_id = intent.project_id)
 
                     state = state.copy(
 
-                        listProjects = getProjectsUseCase.execute(),
+                        listProjectsControl = getProjectsControlUseCase.execute(),
 
-                        isVisibilityDataEntryComponent = mutableStateOf(false)
+                        isVisibilityDataEntryComponent = false,
+
+                        updatedItem = null
 
                     )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                 }
 
             }
+
+            is ProjectControlIntents.DeleteProjectControl -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                    deleteProjectControlUseCase.execute( state.updatedItem!!.id?:0 )
+
+                    state = state.copy(
+
+                        listProjectsControl = getProjectsControlUseCase.execute(),
+
+                        isVisibilityDeleteComponent = false
+
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is ProjectControlIntents.OpenDeleteComponent -> openDeleteComponent(intent.item)
+
+            is ProjectControlIntents.NoDelete -> noDelete()
 
         }
 
@@ -185,7 +229,33 @@ class ProjectControlViewModel (
 
         state = state.copy(
 
-            isVisibilityDataEntryComponent = mutableStateOf(false)
+            isVisibilityDataEntryComponent = false,
+
+            updatedItem = null
+
+        )
+
+    }
+
+    fun noDelete(){
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = false,
+
+            updatedItem = null
+
+        )
+
+    }
+
+    fun openDeleteComponent( item: ServiceModel? ){
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = true,
+
+            updatedItem = item
 
         )
 

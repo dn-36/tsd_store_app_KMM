@@ -1,7 +1,6 @@
 package org.example.project
 
-import ContextDatePicker
-import DatePickerAndroid
+
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -26,8 +25,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-
-        ContextDatePicker.context = this@MainActivity.applicationContext
 
         initKoin {
             androidContext(this@MainActivity.applicationContext)

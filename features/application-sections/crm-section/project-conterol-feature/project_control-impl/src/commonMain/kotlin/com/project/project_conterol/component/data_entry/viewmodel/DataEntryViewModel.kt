@@ -1,11 +1,17 @@
 package com.project.project_conterol.component.data_entry.viewmodel
 
-import DatePickerApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.project.project_conterol.model.ProjectResponseModel
+import com.project.project_conterol.model.ServiceModel
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDate
+import kotlinx.datetime.toLocalDateTime
 import org.koin.mp.KoinPlatform
 
 class DataEntryViewModel : ViewModel() {
@@ -28,7 +34,7 @@ class DataEntryViewModel : ViewModel() {
 
          is DataEntryIntents.SelectProject -> selectProject(intent.item)
 
-         is DataEntryIntents.SetScreen -> setScreen(intent.listProjects)
+         is DataEntryIntents.SetScreen -> setScreen(intent.listProjects, intent.item)
 
          is DataEntryIntents.SelectHour -> selectHour(intent.hour)
 
@@ -132,7 +138,27 @@ class DataEntryViewModel : ViewModel() {
 
    }
 
-   fun setScreen ( listProjects: List<ProjectResponseModel> ) {
+   fun setScreen ( listProjects: List<ProjectResponseModel>, item: ServiceModel? ) {
+
+      var newHour = "00"
+
+      var newMinutes = "00"
+
+      var newDate: LocalDate? = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+      // Разделение времени
+      if (!item?.time.isNullOrEmpty()) {
+         val parts = item?.time!!.split(":")
+         if (parts.size >= 2) { // Проверяем, что хотя бы часы и минуты есть
+            newHour = parts[0]
+            newMinutes = parts[1]
+         }
+      }
+
+      // Преобразование строки даты в LocalDate
+      if (!item?.data.isNullOrEmpty()) {
+         newDate = item!!.data!!.toLocalDate()
+      }
 
       if ( state.isSet ) {
 
@@ -140,7 +166,20 @@ class DataEntryViewModel : ViewModel() {
 
             filteredListProjects = listProjects,
 
-            isSet = false
+            isSet = false,
+
+            selectedProject = if ( item != null ) listProjects.find { it.id == item.project_id }
+
+            else null,
+
+            hour = newHour,
+
+            minutes = newMinutes,
+
+            date = newDate,
+
+            description = if ( item != null ) item.text?:"" else ""
+
 
          )
 

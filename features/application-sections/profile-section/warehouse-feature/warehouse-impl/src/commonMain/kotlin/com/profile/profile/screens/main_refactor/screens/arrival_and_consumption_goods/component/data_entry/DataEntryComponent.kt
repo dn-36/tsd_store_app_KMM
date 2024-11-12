@@ -648,7 +648,7 @@ class DataEntryComponent(
 
                             ) { index, item ->
 
-                                    Text(item.stores[0]!!.name,
+                                    Text(item.stores[0]!!.name?:"Нет имени",
                                         fontSize = 20.sp,
                                         modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)
                                             .clickable(
@@ -682,7 +682,7 @@ class DataEntryComponent(
                             .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
                     ) {
                         Text(
-                            text = vm.state.selectedWarehouse!!.stores[0]!!.name!!,
+                            text = vm.state.selectedWarehouse!!.stores[0]!!.name?:"Нет имени",
                             color = Color.White,
                             fontSize = 15.sp,
                             modifier = Modifier.padding(8.dp).align(

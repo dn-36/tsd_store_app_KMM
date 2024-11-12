@@ -3,6 +3,7 @@ package com.project.`menu-crm-api`.viewmodel
 import CRMScreenApi
 import ContragentsScreensApi
 import androidx.lifecycle.ViewModel
+import com.SpecificationsScreenApi
 import com.example.`notes-screens-api`.NotesScreensApi
 import com.project.`menu-crm-api`.ProjectControlScreenApi
 import com.project.network.Navigation
@@ -14,13 +15,15 @@ class MenuViewModel:ViewModel() {
     fun processIntent(intent: MenuIntents){
         when(intent){
 
-            is MenuIntents.Notes -> { shownotesIntent() }
+            is MenuIntents.Notes ->  shownotesIntent()
 
-            is MenuIntents.Contragents -> { contragents() }
+            is MenuIntents.Contragents ->  contragents()
 
-            is MenuIntents.CRM -> { crm() }
+            is MenuIntents.CRM ->  crm()
 
-            is MenuIntents.ProjectControl -> { projectControl() }
+            is MenuIntents.ProjectControl ->  projectControl()
+
+            is MenuIntents.Specifications ->  specifications()
 
         }
     }
@@ -54,6 +57,14 @@ class MenuViewModel:ViewModel() {
         val projectControlScreen: ProjectControlScreenApi = getKoin().get()
 
         Navigation.navigator.push(projectControlScreen.projectControl())
+
+    }
+
+    fun specifications () {
+
+        val specificationsScreen: SpecificationsScreenApi = getKoin().get()
+
+        Navigation.navigator.push(specificationsScreen.specifications())
 
     }
 

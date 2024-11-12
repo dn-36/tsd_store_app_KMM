@@ -14,10 +14,10 @@ import com.project.network.networkModule
 import com.project.`outhorization-screen-impl`.authorizationModule
 import com.project.project_conterol.projectControlModule
 import com.project.tape.tapeScreenModule
+import com.specificationsModule
 import contactProviderModule
 import contragentsModule
 import crmModule
-import datePickerModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -43,8 +43,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             contragentsModule,
             crmModule,
             projectControlModule,
-            datePickerModule
-
+            specificationsModule
         )
     }
 }

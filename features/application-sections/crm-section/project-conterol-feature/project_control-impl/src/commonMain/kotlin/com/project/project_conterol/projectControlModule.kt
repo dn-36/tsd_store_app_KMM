@@ -7,6 +7,7 @@ import com.project.network.projects_network.ProjectsClient
 import com.project.project_conterol.datasource.ProjectsControlClientImpl
 import com.project.project_conterol.domain.repository.ProjectControlClientApi
 import com.project.project_conterol.domain.usecases.CreateProjectControlUseCase
+import com.project.project_conterol.domain.usecases.DeleteProjectControlUseCase
 import com.project.project_conterol.domain.usecases.GetProjectsControlUseCase
 import com.project.project_conterol.domain.usecases.GetProjectsUseCase
 import com.project.project_conterol.domain.usecases.UpdateProjectControlUseCase
@@ -23,6 +24,8 @@ val projectControlModule = module {
 
     factory { UpdateProjectControlUseCase( get()) }
 
+    factory { DeleteProjectControlUseCase( get()) }
+
     factory { GetProjectsUseCase( get()) }
 
     factory { ProjectsControlClientImpl( get(), get(), get()) as ProjectControlClientApi }
@@ -31,6 +34,6 @@ val projectControlModule = module {
 
     factory { ProjectsClient() }
 
-    factory { ProjectControlViewModel( get(), get(), get(), get()) }
+    factory { ProjectControlViewModel( get(), get(), get(), get(), get()) }
 
 }

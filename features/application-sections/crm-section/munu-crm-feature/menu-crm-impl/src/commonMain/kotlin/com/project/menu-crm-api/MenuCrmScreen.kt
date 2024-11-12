@@ -114,6 +114,17 @@ class MenuCrmScreen:Screen{
                 ) {
                     Text(text = "Контрагенты")
                 }
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+                    onClick = { vm.processIntent(MenuIntents.Specifications) },
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(70.dp))
+                        .height(40.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Спецификации")
+                }
 
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {

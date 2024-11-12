@@ -93,13 +93,13 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                                         ) {
 
                                             Text(
-                                                it!!.name,
+                                                it!!.name?:"Нет имени",
                                                 fontSize = 17.sp,
                                                 fontWeight = FontWeight.Bold
                                             )
 
                                             Text(
-                                                item!!.name!!,
+                                                item.name?:"Нет имени",
                                                 fontSize = 17.sp,
                                             )
 

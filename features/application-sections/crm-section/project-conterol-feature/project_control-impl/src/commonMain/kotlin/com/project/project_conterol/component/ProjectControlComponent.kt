@@ -56,7 +56,14 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
 
-                        { viewModel.processIntents(ProjectControlIntents.Back) }
+                        {
+                            if ( !viewModel.state.isVisibilityDeleteComponent ) {
+
+                                viewModel.processIntents(ProjectControlIntents.Back)
+
+                            }
+
+                            }
                     )
 
                     Spacer(modifier = Modifier.width(10.dp))
@@ -159,9 +166,14 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
                                                 indication = null, // Отключение эффекта затемнения
                                                 interactionSource = remember { MutableInteractionSource() })
 
-                                            { viewModel.processIntents(ProjectControlIntents
+                                            { if ( !viewModel.state.isVisibilityDeleteComponent ) {
 
-                                                .OpenUpdateDataEntryComponent(scope,item)) })
+                                                viewModel.processIntents(
+                                                    ProjectControlIntents
+
+                                                        .OpenUpdateDataEntryComponent(scope, item)
+                                                )
+                                            } })
 
 
                                     Spacer(modifier = Modifier.width(20.dp))
@@ -173,7 +185,9 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
                                                 indication = null, // Отключение эффекта затемнения
                                                 interactionSource = remember { MutableInteractionSource() })
 
-                                            { })
+                                            { viewModel.processIntents(ProjectControlIntents.
+
+                                            OpenDeleteComponent(item)) })
 
                                 }
 
@@ -189,7 +203,15 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
 
                 PlusButton {
 
-                viewModel.processIntents(ProjectControlIntents.OpenCreateDataEntryComponent(scope))
+                    if ( !viewModel.state.isVisibilityDeleteComponent ) {
+
+                        viewModel.processIntents(
+                            ProjectControlIntents.OpenCreateDataEntryComponent(
+                                scope
+                            )
+                        )
+
+                    }
 
                 }
 
@@ -197,7 +219,7 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
 
         }
 
-        if ( viewModel.state.isVisibilityDataEntryComponent.value ) {
+        if ( viewModel.state.isVisibilityDataEntryComponent ) {
 
             DataEntryComponent( listAllProjects = viewModel.state.listProjects,
 
@@ -213,7 +235,23 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
 
                         text, data, time, project_id))
 
+                }, onClickUpdate = { id, coroutineScope, text, data, time, project_id ->
+
+                    viewModel.processIntents(ProjectControlIntents.UpdateProjectControl(
+
+                        coroutineScope, id, text, data, time, project_id))
+
                 }).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityDeleteComponent ) {
+
+            DeleteComponent( onClickDelete = { coroutineScope -> viewModel.processIntents(
+
+                ProjectControlIntents.DeleteProjectControl(coroutineScope)) },
+
+                onClickNo = { viewModel.processIntents(ProjectControlIntents.NoDelete) }).Content()
 
         }
 
