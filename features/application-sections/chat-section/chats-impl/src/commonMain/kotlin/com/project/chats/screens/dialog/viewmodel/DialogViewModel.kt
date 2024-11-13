@@ -1,10 +1,13 @@
 package com.project.chats.screens.dialog.viewmodel
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.util.fastForEachIndexed
 import com.project.chats.screens.chats.screen.ChatsScreen
+import com.project.chats.screens.dialog.components.DialogComponentScreen
 import com.project.chats.screens.dialog.domain.GetListMessagesUseCase
 import com.project.chats.screens.dialog.domain.ReadMessegeUseCase
 import com.project.chats.screens.dialog.domain.SendMessageUseCase
@@ -12,6 +15,7 @@ import com.project.chats.screens.dialog.domain.models.Message
 import com.project.chats.screens.dialog.domain.models.ReplyMessage
 import com.project.chats.screens.dialog.domain.models.StatusMessage
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
+import com.project.chats.screens.gallery.GalleryMediaScreen
 import com.project.core_app.getFormattedDateTime
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
@@ -26,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import com.project.chats.screens.history_files.screen.HistoryFilesScreen
+import com.project.chats.screens.history_files.viewmodel.models.Photo
 import kotlin.coroutines.cancellation.CancellationException
 
 class DialogViewModel(
@@ -46,18 +51,20 @@ class DialogViewModel(
     fun processIntent(intent: DialogIntents) {
         when (intent) {
             is DialogIntents.Back -> back()
-            is DialogIntents.HistoryFiles -> historyFiles()
+            is DialogIntents.HistoryFiles -> historyFiles(intent.dialogComponentScreen)
             is DialogIntents.SetScreen -> {
                 if (isSeted) return
                 this@DialogViewModel.uiChats = intent.uiChats
                 this@DialogViewModel.scope = intent.scope
                 setScreen()
             }
+            is DialogIntents.OpenSelectFileComponent -> { openSelectFileComponent() }
 
-            is DialogIntents.AddNewPhotosGalleryOrCamera -> TODO()
-            DialogIntents.CloseSelectFileComponent -> TODO()
-            is DialogIntents.DeleteSelectedPhoto -> TODO()
-            DialogIntents.OpenSelectFileComponent -> TODO()
+            is DialogIntents.CloseSelectFileComponent -> { closeSelectFileComponent() }
+
+            is DialogIntents.AddNewPhotosGalleryOrCamera -> { addNewPhotosGalleryOrCamera( intent.images ) }
+
+            is DialogIntents.DeleteSelectedPhoto -> { deleteSelectedPhoto( intent.image ) }
         }
     }
 
@@ -65,18 +72,18 @@ class DialogViewModel(
         Navigation.navigator.push(ChatsScreen())
     }
 
-    private fun historyFiles() {
-     val listUrlImage = mutableListOf<String>()
+    private fun historyFiles(dialog:DialogComponentScreen) {
+     val listUrlImage = mutableListOf<Photo>()
          state.listMessage.forEach{
              if(it.url_icon != null){
-            listUrlImage.add(it.url_icon!!)
+            listUrlImage.add(Photo(it.url_icon!!,it.ui))
             }
         }
        // println("QQQQIIII++++OOO")
         println(listUrlImage)
       //  println("QQQQIIII++++OOO")
         Navigation.navigator.push(HistoryFilesScreen(
-          listUrlImage
+          listUrlImage,dialog
         ))
 
     }
@@ -147,7 +154,7 @@ class DialogViewModel(
         }
     }
 
-    fun sendMessageUseCase(text: String, ui: String, scope: CoroutineScope) {
+    fun sendMessage(text: String, ui: String, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             val list = state.listMessage.toMutableList()
 
@@ -166,7 +173,10 @@ class DialogViewModel(
                 )
             )
 
-            state = state.copy(listMessage = list)
+            state = state.copy(
+                listMessage = list,
+                uiSelectedPhoto = "",
+                )
 
             val result = sendMessageUseCase.execute(
                 text,
@@ -177,7 +187,10 @@ class DialogViewModel(
                     null,
                 ui
             )
-
+            state = state.copy(
+            listImages = listOf()
+            )
+             println("LLLLLLLL____LLLLLLLLLL_____LLLLLLLL_____LLLLLLLLLL")
             if (result != sendMessageUseCase.ERROR) {
                 val removeIndex = mutableListOf<Int>()
                 val updatedList = list.mapIndexed { index, message ->
@@ -230,7 +243,8 @@ class DialogViewModel(
         if (_listSelectedMessage.size == 0) {
             val updatedList = state.listMessage.map { message ->
                     message.copy(
-                        isShowSelectedMessage = false,
+                        isSelectedMessage = false,
+                        isShowSelectedMessage  = false
                     )
             }
                     state = state.copy(
@@ -253,7 +267,6 @@ class DialogViewModel(
                 }
             }
 
-            // Обновление state
             state = state.copy(
                 isShowSelectMessage = true,
                 listMessage = updatedList
@@ -277,27 +290,28 @@ class DialogViewModel(
             }
         }
 
-
-
-        state = state.copy(
-            isShowSelectMessage = false,
-            isShowDeleteDialog = false,
-            listMessage = list
-        )
         list = list.map {
             it.copy(
                 isShowSelectedMessage = false,
                 isSelectedMessage = false
             )
         }.toMutableList()
+
+        state = state.copy(
+            isShowSelectMessage = false,
+            isShowDeleteDialog = false,
+            listMessage = list
+        )
+
+
         scope.launch {
          jobUpdate?.cancel()
-         println("println(ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL))")
-         println(ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL))
-         println("println(ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL))")
-
-           // delay(1000L)
-            jobUpdate = updateDate()
+         //println("println(ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL))")
+         //println(
+             ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL)
+         //)
+         //println("println(ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL))")
+         jobUpdate = updateDate()
         }
 
     }
@@ -318,4 +332,67 @@ class DialogViewModel(
         )
     }
 
-}
+    fun showPhoto(list: List<String>){
+        Navigation.navigator.push( GalleryMediaScreen(list))
+    }
+
+    private fun openSelectFileComponent () {
+
+        state = state.copy(
+
+            isVisibilitySelectFileComponent = true
+
+        )
+
+
+    }
+
+    private fun closeSelectFileComponent () {
+
+        state = state.copy(
+
+            isVisibilitySelectFileComponent = false
+
+        )
+
+
+    }
+
+    private fun addNewPhotosGalleryOrCamera ( images: List<ImageBitmap> ) {
+
+        val newList = state.listImages.toMutableList()
+
+        newList.addAll(images)
+
+        state = state.copy(
+            isVisibilitySelectFileComponent = false,
+            listImages = newList
+        )
+
+
+    }
+
+    private fun deleteSelectedPhoto ( image: ImageBitmap) {
+
+        val newList = state.listImages.toMutableList()
+
+        newList.remove(image)
+
+        state = state.copy(
+
+            listImages = newList
+
+        )
+    }
+        @Composable
+    fun setPositionChat(
+        uiChat:String,
+        actionScrollable: @Composable (index:Int)->Unit
+    ){
+        state.listMessage.forEachIndexed { index, message ->
+            if(uiChat == message.ui)
+            actionScrollable(index)
+        }
+    }
+
+    }

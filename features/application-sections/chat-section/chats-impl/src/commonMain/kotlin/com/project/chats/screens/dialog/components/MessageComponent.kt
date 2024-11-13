@@ -58,6 +58,7 @@ fun MessageComponent(
     resendMessage:()->Unit,
     onSwipeRight:()->Unit,
     onSelectMessage:(ui:String)->Unit,
+    showPhoto:(photos:List<String>)->Unit
     ) {
 
     val dismissState = rememberDismissState(
@@ -226,7 +227,9 @@ fun MessageComponent(
                        CoilImage(
                            imageModel = { message.url_icon },
                            loading = { CircularProgressIndicator(modifier = Modifier.size(5.dp)) },
-                           modifier = Modifier.size(150.dp)
+                           modifier = Modifier.size(150.dp).clickable {
+                               showPhoto(listOf(message.url_icon!!))
+                           }
                        )
                    }
                         }

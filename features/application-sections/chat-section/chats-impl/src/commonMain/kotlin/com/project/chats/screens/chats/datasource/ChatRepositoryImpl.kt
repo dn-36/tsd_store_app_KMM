@@ -12,7 +12,7 @@ class ChatRepositoryImpl(
     ):ChatsRepositoryApi {
     override suspend fun getListChats():List<ChatsModel>{
         chatApi.init(sharedPrefsApi.getToken()?:"")
-       val listChats = chatApi.getChats().map {
+       val listChats = chatApi.getListChats().map {
 
            ChatsModel(
                if(!it.image.isNullOrBlank())

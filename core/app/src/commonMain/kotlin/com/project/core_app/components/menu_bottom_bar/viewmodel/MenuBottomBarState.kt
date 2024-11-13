@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.Color
 
 data class MenuBottomBarState(
 
-    var section: MenuBottomBarSection
-
+    val section: MenuBottomBarSection,
+    val countNewMessage:Int = 0
 )
 
 enum class MenuBottomBarSection(

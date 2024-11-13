@@ -43,6 +43,7 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
+            implementation(project(":core:network"))
             implementation(dependencyNotation = libs.peekaboo.ui)
             implementation(dependencyNotation = libs.peekaboo.imagepicker)
             implementation("com.squareup.okio:okio:3.9.1")

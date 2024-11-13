@@ -10,5 +10,8 @@ data class DialogState(
     val isShowDeleteDialog:Boolean = false,
     val listImages:List<ImageBitmap> = listOf(),
     val listMessage:List<Message> = mutableListOf(),
-    val replyMessage: ReplyMessage? = null
+    val isVisibilitySelectFileComponent: Boolean = false,
+    val replyMessage: ReplyMessage? = null,
+    val positionItemChat:Int = 0,
+    val uiSelectedPhoto:String = ""
 )

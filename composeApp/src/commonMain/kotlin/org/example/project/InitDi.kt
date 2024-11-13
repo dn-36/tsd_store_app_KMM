@@ -6,6 +6,7 @@ import com.profile.profile.qr_code.printerPlatformModule
 import com.profile.profile.qr_code.printerScreenModule
 import com.profile.profile.warehouseScreensModule
 import com.project.chats.core.chatsModule
+import com.project.core_app.components.menu_bottom_bar.menuBottomBarMudule
 import org.example.project.app.moduls_di.appModule
 import com.project.`local-storage`.`profile-storage`.localStorageModule
 import com.project.organizationScreenModule
@@ -39,7 +40,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             warehouseScreensModule,
             contactProviderModule,
             contragentsModule,
-            crmModule
+            crmModule,
+            menuBottomBarMudule
 
         )
     }

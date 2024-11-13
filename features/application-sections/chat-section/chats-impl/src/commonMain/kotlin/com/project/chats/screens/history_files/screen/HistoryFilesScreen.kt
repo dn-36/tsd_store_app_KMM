@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,20 +30,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.project.chats.screens.dialog.components.DialogComponentScreen
 import com.skydoves.landscapist.coil3.CoilImage
 import org.example.project.nika_screens_chats.history_files_feature.viewmodel.HistoryFilesIntents
 import com.project.chats.screens.history_files.viewmodel.HistoryFilesViewModel
+import com.project.chats.screens.history_files.viewmodel.models.Photo
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
+import project.core.resources.done
+import project.core.resources.eye
 
 
-class HistoryFilesScreen(private val listUrlImage:List<String>?) : Screen {
+class HistoryFilesScreen(private val listUrlImage:List<Photo>?, dialogScreen:DialogComponentScreen) : Screen {
 
-    private val vm = HistoryFilesViewModel()
+    private val vm = HistoryFilesViewModel(
+        listUrlImage?: listOf(),
+        dialogScreen
+    )
 
     @Composable
     override fun Content() {
@@ -52,7 +61,19 @@ class HistoryFilesScreen(private val listUrlImage:List<String>?) : Screen {
         var alphaFiles by remember { mutableStateOf(0f) }
 
         Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
-
+            if(vm.state.value.isVisibilityButtonGoToPlacePhoto) {
+                Image(
+                    painter = painterResource(resource = Res.drawable.eye),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(20.dp)
+                        .align(Alignment.TopEnd)
+                        .clickable {
+                            vm.goToPlacePhoto()
+                        },
+                    contentDescription = null
+                )
+            }
             Column(modifier = Modifier.align(Alignment.TopStart)) {
                 Row(
                     modifier = Modifier.padding(16.dp).fillMaxWidth(0.6f),
@@ -64,7 +85,7 @@ class HistoryFilesScreen(private val listUrlImage:List<String>?) : Screen {
                         painter = painterResource(Res.drawable.back),
                         contentDescription = null,
                         modifier = Modifier.size(20.dp).clickable(
-                            indication = null, // Отключение эффекта затемнения
+                            indication = null,
                             interactionSource = remember { MutableInteractionSource() })
                         { vm.processIntent(HistoryFilesIntents.Back) }
                     )
@@ -113,39 +134,55 @@ class HistoryFilesScreen(private val listUrlImage:List<String>?) : Screen {
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 LazyColumn {
-                    itemsIndexed((listUrlImage?: listOf()).chunked(3)) { indexes, item ->
+                    itemsIndexed(vm.state.value.listPhoto.chunked(3)) { indexes, item ->
                         Row(
                             modifier = Modifier
-                                .padding(2.dp)
+                                .padding(start = 2.dp, end = 2.dp)
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             item.forEachIndexed { index, image ->
+                               Box(  modifier = Modifier//.padding(5.dp)
+                                   .border(1.dp,Color.Black)
+                                    .weight(0.5F)
+                                   .aspectRatio(1f)
+                                  // .clickable { vm.showGallery(listUrlImage!!.map { it.urlPhoto },image.urlPhoto) }) {
+
+                                   .pointerInput(Unit) {
+                                   detectTapGestures(
+
+                                       onTap = {
+                                           vm.showGallery(listUrlImage!!.map { it.urlPhoto },image.urlPhoto)
+                                       },
+
+                                       onLongPress = {
+
+                                           vm.selectPhoto(image)
+
+                                       },
+                                   )
+                               }
+                               ){
+                                   CoilImage(
+                                       imageModel = {
+                                           image.urlPhoto
+                                                    },
+                                   modifier = Modifier
+                                       .alpha(if(image.isSelected) 0.5f else 1F )
+                                       .aspectRatio(1f)
+                                   )
+                                   if(image.isSelected) {
+                                       Image(
+                                           painter = painterResource(Res.drawable.done),
+                                           contentDescription = null,
+                                           modifier = Modifier.size(50.dp).align(Alignment.Center)
+                                       )
+                                   }
+                               }
 
 
-                                CoilImage(
-                                    imageModel = {
-                                        println("item")
-                                        println(image)
-                                        println("item")
-                                        image },
-                                    modifier = Modifier.padding(5.dp)
-                                        .border(2.dp,Color.Black)
-
-                                        .weight(1f)  // Каждое изображение равномерно заполняет доступное пространство
-                                        .aspectRatio(1f),  // Сохраняет соотношение сторон 1:1
-                                  //  contentScale = ContentScale.Crop
-                                )
                             }
 
-                            // Если количество изображений в строке меньше 3, добавляем пустое пространство
-                            repeat(3 - item.size) {
-                                Spacer(
-                                    modifier = Modifier
-                                        .padding(2.dp)
-                                        .weight(1f)  // Добавляем пустое пространство для равномерного распределения
-                                )
-                            }
                         }
                     }
                 }

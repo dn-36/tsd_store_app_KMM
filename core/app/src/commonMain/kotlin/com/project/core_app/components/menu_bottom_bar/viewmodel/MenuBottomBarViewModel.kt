@@ -5,13 +5,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cafe.adriel.voyager.core.screen.Screen
+import com.project.core_app.components.menu_bottom_bar.domian.GetCountNewMessageUseCase
+import com.project.core_app.components.menu_bottom_bar.domian.MenuBottomBarRepositoryApi
 import com.project.network.Navigation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarState
 
 
-class MenuBottomBarViewModel : ViewModel() {
-
+class MenuBottomBarViewModel(
+    private val getCountNewMessageUseCase: GetCountNewMessageUseCase
+) : ViewModel() {
+    private companion object{
+     var countNewMessge:Int = 0
+    }
     var menuBottomBarState by mutableStateOf(MenuBottomBarState(MenuBottomBarSection.ORGANIZATION))
     private var setUsed:Boolean = false
     fun processIntent(intent: MenuBottomBarIntents){
@@ -23,45 +35,52 @@ class MenuBottomBarViewModel : ViewModel() {
             is MenuBottomBarIntents.Tape -> {tape(intent.screen)}
             is MenuBottomBarIntents.Home -> {organizations(intent.screen)}
             is MenuBottomBarIntents.SetScreen -> {
-                if(!setUsed) {
-                    true
-                    setScreen(intent.section)
-                }
+                    setScreen(intent.section,intent.scope)
             }
         }
     }
-    fun crm(menuScreen:Screen) {
+
+    private fun crm(menuScreen:Screen) {
 
         Navigation.navigator.push(menuScreen)
 
     }
 
-    fun profile(screen:Screen) {
+    private fun profile(screen:Screen) {
 
         Navigation.navigator.push(screen)
 
     }
 
-    fun organizations(screen: Screen) {
+    private fun organizations(screen: Screen) {
 
         Navigation.navigator.push(screen)
 
     }
 
-    fun chats(screen: Screen) {
+    private fun chats(screen: Screen) {
 
         Navigation.navigator.push(screen)
 
     }
 
-    fun tape(screen: Screen) {
+    private fun tape(screen: Screen) {
 
         Navigation.navigator.push(screen)
 
     }
-    fun setScreen(section: MenuBottomBarSection){
+   private fun setScreen(section: MenuBottomBarSection,scope: CoroutineScope){
+       if(!setUsed) {
+       true
+       menuBottomBarState  = menuBottomBarState.copy(section, countNewMessge)
 
-        menuBottomBarState  = menuBottomBarState.copy(section)
-
+           scope.launch(Dispatchers.IO) {
+               while (isActive) {
+                   countNewMessge = getCountNewMessageUseCase.execute()
+                   menuBottomBarState = menuBottomBarState.copy(countNewMessage = countNewMessge)
+                   delay(2000L)
+               }
+           }
+       }
     }
 }

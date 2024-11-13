@@ -2,6 +2,7 @@
 package com.project.network.chats_network
 
 import com.project.network.common.httpClientEngine
+import com.project.network.notitfication.SocketClient
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -58,7 +59,9 @@ class ChatsApi() {
     }
 
     // Получение списка заметок
-    suspend fun getChats(): List<ChatsResponse> {
+    suspend fun getListChats(): List<ChatsResponse> {
+
+      //  SocketClient(_token!!).connect()
 
         val response = client.get(baseUrl+"api/chats") {
             parameter("active", 1)
@@ -221,16 +224,6 @@ class ChatsApi() {
   suspend fun deleteChat(uiChat: String) : String {
       return client.delete(baseUrl+"api/chats/${uiChat}").body<HttpResponse>().bodyAsText()
   }
-    /*
-    Удаление
-Ссылка:
-https://delta.online/api/messages-delete
-Метод: POST
-
-Поля:
-all: 0/1 0 - удалить только у себя, 1 удалить для всех (Для всех удаляются только свои сообщения)
-messages: [UI, UI] массив UI сообщений для удаления
-     */
 
     suspend fun deleteMessage(listUi: List<String>,statusDelete:Int) : String {
         val response = client.post(baseUrl + "api/messages-delete") {
@@ -251,8 +244,7 @@ messages: [UI, UI] массив UI сообщений для удаления
         return  response
     }
 
-  suspend fun getProjects():String{
-       return client.get(baseUrl+"api/project").body<HttpResponse>().bodyAsText()
-   }
+
+
 
 }
