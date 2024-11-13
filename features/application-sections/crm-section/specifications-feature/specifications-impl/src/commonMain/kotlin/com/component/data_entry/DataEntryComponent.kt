@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -54,7 +55,14 @@ class DataEntryComponent (
 
     val listCurrency: List<CurrencyResponseModel>,
 
-    val onClickBack: () -> Unit
+    val onClickBack: () -> Unit,
+
+    val onClickNext: ( selectedCurrency: CurrencyResponseModel?,
+
+                       selectedWarehouse: WarehouseModel?,
+
+                       selectedStatus: Int?) -> Unit,
+
 
 ) {
 
@@ -356,22 +364,13 @@ class DataEntryComponent (
                     }
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 OutlinedTextField(
 
-                    value = viewModel.state.currency,
+                    value = "",
 
-                    onValueChange = { inputText ->
-
-                        viewModel.processIntents(
-
-                            DataEntryIntents.InputTextCurrency(inputText,
-
-                                listCurrency.filter {
-
-                                    it.name.contains(inputText, ignoreCase = true)
-                                }))
+                    onValueChange = {
 
                     },
 
@@ -385,7 +384,7 @@ class DataEntryComponent (
 
                             onClick = {
 
-                                viewModel.processIntents(DataEntryIntents.MenuCurrency)
+                                viewModel.processIntents(DataEntryIntents.MenuStatus)
 
                             }
                         ) {
@@ -402,7 +401,7 @@ class DataEntryComponent (
 
                 )
 
-                if (viewModel.state.selectedCurrency != null) {
+                if (viewModel.state.selectedStatus != null) {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -413,7 +412,7 @@ class DataEntryComponent (
                     ) {
 
                         Text(
-                            text = viewModel.state.selectedCurrency!!.name,
+                            text = viewModel.state.selectedStatus!!.first,
                             color = Color.White,
                             fontSize = 15.sp,
                             modifier = Modifier.padding(8.dp).align(
@@ -433,7 +432,7 @@ class DataEntryComponent (
 
                                     viewModel.processIntents(
 
-                                        DataEntryIntents.DeleteSelectedCurrency
+                                        DataEntryIntents.DeleteSelectedStatus
 
                                     )
 
@@ -441,11 +440,11 @@ class DataEntryComponent (
                     }
                 }
 
-                if (viewModel.state.expendedCurrency) {
+                if (viewModel.state.expendedStatus) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(
+                    //0 отмена, 1 новый, 2 подтвержден, 3 оплачен, 5 отгружен
 
-                        boxHeight( viewModel.state.filteredListCurrency.size).dp)) {
+                    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
 
                         Card(
                             modifier = Modifier.fillMaxSize()
@@ -454,13 +453,13 @@ class DataEntryComponent (
                             shape = RoundedCornerShape(8.dp)
                         ) {}
                         LazyColumn {
-                            itemsIndexed(viewModel.state.filteredListCurrency)
+                            itemsIndexed( listOf("Отмена","Новый","Подтвержден","Оплачен",
+
+                                "Отгружен") )
 
                             { index, item ->
 
-                                if (item.name != "") {
-
-                                    Text(item.name,
+                                    Text( item ,
                                         fontSize = 20.sp,
                                         modifier = Modifier.fillMaxWidth(0.9f)
                                             .padding(16.dp)
@@ -474,19 +473,43 @@ class DataEntryComponent (
 
                                                 viewModel.processIntents(
 
-                                                    DataEntryIntents.SelectedCurrency(
+                                                    DataEntryIntents.SelectedStatus(
 
-                                                        item
+                                                        item,index
                                                     )
                                                 )
 
                                             })
 
-                                }
                             }
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+
+                    Button(
+
+                        onClick = {
+
+                                  onClickNext( viewModel.state.selectedCurrency,
+
+                                      viewModel.state.selectedWarehouse,
+
+                                      viewModel.state.selectedStatus?.second?:1 )
+                        },
+
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(70.dp))
+                            .height(40.dp)
+                            .fillMaxWidth()
+
+                    ) {
+
+                        Text(text = "Далее")
+
+                    }
 
             }
         }

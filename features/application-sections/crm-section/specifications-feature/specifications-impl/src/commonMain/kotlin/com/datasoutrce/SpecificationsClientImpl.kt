@@ -3,6 +3,7 @@ package com.datasoutrce
 import com.domain.repository.SpecificationsClientApi
 import com.model.CategoryLangModel
 import com.model.CategoryModel
+import com.model.CategoryProductModel
 import com.model.ContragentResponseModel
 import com.model.CurrencyResponseModel
 import com.model.CurrencyViewModel
@@ -38,9 +39,15 @@ class SpecificationsClientImpl(
 
 ): SpecificationsClientApi {
 
+    override suspend fun getToken(): String {
+
+        return sharedPrefsApi.getToken()?:""
+
+    }
+
     override suspend fun getSpecifications(): List<SpecificResponseModel> {
 
-        specificationsClient.init(sharedPrefsApi.getToken()?:"")
+        specificationsClient.init(getToken())
 
         return specificationsClient.getSpecifications().map {
 
@@ -273,7 +280,7 @@ class SpecificationsClientImpl(
 
     }
 
-    override suspend fun getProducts(): List<ProductResponseModel> {
+    override suspend fun getProducts (): List<ProductResponseModel> {
 
         return productApiClient.getProductNames().map {
 
@@ -282,7 +289,16 @@ class SpecificationsClientImpl(
                 id = it.id,
                 sku = it.sku,
                 name = it.name,
-                ui = it.ui
+                ui = it.ui,
+                price = it.price,
+                category = if ( it.category != null ) CategoryProductModel(
+
+                id = it.category!!.id,
+                    name = it.category!!.name,
+                    creater_id = it.category!!.creater_id,
+                    company_id = it.category!!.company_id
+
+                )  else null
 
             )
 

@@ -16,6 +16,8 @@ sealed class DataEntryIntents {
 
     object MenuWarehouse: DataEntryIntents()
 
+    object MenuStatus: DataEntryIntents()
+
     data class InputTextCurrency( val text: String,
 
                                   val list: List<CurrencyResponseModel> ): DataEntryIntents()
@@ -28,8 +30,12 @@ sealed class DataEntryIntents {
 
     object DeleteSelectedWarehouse: DataEntryIntents()
 
+    object DeleteSelectedStatus: DataEntryIntents()
+
     data class SelectedCurrency( val item: CurrencyResponseModel ): DataEntryIntents()
 
     data class SelectedWarehouse( val item: WarehouseModel ): DataEntryIntents()
+
+    data class SelectedStatus( val name: String, val index:Int ): DataEntryIntents()
 
 }

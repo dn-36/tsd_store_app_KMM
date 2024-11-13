@@ -26,7 +26,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.component.add_products.AddProductsComponent
 import com.component.data_entry.DataEntryComponent
+import com.component.list_products.ListProductsComponent
+import com.model.ElementSpecification
+import com.model.ProductResponseModel
 import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.util.formatDateTime
@@ -175,7 +179,45 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                 onClickBack = {
 
-                    viewModel.processIntents(SpecificationsIntents.BackFromDataEntry) }).Content()
+                    viewModel.processIntents(SpecificationsIntents.BackFromDataEntry) },
+
+                onClickNext = { selectedCurrency, selectedWarehouse, selectedStatus ->
+
+                    viewModel.processIntents(SpecificationsIntents.Next(selectedCurrency,
+
+                        selectedWarehouse, selectedStatus))
+
+                }).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityAddProducts ) {
+
+            AddProductsComponent(
+
+                listElementSpecifications = viewModel.state.listElementsSpecifications,
+
+                onClickChooseProduct = { list ->
+
+                viewModel.processIntents(SpecificationsIntents.OpenListProducts(list))
+
+            }, onClickBack = { viewModel.processIntents(
+
+                SpecificationsIntents.BackFromAddProducts) } ).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityListProducts ) {
+
+            ListProductsComponent( listAllProducts = viewModel.state.listProducts,
+
+                onClickBack = { viewModel.processIntents(
+
+                    SpecificationsIntents.BackFromListProducts) },
+
+                onClickProduct = { item ->  viewModel.processIntents(
+
+                    SpecificationsIntents.SelectProduct(item))}).Content()
 
         }
 

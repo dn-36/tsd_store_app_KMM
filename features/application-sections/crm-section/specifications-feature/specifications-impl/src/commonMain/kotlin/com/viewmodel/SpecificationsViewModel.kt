@@ -3,12 +3,15 @@ package com.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import com.domain.usecases.GetContragentsUseCase
 import com.domain.usecases.GetCurrencyUseCase
 import com.domain.usecases.GetProductUseCase
 import com.domain.usecases.GetSpecificationsUseCase
 import com.domain.usecases.GetWarehouseUseCase
+import com.model.CurrencyResponseModel
+import com.model.ElementSpecification
+import com.model.ProductResponseModel
+import com.model.WarehouseModel
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.`menu-crm-api`.MenuCrmScreenApi
@@ -30,7 +33,7 @@ class SpecificationsViewModel (
 
     val getProductUseCase: GetProductUseCase
 
-): NetworkViewModel() {
+  ): NetworkViewModel() {
 
     var state by mutableStateOf(SpecificationsState())
 
@@ -50,7 +53,30 @@ class SpecificationsViewModel (
 
                         listContragents = getContragentsUseCase.execute(),
 
-                        isSet = false
+                        isSet = false,
+
+                        listElementsSpecifications = listOf( ElementSpecification(
+
+                            product = mutableListOf(
+                                ProductResponseModel(
+
+                                    id = null,
+                                    name = "Имя продукта",
+                                    sku = null,
+                                    ui = null,
+                                    price = null,
+                                    category = null
+
+                                )
+                            ),
+                            count = mutableListOf(""),
+                            block = "Имя группы",
+                            price_item = mutableListOf(""),
+                            nds = mutableListOf(""),
+                            spectext = mutableListOf(""),
+                            totalPrice = mutableListOf("")
+
+                        ))
 
                     )
 
@@ -63,6 +89,14 @@ class SpecificationsViewModel (
             is SpecificationsIntents.Back -> back()
 
             is SpecificationsIntents.BackFromDataEntry -> backFromDaraEntry()
+
+            is SpecificationsIntents.BackFromAddProducts -> backFromAddProducts()
+
+            is SpecificationsIntents.BackFromListProducts -> backFromListProducts()
+
+            is SpecificationsIntents.OpenListProducts -> openListProducts(intent.list)
+
+            is SpecificationsIntents.SelectProduct -> selectProduct(intent.item)
 
             is SpecificationsIntents.OpenCreateDataEntry -> {
 
@@ -88,6 +122,10 @@ class SpecificationsViewModel (
 
             }
 
+            is SpecificationsIntents.Next -> { next( intent.selectedCurrency,intent.selectedWarehouse,
+
+                intent.selectedStatus ) }
+
         }
 
     }
@@ -110,6 +148,91 @@ class SpecificationsViewModel (
             isVisibilityDataEntry = false
 
         )
+
+    }
+
+    fun backFromAddProducts () {
+
+        state = state.copy(
+
+            isVisibilityDataEntry = true,
+
+            isVisibilityAddProducts = false
+
+        )
+
+    }
+
+    fun backFromListProducts () {
+
+        state = state.copy(
+
+            isVisibilityListProducts = false,
+
+            isVisibilityAddProducts = true
+
+
+        )
+
+    }
+
+    fun next ( selectedCurrency: CurrencyResponseModel?, selectedWarehouse: WarehouseModel?,
+
+              selectedStatus: Int? ) {
+
+        state = state.copy(
+
+            selectedStatus = selectedStatus,
+
+            selectedWarehouse = selectedWarehouse,
+
+            selectedCurrency = selectedCurrency,
+
+            isVisibilityDataEntry = false,
+
+            isVisibilityAddProducts = true
+
+        )
+
+    }
+
+    fun openListProducts (list: List<ElementSpecification> ) {
+
+    state = state.copy(
+
+        listElementsSpecifications = list,
+
+        isVisibilityAddProducts = false,
+
+        isVisibilityListProducts = true
+
+    )
+
+    }
+
+    fun selectProduct ( item: ProductResponseModel ) {
+
+        val newList = state.listElementsSpecifications.toMutableList()
+
+        val lastElement = newList.last()
+        val updatedLastElement = lastElement.copy(
+            product = lastElement.product.toMutableList().apply { add(item) },
+            count = lastElement.count.toMutableList().apply { add("") },
+            totalPrice = lastElement.totalPrice.toMutableList().apply { add("") },
+            spectext = lastElement.spectext.toMutableList().apply { add("") },
+            price_item = lastElement.price_item.toMutableList().apply { add("") },
+            nds = lastElement.nds.toMutableList().apply { add("") }
+        )
+
+        newList[newList.size - 1] = updatedLastElement
+
+        state = state.copy(
+            listElementsSpecifications = newList,
+            isVisibilityListProducts = false,
+            isVisibilityAddProducts = true,
+        )
+
+        println("LIST: ${ state.listElementsSpecifications }")
 
     }
 

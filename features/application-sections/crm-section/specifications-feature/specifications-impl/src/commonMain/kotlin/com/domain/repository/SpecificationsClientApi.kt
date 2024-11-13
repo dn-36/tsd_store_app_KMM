@@ -18,4 +18,6 @@ interface SpecificationsClientApi {
 
     suspend fun getProducts(): List<ProductResponseModel>
 
+    suspend fun getToken():String
+
 }

@@ -35,11 +35,9 @@ include(":features:home")
 include(":features:profile")
 include(":features:tape")
 include(":core:local-storage")
-include(":core:contact-provider")
-include(":core:barcode-scanner")
-include(":core:camera-provider")
 include(":core:network")
 include(":core:app")
+include(":core:contact-provider")
 /*--*/include(":features:application-sections:crm-section:notes-features")
 
 
@@ -48,6 +46,8 @@ include(":core:recources")
 include(":common:phone")
 include(":common:printer-barcode-vkp")
 include(":common:printer-barcode-tsc")
+include(":common:camera-provider")
+
 
 
 /**application-sections**/

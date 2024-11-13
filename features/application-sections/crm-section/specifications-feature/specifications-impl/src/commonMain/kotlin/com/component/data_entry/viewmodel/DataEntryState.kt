@@ -22,8 +22,12 @@ data class DataEntryState(
 
     val selectedWarehouse: WarehouseModel? = null,
 
+    val selectedStatus: Pair<String,Int>? = null,
+
     val expendedCurrency: Boolean = false,
 
-    val expendedWarehouse: Boolean = false
+    val expendedWarehouse: Boolean = false,
+
+    val expendedStatus: Boolean = false,
 
     )

@@ -14,8 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
-
-import com.project.chats.screens.titile_chat.components.TitleChatComponent
 import com.project.chats.screens.titile_chat.screen.TitleChatScreen
 import org.koin.mp.KoinPlatform
 
@@ -119,12 +117,9 @@ class SelectContactsViewModel(
             )
         }
 
-
     }
 
-   private fun showContactsOrganization(scope: CoroutineScope){
-
-
+   private fun showContactsOrganization(scope: CoroutineScope) {
 
        val contactProvider: ContactProviderApi = KoinPlatform.getKoin().get()
 

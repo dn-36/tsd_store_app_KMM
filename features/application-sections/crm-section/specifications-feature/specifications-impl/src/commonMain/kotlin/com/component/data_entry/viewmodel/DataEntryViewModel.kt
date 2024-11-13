@@ -38,6 +38,8 @@ import com.model.WarehouseModel
 
             is DataEntryIntents.MenuWarehouse -> menuWarehouse()
 
+            is DataEntryIntents.MenuStatus -> menuStatus()
+
             is DataEntryIntents.InputTextCurrency -> inputTextCurrency(intent.text, intent.list)
 
             is DataEntryIntents.InputTextWarehouse -> inputTextWarehouse(intent.text, intent.list)
@@ -46,9 +48,13 @@ import com.model.WarehouseModel
 
             is DataEntryIntents.SelectedCurrency -> selectedCurrency(intent.item)
 
+            is DataEntryIntents.SelectedStatus -> selectedStatus(intent.name,intent.index)
+
             is DataEntryIntents.DeleteSelectedCurrency -> deleteSelectedCurrency()
 
             is DataEntryIntents.DeleteSelectedWarehouse -> deleteSelectedWarehouse()
+
+            is DataEntryIntents.DeleteSelectedStatus -> deleteSelectedStatus()
 
         }
 
@@ -60,7 +66,9 @@ import com.model.WarehouseModel
 
             expendedCurrency = !state.expendedCurrency,
 
-            expendedWarehouse = false
+            expendedWarehouse = false,
+
+            expendedStatus = false
 
         )
 
@@ -72,11 +80,27 @@ import com.model.WarehouseModel
 
             expendedWarehouse = !state.expendedWarehouse,
 
-            expendedCurrency = false
+            expendedCurrency = false,
+
+            expendedStatus = false
 
         )
 
     }
+
+     fun menuStatus () {
+
+         state = state.copy(
+
+             expendedStatus = !state.expendedStatus,
+
+             expendedCurrency = false,
+
+             expendedWarehouse = false
+
+         )
+
+     }
 
     fun inputTextCurrency ( text: String,
 
@@ -130,6 +154,18 @@ import com.model.WarehouseModel
 
      }
 
+     fun selectedStatus ( name: String, index: Int ) {
+
+         state = state.copy(
+
+             selectedStatus = Pair(name,index),
+
+             expendedStatus = false
+
+         )
+
+     }
+
      fun deleteSelectedCurrency () {
 
          state = state.copy(
@@ -145,6 +181,16 @@ import com.model.WarehouseModel
          state = state.copy(
 
              selectedWarehouse = null
+
+         )
+
+     }
+
+     fun deleteSelectedStatus () {
+
+         state = state.copy(
+
+             selectedStatus = null
 
          )
 
