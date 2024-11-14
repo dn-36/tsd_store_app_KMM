@@ -19,13 +19,21 @@ data class SpecificationsState(
 
     val listProducts: List<ProductResponseModel> = emptyList(),
 
+    val listElementsSpecifications: List<ElementSpecification> = emptyList(),
+
     val selectedCurrency: CurrencyResponseModel? = null,
 
     val selectedWarehouse: WarehouseModel? = null,
 
-    val listElementsSpecifications: List<ElementSpecification> = emptyList(),
-
     val selectedStatus: Int? = null,
+
+    val indexMainGroup: Int? = null,
+
+    val byCategory: Float = 1f,
+
+    val totalAmount: String = "",
+
+    val name: String = "",
 
     val isSet: Boolean = true,
 
@@ -34,5 +42,9 @@ data class SpecificationsState(
     val isVisibilityAddProducts: Boolean = false,
 
     val isVisibilityListProducts: Boolean = false,
+
+    val isVisibilityDeleteComponent: Boolean = false,
+
+    val updateItem: SpecificResponseModel? = null
 
     )

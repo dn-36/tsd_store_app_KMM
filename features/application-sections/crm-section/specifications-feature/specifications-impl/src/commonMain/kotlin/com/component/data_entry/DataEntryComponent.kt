@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -32,8 +33,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.component.add_products.viewmodel.AddProductsIntents
 import com.component.data_entry.viewmodel.DataEntryIntents
 import com.component.data_entry.viewmodel.DataEntryViewModel
 import com.model.CurrencyResponseModel
@@ -47,7 +50,7 @@ import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.down_arrow
 
-class DataEntryComponent (
+class DataEntryComponent(
 
     val listWarehouse: List<WarehouseModel>,
 
@@ -57,14 +60,19 @@ class DataEntryComponent (
 
     val onClickBack: () -> Unit,
 
-    val onClickNext: ( selectedCurrency: CurrencyResponseModel?,
+    val onClickNext: (
 
-                       selectedWarehouse: WarehouseModel?,
+        name: String,
 
-                       selectedStatus: Int?) -> Unit,
+        selectedCurrency: CurrencyResponseModel?,
+
+        selectedWarehouse: WarehouseModel?,
+
+        selectedStatus: Int?
+    ) -> Unit,
 
 
-) {
+    ) {
 
     val viewModel = DataEntryViewModel()
 
@@ -99,6 +107,28 @@ class DataEntryComponent (
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
+
+                OutlinedTextField(
+
+                    value = viewModel.state.name,
+
+                    onValueChange = {
+
+                    viewModel.processIntents(DataEntryIntents.InputTextName(it))
+
+                    },
+
+                    label = { Text("Название", fontSize = 15.sp) },
+
+                    textStyle = TextStyle(fontSize = 15.sp),
+
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 45.dp)
+
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
 
                 OutlinedTextField(
 
@@ -493,7 +523,11 @@ class DataEntryComponent (
 
                         onClick = {
 
-                                  onClickNext( viewModel.state.selectedCurrency,
+                                  onClickNext(
+
+                                      viewModel.state.name,
+
+                                      viewModel.state.selectedCurrency,
 
                                       viewModel.state.selectedWarehouse,
 

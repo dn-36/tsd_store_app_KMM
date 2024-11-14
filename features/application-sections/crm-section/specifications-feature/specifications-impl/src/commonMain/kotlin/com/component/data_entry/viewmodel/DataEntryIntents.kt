@@ -26,6 +26,8 @@ sealed class DataEntryIntents {
 
                                    val list: List<WarehouseModel> ): DataEntryIntents()
 
+    data class InputTextName( val text: String ): DataEntryIntents()
+
     object DeleteSelectedCurrency: DataEntryIntents()
 
     object DeleteSelectedWarehouse: DataEntryIntents()

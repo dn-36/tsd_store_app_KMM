@@ -3,6 +3,8 @@ package com.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.domain.usecases.CreateSpecificationUseCase
+import com.domain.usecases.DeleteSpecificationUseCase
 import com.domain.usecases.GetContragentsUseCase
 import com.domain.usecases.GetCurrencyUseCase
 import com.domain.usecases.GetProductUseCase
@@ -11,6 +13,7 @@ import com.domain.usecases.GetWarehouseUseCase
 import com.model.CurrencyResponseModel
 import com.model.ElementSpecification
 import com.model.ProductResponseModel
+import com.model.SpecificResponseModel
 import com.model.WarehouseModel
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
@@ -31,7 +34,11 @@ class SpecificationsViewModel (
 
     val getWarehouseUseCase: GetWarehouseUseCase,
 
-    val getProductUseCase: GetProductUseCase
+    val getProductUseCase: GetProductUseCase,
+
+    val createSpecificationUseCase: CreateSpecificationUseCase,
+
+    val deleteSpecificationUseCase: DeleteSpecificationUseCase
 
   ): NetworkViewModel() {
 
@@ -53,31 +60,7 @@ class SpecificationsViewModel (
 
                         listContragents = getContragentsUseCase.execute(),
 
-                        isSet = false,
-
-                        listElementsSpecifications = listOf( ElementSpecification(
-
-                            product = mutableListOf(
-                                ProductResponseModel(
-
-                                    id = null,
-                                    name = "Имя продукта",
-                                    sku = null,
-                                    ui = null,
-                                    price = null,
-                                    category = null
-
-                                )
-                            ),
-                            count = mutableListOf(""),
-                            block = "Имя группы",
-                            price_item = mutableListOf(""),
-                            nds = mutableListOf(""),
-                            spectext = mutableListOf(""),
-                            totalPrice = mutableListOf("")
-
-                        ))
-
+                        isSet = false
                     )
 
                     setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
@@ -94,7 +77,11 @@ class SpecificationsViewModel (
 
             is SpecificationsIntents.BackFromListProducts -> backFromListProducts()
 
-            is SpecificationsIntents.OpenListProducts -> openListProducts(intent.list)
+            is SpecificationsIntents.OpenListProducts -> openListProducts(
+                intent.list,
+
+                intent.indexMainGroup, intent.byCategory, intent.totalAmount
+            )
 
             is SpecificationsIntents.SelectProduct -> selectProduct(intent.item)
 
@@ -102,7 +89,7 @@ class SpecificationsViewModel (
 
                 setStatusNetworkScreen(StatusNetworkScreen.LOADING)
 
-                intent.coroutineScope.launch ( Dispatchers.IO ) {
+                intent.coroutineScope.launch(Dispatchers.IO) {
 
                     state = state.copy(
 
@@ -122,48 +109,133 @@ class SpecificationsViewModel (
 
             }
 
-            is SpecificationsIntents.Next -> { next( intent.selectedCurrency,intent.selectedWarehouse,
+            is SpecificationsIntents.CreateSpecification -> {
 
-                intent.selectedStatus ) }
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch(Dispatchers.IO) {
+
+                    createSpecificationUseCase.execute(
+
+                        text = state.name,
+
+                        valuta_id = state.selectedCurrency?.id,
+
+                        local_store_id = if (state.selectedWarehouse != null)
+
+                            state.selectedWarehouse!!.stores[0]!!.id ?: 0 else null,
+
+                        price = 1, status = 1, items = intent.list
+                    )
+
+                    state = state.copy(
+
+                        listSpecifications = getSpecificationsUseCase.execute(),
+
+                        selectedCurrency = null,
+
+                        selectedStatus = null,
+
+                        selectedWarehouse = null,
+
+                        listElementsSpecifications = emptyList(),
+
+                        name = "",
+
+                        isVisibilityAddProducts = false
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is SpecificationsIntents.Next -> {
+
+                next(
+
+                    intent.name, intent.selectedCurrency,
+
+                    intent.selectedWarehouse, intent.selectedStatus
+                )
+            }
+
+            is SpecificationsIntents.DeleteSpecification -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                    deleteSpecificationUseCase.execute(state.updateItem!!.ui)
+
+                    state = state.copy(
+
+                        listSpecifications = getSpecificationsUseCase.execute(),
+
+                        updateItem = null,
+
+                        isVisibilityDeleteComponent = false
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is SpecificationsIntents.OpenDeleteComponent -> openDeleteComponent(intent.item)
+
+            is SpecificationsIntents.NoDelete -> noDelete()
 
         }
 
     }
 
-    fun back () {
+    fun back() {
 
         val menuScreen: MenuCrmScreenApi = KoinPlatform.getKoin().get()
 
-        Navigation.navigator.push( menuScreen.MenuCrm() )
+        Navigation.navigator.push(menuScreen.MenuCrm())
 
         println("SPECIFICATIONS: ${state.listSpecifications}")
         println("CONTRAGENTS: ${state.listContragents}")
 
     }
 
-    fun backFromDaraEntry () {
+    fun backFromDaraEntry() {
 
         state = state.copy(
 
-            isVisibilityDataEntry = false
+            isVisibilityDataEntry = false,
+
+            selectedCurrency = null,
+
+            selectedStatus = null,
+
+            selectedWarehouse = null,
+
+            listElementsSpecifications = emptyList()
 
         )
 
     }
 
-    fun backFromAddProducts () {
+    fun backFromAddProducts() {
 
         state = state.copy(
 
             isVisibilityDataEntry = true,
 
-            isVisibilityAddProducts = false
+            isVisibilityAddProducts = false,
 
         )
 
     }
 
-    fun backFromListProducts () {
+    fun backFromListProducts() {
 
         state = state.copy(
 
@@ -176,9 +248,12 @@ class SpecificationsViewModel (
 
     }
 
-    fun next ( selectedCurrency: CurrencyResponseModel?, selectedWarehouse: WarehouseModel?,
+    fun next(
 
-              selectedStatus: Int? ) {
+        name: String, selectedCurrency: CurrencyResponseModel?, selectedWarehouse: WarehouseModel?,
+
+        selectedStatus: Int?
+    ) {
 
         state = state.copy(
 
@@ -188,6 +263,8 @@ class SpecificationsViewModel (
 
             selectedCurrency = selectedCurrency,
 
+            name = name,
+
             isVisibilityDataEntry = false,
 
             isVisibilityAddProducts = true
@@ -196,43 +273,161 @@ class SpecificationsViewModel (
 
     }
 
-    fun openListProducts (list: List<ElementSpecification> ) {
+    fun openListProducts(
+        list: List<ElementSpecification>, index: Int?, byCategory: Float,
 
-    state = state.copy(
+        totalAmount: String
+    ) {
 
-        listElementsSpecifications = list,
+        state = state.copy(
 
-        isVisibilityAddProducts = false,
+            listElementsSpecifications = list,
 
-        isVisibilityListProducts = true
+            indexMainGroup = index,
 
-    )
+            byCategory = byCategory,
+
+            isVisibilityAddProducts = false,
+
+            isVisibilityListProducts = true,
+
+            totalAmount = totalAmount
+
+        )
 
     }
 
-    fun selectProduct ( item: ProductResponseModel ) {
+    fun selectProduct(item: ProductResponseModel) {
 
         val newList = state.listElementsSpecifications.toMutableList()
 
-        val lastElement = newList.last()
-        val updatedLastElement = lastElement.copy(
-            product = lastElement.product.toMutableList().apply { add(item) },
-            count = lastElement.count.toMutableList().apply { add("") },
-            totalPrice = lastElement.totalPrice.toMutableList().apply { add("") },
-            spectext = lastElement.spectext.toMutableList().apply { add("") },
-            price_item = lastElement.price_item.toMutableList().apply { add("") },
-            nds = lastElement.nds.toMutableList().apply { add("") }
-        )
+        var index = 0
 
-        newList[newList.size - 1] = updatedLastElement
+        println("BY CATEGORY: ${state.byCategory}")
+
+        println("INDEXMAINGROUP: ${state.indexMainGroup}")
+
+        if (state.listElementsSpecifications.size != 0) {
+
+            if (state.byCategory == 1f) {
+
+                val coincidence = newList.indexOfFirst {
+
+                    it.block == item.category?.name ?: ""
+
+                }
+
+                /*
+                indexOfFirst:
+        •	Возвращает индекс первого элемента, который удовлетворяет заданному условию.
+        •	Если ни один элемент не удовлетворяет условию, возвращается -1.
+            */
+
+                if (coincidence != -1) {
+
+                    val element = newList[coincidence]
+
+                    val updatedElement = element.copy(
+                        product = element.product.toMutableList().apply { add(item) },
+                        count = element.count.toMutableList().apply { add("1") },
+                        totalPrice = element.totalPrice.toMutableList().apply { add("") },
+                        spectext = element.spectext.toMutableList().apply { add("") },
+                        price_item = element.price_item.toMutableList().apply { add("") },
+                        nds = element.nds.toMutableList().apply { add("") }
+                    )
+
+                    newList[coincidence] = updatedElement
+
+                    index = coincidence
+
+                } else {
+
+                    newList.add(
+
+                        ElementSpecification(
+
+                            product = mutableListOf(item),
+                            count = mutableListOf("1"),
+                            block = item.category?.name ?: "Нет названия группы",
+                            price_item = mutableListOf(""),
+                            nds = mutableListOf(""),
+                            spectext = mutableListOf(""),
+                            totalPrice = mutableListOf("")
+
+                        )
+                    )
+
+                    index = newList.size - 1
+
+                }
+            } else {
+
+                val element = newList[state.indexMainGroup ?: 0]
+
+                val updatedElement = element.copy(
+                    product = element.product.toMutableList().apply { add(item) },
+                    count = element.count.toMutableList().apply { add("1") },
+                    totalPrice = element.totalPrice.toMutableList().apply { add("") },
+                    spectext = element.spectext.toMutableList().apply { add("") },
+                    price_item = element.price_item.toMutableList().apply { add("") },
+                    nds = element.nds.toMutableList().apply { add("") }
+                )
+
+                newList[state.indexMainGroup ?: 0] = updatedElement
+
+                index = state.indexMainGroup ?: 0
+
+            }
+
+        } else {
+
+            newList.add(
+                ElementSpecification(
+
+                    product = mutableListOf(item),
+                    count = mutableListOf("1"),
+                    block = item.category?.name ?: "Нет названия группы",
+                    price_item = mutableListOf(""),
+                    nds = mutableListOf(""),
+                    spectext = mutableListOf(""),
+                    totalPrice = mutableListOf("")
+
+                )
+            )
+
+            index = 0
+
+        }
 
         state = state.copy(
             listElementsSpecifications = newList,
             isVisibilityListProducts = false,
             isVisibilityAddProducts = true,
+            indexMainGroup = index
         )
 
-        println("LIST: ${ state.listElementsSpecifications }")
+        println("STATE: ${state.listElementsSpecifications}")
+    }
+
+    fun openDeleteComponent ( item: SpecificResponseModel ) {
+
+        state = state.copy(
+
+            updateItem = item,
+
+            isVisibilityDeleteComponent = true
+
+        )
+
+    }
+
+    fun noDelete () {
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = false
+
+        )
 
     }
 

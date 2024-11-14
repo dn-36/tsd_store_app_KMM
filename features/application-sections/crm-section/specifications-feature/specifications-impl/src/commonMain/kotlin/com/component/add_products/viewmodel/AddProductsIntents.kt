@@ -16,6 +16,16 @@ sealed class AddProductsIntents {
 
     data class SetScreen (
 
-        val listSelectedProducts: List<ElementSpecification> ): AddProductsIntents()
+        val listSelectedProducts: List<ElementSpecification>,
+
+        val indexMainGroup: Int?, val byCategory: Float,
+
+        val totalAmount: String): AddProductsIntents()
+
+    object ByCategory: AddProductsIntents()
+
+    data class ChooseMainGroup ( val indexMainGroup: Int ): AddProductsIntents()
+
+    object AddGroup : AddProductsIntents()
 
 }

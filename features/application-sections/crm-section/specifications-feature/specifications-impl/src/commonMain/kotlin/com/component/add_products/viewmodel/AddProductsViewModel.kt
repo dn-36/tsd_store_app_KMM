@@ -33,7 +33,15 @@ class AddProductsViewModel: ViewModel() {
                 intent.text, intent.index, intent.indexMain )
 
 
-            is AddProductsIntents.SetScreen -> setScreen(intent.listSelectedProducts)
+            is AddProductsIntents.SetScreen -> setScreen(intent.listSelectedProducts,
+
+                intent.indexMainGroup, intent.byCategory, intent.totalAmount)
+
+            is AddProductsIntents.ByCategory -> byCategory()
+
+            is AddProductsIntents.ChooseMainGroup -> chooseMainGroup(intent.indexMainGroup)
+
+            is AddProductsIntents.AddGroup -> addGroup()
 
         }
 
@@ -49,19 +57,23 @@ class AddProductsViewModel: ViewModel() {
 
     }
 
-    fun setScreen ( listSelectedProducts: List<ElementSpecification> ) {
+    fun setScreen ( listSelectedProducts: List<ElementSpecification>, indexMainGroup: Int?,
+
+                    byCategory: Float, totalAmount:String) {
 
         if ( state.isSet ) {
-
-            val newList =
-
-                List( if (listSelectedProducts.size != 0) listSelectedProducts.size else 0) { "" }
 
             state = state.copy(
 
                 listElementSpecification = if ( listSelectedProducts.size != 0 )
 
                     listSelectedProducts else emptyList(),
+
+                indexMainGroup = indexMainGroup,
+
+                byCategory = byCategory,
+
+                totalAmount = totalAmount,
 
                 isSet = false
 
@@ -93,10 +105,25 @@ class AddProductsViewModel: ViewModel() {
 
             totalPrice = updatedTotalPrice)
 
+        var newTotalAmount = 0f
+
+        for (item in newList) {
+            for (totalPriceString in item.totalPrice) {
+                newTotalAmount += totalPriceString.toFloatOrNull() ?: 0f
+            }
+        }
+
+
         state = state.copy(
-            listElementSpecification = newList
+
+            listElementSpecification = newList,
+
+            totalAmount = newTotalAmount.toString()
         )
 
+        //println("NEWTOTALAMOUNT State: ${state.totalAmount.toFloatOrNull()}")
+
+        //println("NEWRORALAMOUNT COUNT: ${state.totalAmount}")
 
     }
 
@@ -122,9 +149,24 @@ class AddProductsViewModel: ViewModel() {
 
             totalPrice = updatedTotalPrice)
 
+        var newTotalAmount = 0f
+
+        for (item in newList) {
+            for (totalPriceString in item.totalPrice) {
+                newTotalAmount += totalPriceString.toFloatOrNull() ?: 0f
+            }
+        }
+
         state = state.copy(
-            listElementSpecification = newList
+
+            listElementSpecification = newList,
+
+            totalAmount = newTotalAmount.toString()
         )
+
+       // println("NEWTOTALAMOUNT State: ${state.totalAmount.toFloatOrNull()}")
+
+       // println("NEWRORALAMOUNT PRICE: ${state.totalAmount}")
 
     }
 
@@ -160,6 +202,59 @@ class AddProductsViewModel: ViewModel() {
         state = state.copy(
 
             listElementSpecification = newList
+        )
+
+    }
+
+    fun byCategory () {
+
+        state = state.copy(
+
+            byCategory = if ( state.byCategory == 1f ) 0f else 1f
+
+        )
+
+    }
+
+    fun chooseMainGroup ( index: Int ) {
+
+    state = state.copy(
+
+        indexMainGroup = index,
+
+        byCategory = 0f
+
+    )
+
+    }
+
+    fun addGroup () {
+
+        val newList = state.listElementSpecification.toMutableList()
+
+        newList.add( ElementSpecification(
+
+            product = mutableListOf(),
+            count = mutableListOf(""),
+            block = if (state.nameGroup.isNotBlank()) state.nameGroup
+
+            else "Новая группа ${newList.size - 1}",
+
+            price_item = mutableListOf(""),
+            nds = mutableListOf(""),
+            spectext = mutableListOf(""),
+            totalPrice = mutableListOf("")
+
+        ) )
+
+        state = state.copy(
+
+            listElementSpecification = newList,
+
+            indexMainGroup = newList.size - 1,
+
+            byCategory = 0f
+
         )
 
     }

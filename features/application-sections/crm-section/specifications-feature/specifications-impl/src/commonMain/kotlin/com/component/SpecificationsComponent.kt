@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.component.add_products.AddProductsComponent
+import com.component.add_products.viewmodel.AddProductsIntents
 import com.component.data_entry.DataEntryComponent
 import com.component.list_products.ListProductsComponent
 import com.model.ElementSpecification
@@ -39,6 +40,8 @@ import com.viewmodel.SpecificationsViewModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
+import project.core.resources.cancel
+import project.core.resources.update_pencil
 
 class SpecificationsComponent ( override val viewModel: SpecificationsViewModel) : NetworkComponent {
 
@@ -63,7 +66,10 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
 
-                        { viewModel.processIntents(SpecificationsIntents.Back) }
+                        {
+                            if ( !viewModel.state.isVisibilityDeleteComponent ) {
+
+                            viewModel.processIntents(SpecificationsIntents.Back)} }
                     )
 
                     Spacer(modifier = Modifier.width(10.dp))
@@ -91,64 +97,100 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                     items(viewModel.state.listSpecifications) { item ->
 
-                        Column(modifier = Modifier.fillMaxWidth()) {
+                        Box () {
+                            Column(modifier = Modifier.fillMaxWidth()) {
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                                Spacer(modifier = Modifier.height(10.dp))
 
-                            //0 отмена, 1 новый, 2 подтвержден, 3 оплачен, 5 отгружен
+                                //0 отмена, 1 новый, 2 подтвержден, 3 оплачен, 5 отгружен
 
-                            when ( item.status ) {
+                                when (item.status) {
 
-                                0 -> Text("Статус : Отмена", fontSize = 16.sp,
+                                    0 -> Text(
+                                        "Статус : Отмена", fontSize = 16.sp,
 
-                                    color = Color(0xFF8B0000),
+                                        color = Color(0xFF8B0000),
 
-                                    fontWeight = FontWeight.Bold )
+                                        fontWeight = FontWeight.Bold
+                                    )
 
-                                1 -> Text("Статус : Новый", fontSize = 16.sp)
+                                    1 -> Text("Статус : Новый", fontSize = 16.sp)
 
-                                2 -> Text("Статус : Подтвержден", fontSize = 16.sp)
+                                    2 -> Text("Статус : Подтвержден", fontSize = 16.sp)
 
-                                3 -> Text("Статус : Оплачен", fontSize = 16.sp)
+                                    3 -> Text("Статус : Оплачен", fontSize = 16.sp)
 
-                                5 -> Text("Статус : Отгружен", fontSize = 16.sp)
+                                    5 -> Text("Статус : Отгружен", fontSize = 16.sp)
 
-                                else -> Text("Статус : Не указан", fontSize = 16.sp)
+                                    else -> Text("Статус : Не указан", fontSize = 16.sp)
+
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Text(
+                                    "Юр.лицо : ${
+                                        if (item.entity_id != null)
+
+                                            viewModel.state.listContragents.firstNotNullOfOrNull { contragent ->
+                                                contragent.entities?.find { it.id == item.entity_id }
+                                            }?.name ?: "Не указано"
+                                        else "Не указано"
+                                    }", fontSize = 16.sp
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Text(
+                                    "Дата : ${formatDateTime(item.created_at ?: "")}",
+
+                                    fontSize = 16.sp
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Text("Описание : ${item.text ?: "не указано"}", fontSize = 16.sp)
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Box(
+
+                                    modifier = Modifier.height(1.dp).fillMaxWidth()
+
+                                        .background(Color.Gray)
+                                )
 
                             }
 
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Row(modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)) {
 
-                            Text(
-                                "Юр.лицо : ${
-                                    if (item.entity_id != null)
+                                Image(painter = painterResource(Res.drawable.update_pencil),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(17.dp)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
 
-                                        viewModel.state.listContragents.firstNotNullOfOrNull { contragent ->
-                                            contragent.entities?.find { it.id == item.entity_id }
-                                        }?.name?:"Не указано"
+                                        { if ( !viewModel.state.isVisibilityDeleteComponent ) {
 
-                                    else "Не указано"
-                                }", fontSize = 16.sp
-                            )
+                                        }
+                                        })
 
-                            Spacer(modifier = Modifier.height(8.dp))
 
-                            Text("Дата : ${formatDateTime(item.created_at?:"")}",
+                                Spacer(modifier = Modifier.width(20.dp))
 
-                                fontSize = 16.sp)
+                                Image(painter = painterResource(Res.drawable.cancel),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(15.dp)
+                                        .clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
 
-                            Spacer(modifier = Modifier.height(8.dp))
+                                        { viewModel.processIntents(
 
-                            Text("Описание : ${item.text ?: "не указано"}", fontSize = 16.sp)
+                                            SpecificationsIntents.OpenDeleteComponent(item)) })
 
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Box(
-
-                                modifier = Modifier.height(1.dp).fillMaxWidth()
-
-                                    .background(Color.Gray)
-                            )
+                            }
 
                         }
 
@@ -161,7 +203,11 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                 PlusButton {
 
-                viewModel.processIntents(SpecificationsIntents.OpenCreateDataEntry(scope))
+                    if ( !viewModel.state.isVisibilityDeleteComponent ) {
+
+                        viewModel.processIntents(SpecificationsIntents.OpenCreateDataEntry(scope))
+
+                    }
 
                 }
 
@@ -181,9 +227,9 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                     viewModel.processIntents(SpecificationsIntents.BackFromDataEntry) },
 
-                onClickNext = { selectedCurrency, selectedWarehouse, selectedStatus ->
+                onClickNext = { name,selectedCurrency, selectedWarehouse, selectedStatus ->
 
-                    viewModel.processIntents(SpecificationsIntents.Next(selectedCurrency,
+                    viewModel.processIntents(SpecificationsIntents.Next(name,selectedCurrency,
 
                         selectedWarehouse, selectedStatus))
 
@@ -197,13 +243,27 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                 listElementSpecifications = viewModel.state.listElementsSpecifications,
 
-                onClickChooseProduct = { list ->
+                onClickChooseProduct = { list, index, byCategory, totalAmount ->
 
-                viewModel.processIntents(SpecificationsIntents.OpenListProducts(list))
+                viewModel.processIntents(SpecificationsIntents.OpenListProducts(list, index,
+
+                    byCategory, totalAmount))
 
             }, onClickBack = { viewModel.processIntents(
 
-                SpecificationsIntents.BackFromAddProducts) } ).Content()
+                SpecificationsIntents.BackFromAddProducts) },
+
+                indexMainGroup = viewModel.state.indexMainGroup,
+
+                byCategory = viewModel.state.byCategory,
+
+                totalAmount = viewModel.state.totalAmount,
+
+                onClickCreate = { list ->
+
+                viewModel.processIntents(
+
+                    SpecificationsIntents.CreateSpecification(scope,list))}).Content()
 
         }
 
@@ -218,6 +278,18 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
                 onClickProduct = { item ->  viewModel.processIntents(
 
                     SpecificationsIntents.SelectProduct(item))}).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityDeleteComponent ) {
+
+            DeleteComponent( onClickNo = {
+
+                viewModel.processIntents(SpecificationsIntents.NoDelete) },
+
+                onClickDelete = { coroutineScope ->  viewModel.processIntents(
+
+                    SpecificationsIntents.DeleteSpecification(coroutineScope))}).Content()
 
         }
 

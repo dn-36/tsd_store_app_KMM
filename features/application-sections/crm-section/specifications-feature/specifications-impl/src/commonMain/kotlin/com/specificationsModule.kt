@@ -2,6 +2,8 @@ package com
 
 import com.datasoutrce.SpecificationsClientImpl
 import com.domain.repository.SpecificationsClientApi
+import com.domain.usecases.CreateSpecificationUseCase
+import com.domain.usecases.DeleteSpecificationUseCase
 import com.domain.usecases.GetContragentsUseCase
 import com.domain.usecases.GetCurrencyUseCase
 import com.domain.usecases.GetProductUseCase
@@ -29,11 +31,15 @@ val specificationsModule = module {
 
     factory { GetWarehouseUseCase(get()) }
 
+    factory { CreateSpecificationUseCase(get()) }
+
+    factory { DeleteSpecificationUseCase(get()) }
+
     factory { GetCurrencyUseCase(get()) }
 
     factory { GetContragentsUseCase(get()) }
 
-    factory { SpecificationsViewModel(get(), get(), get(), get(), get()) }
+    factory { SpecificationsViewModel(get(), get(), get(), get(), get(), get(), get()) }
 
     factory { SpecificationsClient() }
 

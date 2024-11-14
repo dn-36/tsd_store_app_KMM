@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -43,13 +44,23 @@ import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.ready
 
-class AddProductsComponent (
+class AddProductsComponent(
 
     val listElementSpecifications: List<ElementSpecification>,
 
-    val onClickChooseProduct:( list: List<ElementSpecification> ) -> Unit,
+    val onClickChooseProduct: ( list: List<ElementSpecification>, indexMainGroup: Int?,
+
+            byCategory: Float, totalAmount:String ) -> Unit,
 
     val onClickBack: () -> Unit,
+
+    val indexMainGroup: Int?,
+
+    val byCategory: Float,
+
+    val totalAmount: String,
+
+    val onClickCreate: ( list: List<ElementSpecification> ) -> Unit
 
     ) {
 
@@ -57,14 +68,17 @@ class AddProductsComponent (
 
     @Composable
 
-    fun Content () {
+    fun Content() {
 
-        viewModel.processIntents(AddProductsIntents.SetScreen(listElementSpecifications))
+        viewModel.processIntents( AddProductsIntents.SetScreen(listElementSpecifications,
+
+            indexMainGroup, byCategory, totalAmount ) )
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White))
 
         {
-            Column(modifier = Modifier.padding(16.dp),) {
+
+            Column(modifier = Modifier.padding(16.dp)) {
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -85,28 +99,45 @@ class AddProductsComponent (
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                    Text(text = "Выбрать продукт", fontSize = 18.sp,
+                Text(text = "Выбрать продукт", fontSize = 18.sp,
 
-                        textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Center,
 
-                        modifier = Modifier.fillMaxWidth().clickable(
-                            indication = null, // Отключение эффекта затемнения
-                            interactionSource = remember { MutableInteractionSource() })
+                    modifier = Modifier.fillMaxWidth().clickable(
+                        indication = null, // Отключение эффекта затемнения
+                        interactionSource = remember { MutableInteractionSource() })
 
-                        { onClickChooseProduct(viewModel.state.listElementSpecification) } )
+                    {
+                        onClickChooseProduct(
+
+                            viewModel.state.listElementSpecification,
+
+                            viewModel.state.indexMainGroup, viewModel.state.byCategory,
+
+                            viewModel.state.totalAmount
+                        )
+                    })
 
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Row ( verticalAlignment = Alignment.CenterVertically ) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable(
+
+                    indication = null, // Отключение эффекта затемнения
+
+                    interactionSource = remember { MutableInteractionSource() })
+
+                { viewModel.processIntents(AddProductsIntents.ByCategory) }) {
 
                     Text(text = "По категориям", fontSize = 15.sp)
 
                     Spacer(modifier = Modifier.width(20.dp))
 
-                    Image(painterResource(Res.drawable.ready),contentDescription = null,
+                    Image(
+                        painterResource(Res.drawable.ready), contentDescription = null,
 
-                        modifier = Modifier.size(20.dp))
+                        modifier = Modifier.size(20.dp).alpha(viewModel.state.byCategory)
+                    )
 
                 }
 
@@ -134,192 +165,309 @@ class AddProductsComponent (
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                LazyColumn {
+                Button(
 
-                    itemsIndexed( viewModel.state.listElementSpecification ) {
+                    onClick = {
 
-                    mainIndex, item ->
+                    viewModel.processIntents(AddProductsIntents.AddGroup)
 
-                    Column {
+                    },
 
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(70.dp))
+                        .height(35.dp)
+                        .fillMaxWidth()
 
-                            Button(
+                ) {
 
-                                onClick = {
+                    Text(text = "Добавить группу", fontSize = 15.sp)
 
-                                },
+                }
 
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(70.dp))
-                                    .height(35.dp)
-                                    .width(100.dp)
+                Spacer(modifier = Modifier.height(10.dp))
 
-                            ) {
+                OutlinedTextField (
 
-                                Text(text = "Выбрать", fontSize = 12.sp)
+                    value = viewModel.state.totalAmount,
 
-                            }
+                    onValueChange = {},
 
-                            Spacer(modifier = Modifier.width(20.dp))
+                    label = { Text("Общая цена") },
 
-                            Text(text = "${item.block}", fontSize = 17.sp)
+                    colors = TextFieldDefaults.textFieldColors(
 
-                        }
+                        backgroundColor = Color.LightGray.copy(alpha = 0.5f)
+                    ),
 
-                        item.product.forEachIndexed { index, it ->
+                    textStyle = TextStyle(fontSize = 17.sp),
 
-                            Spacer(modifier = Modifier.height(20.dp))
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 45.dp)
 
-                            Text(
-                                text = item.product[mainIndex].name ?: "Нет имени",
-                                fontSize = 17.sp
-                            )
+                )
+
+                if ( viewModel.state.listElementSpecification.size != 0 ) {
+
+                    LazyColumn() {
+
+                        itemsIndexed(viewModel.state.listElementSpecification) {
+
+                                mainIndex, item ->
 
                             Spacer(modifier = Modifier.height(10.dp))
 
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
+                            Column {
 
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
 
-                                OutlinedTextField(
+                                    if (viewModel.state.indexMainGroup != mainIndex) {
 
-                                    value = item.count[index],
+                                        Button(
 
-                                    onValueChange = {
+                                            onClick = {
 
-                                        viewModel.processIntents(
+                                                viewModel.processIntents(
 
-                                            AddProductsIntents.InputTextCount(it,index,mainIndex)
+                                                    AddProductsIntents.ChooseMainGroup(mainIndex)
+                                                )
+
+                                            },
+
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(70.dp))
+                                                .height(35.dp)
+                                                .width(100.dp)
+
+                                        ) {
+
+                                            Text(text = "Выбрать", fontSize = 12.sp)
+
+                                        }
+
+                                        Spacer(modifier = Modifier.width(20.dp))
+
+                                        Text(text = "${item.block}", fontSize = 17.sp)
+
+                                    } else {
+
+                                        Text(
+                                            text = "${item.block}", fontSize = 17.sp,
+
+                                            color = Color(0xFF32CD32)
                                         )
 
-                                    },
+                                    }
 
-                                    label = { Text("Кол-во", fontSize = 15.sp) },
+                                }
 
-                                    keyboardOptions = KeyboardOptions(
+                                item.product.forEachIndexed { index, it ->
 
-                                        keyboardType = KeyboardType.Number
-                                    ),
+                                    Spacer(modifier = Modifier.height(20.dp))
 
-                                    textStyle = TextStyle(fontSize = 15.sp),
-
-                                    modifier = Modifier
-                                        .width(90.dp)
-                                        .heightIn(min = 30.dp)
-
-                                )
-
-                                OutlinedTextField(
-
-                                    value = item.price_item[index],
-
-                                    onValueChange = {
-
-                                        viewModel.processIntents(
-
-                                            AddProductsIntents.InputTextPrice(it,index,mainIndex)
-                                        )
-
-                                    },
-
-                                    label = { Text("Цена шт.", fontSize = 12.sp) },
-
-                                    keyboardOptions = KeyboardOptions(
-
-                                        keyboardType = KeyboardType.Number
-                                    ),
-
-                                    textStyle = TextStyle(fontSize = 15.sp),
-
-                                    modifier = Modifier
-                                        .width(90.dp)
-                                        .heightIn(min = 30.dp)
-
-                                )
-
-                                OutlinedTextField(
-
-                                    value = item.totalPrice[index],
-
-                                    onValueChange = {
-
-
-                                    },
-
-                                    label = { Text("") },
-
-                                    colors = TextFieldDefaults.outlinedTextFieldColors(
-
-                                        backgroundColor = Color.LightGray.copy(alpha = 0.5f)
-                                    ),
-
-                                    textStyle = TextStyle(fontSize = 15.sp),
-
-                                    modifier = Modifier
-                                        .width(80.dp)
-                                        .heightIn(min = 30.dp)
-
-                                )
-
-                                OutlinedTextField(
-
-                                    value = item.nds[index],
-
-                                    onValueChange = {
-
-                                        viewModel.processIntents(
-
-                                            AddProductsIntents.InputTextNDS(it,index,mainIndex)
-                                        )
-
-                                    },
-
-                                    label = { Text("НДС", fontSize = 15.sp) },
-
-                                    keyboardOptions = KeyboardOptions(
-
-                                        keyboardType = KeyboardType.Number
-                                    ),
-
-                                    textStyle = TextStyle(fontSize = 15.sp),
-
-                                    modifier = Modifier
-                                        .width(80.dp)
-                                        .heightIn(min = 30.dp)
-
-                                )
-
-                            }
-
-                            OutlinedTextField(
-
-                                value = item.spectext[index],
-
-                                onValueChange = {
-
-                                    viewModel.processIntents(
-
-                                        AddProductsIntents.InputTextDescription(it,index,mainIndex)
+                                    Text(
+                                        text = item.product[index].name ?: "Нет имени",
+                                        fontSize = 17.sp
                                     )
 
-                                },
+                                    Spacer(modifier = Modifier.height(10.dp))
 
-                                label = { Text("Описание") },
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
 
-                                textStyle = TextStyle(fontSize = 17.sp),
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
 
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .heightIn(min = 45.dp)
+                                        OutlinedTextField(
 
-                            )
+                                            value = item.count[index],
+
+                                            onValueChange = {
+
+                                                viewModel.processIntents(
+
+                                                    AddProductsIntents.InputTextCount(
+                                                        it,
+                                                        index,
+                                                        mainIndex
+                                                    )
+                                                )
+
+                                            },
+
+                                            label = { Text("Кол-во", fontSize = 15.sp) },
+
+                                            keyboardOptions = KeyboardOptions(
+
+                                                keyboardType = KeyboardType.Number
+                                            ),
+
+                                            textStyle = TextStyle(fontSize = 15.sp),
+
+                                            modifier = Modifier
+                                                .width(90.dp)
+                                                .heightIn(min = 30.dp)
+
+                                        )
+
+                                        OutlinedTextField(
+
+                                            value = item.price_item[index],
+
+                                            onValueChange = {
+
+                                                viewModel.processIntents(
+
+                                                    AddProductsIntents.InputTextPrice(
+                                                        it,
+                                                        index,
+                                                        mainIndex
+                                                    )
+                                                )
+
+                                            },
+
+                                            label = { Text("Цена шт.", fontSize = 12.sp) },
+
+                                            keyboardOptions = KeyboardOptions(
+
+                                                keyboardType = KeyboardType.Number
+                                            ),
+
+                                            textStyle = TextStyle(fontSize = 15.sp),
+
+                                            modifier = Modifier
+                                                .width(90.dp)
+                                                .heightIn(min = 30.dp)
+
+                                        )
+
+                                        OutlinedTextField(
+
+                                            value = item.totalPrice[index],
+
+                                            onValueChange = {
+
+
+                                            },
+
+                                            label = { Text("") },
+
+                                            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+                                                backgroundColor = Color.LightGray.copy(alpha = 0.5f)
+                                            ),
+
+                                            textStyle = TextStyle(fontSize = 15.sp),
+
+                                            modifier = Modifier
+                                                .width(80.dp)
+                                                .heightIn(min = 30.dp)
+
+                                        )
+
+                                        OutlinedTextField(
+
+                                            value = item.nds[index],
+
+                                            onValueChange = {
+
+                                                viewModel.processIntents(
+
+                                                    AddProductsIntents.InputTextNDS(
+                                                        it,
+                                                        index,
+                                                        mainIndex
+                                                    )
+                                                )
+
+                                            },
+
+                                            label = { Text("НДС", fontSize = 15.sp) },
+
+                                            keyboardOptions = KeyboardOptions(
+
+                                                keyboardType = KeyboardType.Number
+                                            ),
+
+                                            textStyle = TextStyle(fontSize = 15.sp),
+
+                                            modifier = Modifier
+                                                .width(80.dp)
+                                                .heightIn(min = 30.dp)
+
+                                        )
+
+                                    }
+
+                                    OutlinedTextField(
+
+                                        value = item.spectext[index],
+
+                                        onValueChange = {
+
+                                            viewModel.processIntents(
+
+                                                AddProductsIntents.InputTextDescription(
+                                                    it,
+                                                    index,
+                                                    mainIndex
+                                                )
+                                            )
+
+                                        },
+
+                                        label = { Text("Описание") },
+
+                                        textStyle = TextStyle(fontSize = 17.sp),
+
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .heightIn(min = 45.dp)
+
+                                    )
+
+                                }
+                            }
 
                         }
-                    }
 
+                        // Добавляем кнопку в самом конце LazyColumn
+                        item {
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Button(
+                                onClick = {
+
+                                    onClickCreate(viewModel.state.listElementSpecification)
+                                },
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(70.dp))
+                                    .height(40.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                Text(text = "Создать", fontSize = 15.sp)
+                            }
+                        }
+
+                    }
+                }
+                else {
+
+                    Spacer(modifier = Modifier.height(30.dp))
+
+                    Button(
+                        onClick = {
+
+                                  onClickCreate(viewModel.state.listElementSpecification)
+
+                        },
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(70.dp))
+                            .height(40.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(text = "Создать", fontSize = 15.sp)
                     }
 
                 }
@@ -328,5 +476,4 @@ class AddProductsComponent (
         }
 
     }
-
 }

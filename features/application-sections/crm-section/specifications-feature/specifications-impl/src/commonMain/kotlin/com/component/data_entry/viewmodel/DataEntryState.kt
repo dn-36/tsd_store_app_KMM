@@ -10,6 +10,8 @@ data class DataEntryState(
 
     val warehouse: String = "",
 
+    val name: String = "",
+
     val filteredListWarehouse: List<WarehouseModel> = emptyList(),
 
     val filteredListProducts: List<ProductResponseModel> = emptyList(),

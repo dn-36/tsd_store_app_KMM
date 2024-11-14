@@ -44,6 +44,8 @@ import com.model.WarehouseModel
 
             is DataEntryIntents.InputTextWarehouse -> inputTextWarehouse(intent.text, intent.list)
 
+            is DataEntryIntents.InputTextName -> inputTextName(intent.text)
+
             is DataEntryIntents.SelectedWarehouse -> selectedWarehouse(intent.item)
 
             is DataEntryIntents.SelectedCurrency -> selectedCurrency(intent.item)
@@ -129,6 +131,16 @@ import com.model.WarehouseModel
         )
 
     }
+
+     fun inputTextName ( text: String ) {
+
+         state = state.copy(
+
+             name = text
+
+         )
+
+     }
 
      fun selectedCurrency ( item: CurrencyResponseModel ) {
 

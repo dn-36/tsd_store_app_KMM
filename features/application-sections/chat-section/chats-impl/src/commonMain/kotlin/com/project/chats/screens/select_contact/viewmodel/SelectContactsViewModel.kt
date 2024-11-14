@@ -18,10 +18,13 @@ import com.project.chats.screens.titile_chat.screen.TitleChatScreen
 import org.koin.mp.KoinPlatform
 
 class SelectContactsViewModel(
+
     private val getUsersUseCase: GetUsersOrganizationUseCase
+
 ):NetworkViewModel() {
 
     var state by mutableStateOf(SelectContactsState())
+
     private var setedScreen = false
     fun processIntent(intent: SelectContactsIntents){
 

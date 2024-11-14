@@ -7,6 +7,7 @@ import com.model.CategoryProductModel
 import com.model.ContragentResponseModel
 import com.model.CurrencyResponseModel
 import com.model.CurrencyViewModel
+import com.model.ElementSpecification
 import com.model.EntityContragentModel
 import com.model.LocalModel
 import com.model.LocalStoreModel
@@ -19,6 +20,7 @@ import com.model.WarehouseModel
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.specifications_network.SpecificationsClient
+import com.project.network.specifications_network.model.Items
 import com.project.network.valuta_network.model.CurrencyClient
 import com.project.network.warehouse_network.WarehouseClient
 import product_network.ProductApiClient
@@ -303,6 +305,52 @@ class SpecificationsClientImpl(
             )
 
         }
+
+    }
+
+    override suspend fun createSpecifications(
+
+        text: String?,
+        valuta_id: Int?,
+        local_store_id: Int?,
+        price: Int?,
+        status: Int?,
+        items: List<ElementSpecification>?
+    ) {
+
+        val itemsList = mutableListOf<Items>()
+
+        items?.forEach { group ->
+            group.product.forEachIndexed { index, product ->
+                // Создаем объект Items для каждого элемента
+                val item = Items(
+                    product_id = product.id, // Предполагаем, что ProductResponseModel имеет поле id
+                    count = group.count.getOrNull(index)?.toFloatOrNull(),
+                    block = group.block,
+                    spectext = group.spectext.getOrNull(index)?:"",
+                    price_item = group.price_item.getOrNull(index)?.toFloatOrNull(),
+                    price_id = null, // Укажите, откуда брать price_id, если это поле есть
+                    nds = group.nds.getOrNull(index)?.toIntOrNull()
+                )
+                itemsList.add(item)
+            }
+        }
+
+        specificationsClient.init(getToken())
+
+        specificationsClient.createSpecification( text = text, valuta_id = valuta_id,
+
+            local_store_id = local_store_id, price = price, status = status,
+
+            items = itemsList )
+
+    }
+
+    override suspend fun deleteSpecifications(ui: String) {
+
+        specificationsClient.init(getToken())
+
+        specificationsClient.deleteSpecification(ui)
 
     }
 
