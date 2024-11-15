@@ -36,6 +36,7 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.War
 import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseViewModel
 import com.project.chats.ProfileScreensApi
 import com.project.chats.WarehouseScreensApi
+import com.project.core_app.components.DeleteComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.`printer-api`.PrinterScreensApi
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
@@ -192,11 +193,18 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
 
         if ( viewModel.state.isVisibilityDeleteComponent == 1f ) {
 
-            DeleteWarehouseComponent( onClickDelete = { scope -> viewModel.processIntents(
+            DeleteComponent(
 
-                WarehouseIntents.DeleteWarehouse(scope)
+                name = "склад",
 
-            ) }, onClickNo = { viewModel.processIntents(WarehouseIntents.NoDelete) } ).Content()
+                onClickDelete = { scope ->
+                    viewModel.processIntents(
+
+                        WarehouseIntents.DeleteWarehouse(scope)
+
+                    )
+                },
+                onClickNo = { viewModel.processIntents(WarehouseIntents.NoDelete) }).Content()
 
         }
 

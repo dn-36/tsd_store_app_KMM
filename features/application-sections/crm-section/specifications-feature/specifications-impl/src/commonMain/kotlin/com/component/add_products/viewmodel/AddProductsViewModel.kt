@@ -4,7 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.component.add_products.util.formatForDisplay
 import com.model.ElementSpecification
+import kotlin.math.roundToLong
 
 class AddProductsViewModel: ViewModel() {
 
@@ -35,7 +37,7 @@ class AddProductsViewModel: ViewModel() {
 
             is AddProductsIntents.SetScreen -> setScreen(intent.listSelectedProducts,
 
-                intent.indexMainGroup, intent.byCategory, intent.totalAmount)
+                intent.indexMainGroup, intent.byCategory)
 
             is AddProductsIntents.ByCategory -> byCategory()
 
@@ -59,11 +61,23 @@ class AddProductsViewModel: ViewModel() {
 
     fun setScreen ( listSelectedProducts: List<ElementSpecification>, indexMainGroup: Int?,
 
-                    byCategory: Float, totalAmount:String) {
+                    byCategory: Float) {
 
         if ( state.isSet ) {
 
+
+            val newList = listSelectedProducts.toMutableList()
+
+            var newTotalAmount = 0f
+
+            for (item in newList) {
+                for (totalPriceString in item.totalPrice) {
+                    newTotalAmount += totalPriceString.toFloatOrNull() ?: 0f
+                }
+            }
+
             state = state.copy(
+
 
                 listElementSpecification = if ( listSelectedProducts.size != 0 )
 
@@ -73,7 +87,7 @@ class AddProductsViewModel: ViewModel() {
 
                 byCategory = byCategory,
 
-                totalAmount = totalAmount,
+                totalAmount = newTotalAmount.toString(),
 
                 isSet = false
 
@@ -88,31 +102,37 @@ class AddProductsViewModel: ViewModel() {
         val newList = state.listElementSpecification.toMutableList()
 
         val updatedCount = newList[indexMain].count.toMutableList()
-
         val updatedTotalPrice = newList[indexMain].totalPrice.toMutableList()
 
+        // Обновляем count
         updatedCount[index] = text
 
-        val countFloat = updatedCount[index].toFloatOrNull()?:0f
+        // Преобразуем строки в Double
+        val countDouble = updatedCount[index].toDoubleOrNull() ?: 0.0
+        val priceDouble = newList[indexMain].price_item[index].toDoubleOrNull() ?: 0.0
 
-        val priceFloat = newList[indexMain].price_item[index].toFloatOrNull()?:0f
+        // Вычисляем новую общую стоимость
+        val newTotalPrice = countDouble * priceDouble
 
-        val newTotalPrice = ( countFloat * priceFloat).toString()
+        // Форматируем результат для отображения
+        updatedTotalPrice[index] = newTotalPrice.formatForDisplay()
 
-        updatedTotalPrice[index] = newTotalPrice
+        // Обновляем элемент списка
+        newList[indexMain] = newList[indexMain].copy(
+            count = updatedCount,
+            totalPrice = updatedTotalPrice
+        )
 
-        newList[indexMain] = newList[indexMain].copy(count = updatedCount,
-
-            totalPrice = updatedTotalPrice)
-
-        var newTotalAmount = 0f
-
+        // Считаем общую сумму totalAmount
+        var newTotalAmount = 0.0
         for (item in newList) {
             for (totalPriceString in item.totalPrice) {
-                newTotalAmount += totalPriceString.toFloatOrNull() ?: 0f
+                newTotalAmount += totalPriceString.toDoubleOrNull() ?: 0.0
             }
         }
 
+        // Печатаем результат
+        println("COUNT: ${newTotalPrice.formatForDisplay()}")
 
         state = state.copy(
 
@@ -131,42 +151,45 @@ class AddProductsViewModel: ViewModel() {
 
         val newList = state.listElementSpecification.toMutableList()
 
+        // Обновляем список цен
         val updatedPrice = newList[indexMain].price_item.toMutableList()
-
         val updatedTotalPrice = newList[indexMain].totalPrice.toMutableList()
 
+        // Обновляем цену
         updatedPrice[index] = text
 
-        val countFloat = newList[indexMain].count[index].toFloatOrNull()?:0f
+        // Преобразуем строки в Double
+        val countDouble = newList[indexMain].count[index].toDoubleOrNull() ?: 0.0
+        val priceDouble = updatedPrice[index].toDoubleOrNull() ?: 0.0
 
-        val priceFloat = updatedPrice[index].toFloatOrNull()?:0f
+        // Вычисляем новую общую стоимость
+        val newTotalPrice = countDouble * priceDouble
 
-        val newTotalPrice = ( countFloat * priceFloat).toString()
+        // Форматируем общую стоимость без научной нотации
+        updatedTotalPrice[index] = newTotalPrice.formatForDisplay()
 
-        updatedTotalPrice[index] = newTotalPrice
+        // Обновляем элемент списка
+        newList[indexMain] = newList[indexMain].copy(
+            price_item = updatedPrice,
+            totalPrice = updatedTotalPrice
+        )
 
-        newList[indexMain] = newList[indexMain].copy(price_item = updatedPrice,
-
-            totalPrice = updatedTotalPrice)
-
-        var newTotalAmount = 0f
-
+        // Считаем новую общую сумму
+        var newTotalAmount = 0.0
         for (item in newList) {
             for (totalPriceString in item.totalPrice) {
-                newTotalAmount += totalPriceString.toFloatOrNull() ?: 0f
+                newTotalAmount += totalPriceString.toDoubleOrNull() ?: 0.0
             }
         }
 
+        // Обновляем состояние
         state = state.copy(
-
             listElementSpecification = newList,
-
-            totalAmount = newTotalAmount.toString()
+            totalAmount = newTotalAmount.formatForDisplay() // Форматируем итоговую сумму
         )
 
-       // println("NEWTOTALAMOUNT State: ${state.totalAmount.toFloatOrNull()}")
-
-       // println("NEWRORALAMOUNT PRICE: ${state.totalAmount}")
+        // Для отладки
+        println("NEWTOTALAMOUNT State: ${state.totalAmount}")
 
     }
 
@@ -253,7 +276,9 @@ class AddProductsViewModel: ViewModel() {
 
             indexMainGroup = newList.size - 1,
 
-            byCategory = 0f
+            byCategory = 0f,
+
+            nameGroup = ""
 
         )
 

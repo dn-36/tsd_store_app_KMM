@@ -4,7 +4,7 @@ import com.domain.repository.SpecificationsClientApi
 import com.model.ContragentResponseModel
 import com.model.ElementSpecification
 
-class CreateSpecificationUseCase(
+class CreateSpecificationUseCase (
 
     private val client: SpecificationsClientApi,
 

@@ -10,6 +10,8 @@ import com.domain.usecases.GetCurrencyUseCase
 import com.domain.usecases.GetProductUseCase
 import com.domain.usecases.GetSpecificationsUseCase
 import com.domain.usecases.GetWarehouseUseCase
+import com.domain.usecases.UpdateSpecificationUseCase
+import com.model.CategoryProductModel
 import com.model.CurrencyResponseModel
 import com.model.ElementSpecification
 import com.model.ProductResponseModel
@@ -38,7 +40,9 @@ class SpecificationsViewModel (
 
     val createSpecificationUseCase: CreateSpecificationUseCase,
 
-    val deleteSpecificationUseCase: DeleteSpecificationUseCase
+    val deleteSpecificationUseCase: DeleteSpecificationUseCase,
+
+    val updateSpecificationUseCase: UpdateSpecificationUseCase
 
   ): NetworkViewModel() {
 
@@ -78,9 +82,8 @@ class SpecificationsViewModel (
             is SpecificationsIntents.BackFromListProducts -> backFromListProducts()
 
             is SpecificationsIntents.OpenListProducts -> openListProducts(
-                intent.list,
 
-                intent.indexMainGroup, intent.byCategory, intent.totalAmount
+                intent.list, intent.indexMainGroup, intent.byCategory
             )
 
             is SpecificationsIntents.SelectProduct -> selectProduct(intent.item)
@@ -109,6 +112,118 @@ class SpecificationsViewModel (
 
             }
 
+            is SpecificationsIntents.OpenUpdateDataEntry -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch(Dispatchers.IO) {
+
+                    state = state.copy(
+
+                        listCurrency = getCurrencyUseCase.execute(),
+
+                        listWarehouse = getWarehouseUseCase.execute(),
+
+                        listProducts = getProductUseCase.execute(),
+
+                        updateItem = intent.item,
+
+                        listElementsSpecifications = intent.item.spec_item?.map {
+
+                            val newListProduct = mutableListOf<ProductResponseModel>()
+
+                            val newListCount= mutableListOf<String>()
+
+                            val newListPriceItem= mutableListOf<String>()
+
+                            val newListNDS = mutableListOf<String>()
+
+                            val newListSpecText = mutableListOf<String>()
+
+                            val newListTotalPrice = mutableListOf<String>()
+
+                            newListProduct.add( ProductResponseModel(
+
+                                id =  it.product?.id,
+                                sku = it.product?.sku,
+                                name = it.product?.name,
+                                ui = it.product?.ui,
+                                price = it.product?.price?.toFloat(),
+                                category = CategoryProductModel(
+
+                                    id = it.product?.category?.id,
+                                    name = it.product?.category?.name,
+                                    creater_id = it.product?.category?.creater_id,
+                                    company_id = it.product?.category?.company_id
+
+                                )
+
+                            ))
+
+                            newListCount.add(it.count.toString())
+
+                            newListPriceItem.add(it.price?.toFloat().toString())
+
+                            newListNDS.add(it.nds.toString())
+
+                            newListSpecText.add(it.text?:"")
+
+                            newListTotalPrice.add(
+
+                                ((it.count ?: 0f) * (it.price?.toFloat() ?: 0f)).toString()
+
+                            )
+
+                        ElementSpecification(
+
+                            product = newListProduct,
+                            count = newListCount,
+                            block  = it.block?:"",
+                            price_item = newListPriceItem,
+                            totalPrice = newListTotalPrice,
+                            nds = newListNDS,
+                            spectext = newListSpecText
+
+                        )
+
+                        }?: emptyList() ,
+
+                        isVisibilityDataEntry = true
+
+                    )
+
+                    val mergedList = state.listElementsSpecifications
+                        .groupBy { it.block } // Группируем элементы по значению block
+                        .map { (block, elements) ->
+                            // Берём первый элемент как базовый
+                            val firstElement = elements.first()
+
+                            // Объединяем данные остальных элементов с базовым
+                            elements.drop(1).forEach { otherElement ->
+                                firstElement.product.addAll(otherElement.product)
+                                firstElement.count.addAll(otherElement.count)
+                                firstElement.price_item.addAll(otherElement.price_item)
+                                firstElement.totalPrice.addAll(otherElement.totalPrice)
+                                firstElement.nds.addAll(otherElement.nds)
+                                firstElement.spectext.addAll(otherElement.spectext)
+                            }
+
+                            // Возвращаем объединённый элемент
+                            firstElement
+                        }
+
+                    state = state.copy(
+
+                        listElementsSpecifications = mergedList
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
             is SpecificationsIntents.CreateSpecification -> {
 
                 setStatusNetworkScreen(StatusNetworkScreen.LOADING)
@@ -125,7 +240,7 @@ class SpecificationsViewModel (
 
                             state.selectedWarehouse!!.stores[0]!!.id ?: 0 else null,
 
-                        price = 1, status = 1, items = intent.list
+                        price = 1, status = state.selectedStatus?.second?:1, items = intent.list
                     )
 
                     state = state.copy(
@@ -141,6 +256,53 @@ class SpecificationsViewModel (
                         listElementsSpecifications = emptyList(),
 
                         name = "",
+
+                        isVisibilityAddProducts = false
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is SpecificationsIntents.UpdateSpecification -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch(Dispatchers.IO) {
+
+                    updateSpecificationUseCase.execute(
+
+                        ui = state.updateItem!!.ui,
+
+                        text = state.name,
+
+                        valuta_id = state.selectedCurrency?.id,
+
+                        local_store_id = if (state.selectedWarehouse != null)
+
+                            state.selectedWarehouse!!.stores[0]!!.id ?: 0 else null,
+
+                        price = 1, status = state.selectedStatus?.second?:1, items = intent.list
+                    )
+
+                    state = state.copy(
+
+                        listSpecifications = getSpecificationsUseCase.execute(),
+
+                        selectedCurrency = null,
+
+                        selectedStatus = null,
+
+                        selectedWarehouse = null,
+
+                        listElementsSpecifications = emptyList(),
+
+                        name = "",
+
+                        updateItem = null,
 
                         isVisibilityAddProducts = false
 
@@ -217,6 +379,10 @@ class SpecificationsViewModel (
 
             selectedWarehouse = null,
 
+            updateItem = null,
+
+            name = "",
+
             listElementsSpecifications = emptyList()
 
         )
@@ -252,7 +418,7 @@ class SpecificationsViewModel (
 
         name: String, selectedCurrency: CurrencyResponseModel?, selectedWarehouse: WarehouseModel?,
 
-        selectedStatus: Int?
+        selectedStatus: Pair<String,Int>?
     ) {
 
         state = state.copy(
@@ -274,10 +440,8 @@ class SpecificationsViewModel (
     }
 
     fun openListProducts(
-        list: List<ElementSpecification>, index: Int?, byCategory: Float,
 
-        totalAmount: String
-    ) {
+        list: List<ElementSpecification>, index: Int?, byCategory: Float ) {
 
         state = state.copy(
 
@@ -289,9 +453,7 @@ class SpecificationsViewModel (
 
             isVisibilityAddProducts = false,
 
-            isVisibilityListProducts = true,
-
-            totalAmount = totalAmount
+            isVisibilityListProducts = true
 
         )
 

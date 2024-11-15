@@ -9,6 +9,7 @@ import com.domain.usecases.GetCurrencyUseCase
 import com.domain.usecases.GetProductUseCase
 import com.domain.usecases.GetSpecificationsUseCase
 import com.domain.usecases.GetWarehouseUseCase
+import com.domain.usecases.UpdateSpecificationUseCase
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.network.ConstData
 import com.project.network.contragent_network.ContragentClient
@@ -39,7 +40,9 @@ val specificationsModule = module {
 
     factory { GetContragentsUseCase(get()) }
 
-    factory { SpecificationsViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    factory { UpdateSpecificationUseCase(get()) }
+
+    factory { SpecificationsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
 
     factory { SpecificationsClient() }
 

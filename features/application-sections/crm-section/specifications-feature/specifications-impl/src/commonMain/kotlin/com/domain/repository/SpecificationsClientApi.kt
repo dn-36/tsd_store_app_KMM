@@ -9,6 +9,8 @@ import com.model.WarehouseModel
 
 interface SpecificationsClientApi {
 
+    suspend fun getToken(): String
+
     suspend fun getSpecifications(): List<SpecificResponseModel>
 
     suspend fun getContragents(): List<ContragentResponseModel>
@@ -32,6 +34,16 @@ interface SpecificationsClientApi {
 
     )
 
-    suspend fun getToken(): String
+    suspend fun updateSpecifications(
+
+        ui: String,
+        text: String?,
+        valuta_id: Int?,
+        local_store_id: Int?,
+        price: Int?,
+        status: Int?,
+        items:List<ElementSpecification>?
+
+    )
 
 }

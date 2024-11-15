@@ -18,9 +18,7 @@ sealed class AddProductsIntents {
 
         val listSelectedProducts: List<ElementSpecification>,
 
-        val indexMainGroup: Int?, val byCategory: Float,
-
-        val totalAmount: String): AddProductsIntents()
+        val indexMainGroup: Int?, val byCategory: Float ): AddProductsIntents()
 
     object ByCategory: AddProductsIntents()
 

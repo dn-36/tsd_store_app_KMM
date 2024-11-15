@@ -9,8 +9,14 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -60,6 +66,73 @@ class LocationsClient {
         println(" ${response}")
         println(" ////////////////////++++++++++")
         return response.body<List<ResponseItem>>()
+    }
+
+    // Создание новой локации
+    suspend fun createLocation(
+
+        name: String?, email: String?, phone: String?,
+
+        default: Int?, text: String?,
+
+        telegram: String?, whatsapp: String?, wechat: String?,
+
+        point: Int?, adres: String, contragent_id: Int,
+
+        entity_id: Int, workers: Int?, langs: Int?
+
+    ): HttpResponse {
+
+        val requestBody = mapOf(
+
+            "name" to name,
+            "email" to email,
+            "phone" to phone,
+            "default" to default,
+            "text" to text,
+            "telegram" to telegram,
+            "whatsapp" to whatsapp,
+            "wechat" to wechat,
+            "point" to point,
+            "adres" to adres,
+            "contragent_id" to contragent_id,
+            "entity_id" to entity_id,
+            "workers" to workers,
+            "langs" to langs,
+        )
+        return try {
+            val response = client.post("https://delta.online/api/local") {
+                contentType(ContentType.Application.Json)
+                setBody(requestBody)
+            }
+            println("Создание локации: ${response.toString()}")
+            response
+        } catch (e: Exception) {
+            println("ошибка создания локации: Error - ${e.message}")
+            throw e
+        }
+    }
+
+    // удаление локации
+    suspend fun deleteLocation( id: Int ): HttpResponse {
+
+        return try {
+
+            val response = client.delete("https://delta.online/api/local/${id}") {
+
+                contentType(ContentType.Application.Json)
+            }
+
+            println("Удаление локации: ${response.toString()}")
+
+            response
+
+        } catch (e: Exception) {
+
+            println("ошибка удаления локации: Error - ${e.message}")
+
+            throw e
+        }
     }
 
 }

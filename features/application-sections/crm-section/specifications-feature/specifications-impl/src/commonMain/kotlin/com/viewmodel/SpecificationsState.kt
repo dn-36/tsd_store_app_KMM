@@ -25,13 +25,11 @@ data class SpecificationsState(
 
     val selectedWarehouse: WarehouseModel? = null,
 
-    val selectedStatus: Int? = null,
+    val selectedStatus: Pair<String,Int>? = null,
 
     val indexMainGroup: Int? = null,
 
     val byCategory: Float = 1f,
-
-    val totalAmount: String = "",
 
     val name: String = "",
 

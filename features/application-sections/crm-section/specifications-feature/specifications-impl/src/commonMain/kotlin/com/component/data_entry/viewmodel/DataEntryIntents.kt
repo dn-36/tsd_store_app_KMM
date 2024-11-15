@@ -2,17 +2,32 @@ package com.component.data_entry.viewmodel
 
 import com.model.CurrencyResponseModel
 import com.model.ProductResponseModel
+import com.model.SpecificResponseModel
 import com.model.WarehouseModel
 
 sealed class DataEntryIntents {
 
-    data class SetScreen (val listWarehouse: List<WarehouseModel>,
+    data class SetScreen(
 
-                          val listProducts: List<ProductResponseModel>,
+        val item: SpecificResponseModel?,
 
-                          val listCurrency: List<CurrencyResponseModel> ): DataEntryIntents()
+        val listWarehouse: List<WarehouseModel>,
 
-    object MenuCurrency: DataEntryIntents()
+        val listProducts: List<ProductResponseModel>,
+
+        val listCurrency: List<CurrencyResponseModel>,
+
+        val selectedCurrency: CurrencyResponseModel?,
+
+        val selectedWarehouse: WarehouseModel?,
+
+        val selectedStatus: Pair<String,Int>?,
+
+        val selectedName: String,
+
+    ) : DataEntryIntents()
+
+    object MenuCurrency : DataEntryIntents()
 
     object MenuWarehouse: DataEntryIntents()
 

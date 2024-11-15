@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.project.core_app.components.DeleteComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
@@ -36,7 +37,6 @@ import project.core.resources.cancel
 import project.core.resources.plus
 import project.core.resources.update_pencil
 import screen.component.create_and_update_component.ui.CreateAndUpdateComponent
-import screen.component.delete_component.DeleteComponent
 import screen.viewmodel.ContragentsIntents
 import screen.viewmodel.ContragentsViewModel
 
@@ -224,7 +224,11 @@ class ContragentsComponent ( override val viewModel: ContragentsViewModel) : Net
 
         else if ( viewModel.state.isVisibleDeleteComponent == 1f ) {
 
-            DeleteComponent( onClickDelete = { scope -> viewModel.processIntents(
+            DeleteComponent(
+
+                name = "контрагента",
+
+                onClickDelete = { scope -> viewModel.processIntents(
 
                 ContragentsIntents.DeleteContragent ( scope)) }, onClickNo = {
 

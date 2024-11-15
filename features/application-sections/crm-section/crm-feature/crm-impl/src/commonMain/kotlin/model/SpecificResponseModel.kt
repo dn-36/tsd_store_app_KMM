@@ -24,7 +24,7 @@ data class SpecItemModel (
         val product_id: Int?,
         val price_id: Int? = null,
         val block: String?,
-        val count: Int?,
+        val count: Float?,
         val price: Double?,
         val nds: Int? = null,
         val text: String? = null,

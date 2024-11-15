@@ -3,6 +3,7 @@ package com.project.`menu-crm-api`.viewmodel
 import CRMScreenApi
 import ContragentsScreensApi
 import androidx.lifecycle.ViewModel
+import com.LocationsScreenApi
 import com.SpecificationsScreenApi
 import com.example.`notes-screens-api`.NotesScreensApi
 import com.project.`menu-crm-api`.ProjectControlScreenApi
@@ -24,6 +25,8 @@ class MenuViewModel:ViewModel() {
             is MenuIntents.ProjectControl ->  projectControl()
 
             is MenuIntents.Specifications ->  specifications()
+
+            is MenuIntents.Locations ->  locations()
 
         }
     }
@@ -65,6 +68,14 @@ class MenuViewModel:ViewModel() {
         val specificationsScreen: SpecificationsScreenApi = getKoin().get()
 
         Navigation.navigator.push(specificationsScreen.specifications())
+
+    }
+
+    fun locations () {
+
+       val locationsScreen: LocationsScreenApi = getKoin().get()
+
+        Navigation.navigator.push(locationsScreen.locations())
 
     }
 

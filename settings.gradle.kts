@@ -97,6 +97,11 @@ include(":features:application-sections")
 /** api and impl**/
 /*------*/include(":features:application-sections:crm-section:specifications-feature:specifications-api")
 /*------*/include(":features:application-sections:crm-section:specifications-feature:specifications-impl")
+/**features**/
+/*----*/include(":features:application-sections:crm-section:locations-feature")
+/** api and impl**/
+/*------*/include(":features:application-sections:crm-section:locations-feature:locations-api")
+/*------*/include(":features:application-sections:crm-section:locations-feature:locations-impl")
 
 /**home-section**/
 /*--*/include(":features:application-sections:organization-section")

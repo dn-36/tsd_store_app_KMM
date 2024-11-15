@@ -35,6 +35,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
+import com.project.core_app.components.DeleteComponent
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.`menu-crm-api`.MenuCrmScreenApi
@@ -230,7 +231,11 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
 
         if ( viewModel.state.isVisibilityDeleteComponent == 1f ) {
 
-            DeleteOrganizationComponent( onClickNo = {
+            DeleteComponent(
+
+                name = "организацию",
+
+                onClickNo = {
 
                 viewModel.processIntent(OrganizationsIntents.NoDelete) },
 

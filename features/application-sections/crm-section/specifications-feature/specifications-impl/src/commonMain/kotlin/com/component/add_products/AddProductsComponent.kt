@@ -44,13 +44,13 @@ import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.ready
 
-class AddProductsComponent(
+class AddProductsComponent (
 
     val listElementSpecifications: List<ElementSpecification>,
 
     val onClickChooseProduct: ( list: List<ElementSpecification>, indexMainGroup: Int?,
 
-            byCategory: Float, totalAmount:String ) -> Unit,
+            byCategory: Float ) -> Unit,
 
     val onClickBack: () -> Unit,
 
@@ -58,9 +58,7 @@ class AddProductsComponent(
 
     val byCategory: Float,
 
-    val totalAmount: String,
-
-    val onClickCreate: ( list: List<ElementSpecification> ) -> Unit
+    val onClickSave: (list: List<ElementSpecification> ) -> Unit,
 
     ) {
 
@@ -72,7 +70,7 @@ class AddProductsComponent(
 
         viewModel.processIntents( AddProductsIntents.SetScreen(listElementSpecifications,
 
-            indexMainGroup, byCategory, totalAmount ) )
+            indexMainGroup, byCategory ) )
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White))
 
@@ -93,7 +91,7 @@ class AddProductsComponent(
 
                     Spacer(modifier = Modifier.width(10.dp))
 
-                    Text("Создание", color = Color.Black, fontSize = 20.sp)
+                    Text("Спецификации", color = Color.Black, fontSize = 20.sp)
 
                 }
 
@@ -112,9 +110,7 @@ class AddProductsComponent(
 
                             viewModel.state.listElementSpecification,
 
-                            viewModel.state.indexMainGroup, viewModel.state.byCategory,
-
-                            viewModel.state.totalAmount
+                            viewModel.state.indexMainGroup, viewModel.state.byCategory
                         )
                     })
 
@@ -280,7 +276,9 @@ class AddProductsComponent(
 
                                         OutlinedTextField(
 
-                                            value = item.count[index],
+                                            value = if ( item.count[index].toFloatOrNull() != null )
+
+                                                item.count[index] else "",
 
                                             onValueChange = {
 
@@ -312,7 +310,9 @@ class AddProductsComponent(
 
                                         OutlinedTextField(
 
-                                            value = item.price_item[index],
+                                            value =  if ( item.price_item[index].toFloatOrNull() != null )
+
+                                                item.price_item[index] else "",
 
                                             onValueChange = {
 
@@ -368,7 +368,9 @@ class AddProductsComponent(
 
                                         OutlinedTextField(
 
-                                            value = item.nds[index],
+                                            value = if ( item.nds[index].toIntOrNull() != null )
+
+                                                item.nds[index] else "",
 
                                             onValueChange = {
 
@@ -439,14 +441,14 @@ class AddProductsComponent(
                             Button(
                                 onClick = {
 
-                                    onClickCreate(viewModel.state.listElementSpecification)
+                                    onClickSave(viewModel.state.listElementSpecification)
                                 },
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(70.dp))
                                     .height(40.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Создать", fontSize = 15.sp)
+                                Text(text = "Сохранить", fontSize = 15.sp)
                             }
                         }
 
@@ -459,7 +461,7 @@ class AddProductsComponent(
                     Button(
                         onClick = {
 
-                                  onClickCreate(viewModel.state.listElementSpecification)
+                                  onClickSave(viewModel.state.listElementSpecification)
 
                         },
                         modifier = Modifier
@@ -467,7 +469,7 @@ class AddProductsComponent(
                             .height(40.dp)
                             .fillMaxWidth()
                     ) {
-                        Text(text = "Создать", fontSize = 15.sp)
+                        Text(text = "Сохранить", fontSize = 15.sp)
                     }
 
                 }

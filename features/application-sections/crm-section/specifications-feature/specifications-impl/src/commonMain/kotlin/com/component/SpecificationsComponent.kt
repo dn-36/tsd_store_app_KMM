@@ -27,11 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.component.add_products.AddProductsComponent
-import com.component.add_products.viewmodel.AddProductsIntents
 import com.component.data_entry.DataEntryComponent
 import com.component.list_products.ListProductsComponent
-import com.model.ElementSpecification
-import com.model.ProductResponseModel
+import com.project.core_app.components.DeleteComponent
 import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.util.formatDateTime
@@ -173,6 +171,12 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                                         { if ( !viewModel.state.isVisibilityDeleteComponent ) {
 
+                                            viewModel.processIntents(
+
+                                                SpecificationsIntents.OpenUpdateDataEntry(scope,
+
+                                                    item))
+
                                         }
                                         })
 
@@ -223,6 +227,46 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                 listCurrency = viewModel.state.listCurrency,
 
+                item = viewModel.state.updateItem,
+
+                selectedWarehouse = if ( viewModel.state.updateItem != null )
+
+                    viewModel.state.listWarehouse.find {
+
+                        it.stores[0]!!.id?:0 == viewModel.state.updateItem?.local_store_id?:0 }
+
+                else viewModel.state.selectedWarehouse,
+
+                selectedCurrency = if ( viewModel.state.updateItem != null )
+
+                    viewModel.state.listCurrency.find {
+
+                        it.id == viewModel.state.updateItem?.valuta_id
+
+                    } else viewModel.state.selectedCurrency,
+
+                selectedStatus = if ( viewModel.state.updateItem != null)
+
+                    when (viewModel.state.updateItem?.status?:0) {
+
+                    ////0 отмена, 1 новый, 2 подтвержден, 3 оплачен, 5 отгружен
+
+                    0 -> Pair("Отмена", 0)
+
+                    1 -> Pair("Новый", 1)
+
+                    2 -> Pair("Подтвержден", 2)
+
+                    3 -> Pair("Оплачен", 3)
+
+                    else -> Pair("Новый", 1)
+
+                } else viewModel.state.selectedStatus,
+
+                selectedName  = if ( viewModel.state.updateItem != null)
+
+                    viewModel.state.updateItem?.text?:"" else viewModel.state.name,
+
                 onClickBack = {
 
                     viewModel.processIntents(SpecificationsIntents.BackFromDataEntry) },
@@ -243,11 +287,11 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                 listElementSpecifications = viewModel.state.listElementsSpecifications,
 
-                onClickChooseProduct = { list, index, byCategory, totalAmount ->
+                onClickChooseProduct = { list, index, byCategory ->
 
                 viewModel.processIntents(SpecificationsIntents.OpenListProducts(list, index,
 
-                    byCategory, totalAmount))
+                    byCategory ))
 
             }, onClickBack = { viewModel.processIntents(
 
@@ -257,13 +301,21 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                 byCategory = viewModel.state.byCategory,
 
-                totalAmount = viewModel.state.totalAmount,
+                onClickSave = { list ->
 
-                onClickCreate = { list ->
+                    if ( viewModel.state.updateItem == null ) {
 
                 viewModel.processIntents(
 
-                    SpecificationsIntents.CreateSpecification(scope,list))}).Content()
+                    SpecificationsIntents.CreateSpecification(scope,list))}
+
+                else {
+
+                        viewModel.processIntents(
+
+                            SpecificationsIntents.UpdateSpecification(scope,list))
+
+                } }).Content()
 
         }
 
@@ -283,7 +335,11 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
         else if ( viewModel.state.isVisibilityDeleteComponent ) {
 
-            DeleteComponent( onClickNo = {
+            DeleteComponent(
+
+                name = "спецификацию",
+
+                onClickNo = {
 
                 viewModel.processIntents(SpecificationsIntents.NoDelete) },
 

@@ -81,6 +81,7 @@ class SpecificationsClientImpl(
                         price_id = it.price_id,
                         product =  if ( it.product != null ) ProductModel(
 
+                            ui = it.product!!.ui,
                             id = it.product!!.id,
                             name = it.product!!.name,
                             text = it.product!!.text,
@@ -351,6 +352,45 @@ class SpecificationsClientImpl(
         specificationsClient.init(getToken())
 
         specificationsClient.deleteSpecification(ui)
+
+    }
+
+    override suspend fun updateSpecifications(
+        ui: String,
+        text: String?,
+        valuta_id: Int?,
+        local_store_id: Int?,
+        price: Int?,
+        status: Int?,
+        items: List<ElementSpecification>?
+    ) {
+
+        val itemsList = mutableListOf<Items>()
+
+        items?.forEach { group ->
+            group.product.forEachIndexed { index, product ->
+                // Создаем объект Items для каждого элемента
+                val item = Items(
+                    product_id = product.id, // Предполагаем, что ProductResponseModel имеет поле id
+                    count = group.count.getOrNull(index)?.toFloatOrNull(),
+                    block = group.block,
+                    spectext = group.spectext.getOrNull(index)?:"",
+                    price_item = group.price_item.getOrNull(index)?.toFloatOrNull(),
+                    price_id = null, // Укажите, откуда брать price_id, если это поле есть
+                    nds = group.nds.getOrNull(index)?.toIntOrNull()
+                )
+                itemsList.add(item)
+            }
+        }
+
+        specificationsClient.init(getToken())
+
+        specificationsClient.updateSpecification( ui = ui, text = text, valuta_id = valuta_id,
+
+            local_store_id = local_store_id, price = price, status = status,
+
+            items = itemsList )
+
 
     }
 

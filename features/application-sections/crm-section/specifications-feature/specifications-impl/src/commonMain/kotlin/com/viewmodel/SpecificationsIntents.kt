@@ -20,6 +20,9 @@ sealed class SpecificationsIntents {
     object BackFromListProducts : SpecificationsIntents()
 
     data class OpenCreateDataEntry ( val coroutineScope: CoroutineScope ) : SpecificationsIntents()
+    data class OpenUpdateDataEntry ( val coroutineScope: CoroutineScope,
+
+                                     val item: SpecificResponseModel ) : SpecificationsIntents()
     data class Next(
 
         val name: String,
@@ -28,7 +31,7 @@ sealed class SpecificationsIntents {
 
         val selectedWarehouse: WarehouseModel?,
 
-        val selectedStatus: Int?,
+        val selectedStatus: Pair<String,Int>?,
 
     ) : SpecificationsIntents()
 
@@ -36,9 +39,7 @@ sealed class SpecificationsIntents {
 
                                  val indexMainGroup: Int?,
 
-                                 val byCategory: Float,
-
-        val totalAmount: String )  : SpecificationsIntents()
+                                 val byCategory: Float )  : SpecificationsIntents()
 
     data class OpenDeleteComponent ( val item: SpecificResponseModel ): SpecificationsIntents()
 
@@ -49,6 +50,10 @@ sealed class SpecificationsIntents {
     data class DeleteSpecification ( val coroutineScope: CoroutineScope ) : SpecificationsIntents()
 
     data class CreateSpecification ( val coroutineScope: CoroutineScope,
+
+                                     val list: List<ElementSpecification> ): SpecificationsIntents()
+
+    data class UpdateSpecification ( val coroutineScope: CoroutineScope,
 
                                      val list: List<ElementSpecification> ): SpecificationsIntents()
 

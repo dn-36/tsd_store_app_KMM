@@ -58,6 +58,9 @@ kotlin {
             implementation(project(":features:application-sections:crm-section:specifications-feature:specifications-impl"))
             implementation(project(":features:application-sections:crm-section:specifications-feature:specifications-api"))
 
+            implementation(project(":features:application-sections:crm-section:locations-feature:locations-impl"))
+           implementation(project(":features:application-sections:crm-section:locations-feature:locations-api"))
+
             implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-impl"))
             implementation(project(":features:application-sections:crm-section:contragents-feature:contragents-impl"))
             implementation(project(":features:application-sections:crm-section:crm-feature:crm-impl"))

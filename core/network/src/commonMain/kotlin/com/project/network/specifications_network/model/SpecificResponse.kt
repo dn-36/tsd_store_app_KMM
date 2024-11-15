@@ -1,6 +1,12 @@
 package com.project.network.specifications_network.model
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
@@ -20,6 +26,21 @@ data class SpecificResponse(
     val spec_item: List<SpecItem>?
 )
 
+// Кастомный сериализатор для переменной count
+object FloatAsDoubleOrIntSerializer : KSerializer<Float> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("FloatAsDoubleOrInt", PrimitiveKind.FLOAT)
+
+    override fun deserialize(decoder: Decoder): Float {
+        val value = decoder.decodeString() // Сначала считываем как строку для унификации
+        return value.toFloatOrNull() ?: throw IllegalArgumentException("Invalid number format for count")
+    }
+
+    override fun serialize(encoder: Encoder, value: Float) {
+        encoder.encodeDouble(value.toDouble())
+    }
+}
+
+
 @Serializable
 data class SpecItem(
     val id: Int,
@@ -27,7 +48,8 @@ data class SpecItem(
     val product_id: Int?,
     val price_id: Int? = null,
     val block: String?,
-    val count: Int?,
+    @Serializable(with = FloatAsDoubleOrIntSerializer::class)
+    val count: Float?,
     val price: Double?,
     val nds: Int? = null,
     val text: String? = null,

@@ -1,4 +1,4 @@
-package com.component
+package com.project.core_app.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 
-class DeleteComponent(
+class DeleteComponent (
+
+    val name:String,
 
     val onClickDelete: (coroutineScope: CoroutineScope) -> Unit,
 
@@ -64,7 +66,7 @@ class DeleteComponent(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Text("Вы действительно хотите удалить спецификацию?", fontSize = 12.sp)
+                    Text("Вы действительно хотите удалить ${name}?", fontSize = 12.sp)
 
                     Spacer(modifier = Modifier.height(25.dp))
                     Row(

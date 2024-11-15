@@ -44,6 +44,7 @@ import com.model.ProductResponseModel
 import com.model.StoreModel
 import com.model.WarehouseModel
 import com.component.data_entry.util.boxHeight
+import com.model.SpecificResponseModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
@@ -58,6 +59,16 @@ class DataEntryComponent(
 
     val listCurrency: List<CurrencyResponseModel>,
 
+    val item: SpecificResponseModel?,
+
+    val selectedCurrency: CurrencyResponseModel?,
+
+    val selectedWarehouse: WarehouseModel?,
+
+    val selectedStatus: Pair<String,Int>?,
+
+    val selectedName: String,
+
     val onClickBack: () -> Unit,
 
     val onClickNext: (
@@ -68,11 +79,9 @@ class DataEntryComponent(
 
         selectedWarehouse: WarehouseModel?,
 
-        selectedStatus: Int?
-    ) -> Unit,
+        selectedStatus: Pair<String,Int>?
 
-
-    ) {
+    ) -> Unit, ) {
 
     val viewModel = DataEntryViewModel()
 
@@ -80,11 +89,19 @@ class DataEntryComponent(
 
     fun Content () {
 
-        viewModel.processIntents(DataEntryIntents.SetScreen( listProducts = listProducts,
+        viewModel.processIntents(DataEntryIntents.SetScreen( item = item, listProducts = listProducts,
 
-            listCurrency = listCurrency, listWarehouse = listWarehouse))
+            listCurrency = listCurrency, listWarehouse = listWarehouse,
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.White))
+            selectedCurrency = selectedCurrency, selectedStatus = selectedStatus,
+
+            selectedWarehouse = selectedWarehouse, selectedName = selectedName))
+
+        Box(modifier = Modifier.fillMaxSize().background(Color.White).clickable(
+            indication = null, // Отключение эффекта затемнения
+            interactionSource = remember { MutableInteractionSource() })
+
+        { })
 
         {
             Column(modifier = Modifier.padding(16.dp),) {
@@ -102,7 +119,7 @@ class DataEntryComponent(
 
                     Spacer(modifier = Modifier.width(10.dp))
 
-                    Text("Создание", color = Color.Black, fontSize = 20.sp)
+                    Text("Спецификации", color = Color.Black, fontSize = 20.sp)
 
                 }
 
@@ -483,9 +500,7 @@ class DataEntryComponent(
                             shape = RoundedCornerShape(8.dp)
                         ) {}
                         LazyColumn {
-                            itemsIndexed( listOf("Отмена","Новый","Подтвержден","Оплачен",
-
-                                "Отгружен") )
+                            itemsIndexed( listOf("Отмена","Новый","Подтвержден","Оплачен") )
 
                             { index, item ->
 
@@ -505,7 +520,7 @@ class DataEntryComponent(
 
                                                     DataEntryIntents.SelectedStatus(
 
-                                                        item,index
+                                                        item, index
                                                     )
                                                 )
 
@@ -531,7 +546,7 @@ class DataEntryComponent(
 
                                       viewModel.state.selectedWarehouse,
 
-                                      viewModel.state.selectedStatus?.second?:1 )
+                                      viewModel.state.selectedStatus )
                         },
 
                         modifier = Modifier

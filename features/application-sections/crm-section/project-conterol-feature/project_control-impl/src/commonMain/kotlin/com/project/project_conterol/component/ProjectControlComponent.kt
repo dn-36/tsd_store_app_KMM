@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.project.core_app.components.DeleteComponent
 import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.project_conterol.component.data_entry.DataEntryComponent
@@ -247,7 +248,11 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
 
         else if ( viewModel.state.isVisibilityDeleteComponent ) {
 
-            DeleteComponent( onClickDelete = { coroutineScope -> viewModel.processIntents(
+            DeleteComponent(
+
+                name = "контроль пороекта",
+
+                onClickDelete = { coroutineScope -> viewModel.processIntents(
 
                 ProjectControlIntents.DeleteProjectControl(coroutineScope)) },
 

@@ -1,6 +1,7 @@
 package org.example.project
 
 import com.example.notes_screens_impl.notesModule
+import com.locationsModule
 import com.profile.`printer-impl`.profileScreensModule
 import com.profile.profile.qr_code.printerPlatformModule
 import com.profile.profile.qr_code.printerScreenModule
@@ -43,7 +44,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             contragentsModule,
             crmModule,
             projectControlModule,
-            specificationsModule
+            specificationsModule,
+            locationsModule
         )
     }
 }

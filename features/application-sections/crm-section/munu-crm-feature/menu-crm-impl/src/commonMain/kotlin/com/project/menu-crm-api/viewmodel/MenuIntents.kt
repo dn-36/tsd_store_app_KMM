@@ -6,5 +6,6 @@ sealed class MenuIntents {
     object CRM: MenuIntents()
     object ProjectControl: MenuIntents()
     object Specifications: MenuIntents()
+    object Locations: MenuIntents()
 
 }

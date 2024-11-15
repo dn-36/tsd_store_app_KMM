@@ -125,6 +125,17 @@ class MenuCrmScreen:Screen{
                 ) {
                     Text(text = "Спецификации")
                 }
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+                    onClick = { vm.processIntent(MenuIntents.Locations) },
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(70.dp))
+                        .height(40.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Локации")
+                }
 
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {

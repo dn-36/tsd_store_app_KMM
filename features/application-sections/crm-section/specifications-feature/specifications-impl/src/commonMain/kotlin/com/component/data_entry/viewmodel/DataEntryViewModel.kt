@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.model.CurrencyResponseModel
+import com.model.ProductResponseModel
+import com.model.SpecificResponseModel
 import com.model.WarehouseModel
 
  class DataEntryViewModel:ViewModel() {
@@ -15,24 +17,11 @@ import com.model.WarehouseModel
 
         when ( intent) {
 
-            is DataEntryIntents.SetScreen -> {
+            is DataEntryIntents.SetScreen -> setScreen(intent.listWarehouse,intent.listProducts,
 
-                if ( state.isSet ) {
+                intent.listCurrency,intent.selectedCurrency,intent.selectedWarehouse,intent.selectedStatus,
 
-                    state = state.copy(
-
-                        filteredListCurrency = intent.listCurrency,
-
-                        filteredListProducts = intent.listProducts,
-
-                        filteredListWarehouse = intent.listWarehouse,
-
-                        isSet = false
-
-                    )
-                }
-
-            }
+                intent.selectedName)
 
             is DataEntryIntents.MenuCurrency -> menuCurrency()
 
@@ -61,6 +50,47 @@ import com.model.WarehouseModel
         }
 
     }
+
+     fun setScreen (
+
+                     listWarehouse: List<WarehouseModel>,
+
+                    listProducts: List<ProductResponseModel>,
+
+                    listCurrency: List<CurrencyResponseModel>,
+
+                     selectedCurrency: CurrencyResponseModel?,
+
+                     selectedWarehouse: WarehouseModel?,
+
+                     selectedStatus: Pair<String,Int>?,
+
+                     selectedName: String, ) {
+
+         if ( state.isSet ) {
+
+             state = state.copy(
+
+                 filteredListCurrency = listCurrency,
+
+                 filteredListProducts = listProducts,
+
+                 filteredListWarehouse = listWarehouse,
+
+                 selectedWarehouse = selectedWarehouse,
+
+                 selectedCurrency = selectedCurrency,
+
+                 selectedStatus = selectedStatus,
+
+                 name = selectedName,
+
+                 isSet = false
+
+             )
+         }
+
+     }
 
     fun menuCurrency () {
 
