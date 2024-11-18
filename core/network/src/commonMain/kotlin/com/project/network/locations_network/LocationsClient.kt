@@ -2,6 +2,7 @@ package com.project.network.locations_network
 
 import com.project.network.ConstData
 import com.project.network.httpClientEngine
+import com.project.network.locations_network.model.CreateLocationRequest
 import com.project.network.locations_network.model.ResponseItem
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -13,8 +14,10 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -22,6 +25,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
@@ -69,7 +73,7 @@ class LocationsClient {
     }
 
     // Создание новой локации
-    suspend fun createLocation(
+    suspend fun createLocation (
 
         name: String?, email: String?, phone: String?,
 
@@ -77,38 +81,101 @@ class LocationsClient {
 
         telegram: String?, whatsapp: String?, wechat: String?,
 
-        point: Int?, adres: String, contragent_id: Int,
+        point: List<Double>?, adres: String, contragent_id: Int,
 
-        entity_id: Int, workers: Int?, langs: Int?
+        entity_id: Int, workers: List<Int>, langs: List<Int>
 
     ): HttpResponse {
 
-        val requestBody = mapOf(
+        val requestBody = CreateLocationRequest(
 
-            "name" to name,
-            "email" to email,
-            "phone" to phone,
-            "default" to default,
-            "text" to text,
-            "telegram" to telegram,
-            "whatsapp" to whatsapp,
-            "wechat" to wechat,
-            "point" to point,
-            "adres" to adres,
-            "contragent_id" to contragent_id,
-            "entity_id" to entity_id,
-            "workers" to workers,
-            "langs" to langs,
+            name = name,
+            point = listOf(55.76070387306711,37.56401090435791).toString(),
+            adres = adres,
+            contragent_id = "${contragent_id}",
+            email = email,
+            phone = phone,
+            default = default,
+            text = text,
+            telegram = telegram,
+            whatsapp = whatsapp,
+            wechat = wechat,
+            entity_id = entity_id,
+            workers = workers.toString(),
+            langs = langs.toString()
         )
         return try {
+
             val response = client.post("https://delta.online/api/local") {
+
                 contentType(ContentType.Application.Json)
+
                 setBody(requestBody)
             }
-            println("Создание локации: ${response.toString()}")
+            println("Создание локации: ${response}")
+
+            println("Создание локации: ${requestBody}")
+
             response
+
         } catch (e: Exception) {
+
             println("ошибка создания локации: Error - ${e.message}")
+
+            throw e
+        }
+    }
+
+    // обновление локации
+    suspend fun updateLocation (
+
+        id: Int, name: String?, email: String?, phone: String?,
+
+        default: Int?, text: String?,
+
+        telegram: String?, whatsapp: String?, wechat: String?,
+
+        point: List<Double>?, adres: String, contragent_id: Int,
+
+        entity_id: Int, workers: List<Int>, langs: List<Int>
+
+    ): HttpResponse {
+
+        val requestBody = CreateLocationRequest(
+
+            name = name,
+            point = listOf(55.76070387306711,37.56401090435791).toString(),
+            adres = adres,
+            contragent_id = "${contragent_id}",
+            email = email,
+            phone = phone,
+            default = default,
+            text = text,
+            telegram = telegram,
+            whatsapp = whatsapp,
+            wechat = wechat,
+            entity_id = entity_id,
+            workers = workers.toString(),
+            langs = langs.toString()
+        )
+        return try {
+
+            val response = client.put("https://delta.online/api/local/${id}") {
+
+                contentType(ContentType.Application.Json)
+
+                setBody(requestBody)
+            }
+            println("Обновление локации: ${response}")
+
+            println("Обновление локации: ${requestBody}")
+
+            response
+
+        } catch (e: Exception) {
+
+            println("ошибка обновления локации: Error - ${e.message}")
+
             throw e
         }
     }
@@ -134,5 +201,24 @@ class LocationsClient {
             throw e
         }
     }
+
+    /*
+
+name: новая тестовая спецификация
+email: beldominika@yandex.ru
+phone: 9899999
+default: 0
+text: ghjxee
+telegram: telegtran
+whatsapp: whatsap
+wechat: wecgt
+point:
+adres: adres
+contragent_id: 93
+entity_id: 5
+workers: [18]
+langs: [1]
+
+*/
 
 }

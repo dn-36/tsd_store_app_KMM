@@ -26,9 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.component.add_products.AddProductsComponent
-import com.component.data_entry.DataEntryComponent
-import com.component.list_products.ListProductsComponent
+import com.component.add_products.ui.AddProductsComponent
+import com.component.data_entry_specification.ui.DataEntrySpecificationComponent
+import com.component.list_products.ui.ListProductsComponent
 import com.project.core_app.components.DeleteComponent
 import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
@@ -221,7 +221,7 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
         if ( viewModel.state.isVisibilityDataEntry ) {
 
-            DataEntryComponent( listWarehouse = viewModel.state.listWarehouse,
+            DataEntrySpecificationComponent( listWarehouse = viewModel.state.listWarehouse,
 
                 listProducts = viewModel.state.listProducts,
 

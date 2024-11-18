@@ -3,8 +3,11 @@ package com.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.domain.usecases.CreateLocationUseCase
 import com.domain.usecases.DeleteLocationUseCase
+import com.domain.usecases.GetContragentUseCase
 import com.domain.usecases.GetLocationsUseCase
+import com.domain.usecases.UpdateLocationUseCase
 import com.model.LocationResponseModel
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
@@ -19,7 +22,13 @@ class LocationsViewModel (
 
     val getLocationsUseCase: GetLocationsUseCase,
 
-    val deleteLocationUseCase: DeleteLocationUseCase
+    val deleteLocationUseCase: DeleteLocationUseCase,
+
+    val getContragentUseCase: GetContragentUseCase,
+
+    val createLocationUseCase: CreateLocationUseCase,
+
+    val updateLocationUseCase: UpdateLocationUseCase
 
 ): NetworkViewModel() {
 
@@ -85,15 +94,103 @@ class LocationsViewModel (
 
             is LocationsIntents.OpenCreateDataEntryComponent -> {
 
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
             intent.coroutineScope.launch ( Dispatchers.IO ) {
 
                 state = state.copy(
+
+                    listContragents = getContragentUseCase.execute(),
 
                     isVisibilityDataEntry = true
 
                 )
 
+                setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
             }
+
+            }
+
+            is LocationsIntents.OpenUpdateDataEntryComponent -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                    state = state.copy(
+
+                        updateLocation = intent.item,
+
+                        listContragents = getContragentUseCase.execute(),
+
+                        isVisibilityDataEntry = true
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is LocationsIntents.CreateLocation -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                createLocationUseCase.execute( intent.name, intent.email, intent.phone,
+
+                    intent.default, intent.text, intent.telegram, intent.whatsapp,
+
+                    intent.wechat, intent.point, intent.adres, intent.contragent_id,
+
+                    intent.entity_id, intent.workers, intent.langs)
+
+                    state = state.copy(
+
+                        isVisibilityDataEntry = false,
+
+                        listLocations = getLocationsUseCase.execute()
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is LocationsIntents.UpdateLocation -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch ( Dispatchers.IO ) {
+
+                    updateLocationUseCase.execute( id = state.updateLocation!!.id?:0,
+
+                    intent.name, intent.email, intent.phone,
+
+                        intent.default, intent.text, intent.telegram, intent.whatsapp,
+
+                        intent.wechat, intent.point, intent.adres, intent.contragent_id,
+
+                        intent.entity_id, intent.workers, intent.langs)
+
+                    state = state.copy(
+
+                        isVisibilityDataEntry = false,
+
+                        updateLocation = null,
+
+                        listLocations = getLocationsUseCase.execute()
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
 
             }
 
@@ -137,7 +234,9 @@ class LocationsViewModel (
 
         state = state.copy(
 
-            isVisibilityDataEntry = false
+            isVisibilityDataEntry = false,
+
+            updateLocation = null
 
         )
 

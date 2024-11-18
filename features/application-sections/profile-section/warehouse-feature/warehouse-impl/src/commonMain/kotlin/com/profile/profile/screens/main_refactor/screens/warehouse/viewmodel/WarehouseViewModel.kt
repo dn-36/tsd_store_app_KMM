@@ -154,9 +154,9 @@ class WarehouseViewModel (
 
             is WarehouseIntents.CreateWarehouse -> {
 
-                if ( intent.name.isNotBlank() && intent.localId.isNotBlank() ) {
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
-                    setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+                if ( intent.name.isNotBlank() && intent.localId.isNotBlank() ) {
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
@@ -201,9 +201,9 @@ class WarehouseViewModel (
 
             is WarehouseIntents.UpdateWarehouse -> {
 
-                if (intent.name.isNotBlank() && intent.localId.isNotBlank()) {
+                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
-                    setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
+                if (intent.name.isNotBlank() && intent.localId.isNotBlank()) {
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 

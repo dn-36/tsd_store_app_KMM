@@ -1,5 +1,6 @@
 package com.viewmodel
 
+import com.model.ContragentsResponseModel
 import com.model.LocationResponseModel
 
 data class LocationsState(
@@ -9,6 +10,8 @@ data class LocationsState(
     val isVisibilityDeleteComponent: Boolean = false,
 
     val listLocations: List<LocationResponseModel> = emptyList(),
+
+    val listContragents: List<ContragentsResponseModel> = emptyList(),
 
     val isSet: Boolean = true,
 

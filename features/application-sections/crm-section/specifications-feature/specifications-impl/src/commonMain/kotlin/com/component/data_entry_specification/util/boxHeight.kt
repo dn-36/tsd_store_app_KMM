@@ -1,0 +1,10 @@
+package com.component.data_entry_specification.util
+
+
+fun boxHeight (listSize: Int ) : Int {
+
+    val newSize = 60 * listSize
+
+    return if ( newSize <= 200 ) newSize else 200
+
+}

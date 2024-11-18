@@ -87,6 +87,7 @@ include(":features:application-sections")
 /** api and impl**/
 /*------*/include(":features:application-sections:crm-section:munu-feature:munu-api")
 /*------*/include(":features:application-sections:crm-section:munu-feature:menu-impl")
+
 /**features**/
 /*----*/include(":features:application-sections:crm-section:project-conterol-feature")
 /** api and impl **/
@@ -97,11 +98,18 @@ include(":features:application-sections")
 /** api and impl**/
 /*------*/include(":features:application-sections:crm-section:specifications-feature:specifications-api")
 /*------*/include(":features:application-sections:crm-section:specifications-feature:specifications-impl")
+
 /**features**/
 /*----*/include(":features:application-sections:crm-section:locations-feature")
 /** api and impl**/
 /*------*/include(":features:application-sections:crm-section:locations-feature:locations-api")
 /*------*/include(":features:application-sections:crm-section:locations-feature:locations-impl")
+
+/**features**/
+/*----*/include(":features:application-sections:crm-section:categories-feature")
+/** api and impl**/
+/*------*/include(":features:application-sections:crm-section:categories-feature:categories-api")
+/*------*/include(":features:application-sections:crm-section:categories-feature:categories-impl")
 
 /**home-section**/
 /*--*/include(":features:application-sections:organization-section")

@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.component.data_entry_location.ui.DataEntryLocationComponent
 import com.project.core_app.components.DeleteComponent
 import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
@@ -116,7 +117,11 @@ class LocationsComponent ( override val viewModel: LocationsViewModel) : Network
                                             indication = null, // Отключение эффекта затемнения
                                             interactionSource = remember { MutableInteractionSource() })
 
-                                        {})
+                                        { viewModel.processIntents(
+
+                                            LocationsIntents.OpenUpdateDataEntryComponent(
+
+                                                scope,it)) })
 
 
                                 Spacer(modifier = Modifier.width(20.dp))
@@ -174,11 +179,35 @@ class LocationsComponent ( override val viewModel: LocationsViewModel) : Network
 
         else if ( viewModel.state.isVisibilityDataEntry ) {
 
-            DataEntryComponent( onClickBack = {
+            DataEntryLocationComponent( onClickBack = {
 
                 viewModel.processIntents(LocationsIntents.BackFromDataEntry)
 
-            }).Content()
+            }, onClickCreate = { name, email, phone, default, text, telegram, whatsapp, wechat,
+
+                                 point, adres, contragent_id, entity_id, workers, langs ->
+
+                               viewModel.processIntents(LocationsIntents.CreateLocation( scope,
+
+                                   name, email, phone, default, text, telegram, whatsapp, wechat,
+
+                                   point, adres, contragent_id, entity_id, workers, langs))
+            },
+
+                onClickUpdate = { name, email, phone, default, text, telegram, whatsapp, wechat,
+
+                                  point, adres, contragent_id, entity_id, workers, langs ->
+
+                                viewModel.processIntents(LocationsIntents.UpdateLocation( scope,
+
+                                    name, email, phone, default, text, telegram, whatsapp, wechat,
+
+                                    point, adres, contragent_id, entity_id, workers, langs ))
+                },
+
+                listContragents = viewModel.state.listContragents,
+
+                item = viewModel.state.updateLocation ).Content()
 
         }
 

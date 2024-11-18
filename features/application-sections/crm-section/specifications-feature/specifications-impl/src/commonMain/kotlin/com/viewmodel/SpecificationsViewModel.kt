@@ -174,7 +174,7 @@ class SpecificationsViewModel (
 
                             )
 
-                        ElementSpecification(
+                        ElementSpecification (
 
                             product = newListProduct,
                             count = newListCount,

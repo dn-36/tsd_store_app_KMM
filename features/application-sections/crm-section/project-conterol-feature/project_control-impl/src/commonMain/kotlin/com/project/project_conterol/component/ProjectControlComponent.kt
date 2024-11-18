@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.project.core_app.components.DeleteComponent
 import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
-import com.project.project_conterol.component.data_entry.DataEntryComponent
+import com.project.project_conterol.component.data_entry_project_control.ui.DataEntryProjectControlComponent
 import org.example.project.presentation.project_control.viewmodel.ProjectControlIntents
 import org.example.project.presentation.project_control.viewmodel.ProjectControlViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -222,7 +222,7 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
 
         if ( viewModel.state.isVisibilityDataEntryComponent ) {
 
-            DataEntryComponent( listAllProjects = viewModel.state.listProjects,
+            DataEntryProjectControlComponent( listAllProjects = viewModel.state.listProjects,
 
                 item = viewModel.state.updatedItem,
 

@@ -3,17 +3,22 @@ package com.datasource
 import com.domain.repository.LocationsClientApi
 import com.model.CompanyModel
 import com.model.ContragentModel
+import com.model.ContragentsResponseModel
+import com.model.EntityContragentsModel
 import com.model.EntityModel
 import com.model.LocationResponseModel
 import com.model.WorkerModel
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
+import com.project.network.contragent_network.ContragentClient
 import com.project.network.locations_network.LocationsClient
 
 class LocationClientImpl (
 
     val sharedPrefsApi: SharedPrefsApi,
 
-    val locationsClient: LocationsClient
+    val locationsClient: LocationsClient,
+
+    val contragentClient: ContragentClient
 
 ): LocationsClientApi {
 
@@ -102,6 +107,68 @@ class LocationClientImpl (
 
         locationsClient.deleteLocation(id)
 
+    }
+
+    override suspend fun createLocation( name: String?, email: String?, phone: String?,
+
+                                         default: Int?, text: String?, telegram: String?,
+
+                                         whatsapp: String?, wechat: String?, point: List<Double>?,
+
+                                         adres: String, contragent_id: Int, entity_id: Int,
+
+                                         workers: List<Int>, langs: List<Int>
+
+    ) {
+
+        locationsClient.createLocation( name, email, phone, default, text, telegram, whatsapp,
+
+            wechat, point, adres, contragent_id, entity_id, workers, langs )
+
+    }
+
+    override suspend fun updateLocation( id: Int, name: String?, email: String?, phone: String?,
+
+                                         default: Int?, text: String?, telegram: String?,
+
+                                         whatsapp: String?, wechat: String?, point: List<Double>?,
+
+                                         adres: String, contragent_id: Int, entity_id: Int,
+
+                                         workers: List<Int>, langs: List<Int>
+
+    ) {
+
+        locationsClient.updateLocation( id, name, email, phone, default, text, telegram, whatsapp,
+
+            wechat, point, adres, contragent_id, entity_id, workers, langs )
+
+    }
+
+    override suspend fun getContragent(): List<ContragentsResponseModel> {
+
+        return contragentClient.getContragents().map {
+
+            ContragentsResponseModel(
+
+                id = it.id,
+                name = it.name,
+                ui = it.ui,
+                entities = it.entits?.map {
+
+                    EntityContragentsModel(
+
+                        id = it.id,
+                        name = it.name,
+                        ui = it.ui
+
+                    )
+
+                }?: emptyList()
+
+            )
+
+        }
     }
 
 }
