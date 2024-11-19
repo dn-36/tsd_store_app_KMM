@@ -10,6 +10,8 @@ data class ProjectControlState(
 
     val listProjectsControl: ProjectsControlResponseModel? = null,
 
+    val listFilteredProjectsControl: ProjectsControlResponseModel? = null,
+
     val listProjects: List<ProjectResponseModel> = emptyList(),
 
     val isSet: Boolean = true,

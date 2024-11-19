@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,7 +34,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
-import com.project.core_app.components.DeleteComponent
+import com.project.core_app.components.delete_component.DeleteComponent
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.`menu-crm-api`.MenuCrmScreenApi
@@ -70,13 +70,24 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
         viewModel.processIntent(OrganizationsIntents.SetScreen(scope))
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)){
+
             Column(modifier = Modifier.fillMaxSize()
+
                 .padding(16.dp),) {
+
                 Text("Организации", color = Color.Black, fontSize = 20.sp)
+
                 Spacer(modifier = Modifier.height(20.dp))
 
+                SearchComponent( onValueChange = { text -> viewModel.processIntent(
+
+                    OrganizationsIntents.InputTextSearchComponent(text)) } ).Content()
+
                 LazyColumn ( modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f)  ) {
-                    itemsIndexed( viewModel.state.allOrganizations ) { index, item ->
+
+                    itemsIndexed( viewModel.state.listFilteredOrganizations ) {
+
+                    index, item ->
 
                         Box() {
 
@@ -110,16 +121,16 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
 
                                 Spacer(modifier = Modifier.width(10.dp))
 
-                                Column(
-                                    modifier = Modifier.height(60.dp),
-                                    verticalArrangement = Arrangement.SpaceBetween
-                                ) {
+                                Column {
 
                                     Text(
                                         item.company?.name?:"",
                                         fontSize = 17.sp,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.fillMaxWidth(0.9f)
                                     )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
 
                                     if ( item.company?.url == null || item.company?.url!!.isBlank() ){
 
@@ -140,6 +151,8 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
                                         )
 
                                     }
+
+                                    Spacer(modifier = Modifier.height(8.dp))
 
                                     Box(
                                         modifier = Modifier.height(1.dp).fillMaxWidth()
@@ -239,9 +252,9 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
 
                 viewModel.processIntent(OrganizationsIntents.NoDelete) },
 
-                onClickDelete = { coroutineScope -> viewModel.processIntent(
+                onClickDelete = { viewModel.processIntent(
 
-                    OrganizationsIntents.DeleteOrganization ( coroutineScope ) ) }).Content()
+                    OrganizationsIntents.DeleteOrganization ( scope ) ) }).Content()
 
         }
 

@@ -98,6 +98,7 @@ class ProjectControlViewModel (
                         val cleanedProjectsControl = listAllProjectsControl.copy(
 
                             data = listAllProjectsControl.data?.map { it ->
+
                             it.copy(text = it.text?.let { removeHtmlTags(it) })  // Удаляем HTML-теги из текста
                         }
 
@@ -106,6 +107,8 @@ class ProjectControlViewModel (
                         state = state.copy(
 
                             listProjectsControl = cleanedProjectsControl,
+
+                            listFilteredProjectsControl = cleanedProjectsControl,
 
                             isSet = false
 
@@ -144,9 +147,22 @@ class ProjectControlViewModel (
 
                  time = intent.time, project_id = intent.project_id)
 
+                val listAllProjectsControl = getProjectsControlUseCase.execute()
+
+                val cleanedProjectsControl = listAllProjectsControl.copy(
+
+                    data = listAllProjectsControl.data?.map { it ->
+
+                        it.copy(text = it.text?.let { removeHtmlTags(it) })  // Удаляем HTML-теги из текста
+                    }
+
+                )
+
                 state = state.copy(
 
-                    listProjectsControl = getProjectsControlUseCase.execute(),
+                    listProjectsControl = cleanedProjectsControl,
+
+                    listFilteredProjectsControl = cleanedProjectsControl,
 
                     isVisibilityDataEntryComponent = false,
 
@@ -170,9 +186,22 @@ class ProjectControlViewModel (
 
                         data = intent.data, time = intent.time, project_id = intent.project_id)
 
+                    val listAllProjectsControl = getProjectsControlUseCase.execute()
+
+                    val cleanedProjectsControl = listAllProjectsControl.copy(
+
+                        data = listAllProjectsControl.data?.map { it ->
+
+                            it.copy(text = it.text?.let { removeHtmlTags(it) })  // Удаляем HTML-теги из текста
+                        }
+
+                    )
+
                     state = state.copy(
 
-                        listProjectsControl = getProjectsControlUseCase.execute(),
+                        listProjectsControl = cleanedProjectsControl,
+
+                        listFilteredProjectsControl = cleanedProjectsControl,
 
                         isVisibilityDataEntryComponent = false,
 
@@ -194,9 +223,22 @@ class ProjectControlViewModel (
 
                     deleteProjectControlUseCase.execute( state.updatedItem!!.id?:0 )
 
+                    val listAllProjectsControl = getProjectsControlUseCase.execute()
+
+                    val cleanedProjectsControl = listAllProjectsControl.copy(
+
+                        data = listAllProjectsControl.data?.map { it ->
+
+                            it.copy(text = it.text?.let { removeHtmlTags(it) })  // Удаляем HTML-теги из текста
+                        }
+
+                    )
+
                     state = state.copy(
 
-                        listProjectsControl = getProjectsControlUseCase.execute(),
+                        listProjectsControl = cleanedProjectsControl,
+
+                        listFilteredProjectsControl = cleanedProjectsControl,
 
                         isVisibilityDeleteComponent = false
 
@@ -212,6 +254,12 @@ class ProjectControlViewModel (
             is ProjectControlIntents.OpenDeleteComponent -> openDeleteComponent(intent.item)
 
             is ProjectControlIntents.NoDelete -> noDelete()
+
+            is ProjectControlIntents.InputTextSearchComponent -> {
+
+                inputTextSearchComponent(intent.text)
+
+            }
 
         }
 
@@ -272,6 +320,29 @@ class ProjectControlViewModel (
             listExpendedDescription = newList
 
         )
+
+    }
+
+    fun inputTextSearchComponent( text: String ) {
+
+        val newList = state.listProjectsControl!!.copy(
+
+            data = state.listProjectsControl!!.data?.filter {
+
+                val companyName = it.project?.name.orEmpty()
+
+                companyName.contains(text, ignoreCase = true)
+            }
+        )
+
+        state = state.copy(
+
+            listFilteredProjectsControl = newList
+
+        )
+
+        println("Text ${text}")
+        println("NewList ${newList}")
 
     }
 

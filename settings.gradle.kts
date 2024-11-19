@@ -106,10 +106,10 @@ include(":features:application-sections")
 /*------*/include(":features:application-sections:crm-section:locations-feature:locations-impl")
 
 /**features**/
-/*----*/include(":features:application-sections:crm-section:categories-feature")
-/** api and impl**/
-/*------*/include(":features:application-sections:crm-section:categories-feature:categories-api")
-/*------*/include(":features:application-sections:crm-section:categories-feature:categories-impl")
+///*----*/include(":features:application-sections:crm-section:categories-feature")
+///** api and impl**/
+///*------*/include(":features:application-sections:crm-section:categories-feature:categories-api")
+///*------*/include(":features:application-sections:crm-section:categories-feature:categories-impl")
 
 /**home-section**/
 /*--*/include(":features:application-sections:organization-section")

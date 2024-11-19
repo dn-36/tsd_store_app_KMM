@@ -46,4 +46,6 @@ sealed class CRMIntents {
 
     data class OpenCreateDataEntryComponent (val coroutineScope: CoroutineScope ): CRMIntents()
 
+    data class InputTextSearchComponent( val text: String ): CRMIntents()
+
 }

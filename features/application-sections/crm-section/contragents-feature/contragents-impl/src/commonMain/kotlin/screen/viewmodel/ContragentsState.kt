@@ -4,7 +4,9 @@ import screen.model.ContragentResponseModel
 
 data class ContragentsState(
 
-    val listAllContragents: MutableList<ContragentResponseModel> = mutableListOf(),
+    val listContragents: List<ContragentResponseModel> = emptyList(),
+
+    val listFilteredContragents: List<ContragentResponseModel> = emptyList(),
 
     val isSet: Boolean = true,
 

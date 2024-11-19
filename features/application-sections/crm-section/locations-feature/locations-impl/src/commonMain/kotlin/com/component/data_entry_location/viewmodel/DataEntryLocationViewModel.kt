@@ -18,6 +18,7 @@ class DataEntryLocationViewModel: ViewModel() {
 
             is DataEntryLocationIntents.SetScreen -> setScreen(intent.item, intent.listContragents)
 
+
             is DataEntryLocationIntents.InputTextTitle -> inputTextTitle(intent.text)
 
             is DataEntryLocationIntents.InputTextPhone -> inputTextPhone(intent.text)
@@ -34,17 +35,29 @@ class DataEntryLocationViewModel: ViewModel() {
 
             is DataEntryLocationIntents.InputTextOther -> inputTextOther(intent.text)
 
-            is DataEntryLocationIntents.DeleteSelectedContragent -> deleteSelectedContragent()
+            is DataEntryLocationIntents.InputTextContragent -> inputTextContragent( intent.text,
 
-            is DataEntryLocationIntents.MenuContragents -> menuContragents()
+                intent.list)
+
+            is DataEntryLocationIntents.InputTextEntity -> inputTextEntity( intent.text,
+
+                intent.list)
+
+
+            is DataEntryLocationIntents.SelectEntity -> selectEntity(intent.item)
 
             is DataEntryLocationIntents.SelectContragent -> selectContragent(intent.item)
 
+
             is DataEntryLocationIntents.DeleteSelectedEntity -> deleteSelectedEntity()
+
+            is DataEntryLocationIntents.DeleteSelectedContragent -> deleteSelectedContragent()
+
+
+            is DataEntryLocationIntents.MenuContragents -> menuContragents()
 
             is DataEntryLocationIntents.MenuEntity -> menuEntity()
 
-            is DataEntryLocationIntents.SelectEntity -> selectEntity(intent.item)
 
         }
 
@@ -169,6 +182,30 @@ class DataEntryLocationViewModel: ViewModel() {
         state = state.copy(
 
             address = text
+
+        )
+
+    }
+
+    fun inputTextContragent(text: String, list: List<ContragentsResponseModel>) {
+
+        state = state.copy(
+
+            contragent = text,
+
+            filteredListContragents = list
+
+        )
+
+    }
+
+    fun inputTextEntity(text: String, list: List<EntityContragentsModel>) {
+
+        state = state.copy(
+
+            entity = text,
+
+            filteredListEntity = list
 
         )
 

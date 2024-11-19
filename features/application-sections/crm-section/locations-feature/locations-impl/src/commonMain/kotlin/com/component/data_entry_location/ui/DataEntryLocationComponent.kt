@@ -41,6 +41,7 @@ import com.component.data_entry_location.viewmodel.DataEntryLocationIntents
 import com.component.data_entry_location.viewmodel.DataEntryLocationViewModel
 import com.model.ContragentsResponseModel
 import com.model.LocationResponseModel
+import com.project.core_app.utils.boxHeight
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
@@ -138,10 +139,19 @@ class DataEntryLocationComponent (
 
                 OutlinedTextField(
 
-                    value = "",
+                    value = viewModel.state.contragent,
 
                     onValueChange = { inputText ->
 
+                    viewModel.processIntents(
+
+                       DataEntryLocationIntents.InputTextContragent( inputText,
+
+                           listContragents.filter {
+
+                           it.name!!.contains(inputText, ignoreCase = true)
+
+                       } ))
 
                     },
 
@@ -207,7 +217,9 @@ class DataEntryLocationComponent (
 
                 if ( viewModel.state.expendedContragents ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                    Box(modifier = Modifier.fillMaxWidth().height( boxHeight(
+
+                        viewModel.state.filteredListContragents.size).dp)) {
 
                         Card(
                             modifier = Modifier.fillMaxSize()
@@ -248,10 +260,22 @@ class DataEntryLocationComponent (
 
                 OutlinedTextField(
 
-                    value = "",
+                    value = viewModel.state.entity,
 
                     onValueChange = { inputText ->
 
+                    viewModel.processIntents(DataEntryLocationIntents.InputTextEntity(inputText,
+
+                        listContragents.flatMap { contragent ->
+
+                            contragent.entities.filter {
+
+                                val entityName = it.name.orEmpty()
+
+                                entityName.contains(inputText, ignoreCase = true)
+                            }
+                        }
+                    ))
 
                     },
 
@@ -317,7 +341,9 @@ class DataEntryLocationComponent (
 
                 if ( viewModel.state.expendedEntity ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+                    Box(modifier = Modifier.fillMaxWidth().height( boxHeight(
+
+                        viewModel.state.filteredListEntity.size).dp)) {
 
                         Card(
                             modifier = Modifier.fillMaxSize()
@@ -518,6 +544,7 @@ class DataEntryLocationComponent (
                         onClick = {
 
                             onClickCreate(
+
                                 viewModel.state.name,
 
                                 viewModel.state.email, viewModel.state.phone,

@@ -11,6 +11,8 @@ data class SpecificationsState(
 
     val listSpecifications: List<SpecificResponseModel> = emptyList(),
 
+    val listFilteredSpecifications: List<SpecificResponseModel> = emptyList(),
+
     val listContragents: List<ContragentResponseModel> = emptyList(),
 
     val listCurrency: List<CurrencyResponseModel> = emptyList(),

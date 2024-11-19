@@ -24,11 +24,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.DataEntryComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.ui.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
-import com.project.core_app.components.DeleteComponent
+import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
@@ -244,7 +244,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 viewModel.processIntent(ArrivalAndConsumptionIntents.NoDelete) },
 
-                onClickDelete = { scope -> viewModel.processIntent(
+                onClickDelete = { viewModel.processIntent(
 
                     ArrivalAndConsumptionIntents.DeleteArrivalOrConsumption( scope )) }).Content()
 

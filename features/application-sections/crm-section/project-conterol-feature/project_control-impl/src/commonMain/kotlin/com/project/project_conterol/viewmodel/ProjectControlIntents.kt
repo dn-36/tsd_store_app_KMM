@@ -38,4 +38,6 @@ sealed class ProjectControlIntents {
                                      val  text:String, val data: String, val time: String,
 
                                      val project_id: String  ):ProjectControlIntents()
+
+    data class InputTextSearchComponent( val text: String ): ProjectControlIntents()
 }

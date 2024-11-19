@@ -15,7 +15,11 @@ data class CRMState(
 
     val listIncomingCRM: List<ApiResponseCRMModel> = emptyList(),
 
-    val listOutgoingCRM: MutableList<ApiResponseCRMModel> = mutableListOf(),
+    val listFilteredIncomingCRM: List<ApiResponseCRMModel> = emptyList(),
+
+    val listOutgoingCRM: List<ApiResponseCRMModel> = emptyList(),
+
+    val listFilteredOutgoingCRM: List<ApiResponseCRMModel> = emptyList(),
 
     val listProducts: List<ProductModel> = emptyList(),
 

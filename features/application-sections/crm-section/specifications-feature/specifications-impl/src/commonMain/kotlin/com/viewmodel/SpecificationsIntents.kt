@@ -57,4 +57,6 @@ sealed class SpecificationsIntents {
 
                                      val list: List<ElementSpecification> ): SpecificationsIntents()
 
+    data class InputTextSearchComponent( val text: String ): SpecificationsIntents()
+
 }

@@ -14,4 +14,5 @@ sealed class OrganizationsIntents {
     object CancelOrganizationComponent: OrganizationsIntents()
     object NoDelete: OrganizationsIntents()
     data class OpenDeleteComponent ( val item: Response ): OrganizationsIntents()
+    data class InputTextSearchComponent( val text: String ): OrganizationsIntents()
 }

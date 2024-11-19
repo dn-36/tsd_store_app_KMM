@@ -8,4 +8,5 @@ sealed class NotesIntents {
     object Back: NotesIntents()
     data class SetNotes (val coroutineScope: CoroutineScope): NotesIntents()
     data class EditNote(val note: NoteResponse): NotesIntents()
+    data class InputTextSearchComponent( val text: String ): NotesIntents()
 }

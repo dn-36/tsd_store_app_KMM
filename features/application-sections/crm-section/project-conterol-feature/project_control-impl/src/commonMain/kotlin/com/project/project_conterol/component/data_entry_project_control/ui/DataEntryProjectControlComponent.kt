@@ -39,8 +39,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.project.core_app.utils.boxHeight
 import com.project.project_conterol.component.calendar.CustomCalendar
-import com.project.project_conterol.component.data_entry_project_control.util.boxHeight
 import com.project.project_conterol.component.data_entry_project_control.viewmodel.DataEntryProjectControlIntents
 import com.project.project_conterol.component.data_entry_project_control.viewmodel.DataEntryViewModelProjectControl
 import com.project.project_conterol.model.ProjectResponseModel
@@ -204,7 +204,7 @@ class DataEntryProjectControlComponent (
 
                     if (viewModel.state.expendedProject) {
 
-                        Box(modifier = Modifier.fillMaxWidth().height(boxHeight(
+                        Box(modifier = Modifier.fillMaxWidth().height( boxHeight(
 
                             viewModel.state.filteredListProjects.size).dp)) {
                             Card(

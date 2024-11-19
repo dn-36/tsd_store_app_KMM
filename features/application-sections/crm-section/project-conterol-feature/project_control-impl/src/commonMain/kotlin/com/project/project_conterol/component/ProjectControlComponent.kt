@@ -26,8 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.project.core_app.components.DeleteComponent
+import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.components.PlusButton
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.project_conterol.component.data_entry_project_control.ui.DataEntryProjectControlComponent
 import org.example.project.presentation.project_control.viewmodel.ProjectControlIntents
@@ -38,7 +39,9 @@ import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.update_pencil
 
-class ProjectControlComponent ( override val viewModel: ProjectControlViewModel) : NetworkComponent {
+class ProjectControlComponent ( override val viewModel: ProjectControlViewModel
+
+   ) : NetworkComponent {
 
     @Composable
     override fun Component() {
@@ -76,6 +79,16 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                Text("Для поиска введите название проекта", color = Color.Gray,
+
+                    fontSize = 16.sp)
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                SearchComponent( onValueChange = { text -> viewModel.processIntents(
+
+                    ProjectControlIntents.InputTextSearchComponent(text)) } ).Content()
+
                 if ( viewModel.state.listProjectsControl != null ) {
 
                     Text(
@@ -88,7 +101,7 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
 
                     LazyColumn {
 
-                        itemsIndexed ( viewModel.state.listProjectsControl!!.data?: emptyList() ) { index, item ->
+                        itemsIndexed ( viewModel.state.listFilteredProjectsControl!!.data?: emptyList() ) { index, item ->
 
                             Box () {
                                 Column(modifier = Modifier.fillMaxWidth().clickable(
@@ -252,9 +265,9 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel)
 
                 name = "контроль пороекта",
 
-                onClickDelete = { coroutineScope -> viewModel.processIntents(
+                onClickDelete = { viewModel.processIntents(
 
-                ProjectControlIntents.DeleteProjectControl(coroutineScope)) },
+                ProjectControlIntents.DeleteProjectControl(scope)) },
 
                 onClickNo = { viewModel.processIntents(ProjectControlIntents.NoDelete) }).Content()
 

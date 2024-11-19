@@ -25,4 +25,6 @@ sealed class ContragentsIntents {
 
     object NoDelete : ContragentsIntents()
 
+    data class InputTextSearchComponent( val text: String ): ContragentsIntents()
+
 }

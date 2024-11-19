@@ -3,8 +3,6 @@ package com.project.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.ViewModel
 import com.project.component.CreateOrUpdateOrganization
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
@@ -52,7 +50,9 @@ class OrganizationsViewModel(
 
                             state = state.copy(
 
-                                allOrganizations = listOrganization,
+                                listOrganizations = listOrganization,
+
+                                listFilteredOrganizations = listOrganization,
 
                                 listColorActiveOrganizations = listColor
                             )
@@ -177,6 +177,11 @@ class OrganizationsViewModel(
 
             is OrganizationsIntents.OpenDeleteComponent -> { openDeleteComponent( intent.item ) }
 
+            is OrganizationsIntents.InputTextSearchComponent -> {
+
+                inputTextSearchComponent(intent.text)
+            }
+
         }
     }
 
@@ -258,6 +263,27 @@ class OrganizationsViewModel(
             updateOrganization = null
 
         )
+
+    }
+
+    fun inputTextSearchComponent( text: String ) {
+
+        val newList = state.listOrganizations.filter {
+
+            val companyName = it.company?.name.orEmpty()
+
+            companyName.contains(text, ignoreCase = true)
+
+        }
+
+        state = state.copy(
+
+            listFilteredOrganizations = newList
+
+        )
+
+        println("Text ${text}")
+        println("NewList ${newList}")
 
     }
 

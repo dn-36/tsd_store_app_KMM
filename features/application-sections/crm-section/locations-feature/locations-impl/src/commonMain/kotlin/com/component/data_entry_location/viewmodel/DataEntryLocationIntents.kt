@@ -22,6 +22,14 @@ sealed class DataEntryLocationIntents {
 
     data class InputTextOther( val text: String ): DataEntryLocationIntents()
 
+    data class InputTextContragent( val text: String, val list:List<ContragentsResponseModel>
+
+    ): DataEntryLocationIntents()
+
+    data class InputTextEntity( val text: String, val list: List<EntityContragentsModel>
+
+    ): DataEntryLocationIntents()
+
     data class SetScreen (
 
         val item: LocationResponseModel?,

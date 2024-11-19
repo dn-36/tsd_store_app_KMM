@@ -7,7 +7,9 @@ import com.project.network.organizations_network.model.Response
 
 data class OrganizationsState(
 
-    val allOrganizations: List<Response> = emptyList(),
+    val listOrganizations: List<Response> = emptyList(),
+
+    val listFilteredOrganizations: List<Response> = emptyList(),
 
     val isUsed: MutableState<Boolean> = mutableStateOf(true),
 

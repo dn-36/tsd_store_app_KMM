@@ -12,13 +12,13 @@ data class WarehouseState(
 
     val filteredLocations: List<ResponseItem> = emptyList(),
 
-    val listAllWarehouse: List<Warehouse> = emptyList(),
+    val listWarehouse: List<Warehouse> = emptyList(),
+
+    val listFilteredWarehouse: List<Warehouse> = emptyList(),
 
     val listColorsSelectedWarehouse: MutableList<Color> = mutableListOf(),
 
     val isUsed: MutableState<Boolean> = mutableStateOf(true),
-
-    val index: Int = 0,
 
     val textButtonWindow: String = "",
 

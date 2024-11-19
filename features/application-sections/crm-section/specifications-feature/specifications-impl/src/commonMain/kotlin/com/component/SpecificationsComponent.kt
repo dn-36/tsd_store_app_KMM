@@ -29,8 +29,9 @@ import androidx.compose.ui.unit.sp
 import com.component.add_products.ui.AddProductsComponent
 import com.component.data_entry_specification.ui.DataEntrySpecificationComponent
 import com.component.list_products.ui.ListProductsComponent
-import com.project.core_app.components.DeleteComponent
+import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.components.PlusButton
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.util.formatDateTime
 import com.viewmodel.SpecificationsIntents
@@ -77,23 +78,13 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
                 }
                 Spacer(modifier = Modifier.height(20.dp))
 
-                /*LazyColumn {
-                    items(viewModel.state.listContragents){
+                SearchComponent( onValueChange = { text -> viewModel.processIntents(
 
-                        it.entities?.forEach {
-
-                            Text ( "${it.name}  ${it.id}" )
-
-
-                        }
-
-
-                    }
-                }*/
+                    SpecificationsIntents.InputTextSearchComponent(text)) } ).Content()
 
                 LazyColumn {
 
-                    items(viewModel.state.listSpecifications) { item ->
+                    items(viewModel.state.listFilteredSpecifications) { item ->
 
                         Box () {
                             Column(modifier = Modifier.fillMaxWidth()) {
@@ -343,9 +334,9 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                 viewModel.processIntents(SpecificationsIntents.NoDelete) },
 
-                onClickDelete = { coroutineScope ->  viewModel.processIntents(
+                onClickDelete = { viewModel.processIntents(
 
-                    SpecificationsIntents.DeleteSpecification(coroutineScope))}).Content()
+                    SpecificationsIntents.DeleteSpecification(scope))}).Content()
 
         }
 

@@ -47,4 +47,6 @@ sealed class LocationsIntents {
 
                                val langs: List<Int> ): LocationsIntents()
 
+    data class InputTextSearchComponent( val text: String ): LocationsIntents()
+
 }

@@ -62,6 +62,8 @@ class SpecificationsViewModel (
 
                         listSpecifications = getSpecificationsUseCase.execute(),
 
+                        listFilteredSpecifications = getSpecificationsUseCase.execute(),
+
                         listContragents = getContragentsUseCase.execute(),
 
                         isSet = false
@@ -247,6 +249,8 @@ class SpecificationsViewModel (
 
                         listSpecifications = getSpecificationsUseCase.execute(),
 
+                        listFilteredSpecifications = getSpecificationsUseCase.execute(),
+
                         selectedCurrency = null,
 
                         selectedStatus = null,
@@ -292,6 +296,8 @@ class SpecificationsViewModel (
 
                         listSpecifications = getSpecificationsUseCase.execute(),
 
+                        listFilteredSpecifications = getSpecificationsUseCase.execute(),
+
                         selectedCurrency = null,
 
                         selectedStatus = null,
@@ -336,6 +342,8 @@ class SpecificationsViewModel (
 
                         listSpecifications = getSpecificationsUseCase.execute(),
 
+                        listFilteredSpecifications = getSpecificationsUseCase.execute(),
+
                         updateItem = null,
 
                         isVisibilityDeleteComponent = false
@@ -351,6 +359,11 @@ class SpecificationsViewModel (
             is SpecificationsIntents.OpenDeleteComponent -> openDeleteComponent(intent.item)
 
             is SpecificationsIntents.NoDelete -> noDelete()
+
+            is SpecificationsIntents.InputTextSearchComponent -> {
+
+                inputTextSearchComponent(intent.text)
+            }
 
         }
 
@@ -590,6 +603,27 @@ class SpecificationsViewModel (
             isVisibilityDeleteComponent = false
 
         )
+
+    }
+
+    fun inputTextSearchComponent( text: String ) {
+
+        val newList = state.listSpecifications.filter {
+
+            val companyName = it.text.orEmpty()
+
+            companyName.contains(text, ignoreCase = true)
+
+        }
+
+        state = state.copy(
+
+            listFilteredSpecifications = newList
+
+        )
+
+        println("Text ${text}")
+        println("NewList ${newList}")
 
     }
 

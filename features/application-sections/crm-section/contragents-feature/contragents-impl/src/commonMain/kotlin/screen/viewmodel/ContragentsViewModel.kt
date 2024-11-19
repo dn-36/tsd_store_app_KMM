@@ -41,11 +41,11 @@ class ContragentsViewModel (
 
                   if ( state.isSet ) {
 
-                      val listContragents = getContagentsUseCase.execute()
-
                       state = state.copy(
 
-                          listAllContragents = listContragents.toMutableList(),
+                          listContragents = getContagentsUseCase.execute(),
+
+                          listFilteredContragents = getContagentsUseCase.execute(),
 
                           isSet = false
 
@@ -67,13 +67,13 @@ class ContragentsViewModel (
 
                   deleteContragentUseCase.execute( state.updatedItem!!.id!! )
 
-                  val listContragents = getContagentsUseCase.execute()
-
                   state = state.copy(
 
                       isVisibleDeleteComponent = 0f,
 
-                      listAllContragents = listContragents.toMutableList()
+                      listContragents = getContagentsUseCase.execute(),
+
+                      listFilteredContragents = getContagentsUseCase.execute(),
 
                   )
 
@@ -95,11 +95,11 @@ class ContragentsViewModel (
 
                   createContragentsUseCase.execute( intent.name )
 
-                  val listContragents = getContagentsUseCase.execute()
-
                   state = state.copy(
 
-                      listAllContragents = listContragents.toMutableList(),
+                      listContragents = getContagentsUseCase.execute(),
+
+                      listFilteredContragents = getContagentsUseCase.execute(),
 
                       isVisibleCreateAndUpdateComponent = 0f
 
@@ -119,11 +119,11 @@ class ContragentsViewModel (
 
               updateContragentUseCase.execute( intent.name, state.updatedItem!!.id?:0 )
 
-                  val listContragents = getContagentsUseCase.execute()
-
                   state = state.copy(
 
-                      listAllContragents = listContragents.toMutableList(),
+                      listContragents = getContagentsUseCase.execute(),
+
+                      listFilteredContragents = getContagentsUseCase.execute(),
 
                       isVisibleCreateAndUpdateComponent = 0f
 
@@ -142,6 +142,8 @@ class ContragentsViewModel (
           is ContragentsIntents.OpenDeleteComponent -> { openDeleteComponent( intent.item ) }
 
           is ContragentsIntents.NoDelete -> { noDelete() }
+
+          is ContragentsIntents.InputTextSearchComponent -> inputTextSearchComponent(intent.text)
 
       }
 
@@ -200,6 +202,27 @@ class ContragentsViewModel (
             updatedItem = null
 
         )
+
+    }
+
+    fun inputTextSearchComponent( text: String ) {
+
+        val newList = state.listContragents.filter {
+
+            val companyName = it.name.orEmpty()
+
+            companyName.contains(text, ignoreCase = true)
+
+        }
+
+        state = state.copy(
+
+            listFilteredContragents = newList
+
+        )
+
+        println("Text ${text}")
+        println("NewList ${newList}")
 
     }
 

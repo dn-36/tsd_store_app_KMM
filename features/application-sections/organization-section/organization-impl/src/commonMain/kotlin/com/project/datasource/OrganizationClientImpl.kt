@@ -47,7 +47,7 @@ class OrganizationClientImpl (
         val allOrganizations = organizationClient.getOrganizations()
 
         println(
-            "-------${allOrganizations}--------------"
+            "Organization ${allOrganizations}"
         )
 
         val newListColor = mutableListOf<Color>()

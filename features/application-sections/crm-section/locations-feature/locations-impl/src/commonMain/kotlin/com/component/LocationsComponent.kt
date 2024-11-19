@@ -26,8 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.component.data_entry_location.ui.DataEntryLocationComponent
-import com.project.core_app.components.DeleteComponent
+import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.components.PlusButton
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.viewmodel.LocationsIntents
 import com.viewmodel.LocationsViewModel
@@ -70,9 +71,13 @@ class LocationsComponent ( override val viewModel: LocationsViewModel) : Network
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                SearchComponent( onValueChange = { text -> viewModel.processIntents(
+
+                    LocationsIntents.InputTextSearchComponent(text)) } ).Content()
+
                 LazyColumn {
 
-                    items(viewModel.state.listLocations){
+                    items(viewModel.state.listFilteredLocations){
 
                         Box () {
                             Column(modifier = Modifier.fillMaxWidth()) {
@@ -82,7 +87,7 @@ class LocationsComponent ( override val viewModel: LocationsViewModel) : Network
                                 Text(
                                     "Название : ${it.name?:"Не указано"}", fontSize = 16.sp,
 
-                                    modifier = Modifier.fillMaxWidth(0.9f)
+                                    modifier = Modifier.fillMaxWidth(0.85f)
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
@@ -165,7 +170,7 @@ class LocationsComponent ( override val viewModel: LocationsViewModel) : Network
 
                 name = "локацию",
 
-                onClickDelete = { scope ->
+                onClickDelete = {
 
                     viewModel.processIntents(LocationsIntents.DeleteLocation(scope))
 

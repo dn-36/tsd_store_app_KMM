@@ -2,8 +2,6 @@ package com.project.network.cargo_network
 
 import com.project.network.cargo_network.model.CargoResponse
 import com.project.network.httpClientEngine
-import com.project.network.services_network.ServicesClient
-import com.project.network.services_network.model.ServiceResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation

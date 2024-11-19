@@ -21,7 +21,7 @@ import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.specifications_network.SpecificationsClient
 import com.project.network.specifications_network.model.Items
-import com.project.network.valuta_network.model.CurrencyClient
+import com.project.network.valuta_network.CurrencyClient
 import com.project.network.warehouse_network.WarehouseClient
 import product_network.ProductApiClient
 

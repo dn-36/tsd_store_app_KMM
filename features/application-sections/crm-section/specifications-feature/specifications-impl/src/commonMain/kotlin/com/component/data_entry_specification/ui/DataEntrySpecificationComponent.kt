@@ -40,8 +40,8 @@ import com.model.CurrencyResponseModel
 import com.model.ProductResponseModel
 import com.model.StoreModel
 import com.model.WarehouseModel
-import com.component.data_entry_specification.util.boxHeight
 import com.model.SpecificResponseModel
+import com.project.core_app.utils.boxHeight
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back

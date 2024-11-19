@@ -11,6 +11,8 @@ data class LocationsState(
 
     val listLocations: List<LocationResponseModel> = emptyList(),
 
+    val listFilteredLocations: List<LocationResponseModel> = emptyList(),
+
     val listContragents: List<ContragentsResponseModel> = emptyList(),
 
     val isSet: Boolean = true,

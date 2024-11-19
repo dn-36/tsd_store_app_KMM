@@ -28,7 +28,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.project.core_app.components.DeleteComponent
+import com.project.core_app.components.delete_component.DeleteComponent
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
@@ -81,9 +82,13 @@ class ContragentsComponent ( override val viewModel: ContragentsViewModel) : Net
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                SearchComponent( onValueChange = { text -> viewModel.processIntents(
+
+                    ContragentsIntents.InputTextSearchComponent(text)) } ).Content()
+
                 LazyColumn ( ) {
 
-                    itemsIndexed(viewModel.state.listAllContragents) { index, it ->
+                    itemsIndexed(viewModel.state.listFilteredContragents) { index, it ->
 
                         Spacer(modifier = Modifier.height(10.dp))
 
@@ -228,7 +233,7 @@ class ContragentsComponent ( override val viewModel: ContragentsViewModel) : Net
 
                 name = "контрагента",
 
-                onClickDelete = { scope -> viewModel.processIntents(
+                onClickDelete = { viewModel.processIntents(
 
                 ContragentsIntents.DeleteContragent ( scope)) }, onClickNo = {
 

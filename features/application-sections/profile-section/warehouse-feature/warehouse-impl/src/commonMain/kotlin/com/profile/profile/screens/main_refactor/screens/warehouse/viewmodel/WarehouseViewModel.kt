@@ -13,6 +13,7 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.screen.Wareho
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
+import com.project.network.warehouse_network.model.Store
 import com.project.network.warehouse_network.model.Warehouse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -48,8 +49,7 @@ class WarehouseViewModel (
 
                         state = state.copy(
 
-                            listAllLocations = listAllLocations,
-                            index = 2
+                            listAllLocations = listAllLocations
 
                         )
 
@@ -65,7 +65,7 @@ class WarehouseViewModel (
                                     )
                                 }, onClickUpdate = {scope, name, localId, ui ->  }
 
-                                , warehouse = null, index = state.index,
+                                , warehouse = null,
 
                                 locationUpdated = null,
 
@@ -90,8 +90,7 @@ class WarehouseViewModel (
 
                         state = state.copy(
 
-                            listAllLocations = listAllLocations,
-                            index = 1
+                            listAllLocations = listAllLocations
 
                         )
 
@@ -110,7 +109,7 @@ class WarehouseViewModel (
                                     )
                                 }, onClickCreate = {scope, name, localId ->  }
 
-                                , warehouse = intent.warehouse, index = state.index,
+                                , warehouse = intent.warehouse,
 
                                 locationUpdated = locations,
 
@@ -138,7 +137,9 @@ class WarehouseViewModel (
 
                             state = state.copy(
 
-                                listAllWarehouse = listAllWarehouse,
+                                listWarehouse = listAllWarehouse,
+
+                                listFilteredWarehouse = listAllWarehouse
 
                                 )
 
@@ -154,9 +155,9 @@ class WarehouseViewModel (
 
             is WarehouseIntents.CreateWarehouse -> {
 
-                setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
-
                 if ( intent.name.isNotBlank() && intent.localId.isNotBlank() ) {
+
+                    setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
@@ -214,7 +215,6 @@ class WarehouseViewModel (
                         setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
 
                     }
-
                 }
             }
 
@@ -223,6 +223,8 @@ class WarehouseViewModel (
             is WarehouseIntents.NoDelete -> { noDelete() }
 
             is WarehouseIntents.OpenDeleteComponent -> { openDeleteComponent( intent.ui ) }
+
+            is WarehouseIntents.InputTextSearchComponent -> inputTextSearchComponent(intent.text)
 
         }
 
@@ -255,6 +257,36 @@ class WarehouseViewModel (
             updateUiWarehouse = ui
 
         )
+
+    }
+
+    fun inputTextSearchComponent( text: String ) {
+
+        val newList = state.listWarehouse.map { warehouse ->
+            // Фильтруем список stores внутри каждого warehouse
+
+            val filteredStores = warehouse.stores.filter {
+
+                val companyName = it?.name.orEmpty() // Безопасный доступ к name
+                //Если it или it.name равны null, используется пустая строка (orEmpty()),
+                // чтобы избежать ошибок при вызове contains.
+
+                companyName.contains(text, ignoreCase = true)
+            }
+            // Возвращаем новый Warehouse с обновлённым списком stores
+
+            warehouse.copy(stores = filteredStores)
+
+        }.filter { it.stores.isNotEmpty() }
+
+        state = state.copy(
+
+                listFilteredWarehouse = newList
+
+            )
+
+            println("Text ${text}")
+            println("NewList ${newList}")
 
     }
 

@@ -52,6 +52,8 @@ class LocationsViewModel (
 
                             listLocations = getLocationsUseCase.execute(),
 
+                            listFilteredLocations = getLocationsUseCase.execute(),
+
                             isSet = false
 
                         )
@@ -78,7 +80,9 @@ class LocationsViewModel (
 
                         updateLocation = null,
 
-                        listLocations = getLocationsUseCase.execute()
+                        listLocations = getLocationsUseCase.execute(),
+
+                        listFilteredLocations = getLocationsUseCase.execute(),
 
                     )
 
@@ -152,7 +156,9 @@ class LocationsViewModel (
 
                         isVisibilityDataEntry = false,
 
-                        listLocations = getLocationsUseCase.execute()
+                        listLocations = getLocationsUseCase.execute(),
+
+                        listFilteredLocations = getLocationsUseCase.execute(),
 
                     )
 
@@ -184,7 +190,9 @@ class LocationsViewModel (
 
                         updateLocation = null,
 
-                        listLocations = getLocationsUseCase.execute()
+                        listLocations = getLocationsUseCase.execute(),
+
+                        listFilteredLocations = getLocationsUseCase.execute(),
 
                     )
 
@@ -193,6 +201,8 @@ class LocationsViewModel (
                 }
 
             }
+
+            is LocationsIntents.InputTextSearchComponent -> inputTextSearchComponent(intent.text)
 
         }
 
@@ -239,6 +249,27 @@ class LocationsViewModel (
             updateLocation = null
 
         )
+
+    }
+
+    fun inputTextSearchComponent( text: String ) {
+
+        val newList = state.listLocations.filter {
+
+            val companyName = it.name.orEmpty()
+
+            companyName.contains(text, ignoreCase = true)
+
+        }
+
+        state = state.copy(
+
+            listFilteredLocations = newList
+
+        )
+
+        println("Text ${text}")
+        println("NewList ${newList}")
 
     }
 

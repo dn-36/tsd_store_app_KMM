@@ -71,7 +71,11 @@ class CRMViewModel (
 
                             listIncomingCRM = getIncomingCRMUseCase.execute(),
 
-                            listOutgoingCRM = getOutgoingCRMUseCase.execute().toMutableList(),
+                            listFilteredIncomingCRM = getIncomingCRMUseCase.execute(),
+
+                            listOutgoingCRM = getOutgoingCRMUseCase.execute(),
+
+                            listFilteredOutgoingCRM = getOutgoingCRMUseCase.execute(),
 
                             isSet = false
 
@@ -192,7 +196,9 @@ class CRMViewModel (
 
                     isVisibilityDataEntryComponent = 0f,
 
-                    listOutgoingCRM = getOutgoingCRMUseCase.execute().toMutableList()
+                    listOutgoingCRM = getOutgoingCRMUseCase.execute(),
+
+                    listFilteredOutgoingCRM = getOutgoingCRMUseCase.execute()
 
                 )
 
@@ -230,7 +236,9 @@ class CRMViewModel (
 
                         updateItem = null,
 
-                        listOutgoingCRM = getOutgoingCRMUseCase.execute().toMutableList()
+                        listOutgoingCRM = getOutgoingCRMUseCase.execute(),
+
+                        listFilteredOutgoingCRM = getOutgoingCRMUseCase.execute()
 
                     )
 
@@ -239,6 +247,8 @@ class CRMViewModel (
                 }
 
             }
+
+            is CRMIntents.InputTextSearchComponent -> inputTextSearchComponent(intent.text)
 
         }
 
@@ -309,5 +319,42 @@ class CRMViewModel (
 
     }
 
+    fun inputTextSearchComponent( text: String ) {
+
+        if ( state.isIncoming ) {
+
+            val newList = state.listIncomingCRM.filter {
+
+                val companyName = it.entity_our?.name.orEmpty()
+
+                companyName.contains(text, ignoreCase = true)
+
+            }
+
+            state = state.copy(
+
+                listFilteredIncomingCRM = newList
+
+            )
+        }
+
+        else if ( state.isOutgoing ) {
+
+            val newList = state.listOutgoingCRM.filter {
+
+                val companyName = it.entity_our?.name.orEmpty()
+
+                companyName.contains(text, ignoreCase = true)
+
+            }
+
+            state = state.copy(
+
+                listFilteredOutgoingCRM = newList
+
+            )
+        }
+
+    }
 
 }

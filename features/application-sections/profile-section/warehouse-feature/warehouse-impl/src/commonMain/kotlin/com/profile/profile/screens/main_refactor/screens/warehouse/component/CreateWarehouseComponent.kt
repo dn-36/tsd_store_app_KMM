@@ -60,7 +60,7 @@ class CreateWarehouseComponent (
 
     val onClickCreate:( scope:CoroutineScope, name:String, localId:String) -> Unit,
 
-    val index: Int, val locationUpdated:ResponseItem?,
+    val locationUpdated:ResponseItem?,
 
     val onClickCansel: () -> Unit
 
@@ -167,6 +167,7 @@ class CreateWarehouseComponent (
                                 .heightIn(min = 50.dp) // Стандартная высота TextField
                         )
                         if (expandedLocation) {
+
                             Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.7f)) {
                                 Card(
                                     modifier = Modifier.fillMaxSize()
@@ -221,7 +222,7 @@ class CreateWarehouseComponent (
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    if(index == 2) {
+                    if(warehouse == null) {
 
                         Button(
                             onClick = {
@@ -243,10 +244,11 @@ class CreateWarehouseComponent (
                             Text(text = "Создать")
                         }
                     }
-                    else if(index == 1) {
+                    else  {
 
                         Button(
                             onClick = {
+
                                 onClickUpdate(
 
                                     scope,
@@ -255,7 +257,7 @@ class CreateWarehouseComponent (
 
                                     if (selectedLocation.size != 0) selectedLocation[0].id.toString() else "" ,
 
-                                    warehouse!!.stores[0]!!.ui.toString()
+                                    warehouse.stores[0]!!.ui
                                 )
                             },
                             modifier = Modifier

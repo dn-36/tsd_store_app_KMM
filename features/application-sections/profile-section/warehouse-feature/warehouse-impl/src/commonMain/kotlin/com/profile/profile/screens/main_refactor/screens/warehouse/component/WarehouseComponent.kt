@@ -36,7 +36,8 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.War
 import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseViewModel
 import com.project.chats.ProfileScreensApi
 import com.project.chats.WarehouseScreensApi
-import com.project.core_app.components.DeleteComponent
+import com.project.core_app.components.delete_component.DeleteComponent
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.`printer-api`.PrinterScreensApi
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
@@ -64,18 +65,31 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
         viewModel.processIntents(WarehouseIntents.SetScreen(scope))
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+
             Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+
                 Text("Склад", color = Color.Black, fontSize = 20.sp)
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                SearchComponent( onValueChange = { text -> viewModel.processIntents(
+
+                    WarehouseIntents.InputTextSearchComponent(text)) } ).Content()
+
                 LazyColumn ( modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f) ) {
-                    items(viewModel.state.listAllWarehouse) { item ->
-                        if(item.stores.isNotEmpty()) {
+
+                    items(viewModel.state.listFilteredWarehouse) { item ->
+
+                        if ( item.stores.isNotEmpty() ) {
+
                             item.stores.forEach {
+
                                 Box() {
+
                                     Row(verticalAlignment = Alignment.CenterVertically,
+
                                         modifier = Modifier.fillMaxWidth()
+
                                             .padding(vertical = 8.dp).clickable(
                                                 indication = null, // Отключение эффекта затемнения
                                                 interactionSource = remember { MutableInteractionSource() })
@@ -197,7 +211,8 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
 
                 name = "склад",
 
-                onClickDelete = { scope ->
+                onClickDelete = {
+
                     viewModel.processIntents(
 
                         WarehouseIntents.DeleteWarehouse(scope)

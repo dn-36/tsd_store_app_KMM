@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,9 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,9 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.notes_screens_impl.screens.notes.viewmodel.NotesViewModel
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
-import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.example.project.presentation.crm_feature.notes_screen.model.Notes
 import org.example.project.presentation.crm_feature.notes_screen.util.formatDateTime
 import org.example.project.presentation.crm_feature.notes_screen.viewmodel.NotesIntents
@@ -73,7 +69,9 @@ class NotesComponent ( override val viewModel: NotesViewModel ) :NetworkComponen
 
                  Spacer(modifier = Modifier.height(20.dp))
 
-                if (viewModel.notesState.listNotes.size != 0) {
+                SearchComponent( onValueChange = { text -> viewModel.processIntent(
+
+                   NotesIntents.InputTextSearchComponent(text)) } ).Content()
 
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
 
@@ -88,7 +86,7 @@ class NotesComponent ( override val viewModel: NotesViewModel ) :NetworkComponen
                                 Column() {
 
                                         val oddIndexedNotes =
-                                            viewModel.notesState.listNotes.filterIndexed { index, _ -> index % 2 == 0 }
+                                            viewModel.state.listFilteredNotes.filterIndexed { index, _ -> index % 2 == 0 }
 
                                         for (item in oddIndexedNotes) {
 
@@ -106,7 +104,7 @@ class NotesComponent ( override val viewModel: NotesViewModel ) :NetworkComponen
                                 Column() {
 
                                         val oddIndexedNotes =
-                                            viewModel.notesState.listNotes.filterIndexed { index, _ -> index % 2 != 0 }
+                                            viewModel.state.listFilteredNotes.filterIndexed { index, _ -> index % 2 != 0 }
 
                                         for (item in oddIndexedNotes) {
 
@@ -124,7 +122,6 @@ class NotesComponent ( override val viewModel: NotesViewModel ) :NetworkComponen
                             }
                         }
                     }
-                }
             }
 
             Box( modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)

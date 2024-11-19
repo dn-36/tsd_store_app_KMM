@@ -28,8 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.core_app.components.PlusButton
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
-import component.data_entry.DataEntryComponent
+import component.data_entry.ui.DataEntryComponent
 import kotlinx.coroutines.CoroutineScope
 import model.ServiceItemCreateCRMModel
 import org.jetbrains.compose.resources.painterResource
@@ -130,11 +131,21 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                Text("Для поиска введите имя юр.лица исполнителя", color = Color.Gray,
+
+                    fontSize = 16.sp)
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                SearchComponent( onValueChange = { text -> viewModel.processIntents(
+
+                    CRMIntents.InputTextSearchComponent(text)) } ).Content()
+
                 if (viewModel.state.isIncoming) {
 
                     LazyColumn {
 
-                        items(viewModel.state.listIncomingCRM) { item ->
+                        items(viewModel.state.listFilteredIncomingCRM) { item ->
 
                             Column(modifier = Modifier.fillMaxWidth()) {
 
@@ -142,6 +153,7 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                                 Text(
                                     "Клиент/Проект : ${
+                                        
                                         if (item.entity != null)
 
                                             item.entity.name else "Не указано"
@@ -154,6 +166,7 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
                                         if (item.projects != null)
 
                                             item.projects.name else "Не указано"
+                                        
                                     } ", fontSize = 16.sp, modifier = Modifier
 
                                         .fillMaxWidth(0.9f)
@@ -163,9 +176,11 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                                 Text(
                                     "Юр.лицо исполнитель : ${
+                                        
                                         if (item.entity_our != null)
 
                                             item.entity_our.name else "Не указано"
+                                        
                                     }", fontSize = 16.sp
                                 )
 
@@ -222,26 +237,27 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                     LazyColumn {
 
-                        items(viewModel.state.listOutgoingCRM) { item ->
+                        items(viewModel.state.listFilteredOutgoingCRM) { item ->
 
                             Box (modifier = Modifier.fillMaxWidth()) {
 
                                 Column() {
 
                                     Text(
+
                                         "Клиент/Проект : ${
+                                            
                                             if (item.entity != null)
 
                                                 item.entity.name else "Не указано"
-                                        } ${
-                                            if (item.groupentits != null)
+                                        } ${ if (item.groupentits != null)
 
                                                 "/ ${item.groupentits.name}" else ""
-                                        } / ${
-
-                                            if (item.projects != null)
+                                            
+                                        } / ${ if (item.projects != null)
 
                                                 item.projects.name else "Не указано"
+                                            
                                         }", fontSize = 16.sp, modifier = Modifier
 
                                             .fillMaxWidth(0.9f)
@@ -251,9 +267,11 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                                     Text(
                                         "Юр.лицо исполнитель : ${
+                                            
                                             if (item.entity_our != null)
 
                                                 item.entity_our.name else "Не указано"
+                                            
                                         }", fontSize = 16.sp
                                     )
 

@@ -4,5 +4,9 @@ import com.project.network.notes_network.model.NoteResponse
 
 
 data class NotesState(
-    val listNotes:List<NoteResponse> = listOf()
+
+    val listNotes:List<NoteResponse> = emptyList(),
+
+    val listFilteredNotes:List<NoteResponse> = emptyList()
+
 )

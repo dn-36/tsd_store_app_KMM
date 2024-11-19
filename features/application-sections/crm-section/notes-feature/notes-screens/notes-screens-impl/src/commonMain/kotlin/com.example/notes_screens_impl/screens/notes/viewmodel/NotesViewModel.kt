@@ -23,15 +23,15 @@ class NotesViewModel (
 
 ) : NetworkViewModel() {
 
-    var notesState by mutableStateOf(NotesState())
+    var state by mutableStateOf(NotesState())
 
     fun processIntent(intents: NotesIntents){
 
         when(intents){
 
-            is NotesIntents.CreateBookmarks -> { createNotesIntent() }
+            is NotesIntents.CreateBookmarks -> createNotesIntent()
 
-            is NotesIntents.Back -> { back() }
+            is NotesIntents.Back -> back()
 
             is NotesIntents.SetNotes -> {
 
@@ -39,9 +39,11 @@ class NotesViewModel (
 
                     getNotesUseCase.execute ( onGet = { listAllNotes ->
 
-                        notesState = notesState.copy(
+                        state = state.copy(
 
-                            listNotes = listAllNotes
+                            listNotes = listAllNotes,
+
+                            listFilteredNotes = listAllNotes
 
                         )
 
@@ -51,10 +53,11 @@ class NotesViewModel (
 
                 }
 
-            //setNotesIntent(intents.coroutineScope)
             }
 
-            is NotesIntents.EditNote -> { editNote(intents.note) }
+            is NotesIntents.EditNote -> editNote(intents.note)
+
+            is NotesIntents.InputTextSearchComponent -> inputTextSearchComponent(intents.text)
         }
     }
 
@@ -75,4 +78,27 @@ class NotesViewModel (
         Navigation.navigator.push( menuScreen.MenuCrm() )
 
     }
+
+    fun inputTextSearchComponent( text: String ) {
+
+        val newList = state.listNotes.filter {
+
+            val companyName = it.name.orEmpty()
+
+            companyName.contains(text, ignoreCase = true)
+
+        }
+
+        state = state.copy(
+
+            listFilteredNotes = newList
+
+        )
+
+        println("Text ${text}")
+
+        println("NewList ${newList}")
+
+    }
+
 }
