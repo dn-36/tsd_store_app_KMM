@@ -43,7 +43,9 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.profile.profile.qr_code.core.ProductPresentationModel
+import com.profile.profile.udpPlayer.core.ProductPresentationModel
+import com.project.core_app.components.menu_bottom_tools.ui.MenuBottomBarTools
+import com.project.core_app.components.menu_bottom_tools.viewmodel.MenuBottomBarToolsSection
 import com.project.core_app.ui.components.BarCodeVkpComponent
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.ListBluetoothDevicesComponent
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.QRcodeSizeComponent
@@ -275,26 +277,6 @@ Row {
 
             }
 
-            Button(
-                onClick = { viewModel.processIntent(
-                    QRcodeMenuIntent.PrintQRcode(
-                        ProductPresentationModel(
-                            product.title,
-                            product.qrCodeData,
-                            state.heightQRcode,
-                            state.fontSize
-                        ),
-                       getKoin().get()
-                    )
-                ) },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.BottomCenter)
-
-            ) {
-                Text(text = "Печать")
-            }
 
             if (state.isOpenedSettingsVKP) {
                 if (state.imgBitmap != null) {
@@ -339,6 +321,34 @@ Row {
             //if(state.categoryPrinter == CategoryPrinter.TSC) {
 
             //}
+             if(!state.isOpenedSettingsVKP&& !state.isOpenedBluetoothSettingsTSC) {
+                 Column(modifier = Modifier.align(Alignment.BottomCenter)) {
+                     Button(
+                         onClick = { viewModel.processIntent(
+                             QRcodeMenuIntent.PrintQRcode(
+                                 ProductPresentationModel(
+                                     product.title,
+                                     product.qrCodeData,
+                                     state.heightQRcode,
+                                     state.fontSize
+                                 ),
+                                 getKoin().get()
+                             )
+                         ) },
+                         modifier = Modifier
+                             .fillMaxWidth(0.9f)
+                             .padding(bottom = 16.dp)
+                             .align(Alignment.CenterHorizontally)
+
+                     ) {
+                         Text(text = "Печать")
+                     }
+                     Box{
+                         MenuBottomBarTools().Content(MenuBottomBarToolsSection.PRINT)
+                     }
+                 }
+
+             }
             }
         }
     }

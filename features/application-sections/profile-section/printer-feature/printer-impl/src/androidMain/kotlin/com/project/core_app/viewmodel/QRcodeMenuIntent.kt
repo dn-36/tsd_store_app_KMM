@@ -2,7 +2,7 @@ package com.project.core_app.viewmodel
 
 import android.content.Context
 import cafe.adriel.voyager.navigator.Navigator
-import com.profile.profile.qr_code.core.ProductPresentationModel
+import com.profile.profile.udpPlayer.core.ProductPresentationModel
 import kotlinx.coroutines.CoroutineScope
 import com.project.core_app.viewmodel.model.CategoryPrinter
 

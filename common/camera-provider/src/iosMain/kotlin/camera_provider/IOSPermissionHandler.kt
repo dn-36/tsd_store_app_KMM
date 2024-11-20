@@ -26,7 +26,7 @@ class IOSPermissionHandler : CameraProviderApi {
                     }
                 }
                 else -> {
-                    // Разрешение отклонено или ограничено
+
                     continuation.resume(false)
                 }
             }

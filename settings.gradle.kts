@@ -42,12 +42,14 @@ include(":core:contact-provider")
 
 
 include(":common")
+include(":common:printer-impl")
+include(":common:ip-camera-udp-client")
+
 include(":core:recources")
 include(":common:phone")
 include(":common:printer-barcode-vkp")
 include(":common:printer-barcode-tsc")
 include(":common:camera-provider")
-
 
 
 /**application-sections**/
@@ -124,7 +126,18 @@ include(":features:application-sections")
 /** api and impl **/
 /*----*/include(":features:application-sections:profile-section:profile-feature:profile-impl")
 /*----*/include(":features:application-sections:profile-section:profile-feature:profile-api")
+
+
+/**profile-ip-camera**/
+/*--*/include(":features:application-sections:profile-section:ip-camera-feature")
+/** api and impl **/
+/*----*/include(":features:application-sections:profile-section:ip-camera-feature:ip-camera-impl")
+/*----*/include(":features:application-sections:profile-section:ip-camera-feature:ip-camera-api")
+
 /*----*/include(":features:application-sections:profile-section:warehouse-feature")
+/*----*/include(":features:application-sections:profile-section:tools-feature:ip-camera-api")
+/*----*/include(":features:application-sections:profile-section:tools-feature:ip-camera-impl")
+
 
 /*----*/include(":features:application-sections:profile-section:warehouse-feature:warehouse-api")
 /*----*/include(":features:application-sections:profile-section:warehouse-feature:warehouse-impl")

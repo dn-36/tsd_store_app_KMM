@@ -1,9 +1,9 @@
 package com.project.network.group_entity_network
 
+import com.project.network.common.httpClientEngine
 import com.project.network.crm_network.CRMClient
 import com.project.network.crm_network.model.ApiResponseCRMOutgoing
 import com.project.network.group_entity_network.model.GroupEntityResponse
-import com.project.network.httpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation

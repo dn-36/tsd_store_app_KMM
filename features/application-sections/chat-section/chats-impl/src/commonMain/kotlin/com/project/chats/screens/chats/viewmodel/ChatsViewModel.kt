@@ -30,7 +30,7 @@ class ChatsViewModel(
     fun processIntent(intent: ChatsIntents) {
         when (intent) {
             is ChatsIntents.DialogueSelection -> {
-                dialogueSelection(intent.ui,intent.titleChat,intent.urlIcon,intent.countNewMessage)
+                dialogueSelection(intent.ui,intent.titleChat,intent.urlIcon)
             }
             is ChatsIntents.AddChat -> {
                 addChat()
@@ -82,13 +82,14 @@ class ChatsViewModel(
 
 
 
-   private fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?,countNewMessage:Int) {
+   private fun dialogueSelection(chatsUi:String,titleChat:String,urlIcon:String?) {
             Navigation.navigator.push(
                 DialogScreen(
                     chatsUi,
                     titleChat,
                     urlIcon,
-                    countNewMessage
+
+                  //  countNewMessage
                 )
             )
     }

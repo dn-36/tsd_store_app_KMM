@@ -12,20 +12,18 @@ class ChatRepositoryImpl(
     ):ChatsRepositoryApi {
     override suspend fun getListChats():List<ChatsModel>{
         chatApi.init(sharedPrefsApi.getToken()?:"")
-       val listChats = chatApi.getChats().map {
+       val listChats = chatApi.getListChats().map {
 
            ChatsModel(
                if(!it.image.isNullOrBlank())
                 "https://delta.online/storage/"+
                it.image
-               else
-                   null
-               ,
+               else null,
                it?.name?:"",
                it?.message?:"",
                Utils.parseDateTimeManually(it.created_at?:""),
                it?.ui?:"",
-               it.count_new_message?:0
+               it.count_new_message
            )
        }
         return Utils.sortByNearestDate(listChats)

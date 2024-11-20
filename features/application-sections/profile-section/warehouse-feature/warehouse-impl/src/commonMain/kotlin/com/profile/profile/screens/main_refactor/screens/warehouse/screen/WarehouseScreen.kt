@@ -38,7 +38,6 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.War
 import com.project.chats.ProfileScreensApi
 import com.project.chats.WarehouseScreensApi
 import com.project.core_app.network_base_screen.NetworkScreen
-import com.project.`printer-api`.PrinterScreensApi
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform

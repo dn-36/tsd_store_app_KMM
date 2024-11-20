@@ -1,8 +1,8 @@
 package com.project.network.contragent_network
 
-import com.project.network.ConstData
+import com.project.network.common.ConstData
 import com.project.network.contragent_network.model.ContragentResponse
-import com.project.network.httpClientEngine
+import com.project.network.common.httpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest

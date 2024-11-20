@@ -13,6 +13,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.project.network.Navigation
 import com.project.network.users_network.UsersClient
+import com.project.`printer-api`.PrinterScreensApi
 import org.koin.mp.KoinPlatform.getKoin
 
 class ProfileViewModel : NetworkViewModel() {
@@ -26,8 +27,15 @@ class ProfileViewModel : NetworkViewModel() {
             is ProfileIntents.Warehouse -> { warehouse() }
 
             is ProfileIntents.SetScreen -> { setScreen(intents.coroutineScope) }
-
+            ProfileIntents.Tools -> {tools()}
         }
+    }
+    fun tools(){
+
+        val toolsScreen: PrinterScreensApi = getKoin().get()
+
+        Navigation.navigator.push(toolsScreen.printer())//toolsScreen.tools())
+
     }
 
     fun warehouse(){

@@ -39,10 +39,16 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
+            implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-api"))
+            implementation(project(":features:application-sections:profile-section:printer-feature:printer-api"))
             implementation(project(":features:authorization-feature:authorization-screen-api"))
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
+            implementation(project(":core:network"))
+            implementation(dependencyNotation = libs.peekaboo.ui)
+            implementation(dependencyNotation = libs.peekaboo.imagepicker)
+            implementation("com.squareup.okio:okio:3.9.1")
             implementation(libs.kotlinx.io)
             implementation("io.ktor:ktor-utils:2.0.0")
             implementation(compose.runtime)

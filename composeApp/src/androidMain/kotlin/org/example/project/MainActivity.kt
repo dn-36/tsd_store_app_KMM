@@ -1,27 +1,35 @@
 package org.example.project
 
-
-import android.content.Context
-import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.Manifest
-import android.app.Activity
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.project.network.ConstData
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import com.project.phone.PermissionManeger
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.example.project.app.ui.App
 import org.koin.android.ext.koin.androidContext
+import java.io.ByteArrayInputStream
+import java.net.DatagramPacket
+import java.net.InetAddress
+import java.net.MulticastSocket
 
 class MainActivity : ComponentActivity() {
 
-
+    private lateinit var udpReceiver: UdpMulticastReceiver
+    val multicastAddress = "236.0.0.1"
+    val multicastPort = 2000
+    val packetSize = 20016
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -33,7 +41,6 @@ class MainActivity : ComponentActivity() {
         val permissionManeger = PermissionManeger(this)
 
         permissionManeger.askPermissions(
-
             PermissionManeger.PERMISSION.CONTACTS_PERMISSION,
             PermissionManeger.PERMISSION.CAMERA_PERMISSION,
             PermissionManeger.PERMISSION.BLUETOOTH_PERMISSION
@@ -41,12 +48,196 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-                App.Content()
+          /*  udpReceiver = UdpMulticastReceiver(
+                address = multicastAddress,
+                port = multicastPort,
+                packetSize = packetSize
+            ) { frame ->
+                processFrame(frame)
+            }*/
+
+          //  udpReceiver.startReceiving()
+
+           // VideoStream()
+            /*    InputStreamHttpPlayer(
+                    "http://192.168.1.150:0000/ts.mpd",
+                   modifier = Modifier.fillMaxSize()
+                )*/
+            App().AppContent()
+
 
         }
     }
 
 }
+val bitmap = mutableStateOf<Bitmap?>(null)
 
 
 
+// Вызываем в обработчике frame:
+private fun processFrame(frame: ByteArray) {
+    Log.d("Received frame", "Processing frame of size: ${frame.size}")
+   GlobalScope.launch {
+        decodeMjpegFrame(frame)
+    }
+}
+
+// Обратите внимание на использование compose, чтобы отображать обновления в реальном времени:
+@Composable
+fun VideoStream() {
+    if (bitmap.value != null) {
+        Image(
+            bitmap = bitmap.value!!.asImageBitmap(),
+            contentDescription = null,
+            Modifier.fillMaxSize()
+        )
+    }
+}
+class UdpMulticastReceiver(
+    private val address: String,
+    private val port: Int,
+    private val packetSize: Int,
+    private val onFrameReceived: (ByteArray) -> Unit
+) {
+    private var socket: MulticastSocket? = null
+    private var isReceiving = false
+
+
+    private var frameBuffer = ByteArray(0)
+
+    fun startReceiving() {
+        isReceiving = true
+
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val group = InetAddress.getByName(address)
+                socket = MulticastSocket(port).apply {
+                    joinGroup(group)
+                }
+
+                val buffer = ByteArray(packetSize)
+
+                while (isReceiving) {
+                    try {
+                        val packet = DatagramPacket(buffer, buffer.size)
+
+                        // Получаем пакет
+                        socket?.receive(packet)
+
+                        // Добавляем данные в буфер
+                        val receivedData = packet.data.copyOf(packet.length)
+                        frameBuffer += receivedData
+
+                        // Проверяем, есть ли конец кадра (FFD9)
+                        val endIndex = frameBuffer.indexOfSequence(byteArrayOf(0xFF.toByte(), 0xD9.toByte()))
+
+                        if (endIndex != -1) {
+                            // Извлекаем полный кадр
+                            val fullFrame = frameBuffer.copyOfRange(0, endIndex + 2)
+
+                            // Передаем кадр в обработчик
+                            withContext(Dispatchers.Main) {
+                                onFrameReceived(fullFrame)
+                            }
+
+                            // Удаляем обработанные данные из буфера
+                            frameBuffer = frameBuffer.copyOfRange(endIndex + 2, frameBuffer.size)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                stopReceiving()
+            }
+        }
+    }
+
+    fun ByteArray.indexOfSequence(sequence: ByteArray, start: Int = 0): Int {
+        if (sequence.isEmpty() || this.size < sequence.size || start < 0) return -1
+        for (i in start..this.size - sequence.size) {
+            if (this.copyOfRange(i, i + sequence.size).contentEquals(sequence)) {
+                return i
+            }
+        }
+        return -1
+    }
+
+
+
+    fun stopReceiving() {
+        isReceiving = false
+        try {
+            socket?.leaveGroup(InetAddress.getByName(address))
+            socket?.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}
+
+
+suspend fun decodeMjpegFrame(data: ByteArray) {
+    withContext(Dispatchers.IO) {
+        try {
+            // Пример: замените "BoundaryString" на ваше реальное значение границы
+            val boundary = "--BoundaryString".toByteArray()
+            val frames = splitByteArray(data, boundary)
+
+            for (frame in frames) {
+                if (frame.isNotEmpty()) {
+                    // Поиск начала JPEG-данных
+                    val startIndex = frame.indexOf(0xFF.toByte()) // Начало JPEG
+                    val jpegData = frame.copyOfRange(startIndex, frame.size)
+                    if (startIndex >= 0 ) {
+
+
+
+                        val inputStream = ByteArrayInputStream(jpegData)
+                        val decodedBitmap = BitmapFactory.decodeStream(inputStream)
+
+                        if (decodedBitmap != null) {
+                            withContext(Dispatchers.Main) {
+                                bitmap.value = decodedBitmap
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("MJPEG Decoder", "Error decoding MJPEG frame", e)
+        }
+    }
+}
+
+// Функция для разделения ByteArray по границе
+fun splitByteArray(data: ByteArray, boundary: ByteArray): List<ByteArray> {
+    val frames = mutableListOf<ByteArray>()
+    var start = 0
+    var end: Int
+
+    while (start < data.size) {
+        end = indexOf(data, boundary, start)
+        if (end == -1) {
+            frames.add(data.copyOfRange(start, data.size))
+            break
+        }
+        frames.add(data.copyOfRange(start, end))
+        start = end + boundary.size
+    }
+
+    return frames
+}
+
+// Функция для поиска индекса первого вхождения границы в ByteArray
+fun indexOf(data: ByteArray, target: ByteArray, start: Int = 0): Int {
+    outer@ for (i in start..data.size - target.size) {
+        for (j in target.indices) {
+            if (data[i + j] != target[j]) continue@outer
+        }
+        return i
+    }
+    return -1
+}

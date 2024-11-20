@@ -1,7 +1,7 @@
 package com.project.network.services_network
 
+import com.project.network.common.httpClientEngine
 import com.project.network.crm_network.CRMClient
-import com.project.network.httpClientEngine
 import com.project.network.services_network.model.ServiceResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

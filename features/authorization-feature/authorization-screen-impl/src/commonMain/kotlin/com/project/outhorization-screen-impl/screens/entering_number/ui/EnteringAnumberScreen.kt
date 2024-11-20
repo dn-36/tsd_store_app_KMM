@@ -1,4 +1,4 @@
-package org.example.project.presentation.feature.authorization.screens.entering_number.ui
+package com.project.`outhorization-screen-impl`.screens.entering_number.ui
 
 
 import androidx.compose.foundation.background

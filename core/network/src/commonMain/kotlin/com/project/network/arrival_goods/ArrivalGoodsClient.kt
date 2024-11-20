@@ -1,9 +1,9 @@
 package com.project.network.arrival_goods
 
-import com.project.network.ConstData
+import com.project.network.common.ConstData
 import com.project.network.arrival_goods.model.CreateRequest
 import com.project.network.arrival_goods.model.StoreResponse
-import com.project.network.httpClientEngine
+import com.project.network.common.httpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -30,8 +30,6 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.double
-import kotlinx.serialization.json.int
 
 
 class ArrivalGoodsClient {

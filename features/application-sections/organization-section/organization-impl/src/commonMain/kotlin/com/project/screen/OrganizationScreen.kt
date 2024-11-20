@@ -37,7 +37,7 @@ import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
 import com.project.component.OrganizationComponent
 import com.project.network.Navigation
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.components.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkScreen
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.menu.screen.TapeScreenApi
@@ -50,9 +50,8 @@ import project.core.resources.Res
 import project.core.resources.cancel
 import project.core.resources.plus
 import project.core.resources.update_pencil
+import kotlin.jvm.Transient
 
 class OrganizationScreen : NetworkScreen(
-
-    OrganizationComponent ( getKoin().get() )
-
+    OrganizationComponent (getKoin().get())
 )

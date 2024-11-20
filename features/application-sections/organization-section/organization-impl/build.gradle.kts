@@ -50,6 +50,9 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
 
+            implementation(dependencyNotation = libs.peekaboo.ui)
+            implementation(dependencyNotation = libs.peekaboo.imagepicker)
+            implementation("com.github.skydoves:landscapist-coil3:2.4.1")
         }
 
     }

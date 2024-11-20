@@ -1,8 +1,7 @@
 package com.project.network.organizations_network
 
-import com.project.network.ConstData
-import com.project.network.httpClientEngine
-import com.project.network.notes_network.model.BodyNoteDto
+import com.project.network.common.ConstData
+import com.project.network.common.httpClientEngine
 import com.project.network.organizations_network.model.ActiveOrganizationRequest
 import com.project.network.organizations_network.model.CreateOrganizationRequest
 import com.project.network.organizations_network.model.Response

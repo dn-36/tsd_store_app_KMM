@@ -1,4 +1,4 @@
-package com.profile.profile.screens.profile_screen.screen
+package com.profile.`printer-impl`.screens.profile_screen.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.profile.printer.ProfileComponent
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
+import com.project.core_app.components.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkScreen
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 import org.example.project.presentation.profile_feature.main_feature.viewmodel.ProfileIntents

@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 
 sealed class ProfileIntents {
     object Warehouse:ProfileIntents()
+    object Tools:ProfileIntents()
 
     data class SetScreen(val coroutineScope: CoroutineScope):ProfileIntents()
 }
