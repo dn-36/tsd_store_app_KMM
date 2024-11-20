@@ -23,6 +23,7 @@ koin = "3.6.0-Beta4"
 serialization = "1.6.0"
 org-jetbrains-kotlin-jvm = "1.9.10"
 peekaboo = "0.5.2"
+runtimeAndroid = "1.6.7"
 
 
 [libraries]
@@ -60,6 +61,7 @@ multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings
 
 peekaboo-ui = { group = "io.github.onseok", name = "peekaboo-ui", version.ref = "peekaboo" }
 peekaboo-imagepicker = { group = "io.github.onseok", name = "peekaboo-image-picker", version.ref = "peekaboo" }
+androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 
 
 [plugins]

@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.profile.profile.udpPlayer.StreamUdpPlayer
 import com.project.menu.screen.OrganizationScreenApi
 import com.project.network.Navigation
 import com.project.`outhorization-screen-api`.AuthorizationScreensApi
@@ -53,7 +54,10 @@ class App {
             }
 
         }
+
     }
 }
+
+
 
 

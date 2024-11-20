@@ -1,4 +1,4 @@
-package com.profile.profile.screens.profile_screen.screen
+package com.profile.`printer-impl`.screens.profile_screen.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

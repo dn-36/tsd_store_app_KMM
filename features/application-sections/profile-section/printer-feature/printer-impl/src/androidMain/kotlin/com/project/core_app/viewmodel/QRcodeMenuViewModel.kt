@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.profile.profile.qr_code.screens.product_search.ui.ProductSearchScreen
+import com.profile.profile.udpPlayer.screens.product_search.ui.ProductSearchScreen
 import com.project.core_app.usecases.ConectUSBUseCase
 import com.project.core_app.usecases.ConnectToBleutoothDeviceUseCase
 import com.project.core_app.usecases.GetListBluetoothDeviceUseCase

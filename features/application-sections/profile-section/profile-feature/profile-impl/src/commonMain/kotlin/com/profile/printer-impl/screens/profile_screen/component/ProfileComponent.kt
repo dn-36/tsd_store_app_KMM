@@ -94,9 +94,18 @@ class ProfileComponent ( override val viewModel: ProfileViewModel ) : NetworkCom
                                 modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f))
                         }
                         Spacer(modifier = Modifier.height(20.dp))
-
                         Row(modifier = Modifier.fillMaxWidth(0.9f).clickable (
                             indication = null, // Отключение эффекта затемнения
+                            interactionSource = remember { MutableInteractionSource() })
+                        { viewModel.processIntent(ProfileIntents.Tools) }
+                            , horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+                            Text("Инструменты", fontSize = 15.sp)
+                            Image(painter = painterResource(Res.drawable.down_arrow),contentDescription = null,
+                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f))
+                        }
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Row(modifier = Modifier.fillMaxWidth(0.9f).clickable (
+                            indication = null,
                             interactionSource = remember { MutableInteractionSource() })
                         { viewModel.processIntent(ProfileIntents.Warehouse) }
                             , horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){

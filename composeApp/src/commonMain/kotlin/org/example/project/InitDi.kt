@@ -2,8 +2,9 @@ package org.example.project
 
 import com.example.notes_screens_impl.notesModule
 import com.profile.`printer-impl`.profileScreensModule
-import com.profile.profile.qr_code.printerPlatformModule
-import com.profile.profile.qr_code.printerScreenModule
+import com.profile.profile.udpPlayer.printerPlatformModule
+import com.profile.profile.udpPlayer.printerScreenModule
+import com.profile.profile.toolsScreensModule
 import com.profile.profile.warehouseScreensModule
 import com.project.chats.core.chatsModule
 import com.project.core_app.components.menu_bottom_bar.menuBottomBarMudule
@@ -41,8 +42,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             contactProviderModule,
             contragentsModule,
             crmModule,
-            menuBottomBarMudule
-
+            menuBottomBarMudule,
+            toolsScreensModule
         )
     }
 }

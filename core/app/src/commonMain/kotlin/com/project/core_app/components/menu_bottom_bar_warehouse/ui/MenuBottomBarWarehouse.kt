@@ -23,11 +23,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.project.core_app.components.menu_bottom_bar_warehouse.viewmodel.MenuBottomBarWarehouseIntents
+import com.project.core_app.components.menu_bottom_bar_warehouse.viewmodel.MenuBottomBarWarehouseViewModel
 
-import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseIntents
-import com.profile.profile.screens.warehouse_feature.core.menu_bottom_bar_warehouse.viewmodel.MenuBottomBarWarehouseViewModel
-import com.project.core_app.components.menu_bottom_bar.viewmodel.MenuBottomBarIntents
-import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
+import com.project.core_app.components.menu_bottom_tools.viewmodel.MenuBottomBarToolsIntents
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
 
 
@@ -53,11 +52,11 @@ val vm = MenuBottomBarWarehouseViewModel()
         warehouseScreen: Screen,
         profileScreen: Screen,
         financeScreen: Screen,
-        printScreen: Screen,
+       // printScreen: Screen,
     ): MenuBottomBarWarehouse {
         _warehouseScreen = warehouseScreen
         _profileScreen = profileScreen
-        _printScreen = printScreen
+     //   _printScreen = printScreen
         _financeScreen = financeScreen
         return this
     }
@@ -70,52 +69,65 @@ val vm = MenuBottomBarWarehouseViewModel()
         Box(
                 modifier = Modifier
                     .padding(bottom = 16.dp)
-                    .fillMaxHeight(0.1f)
+                    .fillMaxHeight(0.12f)
                     .fillMaxWidth()
                     .background(Color.White)
             ) {
-                Row(modifier = Modifier.align(Alignment.BottomCenter)
+            Box(modifier = Modifier.background(Color.Black) .height(50.dp).width(1.dp).align(Alignment.Center),)
+            Row(modifier = Modifier.align(Alignment.BottomCenter)
                     .fillMaxWidth(0.95f), horizontalArrangement = Arrangement.SpaceBetween){
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.state.section.WarehouseButtonCollor)
-                            .width(70.dp).height(40.dp).clickable { vm.processIntent(MenuBottomBarWarehouseIntents.Warehouse(
-                                _warehouseScreen!!)) }){
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.weight(1F)
+                    ) {
+                        Box(modifier = Modifier.clip(RoundedCornerShape(10.dp)).background(color = vm.state.section.WarehouseButtonCollor)
+                            .width(100.dp).height(60.dp).clickable { vm.processIntent(
+                                MenuBottomBarWarehouseIntents.Warehouse(
+                                _warehouseScreen!!)
+                        )
+                            }){
                         Image(painter = painterResource(Res.drawable.warehouse),contentDescription = null,
-                            modifier =  Modifier.size(30.dp).align(Alignment.Center))
+                            modifier =  Modifier.size(40.dp).align(Alignment.Center))
                         }
                         Text("Склад", color = Color.Black, fontSize = 12.sp)
 
                     }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.state.section.FinanceButtonCollor)
-                            .width(70.dp).height(40.dp).clickable { vm.processIntent(MenuBottomBarWarehouseIntents.Finance(
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.weight(1F)
+                        ) {
+                        Box(modifier = Modifier.clip(RoundedCornerShape(10.dp)).background(color = vm.state.section.FinanceButtonCollor)
+                            .width(100.dp).height(60.dp).clickable { vm.processIntent(
+                                MenuBottomBarWarehouseIntents.Finance(
                                 _financeScreen!!))}){
                             Image(painter = painterResource(Res.drawable.exchange),contentDescription = null,
-                                modifier =  Modifier.size(30.dp).align(Alignment.Center))
+                                modifier =  Modifier.size(40.dp).align(Alignment.Center))
                         }
                         Text("Приход Расход", color = Color.Black, fontSize = 12.sp)
 
                     }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                 /*   Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(color = vm.state.section.PrintButtonCollor)
-                            .width(70.dp).height(40.dp).clickable { vm.processIntent(MenuBottomBarWarehouseIntents.Print(
+                            .width(70.dp).height(40.dp).clickable { vm.processIntent(
+                                MenuBottomBarWarehouseIntents.Print(
                                 _printScreen!!)) }){
                             Image(painter = painterResource(Res.drawable.printing),contentDescription = null,
                                 modifier =  Modifier.size(30.dp).align(Alignment.Center))
                         }
                         Text("Напечатать", color = Color.Black, fontSize = 12.sp)
 
-                    }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    }*/
+                /*    Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Box(modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(Color.White)
-                            .width(70.dp).height(40.dp).clickable { vm.processIntent(MenuBottomBarWarehouseIntents.Profile(
+                            .width(70.dp).height(40.dp).clickable { vm.processIntent(
+                                MenuBottomBarWarehouseIntents.Profile(
                                 _profileScreen!!)) }){
                             Image(painter = painterResource(Res.drawable.user),contentDescription = null,
                                 modifier =  Modifier.size(30.dp).align(Alignment.Center))
                         }
                         Text("Профиль", color = Color.Black, fontSize = 12.sp)
 
-                    }
+                    }*/
 
                 }
             }

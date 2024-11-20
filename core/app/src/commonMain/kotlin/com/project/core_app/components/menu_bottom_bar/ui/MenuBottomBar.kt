@@ -50,8 +50,10 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.home
+import project.core.resources.icon_youtub
 import project.core.resources.menu
 import project.core.resources.messenger
+import project.core.resources.play_video
 import project.core.resources.squares_stack
 import project.core.resources.user
 
@@ -143,7 +145,7 @@ class MenuBottomBar {
                             )
                         }) {
                         Image(
-                            painter = painterResource(Res.drawable.menu), contentDescription = null,
+                            painter = painterResource(Res.drawable.icon_youtub), contentDescription = null,
                             modifier = Modifier.size(30.dp).align(Alignment.Center)
                         )
                     }
@@ -204,12 +206,12 @@ class MenuBottomBar {
                             )
                         }) {
                         Image(
-                            painter = painterResource(Res.drawable.user), contentDescription = null,
+                            painter = painterResource(Res.drawable.menu), contentDescription = null,
                             modifier = Modifier.size(30.dp).align(Alignment.Center)
                         )
 
                     }
-                    Text("Профиль", color = Color.Black, fontSize = 12.sp)
+                    Text("еще", color = Color.Black, fontSize = 12.sp)
 
                 }
             }

@@ -37,7 +37,7 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.War
 import com.project.chats.ProfileScreensApi
 import com.project.chats.WarehouseScreensApi
 import com.project.core_app.network_base_screen.NetworkComponent
-import com.project.`printer-api`.PrinterScreensApi
+//import com.project.`printer-api`.PrinterScreensApi
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
 import org.jetbrains.compose.resources.painterResource
@@ -56,7 +56,7 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
 
         val profileScreens: ProfileScreensApi = KoinPlatform.getKoin().get()
 
-        val printScreen: PrinterScreensApi = KoinPlatform.getKoin().get()
+        //val printScreen: PrinterScreensApi = KoinPlatform.getKoin().get()
 
         val scope = rememberCoroutineScope()
 
@@ -183,7 +183,7 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                     warehouseScreens.warehouse(),
                     profileScreens.profile(),
                     ArrivalAndConsumptionScreen(),
-                    printScreen.printer()
+                   // printScreen.printer()
 
                 ).Content(MenuBottomBarWarehouseSection.WAREHOUSE)
             }

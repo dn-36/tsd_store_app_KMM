@@ -39,6 +39,8 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
+            implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-api"))
+            implementation(project(":features:application-sections:profile-section:printer-feature:printer-api"))
             implementation(project(":features:authorization-feature:authorization-screen-api"))
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             implementation(project(":core:recources"))
