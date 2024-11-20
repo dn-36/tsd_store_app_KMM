@@ -199,6 +199,8 @@ class ArrivalAndConsumptionClientImpl (
 
              id = it.id!!,
 
+                text = it.text?:"",
+
                 store_id = it.store_id!!,
 
                 contragent_id = it.contragent_id!!,
@@ -243,22 +245,27 @@ class ArrivalAndConsumptionClientImpl (
 
     }
 
-    override suspend fun createArrivalOrConsumption( idLegalEntityParish: Int?,
+    override suspend fun createArrivalOrConsumption(
 
-                                                     idLegalEntityExpense: Int?,
+        description: String,
 
-                                                     idContragentExpense: Int?,
+        idLegalEntityParish: Int?,
 
-                                                     idContragentParish: Int?,
+        idLegalEntityExpense: Int?,
 
-                                                     idWarehouse: Int?,
+        idContragentExpense: Int?,
 
-                                                     isPush: Int ,
+        idContragentParish: Int?,
 
-                                                     listProducts:List<ProductArrivalAndConsumption> ) {
+        idWarehouse: Int?,
+
+        isPush: Int,
+
+        listProducts: List<ProductArrivalAndConsumption>
+    ) {
 
         println("create usecase "+arrivalAndConsumptionClient.createProduct(
-            text = "",
+            text = description,
             idContragentExpense?:0,
             idContragentParish?:0,
             idLegalEntityExpense?:0,

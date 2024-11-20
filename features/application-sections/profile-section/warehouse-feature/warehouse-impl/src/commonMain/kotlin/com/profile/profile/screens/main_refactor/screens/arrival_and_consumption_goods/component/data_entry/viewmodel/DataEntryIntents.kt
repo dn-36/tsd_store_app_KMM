@@ -62,6 +62,8 @@ sealed class DataEntryIntents {
 
     data class TextInputLegalEntityExpense ( val text: String ): DataEntryIntents()
 
+    data class TextInputDescription ( val text: String ): DataEntryIntents()
+
     data class TextInputWarehouse ( val text: String, val newList: List<WarehouseArrivalAndConsumption> ): DataEntryIntents()
 
 

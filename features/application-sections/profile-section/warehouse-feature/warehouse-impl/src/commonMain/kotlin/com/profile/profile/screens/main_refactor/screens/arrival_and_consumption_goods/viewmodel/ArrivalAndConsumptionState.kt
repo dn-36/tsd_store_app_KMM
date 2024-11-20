@@ -25,6 +25,8 @@ data class ArrivalAndConsumptionState (
 
     val idWarehouse: Int? = null,
 
+    val description: String = "",
+
     val isPush: Int = 0,
 
     val isVisibilityListProducts: MutableState<Float> = mutableStateOf(0f),

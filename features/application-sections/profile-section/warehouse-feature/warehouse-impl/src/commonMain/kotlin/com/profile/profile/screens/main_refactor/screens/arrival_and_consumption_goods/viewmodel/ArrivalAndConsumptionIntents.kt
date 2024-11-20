@@ -17,6 +17,8 @@ sealed class ArrivalAndConsumptionIntents {
 
     data class Next(
 
+        val description: String,
+
         val idLegalEntityParish: Int?,
 
         val idLegalEntityExpense: Int?,

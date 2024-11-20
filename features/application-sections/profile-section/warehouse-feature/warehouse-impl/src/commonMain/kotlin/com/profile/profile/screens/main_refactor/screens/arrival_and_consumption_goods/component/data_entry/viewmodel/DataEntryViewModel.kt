@@ -26,47 +26,59 @@ class DataEntryViewModel: ViewModel() {
 
                 intent.updatedContragentParish, intent.updatedWarehouse) }
 
-            is DataEntryIntents.MenuContragentsExpense -> { menuContragentsExpense() }
+            is DataEntryIntents.MenuContragentsExpense -> menuContragentsExpense()
 
-            is DataEntryIntents.MenuContragentsParish -> { menuContragentsParish() }
+            is DataEntryIntents.MenuContragentsParish -> menuContragentsParish()
 
-            is DataEntryIntents.MenuWarehouse -> { menuWarehouse() }
+            is DataEntryIntents.MenuWarehouse -> menuWarehouse()
 
-            is DataEntryIntents.MenuLegalEntityExpense -> { menuLegalEntityExpense() }
+            is DataEntryIntents.MenuLegalEntityExpense -> menuLegalEntityExpense()
 
-            is DataEntryIntents.MenuLegalEntityParish -> { menuLegalEntityParish() }
+            is DataEntryIntents.MenuLegalEntityParish -> menuLegalEntityParish()
 
-            is DataEntryIntents.SelectContragentExpense -> { selectContragentExpense( intent.item ) }
+            is DataEntryIntents.SelectContragentExpense -> selectContragentExpense( intent.item )
 
-            is DataEntryIntents.SelectContragentParish -> { selectContragentParish( intent.item ) }
+            is DataEntryIntents.SelectContragentParish -> selectContragentParish( intent.item )
 
-            is DataEntryIntents.SelectWarehouse -> { selectWarehouse( intent.item ) }
+            is DataEntryIntents.SelectWarehouse -> selectWarehouse( intent.item )
 
-            is DataEntryIntents.SelectLegalEntityExpense -> { selectLegalEntityExpense( intent.item ) }
+            is DataEntryIntents.SelectLegalEntityExpense -> selectLegalEntityExpense( intent.item )
 
-            is DataEntryIntents.SelectLegalEntityParish -> { selectLegalEntityParish( intent.item ) }
+            is DataEntryIntents.SelectLegalEntityParish -> selectLegalEntityParish( intent.item )
 
-            is DataEntryIntents.CancelContragentParish -> { canselContragentParish() }
+            is DataEntryIntents.CancelContragentParish -> canselContragentParish()
 
-            is DataEntryIntents.CancelContragentExpense -> { canselContragentExpense() }
+            is DataEntryIntents.CancelContragentExpense -> canselContragentExpense()
 
-            is DataEntryIntents.CancelLegalEntityParish -> { canselLegalEntityParish() }
+            is DataEntryIntents.CancelLegalEntityParish -> canselLegalEntityParish()
 
-            is DataEntryIntents.CancelLegalEntityExpense -> { canselLegalEntityExpense() }
+            is DataEntryIntents.CancelLegalEntityExpense -> canselLegalEntityExpense()
 
-            is DataEntryIntents.CancelWarehouse -> { canselWarehouse() }
+            is DataEntryIntents.CancelWarehouse -> canselWarehouse()
 
-            is DataEntryIntents.TextInputContragentParish -> { inputTextContragentParish ( intent.text, intent.newList ) }
+            is DataEntryIntents.TextInputContragentParish -> { inputTextContragentParish (
 
-            is DataEntryIntents.TextInputContragentExpense -> { inputTextContragentExpense ( intent.text, intent.newList ) }
+                intent.text, intent.newList ) }
 
-            is DataEntryIntents.TextInputLegalEntityParish -> { inputTextLegalEntityParish ( intent.text ) }
+            is DataEntryIntents.TextInputContragentExpense -> { inputTextContragentExpense (
 
-            is DataEntryIntents.TextInputLegalEntityExpense -> { inputTextLegalEntityExpense ( intent.text ) }
+                intent.text, intent.newList ) }
 
-            is DataEntryIntents.TextInputWarehouse -> { inputTextWarehouse ( intent.text, intent.newList ) }
+            is DataEntryIntents.TextInputLegalEntityParish -> { inputTextLegalEntityParish (
 
-            is DataEntryIntents.CheckNullTF -> { checkNullTF () }
+                intent.text ) }
+
+            is DataEntryIntents.TextInputLegalEntityExpense -> { inputTextLegalEntityExpense (
+
+                intent.text ) }
+
+            is DataEntryIntents.TextInputWarehouse -> { inputTextWarehouse (
+
+                intent.text, intent.newList ) }
+
+            is DataEntryIntents.TextInputDescription -> inputTextDescription ( intent.text )
+
+            is DataEntryIntents.CheckNullTF ->  checkNullTF ()
 
         }
 
@@ -308,6 +320,16 @@ class DataEntryViewModel: ViewModel() {
         warehouse = text,
 
         filteredWarehouse = list
+
+        )
+
+    }
+
+    fun inputTextDescription ( text: String ) {
+
+        state = state.copy(
+
+            description = text
 
         )
 

@@ -137,15 +137,17 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 onClickBack = { viewModel.processIntent(ArrivalAndConsumptionIntents.BackDataEntry) },
 
-                onClickNext = { idLegalEntityParish: Int?, idLegalEntityExpense: Int?, idContragentExpense: Int?, idContragentParish: Int?, idWarehouse: Int? ->
+                onClickNext = { description, idLegalEntityParish, idLegalEntityExpense,
+
+                                idContragentExpense, idContragentParish, idWarehouse ->
 
                     viewModel.processIntent(
+
                         ArrivalAndConsumptionIntents.Next(
-                            idLegalEntityParish,
-                            idLegalEntityExpense,
-                            idContragentExpense,
-                            idContragentParish,
-                            idWarehouse
+
+                            description, idLegalEntityParish, idLegalEntityExpense,
+
+                            idContragentExpense, idContragentParish, idWarehouse
                         )
                     )
                 }

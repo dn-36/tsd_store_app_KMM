@@ -9,21 +9,28 @@ class CreateArrivalOrConsumptionUseCase (
 
     ) {
 
-    suspend fun execute(  idLegalEntityParish: Int?,
+    suspend fun execute(
 
-                          idLegalEntityExpense: Int?,
+        description: String,
 
-                          idContragentExpense: Int?,
+        idLegalEntityParish: Int?,
 
-                          idContragentParish: Int?,
+        idLegalEntityExpense: Int?,
 
-                          idWarehouse: Int?,
+        idContragentExpense: Int?,
 
-                          isPush: Int ,
+        idContragentParish: Int?,
 
-                         listProducts:List<ProductArrivalAndConsumption>) {
+        idWarehouse: Int?,
+
+        isPush: Int,
+
+        listProducts: List<ProductArrivalAndConsumption>
+    ) {
 
         client.createArrivalOrConsumption (
+
+        description,
 
         idLegalEntityParish ,
 

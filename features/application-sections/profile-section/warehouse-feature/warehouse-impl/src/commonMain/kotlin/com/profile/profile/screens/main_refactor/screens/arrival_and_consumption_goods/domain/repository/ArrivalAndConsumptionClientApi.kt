@@ -16,6 +16,8 @@ interface ArrivalAndConsumptionClientApi {
     suspend fun deleteArrivalOrConsumption( ui:String )
     suspend fun createArrivalOrConsumption(
 
+        description: String,
+
         idLegalEntityParish: Int?,
 
         idLegalEntityExpense: Int?,

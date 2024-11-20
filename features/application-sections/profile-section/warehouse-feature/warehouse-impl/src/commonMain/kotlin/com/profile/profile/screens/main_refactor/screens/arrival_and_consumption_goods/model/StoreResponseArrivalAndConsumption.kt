@@ -5,6 +5,8 @@ data class StoreResponseArrivalAndConsumption(
 
     val id: Int?,
 
+    val text: String,
+
     val store_id: Int?,
 
     val contragent_id: Int?,

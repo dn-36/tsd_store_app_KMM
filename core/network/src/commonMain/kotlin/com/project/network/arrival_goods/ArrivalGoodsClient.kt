@@ -36,10 +36,6 @@ import kotlinx.serialization.json.int
 
 class ArrivalGoodsClient {
 
-    /*CreateInExData(contragentId=8, contragentPushId=7, entityId=8, entityPushId=7, storeId=39, isPush=1, products=[ProductCreteWrapper(product=ProductCreateCounter(id=189, count=15))])*/
-
-    /*CreateRequest(text=Text, contragent_id=93, contragent_push_id=103, entity_id=86, entity_push_id=86, store_id=39, is_push=1, products=[Product(id=169, count=50)])*/
-
         private val client = HttpClient(httpClientEngine) {
             install(ContentNegotiation) {
                 json(Json {

@@ -48,6 +48,10 @@ fun Item (item: StoreResponseArrivalAndConsumption, onDelete:( item:StoreRespons
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                Text("Описание: ${item.text}", fontSize = 15.sp)
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Text("Контрагент: ${item.contragent!!.name}", fontSize = 15.sp)
 
                 Spacer(modifier = Modifier.height(8.dp))

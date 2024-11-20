@@ -70,6 +70,8 @@ class DataEntryComponent(
 
     val onClickNext: (
 
+        description: String,
+
         idLegalEntityParish: Int?,
 
         idLegalEntityExpense: Int?,
@@ -714,6 +716,30 @@ class DataEntryComponent(
                     }
                 }
 
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField(
+
+                    value = vm.state.description,
+
+                    onValueChange = { inputText ->
+
+                        vm.processIntents(DataEntryIntents.TextInputDescription ( inputText ))
+
+                    },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.LightGray, // Цвет границы при фокусе
+                        unfocusedBorderColor = Color.LightGray, // Цвет границы в неактивном состоянии
+                        backgroundColor = Color.LightGray.copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                    ),
+
+                    label = { Text("Описание") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 40.dp) // Стандартная высота TextField
+                )
+
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Button(
@@ -724,6 +750,8 @@ class DataEntryComponent(
                         if ( vm.state.onCheck ) {
 
                             onClickNext(
+
+                                vm.state.description,
 
                                 if (vm.state.selectedLegalEntityParish != null) vm.state.selectedLegalEntityParish!!.id else null,
 

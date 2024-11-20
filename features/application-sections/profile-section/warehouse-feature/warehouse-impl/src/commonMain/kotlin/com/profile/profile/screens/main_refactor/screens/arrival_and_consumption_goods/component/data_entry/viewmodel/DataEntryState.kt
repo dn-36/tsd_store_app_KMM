@@ -17,6 +17,8 @@ data class DataEntryState(
 
     val warehouse: String = "",
 
+    val description: String = "",
+
 
     val expandedContragentParish: Boolean = false,
 

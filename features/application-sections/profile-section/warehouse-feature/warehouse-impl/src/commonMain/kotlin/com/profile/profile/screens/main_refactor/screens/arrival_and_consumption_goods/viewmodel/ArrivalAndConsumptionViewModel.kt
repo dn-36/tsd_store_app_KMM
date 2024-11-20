@@ -410,6 +410,8 @@ class ArrivalAndConsumptionViewModel (
 
                         createArrivalOrConsumptionUseCase.execute(
 
+                            description = state.description,
+
                             idLegalEntityParish = state.idLegalEntityParish,
 
                             idLegalEntityExpense = state.idLegalEntityExpense,
@@ -480,7 +482,7 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.Next -> {
 
-                next( intent.idLegalEntityParish, intent.idLegalEntityExpense,
+                next( intent.description, intent.idLegalEntityParish, intent.idLegalEntityExpense,
 
                     intent.idContragentExpense, intent.idContragentParish, intent.idWarehouse )
 
@@ -616,9 +618,9 @@ class ArrivalAndConsumptionViewModel (
 
     }
 
-    fun next ( idLegalEntityParish: Int?, idLegalEntityExpense: Int?, idContragentExpense: Int? ,
+    fun next ( description: String, idLegalEntityParish: Int?, idLegalEntityExpense: Int?,
 
-    idContragentParish: Int?, idWarehouse: Int? ) {
+               idContragentExpense: Int?, idContragentParish: Int?, idWarehouse: Int? ) {
 
         if ( idLegalEntityParish != null && idLegalEntityExpense != null &&
 
@@ -637,6 +639,8 @@ class ArrivalAndConsumptionViewModel (
                 idLegalEntityExpense = idLegalEntityExpense,
 
                 idLegalEntityParish = idLegalEntityParish,
+
+                description = description,
 
                 idWarehouse = idWarehouse,
 
