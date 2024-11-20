@@ -3,8 +3,6 @@ package org.example.project.presentation.project_control.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.`menu-crm-api`.MenuCrmScreenApi
@@ -110,6 +108,10 @@ class ProjectControlViewModel (
 
                             listFilteredProjectsControl = cleanedProjectsControl,
 
+                            listAlphaTools = if ( cleanedProjectsControl.data != null )
+
+                                List(cleanedProjectsControl.data.size){false} else emptyList(),
+
                             isSet = false
 
                         )
@@ -164,6 +166,10 @@ class ProjectControlViewModel (
 
                     listFilteredProjectsControl = cleanedProjectsControl,
 
+                    listAlphaTools = if ( cleanedProjectsControl.data != null )
+
+                        List(cleanedProjectsControl.data.size){false} else emptyList(),
+
                     isVisibilityDataEntryComponent = false,
 
                     updatedItem = null
@@ -203,6 +209,10 @@ class ProjectControlViewModel (
 
                         listFilteredProjectsControl = cleanedProjectsControl,
 
+                        listAlphaTools = if ( cleanedProjectsControl.data != null )
+
+                            List(cleanedProjectsControl.data.size){false} else emptyList(),
+
                         isVisibilityDataEntryComponent = false,
 
                         updatedItem = null
@@ -240,7 +250,13 @@ class ProjectControlViewModel (
 
                         listFilteredProjectsControl = cleanedProjectsControl,
 
-                        isVisibilityDeleteComponent = false
+                        listAlphaTools = if ( cleanedProjectsControl.data != null )
+
+                            List(cleanedProjectsControl.data.size){false} else emptyList(),
+
+                        isVisibilityDeleteComponent = false,
+
+                        updatedItem = null
 
 
                     )
@@ -260,6 +276,8 @@ class ProjectControlViewModel (
                 inputTextSearchComponent(intent.text)
 
             }
+
+            is ProjectControlIntents.Dots -> dots(intent.index)
 
         }
 
@@ -346,4 +364,20 @@ class ProjectControlViewModel (
 
     }
 
+    fun dots ( index: Int ) {
+
+        if ( state.listProjectsControl!!.data != null ) {
+
+                val newList = state.listAlphaTools.toMutableList()
+
+                newList[index] = !newList[index]
+
+                state = state.copy(
+
+                    listAlphaTools = newList
+
+                )
+
+        }
+    }
 }

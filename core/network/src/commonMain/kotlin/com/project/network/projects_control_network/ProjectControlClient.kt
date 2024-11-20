@@ -1,8 +1,6 @@
 package com.project.network.projects_control_network
 
-import com.project.network.group_entity_network.GroupEntityClient
-import com.project.network.group_entity_network.model.GroupEntityResponse
-import com.project.network.httpClientEngine
+import com.project.network.common.httpClientEngine
 import com.project.network.projects_control_network.model.ProjectControlResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

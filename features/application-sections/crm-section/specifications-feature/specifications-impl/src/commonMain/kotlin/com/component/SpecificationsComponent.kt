@@ -3,6 +3,7 @@ package com.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -23,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -84,9 +87,33 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                 LazyColumn {
 
-                    items(viewModel.state.listFilteredSpecifications) { item ->
+                    itemsIndexed(
 
-                        Box () {
+                        viewModel.state.listFilteredSpecifications) { index,item ->
+
+                        Box (modifier = Modifier.pointerInput(true) {
+
+                            detectTapGestures(
+
+                                onPress = {
+                                    if (  viewModel.state.listAlphaTools.size > index &&
+
+                                        viewModel.state.listAlphaTools[index] == 1f ) {
+
+                                        viewModel.processIntents(SpecificationsIntents.OnePressItem)
+                                    }
+                                },
+
+                                onLongPress = {
+
+                                    viewModel.processIntents(
+
+                                        SpecificationsIntents.LongPressItem(index))
+
+                                },
+                            )
+
+                        }) {
                             Column(modifier = Modifier.fillMaxWidth()) {
 
                                 Spacer(modifier = Modifier.height(10.dp))
@@ -151,40 +178,52 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                             }
 
-                            Row(modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)) {
+                            if (  viewModel.state.listAlphaTools.size > index &&
 
-                                Image(painter = painterResource(Res.drawable.update_pencil),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(17.dp)
-                                        .clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
+                                viewModel.state.listAlphaTools[index] == 1f ) {
 
-                                        { if ( !viewModel.state.isVisibilityDeleteComponent ) {
+                                Row(modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)) {
 
-                                            viewModel.processIntents(
+                                    Image(painter = painterResource(Res.drawable.update_pencil),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(17.dp)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
 
-                                                SpecificationsIntents.OpenUpdateDataEntry(scope,
+                                            {
+                                                if (!viewModel.state.isVisibilityDeleteComponent) {
 
-                                                    item))
+                                                    viewModel.processIntents(
 
-                                        }
-                                        })
+                                                        SpecificationsIntents.OpenUpdateDataEntry(
+                                                            scope,
+
+                                                            item
+                                                        )
+                                                    )
+
+                                                }
+                                            })
 
 
-                                Spacer(modifier = Modifier.width(20.dp))
+                                    Spacer(modifier = Modifier.width(20.dp))
 
-                                Image(painter = painterResource(Res.drawable.cancel),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(15.dp)
-                                        .clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
+                                    Image(painter = painterResource(Res.drawable.cancel),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(15.dp)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
 
-                                        { viewModel.processIntents(
+                                            {
+                                                viewModel.processIntents(
 
-                                            SpecificationsIntents.OpenDeleteComponent(item)) })
+                                                    SpecificationsIntents.OpenDeleteComponent(item)
+                                                )
+                                            })
 
+                                }
                             }
 
                         }

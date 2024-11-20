@@ -40,4 +40,8 @@ sealed class ProjectControlIntents {
                                      val project_id: String  ):ProjectControlIntents()
 
     data class InputTextSearchComponent( val text: String ): ProjectControlIntents()
+
+
+    data class Dots(val index: Int ): ProjectControlIntents()
+
 }

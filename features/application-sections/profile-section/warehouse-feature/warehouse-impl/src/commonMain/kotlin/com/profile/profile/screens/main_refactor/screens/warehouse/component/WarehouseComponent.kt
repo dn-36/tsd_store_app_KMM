@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,8 +60,6 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
 
         val profileScreens: ProfileScreensApi = KoinPlatform.getKoin().get()
 
-        //val printScreen: PrinterScreensApi = KoinPlatform.getKoin().get()
-
         val scope = rememberCoroutineScope()
 
         viewModel.processIntents(WarehouseIntents.SetScreen(scope))
@@ -76,29 +76,51 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
 
                     WarehouseIntents.InputTextSearchComponent(text)) } ).Content()
 
+                var globalIndex = 0
+
                 LazyColumn ( modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f) ) {
 
                     items(viewModel.state.listFilteredWarehouse) { item ->
 
                         if ( item.stores.isNotEmpty() ) {
 
-                            item.stores.forEach {
+                            item.stores.forEachIndexed() { index, it ->
 
-                                Box() {
+                                val currentIndex = globalIndex // Текущий глобальный индекс
+
+                                globalIndex++ // Увеличиваем индекс после использования
+
+                                Box(modifier = Modifier.pointerInput(true) {
+
+                                    detectTapGestures(
+
+                                        onPress = {
+                                            if ( viewModel.state.listAlphaTools.size > currentIndex &&
+
+                                                viewModel.state.listAlphaTools[currentIndex] == 1f ) {
+
+                                                viewModel.processIntents(
+
+                                                    WarehouseIntents.OnePressItem)
+                                            }
+                                        },
+
+                                        onLongPress = {
+
+                                            viewModel.processIntents(
+
+                                                WarehouseIntents.LongPressItem(currentIndex))
+
+                                        },
+                                    )
+
+                                }) {
 
                                     Row(verticalAlignment = Alignment.CenterVertically,
 
                                         modifier = Modifier.fillMaxWidth()
 
-                                            .padding(vertical = 8.dp).clickable(
-                                                indication = null, // Отключение эффекта затемнения
-                                                interactionSource = remember { MutableInteractionSource() })
-                                            {}) {
-
-                                        /*Box(
-                                            modifier = Modifier.size(30.dp).clip(CircleShape)
-                                                .background(Color.Gray)
-                                        )*/
+                                            .padding(vertical = 8.dp)) {
 
                                         Spacer(modifier = Modifier.width(10.dp))
 
@@ -125,42 +147,57 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
 
                                         }
                                     }
-                                    Row(modifier = Modifier.align(Alignment.TopEnd)) {
 
-                                        Image(painter = painterResource(Res.drawable.update_pencil),
-                                            contentDescription = null,
-                                            modifier = Modifier.size(17.dp)
-                                                .clickable(
-                                                    indication = null, // Отключение эффекта затемнения
-                                                    interactionSource = remember {
+                                    if (  viewModel.state.listAlphaTools.size > currentIndex &&
 
-                                                        MutableInteractionSource() })
-                                                {
-                                                    if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
+                                        viewModel.state.listAlphaTools[currentIndex] == 1f ) {
 
-                                                    viewModel.processIntents(WarehouseIntents.
+                                        Row(modifier = Modifier.align(Alignment.TopEnd)) {
 
-                                                    OpenWindowUpdateWarehouse(scope,item))}})
+                                            Image(painterResource(Res.drawable.update_pencil),
+
+                                                contentDescription = null,
+                                                modifier = Modifier.size(17.dp)
+                                                    .clickable(
+                                                        indication = null, // Отключение затемнения
+                                                        interactionSource = remember {
+
+                                                            MutableInteractionSource()
+                                                        })
+                                                    {
+                                                        if (viewModel.state.isVisibilityDeleteComponent == 0f) {
+
+                                                            viewModel.processIntents(
+
+                                                                WarehouseIntents.
+
+                                                                OpenWindowUpdateWarehouse( scope,
+                                                                    item ))
+                                                        }
+                                                    })
 
 
-                                        Spacer(modifier = Modifier.width(20.dp))
+                                            Spacer(modifier = Modifier.width(20.dp))
 
-                                        Image(painter = painterResource(Res.drawable.cancel),
-                                            contentDescription = null,
-                                            modifier = Modifier.size(15.dp)
-                                                .clickable(
-                                                    indication = null, // Отключение эффекта затемнения
-                                                    interactionSource = remember { MutableInteractionSource() })
-                                                {
-                                                    viewModel.processIntents(
-                                                        WarehouseIntents.OpenDeleteComponent(
+                                            Image(painter = painterResource(Res.drawable.cancel),
+                                                contentDescription = null,
+                                                modifier = Modifier.size(15.dp)
+                                                    .clickable(
+                                                        indication = null, // Отключение затемнения
+                                                        interactionSource = remember {
 
-                                                            ui = it!!.ui
+                                                            MutableInteractionSource() })
+                                                    {
+                                                        viewModel.processIntents(
+                                                            WarehouseIntents.OpenDeleteComponent(
 
+                                                                ui = it!!.ui
+
+                                                            )
                                                         )
-                                                    )
-                                                })
+                                                    })
 
+                                        }
                                     }
                                 }
                             }
@@ -198,7 +235,6 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                     warehouseScreens.warehouse(),
                     profileScreens.profile(),
                     ArrivalAndConsumptionScreen(),
-                   // printScreen.printer()
 
                 ).Content(MenuBottomBarWarehouseSection.WAREHOUSE)
             }

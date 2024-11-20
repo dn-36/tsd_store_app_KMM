@@ -1,6 +1,10 @@
 package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,27 +15,38 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.ui.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.util.formatDateTime
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
 import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
+import org.jetbrains.compose.resources.painterResource
+import project.core.resources.Res
+import project.core.resources.cancel
+import project.core.resources.update_pencil
 
 class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsumptionViewModel) :
 
@@ -52,27 +67,119 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn (modifier = Modifier.fillMaxHeight(0.8f)) {
-                    items(viewModel.state.listAllArrivalOrConsumption) { item ->
 
-                        Item(item, onDelete = { ui ->
+                    itemsIndexed(viewModel.state.listAllArrivalOrConsumption)
 
-                            viewModel.processIntent(
-                                ArrivalAndConsumptionIntents.OpenDeleteComponent(
+                    { index,item ->
 
-                                    item
+                        Box(modifier = Modifier.pointerInput(true) {
 
-                                )
+                            detectTapGestures(
+
+                                onPress = {
+                                    if (  viewModel.state.listAlphaTools.size > index &&
+
+                                        viewModel.state.listAlphaTools[index] == 1f ) {
+
+                                        viewModel.processIntent(
+
+                                            ArrivalAndConsumptionIntents.OnePressItem)
+                                    }
+                                },
+
+                                onLongPress = {
+
+                                    viewModel.processIntent(
+
+                                        ArrivalAndConsumptionIntents.LongPressItem(index))
+
+                                },
                             )
-                        },
 
-                            onUpdate = { item ->
-                                viewModel.processIntent(
-                                    ArrivalAndConsumptionIntents.UpdateButton(
-                                        scope,
-                                        item
+                        }) {
+
+                            Row(modifier = Modifier.fillMaxWidth()) {
+
+                                Column {
+
+                                    if (item.is_push == 1) {
+
+                                        Text("Приход", fontSize = 17.sp, fontWeight = FontWeight.Bold)
+
+                                    }
+                                    else{
+
+                                        Text("Расход", fontSize = 17.sp, fontWeight = FontWeight.Bold)
+
+                                    }
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text("Описание: ${item.text}", fontSize = 15.sp)
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text("Контрагент: ${item.contragent!!.name}", fontSize = 15.sp)
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text("Склад: ${item.store!!.name}", fontSize = 15.sp)
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                }
+
+                            }
+
+                            Text( formatDateTime(item.created_at!!), fontSize = 13.sp, modifier = Modifier.align(Alignment.BottomEnd))
+
+                            if (  viewModel.state.listAlphaTools.size > index &&
+
+                                viewModel.state.listAlphaTools[index] == 1f ) {
+
+                                Row(modifier = Modifier.align(Alignment.TopEnd)) {
+
+                                    Image(painter = painterResource(Res.drawable.update_pencil),
+                                        contentDescription = null,
+
+                                        modifier = Modifier.size(20.dp).clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+                                            viewModel.processIntent(
+                                                ArrivalAndConsumptionIntents.UpdateButton(
+                                                    scope,
+                                                    item
+                                                )
+                                            )
+                                        }
                                     )
-                                )
-                            })
+
+                                    Spacer(modifier = Modifier.width(20.dp))
+
+                                    Image(painter = painterResource(Res.drawable.cancel),
+                                        contentDescription = null,
+
+                                        modifier = Modifier.size(20.dp).clickable(
+                                            indication = null, // Отключение эффекта затемнения
+                                            interactionSource = remember { MutableInteractionSource() })
+
+                                        {
+                                            viewModel.processIntent(
+                                                ArrivalAndConsumptionIntents.OpenDeleteComponent(
+
+                                                    item
+                                                )
+                                            )
+                                        }
+                                    )
+
+                                }
+
+                            }
+
+                        }
 
                         Spacer(modifier = Modifier.height(10.dp))
 

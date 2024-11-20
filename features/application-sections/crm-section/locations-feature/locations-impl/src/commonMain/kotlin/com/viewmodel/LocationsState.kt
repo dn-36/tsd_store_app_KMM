@@ -9,6 +9,8 @@ data class LocationsState(
 
     val isVisibilityDeleteComponent: Boolean = false,
 
+    val listAlphaTools: List<Float> = emptyList(),
+
     val listLocations: List<LocationResponseModel> = emptyList(),
 
     val listFilteredLocations: List<LocationResponseModel> = emptyList(),

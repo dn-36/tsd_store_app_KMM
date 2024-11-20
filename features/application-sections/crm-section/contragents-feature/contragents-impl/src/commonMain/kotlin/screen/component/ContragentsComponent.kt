@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.core_app.components.delete_component.DeleteComponent
@@ -93,7 +95,32 @@ class ContragentsComponent ( override val viewModel: ContragentsViewModel) : Net
                         Spacer(modifier = Modifier.height(10.dp))
 
                         Box(
-                            modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
+                            modifier = Modifier.fillMaxWidth().pointerInput(true) {
+
+                                detectTapGestures(
+
+                                    onPress = {
+
+                                        if ( viewModel.state.listAlphaTools.size > index &&
+
+                                            viewModel.state.listAlphaTools[index] == 1f ) {
+
+                                            viewModel.processIntents(
+
+                                                ContragentsIntents.OnePressItem)
+                                        }
+                                    },
+
+                                    onLongPress = {
+
+                                        viewModel.processIntents(
+
+                                            ContragentsIntents.LongPressItem(index))
+
+                                    },
+                                )
+                            }, contentAlignment = Alignment.Center
+
                         ) {
 
                             Column {
@@ -129,52 +156,64 @@ class ContragentsComponent ( override val viewModel: ContragentsViewModel) : Net
 
                             }
 
-                            Row(modifier = Modifier.align(Alignment.TopEnd)) {
+                            if ( viewModel.state.listAlphaTools.size > index &&
 
-                                Image(painter = painterResource(Res.drawable.update_pencil),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(17.dp)
-                                        .clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
+                                viewModel.state.listAlphaTools[index] == 1f ) {
 
-                                        { if (
+                                Row(modifier = Modifier.align(Alignment.TopEnd)) {
 
-                                            viewModel.state.isVisibleCreateAndUpdateComponent == 0f
+                                    Image(painter = painterResource(Res.drawable.update_pencil),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(17.dp)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
 
-                                            && viewModel.state.isVisibleDeleteComponent == 0f
+                                            {
+                                                if (
 
-                                            ) { viewModel.processIntents(ContragentsIntents.
+                                                    viewModel.state.isVisibleCreateAndUpdateComponent == 0f
 
-                                        OpenCreateOrUpdateComponent ( it, 1 )) }})
+                                                    && viewModel.state.isVisibleDeleteComponent == 0f
+
+                                                ) {
+                                                    viewModel.processIntents(
+                                                        ContragentsIntents.OpenCreateOrUpdateComponent(
+                                                            it,
+                                                            1
+                                                        )
+                                                    )
+                                                }
+                                            })
 
 
-                                Spacer(modifier = Modifier.width(20.dp))
+                                    Spacer(modifier = Modifier.width(20.dp))
 
-                                Image(painter = painterResource(Res.drawable.cancel),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(15.dp)
-                                        .clickable(
-                                            indication = null, // Отключение эффекта затемнения
-                                            interactionSource = remember { MutableInteractionSource() })
+                                    Image(painter = painterResource(Res.drawable.cancel),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(15.dp)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember { MutableInteractionSource() })
 
-                                        { if (
+                                            {
+                                                if (
 
-                                            viewModel.state.isVisibleCreateAndUpdateComponent == 0f
+                                                    viewModel.state.isVisibleCreateAndUpdateComponent == 0f
 
-                                            && viewModel.state.isVisibleDeleteComponent == 0f
+                                                    && viewModel.state.isVisibleDeleteComponent == 0f
 
-                                        ) {
-                                            viewModel.processIntents(
+                                                ) {
+                                                    viewModel.processIntents(
 
-                                                ContragentsIntents.OpenDeleteComponent(it)
-                                            )
-                                        }
+                                                        ContragentsIntents.OpenDeleteComponent(it)
+                                                    )
+                                                }
 
-                                        })
+                                            })
 
+                                }
                             }
-
 
                         }
 

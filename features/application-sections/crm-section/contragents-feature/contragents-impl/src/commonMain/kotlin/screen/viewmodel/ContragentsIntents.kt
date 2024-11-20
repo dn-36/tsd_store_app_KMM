@@ -27,4 +27,9 @@ sealed class ContragentsIntents {
 
     data class InputTextSearchComponent( val text: String ): ContragentsIntents()
 
+
+    data class LongPressItem( val index: Int ): ContragentsIntents()
+
+    object OnePressItem: ContragentsIntents()
+
 }

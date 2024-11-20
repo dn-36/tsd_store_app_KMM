@@ -4,7 +4,6 @@ import com.example.notes_screens_impl.screens.notes.domain.repository.NotesClien
 import com.project.network.notes_network.NotesClient
 import com.project.network.notes_network.model.NoteResponse
 import com.project.network.notes_network.model.removeHtmlTags
-import com.project.network.organizations_network.OrganizationsClient
 
 class NotesClientImpl (
 

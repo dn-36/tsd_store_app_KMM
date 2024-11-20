@@ -1,7 +1,9 @@
-package com.project.network.cargo_network
+package com.project.network.lenta_network
 
-import com.project.network.cargo_network.model.CargoResponse
 import com.project.network.common.httpClientEngine
+import com.project.network.crm_network.CRMClient
+import com.project.network.crm_network.model.ApiResponseCRMOutgoing
+import com.project.network.lenta_network.model.LentaResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -13,17 +15,13 @@ import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-class CargoClient {
+class LentaClient {
 
     companion object{
-
         private var _token: String = ""
-
     }
-    fun init(token: String): CargoClient {
-
+    fun init(token: String): LentaClient {
         _token = token
-
         return this
     }
 
@@ -33,6 +31,7 @@ class CargoClient {
                 ignoreUnknownKeys = true // Игнорировать неизвестные поля
                 isLenient = true// Быть гибким с форматом JSON
                 explicitNulls = false
+
             })
         }
         install(Logging) {
@@ -43,17 +42,17 @@ class CargoClient {
         }
     }
 
-    //Получение груза
+    // получение видео
 
-    suspend fun getCargo(): List<CargoResponse> {
+    suspend fun getVideo(): List<LentaResponse> {
 
-        val response = client.get("https://delta.online/api/cargo") {
+        val response = client.get("https://delta.online/api/lenta") {
 
         }
         println(" ////////////////////++++++++++")
-        println("Получение Груза:  ${response}")
+        println("получение видео:  ${response}")
         println(" ////////////////////++++++++++")
-        return response.body<List<CargoResponse>>()
+        return response.body<List<LentaResponse>>()
     }
 
 }

@@ -49,10 +49,12 @@ kotlin {
 
             implementation(project(":features:application-sections:crm-section:locations-feature:locations-impl"))
             implementation(project(":features:application-sections:crm-section:locations-feature:locations-api"))
+            implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-impl"))
+            implementation(project(":features:application-sections:crm-section:project-conterol-feature:project_control-impl"))
 
             implementation(project(":core:app"))
             implementation(project(":core:local-storage"))
-            implementation(project(":core:camera-provider"))
+            implementation(project(":common:camera-provider"))
             implementation(project(":core:contact-provider"))
             implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api"))
             implementation(project(":features:authorization-feature:authorization-screen-api"))

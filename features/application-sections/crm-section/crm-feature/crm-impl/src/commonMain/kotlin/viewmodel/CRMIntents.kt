@@ -48,4 +48,9 @@ sealed class CRMIntents {
 
     data class InputTextSearchComponent( val text: String ): CRMIntents()
 
+
+    data class LongPressItem( val index: Int ): CRMIntents()
+
+    object OnePressItem: CRMIntents()
+
 }

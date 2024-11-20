@@ -68,4 +68,7 @@ sealed class ArrivalAndConsumptionIntents {
 
     data class CanselSelectedProduct ( val index: Int) : ArrivalAndConsumptionIntents()
 
+    data class LongPressItem( val index: Int ): ArrivalAndConsumptionIntents()
+    object OnePressItem: ArrivalAndConsumptionIntents()
+
 }

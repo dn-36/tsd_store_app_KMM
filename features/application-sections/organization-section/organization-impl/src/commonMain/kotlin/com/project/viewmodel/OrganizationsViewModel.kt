@@ -182,6 +182,10 @@ class OrganizationsViewModel(
                 inputTextSearchComponent(intent.text)
             }
 
+            is OrganizationsIntents.LongPressItem -> longPressItem( intent.index )
+
+            is OrganizationsIntents.OnePressItem -> onePressItem()
+
         }
     }
 
@@ -284,6 +288,32 @@ class OrganizationsViewModel(
 
         println("Text ${text}")
         println("NewList ${newList}")
+
+    }
+
+    fun longPressItem ( index: Int ) {
+
+        val newList = MutableList(state.listOrganizations.size){0F}
+
+        newList[index] = 1f
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+    }
+
+    fun onePressItem () {
+
+        val newList = MutableList(state.listOrganizations.size){0F}
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
 
     }
 

@@ -76,6 +76,7 @@ fun MessageComponent(
     Box(
         modifier = Modifier
                 .pointerInput(message.isShowSelectedMessage) {
+
                     detectTapGestures(
 
                         onTap = {

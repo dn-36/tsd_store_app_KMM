@@ -15,6 +15,8 @@ data class ArrivalAndConsumptionState (
 
     val listAllContragent: List<ContragentResponseArrivalAndConsumption> = emptyList(),
 
+    val listAlphaTools: List<Float> = emptyList(),
+
     val idLegalEntityParish: Int? = null,
 
     val idLegalEntityExpense: Int? = null,

@@ -16,14 +16,14 @@ data class WarehouseState(
 
     val listFilteredWarehouse: List<Warehouse> = emptyList(),
 
-    val listColorsSelectedWarehouse: MutableList<Color> = mutableListOf(),
-
     val isUsed: MutableState<Boolean> = mutableStateOf(true),
-
-    val textButtonWindow: String = "",
 
     val updateUiWarehouse: String = "",
 
-    val isVisibilityDeleteComponent: Float = 0f
+    val isVisibilityDeleteComponent: Float = 0f,
+
+    val listAlphaTools: List<Float> = emptyList(),
+
+    val indexStore: Int = 0
 
     )

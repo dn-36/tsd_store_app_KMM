@@ -21,8 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.project.core_app.components.menu_bottom_bar.ui.MenuBottomBar
 import com.project.network.Navigation
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.menu_crm_api.viewmodel.MenuViewModel
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 

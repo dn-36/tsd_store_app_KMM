@@ -23,4 +23,6 @@ data class OrganizationsState(
 
     val listColorActiveOrganizations:MutableList<Color> = mutableListOf(),
 
+    val listAlphaTools: List<Float> = emptyList()
+
     )

@@ -204,6 +204,10 @@ class LocationsViewModel (
 
             is LocationsIntents.InputTextSearchComponent -> inputTextSearchComponent(intent.text)
 
+            is LocationsIntents.LongPressItem -> longPressItem(intent.index)
+
+            is LocationsIntents.OnePressItem -> onePressItem()
+
         }
 
     }
@@ -270,6 +274,32 @@ class LocationsViewModel (
 
         println("Text ${text}")
         println("NewList ${newList}")
+
+    }
+
+    fun longPressItem ( index: Int ) {
+
+        val newList = MutableList(state.listLocations.size){0F}
+
+        newList[index] = 1f
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+    }
+
+    fun onePressItem () {
+
+        val newList = MutableList(state.listLocations.size){0F}
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
 
     }
 

@@ -59,4 +59,9 @@ sealed class SpecificationsIntents {
 
     data class InputTextSearchComponent( val text: String ): SpecificationsIntents()
 
+
+    data class LongPressItem( val index: Int ): SpecificationsIntents()
+
+    object OnePressItem: SpecificationsIntents()
+
 }

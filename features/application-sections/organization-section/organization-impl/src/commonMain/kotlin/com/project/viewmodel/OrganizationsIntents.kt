@@ -15,4 +15,6 @@ sealed class OrganizationsIntents {
     object NoDelete: OrganizationsIntents()
     data class OpenDeleteComponent ( val item: Response ): OrganizationsIntents()
     data class InputTextSearchComponent( val text: String ): OrganizationsIntents()
+    data class LongPressItem( val index: Int ): OrganizationsIntents()
+    object OnePressItem: OrganizationsIntents()
 }

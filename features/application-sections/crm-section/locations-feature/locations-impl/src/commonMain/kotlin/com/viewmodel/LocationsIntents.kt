@@ -49,4 +49,9 @@ sealed class LocationsIntents {
 
     data class InputTextSearchComponent( val text: String ): LocationsIntents()
 
+
+    data class LongPressItem( val index: Int ): LocationsIntents()
+
+    object OnePressItem: LocationsIntents()
+
 }

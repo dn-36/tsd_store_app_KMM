@@ -13,8 +13,6 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.screen.Wareho
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
-import com.project.network.warehouse_network.model.Store
-import com.project.network.warehouse_network.model.Warehouse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -226,6 +224,14 @@ class WarehouseViewModel (
 
             is WarehouseIntents.InputTextSearchComponent -> inputTextSearchComponent(intent.text)
 
+            is WarehouseIntents.LongPressItem -> longPressItem(intent.index)
+
+            is WarehouseIntents.OnePressItem -> onePressItem()
+
+            is WarehouseIntents.GetStoreIndex -> getStoreIndex()
+
+            is WarehouseIntents.ResetStoreIndex -> resetStoreIndex()
+
         }
 
     }
@@ -286,8 +292,61 @@ class WarehouseViewModel (
             )
 
             println("Text ${text}")
+
             println("NewList ${newList}")
 
+    }
+
+    fun longPressItem ( index: Int ) {
+
+        val totalStoresCount = state.listWarehouse.flatMap { it.stores }.size
+
+        val newList = MutableList(totalStoresCount) { 0F }
+
+        newList[index] = 1f
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+        println("SIZE ${newList.size}")
+
+    }
+
+    fun onePressItem () {
+
+        val newList = MutableList(state.listWarehouse.size){0F}
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+    }
+
+    fun getStoreIndex(): Int {
+
+        val currentIndex = state.indexStore
+
+        state = state.copy(
+
+            indexStore = currentIndex + 1
+
+        )
+
+        return currentIndex
+    }
+
+    fun resetStoreIndex() {
+
+        state = state.copy(
+
+            indexStore = 0
+
+        )
     }
 
 }

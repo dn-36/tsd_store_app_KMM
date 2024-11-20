@@ -23,6 +23,9 @@ data class SpecificationsState(
 
     val listElementsSpecifications: List<ElementSpecification> = emptyList(),
 
+    val listAlphaTools: List<Float> = emptyList(),
+
+
     val selectedCurrency: CurrencyResponseModel? = null,
 
     val selectedWarehouse: WarehouseModel? = null,

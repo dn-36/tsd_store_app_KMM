@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,8 +37,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.project.chats.ChatScreensApi
 import com.project.chats.ProfileScreensApi
 import com.project.core_app.components.delete_component.DeleteComponent
+import com.project.core_app.components.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.components.search_component.ui.SearchComponent
-import com.project.core_app.menu_bottom_bar.ui.MenuBottomBar
 import com.project.core_app.network_base_screen.NetworkComponent
 import com.project.`menu-crm-api`.MenuCrmScreenApi
 import com.project.menu.screen.OrganizationScreenApi
@@ -89,34 +91,63 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
 
                     index, item ->
 
-                        Box() {
+                        Box(modifier = Modifier.pointerInput(true) {
+
+                            detectTapGestures(
+
+                                onPress = {
+                                    if (  viewModel.state.listAlphaTools.size > index &&
+
+                                        viewModel.state.listAlphaTools[index] == 1f ) {
+
+                                        viewModel.processIntent(OrganizationsIntents.OnePressItem)
+                                    }
+                                },
+
+                                onLongPress = {
+
+                                    viewModel.processIntent(
+
+                                        OrganizationsIntents.LongPressItem(index))
+
+                                },
+                            )
+
+                        }) {
 
                             Row(verticalAlignment = Alignment.CenterVertically,
 
                                 modifier = Modifier.fillMaxWidth()
 
-                                    .padding(vertical = 8.dp).clickable(
-
-                                        indication = null, // Отключение эффекта затемнения
-
-                                        interactionSource = remember { MutableInteractionSource() })
-                                    {
-                                        if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
-
-                                            viewModel.processIntent(
-                                                OrganizationsIntents.ChoosingActiveOrganization(
-                                                    scope,
-                                                    item.company?.ui?:""
-                                                )
-                                            )
-
-                                        }
-
-                                    }) {
+                                    .padding(vertical = 8.dp)) {
 
                                 Box(
                                     modifier = Modifier.size(30.dp).clip(CircleShape)
-                                        .background(viewModel.state.listColorActiveOrganizations[index])
+                                        .background(
+
+                                            viewModel.state.listColorActiveOrganizations[index])
+
+                                        .clickable(
+
+                                            indication = null, // Отключение эффекта затемнения
+
+                                            interactionSource = remember {
+
+                                                MutableInteractionSource() })
+                                        {
+                                            if ( viewModel.state.isVisibilityDeleteComponent == 0f
+
+                                                ) { viewModel.processIntent(
+
+                                                    OrganizationsIntents.ChoosingActiveOrganization(
+
+                                                        scope, item.company?.ui?:""
+                                                    )
+                                                )
+
+                                            }
+
+                                        }
                                 )
 
                                 Spacer(modifier = Modifier.width(10.dp))
@@ -164,38 +195,46 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
 
                             if ( item.company?.name != "Личный профиль" && item.company?.name != "c17" ) {
 
-                                Row(modifier = Modifier.align(Alignment.TopEnd)) {
+                                if (  viewModel.state.listAlphaTools.size > index &&
 
-                                    Image(painter = painterResource(Res.drawable.update_pencil),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(17.dp)
-                                            .clickable(
-                                                indication = null, // Отключение эффекта затемнения
-                                                interactionSource = remember { MutableInteractionSource() })
-                                            {
-                                                if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
+                                    viewModel.state.listAlphaTools[index] == 1f ) {
 
-                                                viewModel.processIntent(OrganizationsIntents.
+                                    Row(modifier = Modifier.align(Alignment.TopEnd)) {
 
-                                                SelectItemUpdate(item))}
+                                        Image(painter = painterResource(Res.drawable.update_pencil),
+                                            contentDescription = null,
+                                            modifier = Modifier.size(17.dp)
+                                                .clickable(
+                                                    indication = null, // Отключение эффекта затемнения
+                                                    interactionSource = remember { MutableInteractionSource() })
+                                                {
+                                                    if (viewModel.state.isVisibilityDeleteComponent == 0f) {
 
-                                            })
+                                                        viewModel.processIntent(
+                                                            OrganizationsIntents.SelectItemUpdate(
+                                                                item
+                                                            )
+                                                        )
+                                                    }
 
-                                    Spacer(modifier = Modifier.width(20.dp))
+                                                })
 
-                                    Image(painter = painterResource(Res.drawable.cancel),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(15.dp)
-                                            .clickable(
-                                                indication = null,
-                                                interactionSource = remember { MutableInteractionSource() })
-                                            {
-                                                viewModel.processIntent(
-                                                    OrganizationsIntents.OpenDeleteComponent(
-                                                        item
+                                        Spacer(modifier = Modifier.width(20.dp))
+
+                                        Image(painter = painterResource(Res.drawable.cancel),
+                                            contentDescription = null,
+                                            modifier = Modifier.size(15.dp)
+                                                .clickable(
+                                                    indication = null,
+                                                    interactionSource = remember { MutableInteractionSource() })
+                                                {
+                                                    viewModel.processIntent(
+                                                        OrganizationsIntents.OpenDeleteComponent(
+                                                            item
+                                                        )
                                                     )
-                                                )
-                                            })
+                                                })
+                                    }
                                 }
                             }
                         }

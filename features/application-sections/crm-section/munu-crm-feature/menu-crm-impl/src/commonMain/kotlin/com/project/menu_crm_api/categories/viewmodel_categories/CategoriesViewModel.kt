@@ -132,7 +132,7 @@ class CategoriesViewModel (
 
                         filteredListCategories = getCategoriesUseCase.execute(),
 
-                    )
+                        )
 
                     setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
@@ -143,6 +143,10 @@ class CategoriesViewModel (
             is CategoriesIntents.OpenDeleteComponent -> openDeleteComponent(intent.item)
 
             is CategoriesIntents.InputTextSearchComponent -> inputTextSearchComponent(intent.text)
+
+            is CategoriesIntents.LongPressItem -> longPressItem(intent.index)
+
+            is CategoriesIntents.OnePressItem -> onePressItem()
 
         }
 
@@ -222,6 +226,32 @@ class CategoriesViewModel (
 
         println("Text ${text}")
         println("NewList ${newList}")
+
+    }
+
+    fun longPressItem ( index: Int ) {
+
+        val newList = MutableList(state.listCategories.size){0F}
+
+        newList[index] = 1f
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+    }
+
+    fun onePressItem () {
+
+        val newList = MutableList(state.listCategories.size){0F}
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
 
     }
 

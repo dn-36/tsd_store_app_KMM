@@ -500,6 +500,10 @@ class ArrivalAndConsumptionViewModel (
 
                 openDeleteComponent( intent.item!! ) }
 
+            is ArrivalAndConsumptionIntents.LongPressItem -> longPressItem(intent.index)
+
+            is ArrivalAndConsumptionIntents.OnePressItem -> onePressItem()
+
         }
     }
 
@@ -731,6 +735,32 @@ class ArrivalAndConsumptionViewModel (
             isVisibilityDeleteComponent = mutableStateOf(1f),
 
             updatedItem = item
+
+        )
+
+    }
+
+    fun longPressItem ( index: Int ) {
+
+        val newList = MutableList(state.listAllArrivalOrConsumption.size){0F}
+
+        newList[index] = 1f
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+    }
+
+    fun onePressItem () {
+
+        val newList = MutableList(state.listAllArrivalOrConsumption.size){0F}
+
+        state = state.copy(
+
+            listAlphaTools = newList
 
         )
 

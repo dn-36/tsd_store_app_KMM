@@ -29,4 +29,8 @@ sealed class CategoriesIntents {
 
     data class InputTextSearchComponent( val text: String ): CategoriesIntents()
 
+    data class LongPressItem( val index: Int ): CategoriesIntents()
+
+    object OnePressItem: CategoriesIntents()
+
 }

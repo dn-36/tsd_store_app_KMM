@@ -250,6 +250,10 @@ class CRMViewModel (
 
             is CRMIntents.InputTextSearchComponent -> inputTextSearchComponent(intent.text)
 
+            is CRMIntents.LongPressItem -> longPressItem(intent.index)
+
+            is CRMIntents.OnePressItem -> onePressItem()
+
         }
 
     }
@@ -354,6 +358,32 @@ class CRMViewModel (
 
             )
         }
+
+    }
+
+    fun longPressItem ( index: Int ) {
+
+            val newList = MutableList(state.listOutgoingCRM.size) { 0F }
+
+            newList[index] = 1f
+
+            state = state.copy(
+
+                listAlphaTools = newList
+
+            )
+
+    }
+
+    fun onePressItem () {
+
+            val newList = MutableList(state.listOutgoingCRM.size) { 0F }
+
+            state = state.copy(
+
+                listAlphaTools = newList
+
+            )
 
     }
 

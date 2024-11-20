@@ -3,6 +3,7 @@ package component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -24,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -237,9 +240,30 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                     LazyColumn {
 
-                        items(viewModel.state.listFilteredOutgoingCRM) { item ->
+                        itemsIndexed(
 
-                            Box (modifier = Modifier.fillMaxWidth()) {
+                            viewModel.state.listFilteredOutgoingCRM) { index,item ->
+
+                            Box (modifier = Modifier.fillMaxWidth().pointerInput(true) {
+
+                                detectTapGestures(
+
+                                    onPress = {
+                                        if ( viewModel.state.listAlphaTools.size > index &&
+
+                                            viewModel.state.listAlphaTools[index] == 1f ) {
+
+                                            viewModel.processIntents(CRMIntents.OnePressItem)
+                                        }
+                                    },
+
+                                    onLongPress = {
+
+                                        viewModel.processIntents(CRMIntents.LongPressItem(index))
+
+                                    },
+                                )
+                            }) {
 
                                 Column() {
 
@@ -323,6 +347,9 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
 
                                 }
 
+                                if ( viewModel.state.listAlphaTools.size > index &&
+
+                                    viewModel.state.listAlphaTools[index] == 1f ) {
 
                                     Image(painter = painterResource(Res.drawable.update_pencil),
                                         contentDescription = null,
@@ -332,11 +359,19 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
                                                 indication = null, // Отключение эффекта затемнения
                                                 interactionSource = remember {
 
-                                                    MutableInteractionSource() })
-                                            { viewModel.processIntents(
+                                                    MutableInteractionSource()
+                                                })
+                                            {
+                                                viewModel.processIntents(
 
-                                                CRMIntents.OpenUpdateDataEntryComponent( item,scope )) })
+                                                    CRMIntents.OpenUpdateDataEntryComponent(
+                                                        item,
+                                                        scope
+                                                    )
+                                                )
+                                            })
 
+                                }
 
                             }
 

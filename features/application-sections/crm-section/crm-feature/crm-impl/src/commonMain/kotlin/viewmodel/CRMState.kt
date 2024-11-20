@@ -39,6 +39,8 @@ data class CRMState(
 
     val listProjects: List<ProjectResponseModel> = emptyList(),
 
+    val listAlphaTools: List<Float> = emptyList(),
+
 
     val isIncoming: Boolean = true,
 

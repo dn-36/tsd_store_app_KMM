@@ -1,7 +1,8 @@
 package com.project.network.locations_network
 
-import com.project.network.ConstData
-import com.project.network.httpClientEngine
+
+import com.project.network.common.ConstData
+import com.project.network.common.httpClientEngine
 import com.project.network.locations_network.model.CreateLocationRequest
 import com.project.network.locations_network.model.ResponseItem
 import io.ktor.client.HttpClient

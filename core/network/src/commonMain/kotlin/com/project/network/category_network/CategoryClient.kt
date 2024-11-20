@@ -1,10 +1,7 @@
 package com.project.network.category_network
 
 import com.project.network.category_network.model.CategoryResponse
-import com.project.network.httpClientEngine
-import com.project.network.locations_network.model.CreateLocationRequest
-import com.project.network.services_network.ServicesClient
-import com.project.network.services_network.model.ServiceResponse
+import com.project.network.common.httpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation

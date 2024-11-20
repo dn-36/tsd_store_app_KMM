@@ -365,6 +365,10 @@ class SpecificationsViewModel (
                 inputTextSearchComponent(intent.text)
             }
 
+            is SpecificationsIntents.LongPressItem -> longPressItem(intent.index)
+
+            is SpecificationsIntents.OnePressItem -> onePressItem()
+
         }
 
     }
@@ -600,7 +604,9 @@ class SpecificationsViewModel (
 
         state = state.copy(
 
-            isVisibilityDeleteComponent = false
+            isVisibilityDeleteComponent = false,
+
+            updateItem = null
 
         )
 
@@ -624,6 +630,32 @@ class SpecificationsViewModel (
 
         println("Text ${text}")
         println("NewList ${newList}")
+
+    }
+
+    fun longPressItem ( index: Int ) {
+
+        val newList = MutableList(state.listSpecifications.size){0F}
+
+        newList[index] = 1f
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+    }
+
+    fun onePressItem () {
+
+        val newList = MutableList(state.listSpecifications.size){0F}
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
 
     }
 

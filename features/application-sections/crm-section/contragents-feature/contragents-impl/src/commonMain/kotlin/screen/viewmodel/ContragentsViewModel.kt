@@ -145,6 +145,10 @@ class ContragentsViewModel (
 
           is ContragentsIntents.InputTextSearchComponent -> inputTextSearchComponent(intent.text)
 
+          is ContragentsIntents.LongPressItem -> longPressItem(intent.index)
+
+          is ContragentsIntents.OnePressItem -> onePressItem()
+
       }
 
   }
@@ -223,6 +227,32 @@ class ContragentsViewModel (
 
         println("Text ${text}")
         println("NewList ${newList}")
+
+    }
+
+    fun longPressItem ( index: Int ) {
+
+        val newList = MutableList(state.listContragents.size) { 0F }
+
+        newList[index] = 1f
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+    }
+
+    fun onePressItem () {
+
+        val newList = MutableList(state.listContragents.size) { 0F }
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
 
     }
 

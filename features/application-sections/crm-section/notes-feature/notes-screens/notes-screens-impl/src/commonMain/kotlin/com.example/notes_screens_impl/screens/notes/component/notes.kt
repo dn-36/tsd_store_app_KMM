@@ -30,49 +30,68 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 
 
-object Notes{
+object Notes {
     @Composable
-    fun Content(title:String,description:String,onClick:() -> Unit,date:String){
+    fun Content(title: String, description: String, onClick: () -> Unit, date: String) {
 
-    Box(modifier = Modifier.padding(bottom = 10.dp).defaultMinSize( minWidth = 170.dp, minHeight = 110.dp)
-    .sizeIn(maxWidth = 170.dp, maxHeight = 230.dp)){
-        Card(modifier = Modifier
-            .clickable(
-            indication = null, // Отключение эффекта затемнения
-            interactionSource = remember { MutableInteractionSource() })
-        { onClick() }
-            .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
-            backgroundColor = Color.White,
-            shape = RoundedCornerShape(8.dp)) {
+        Box(
+            modifier = Modifier.padding(bottom = 10.dp).defaultMinSize( minWidth = 170.dp,
 
-            Column ( modifier = Modifier.fillMaxWidth()
+                minHeight = 110.dp ).sizeIn(maxWidth = 170.dp, maxHeight = 230.dp)
 
-                .align(Alignment.BottomCenter).padding(12.dp), verticalArrangement = Arrangement.SpaceBetween) {
+        ) {
 
-                Text(
-                    title, fontSize = 18.sp,maxLines = 1, // Укажите максимальное количество строк
-                    overflow = TextOverflow.Ellipsis // Чтобы обрезать текст и добавить многоточие, если он превышает maxLines
-                )
+            Card(
+                modifier = Modifier.clickable(
 
-                Spacer(modifier = Modifier.height(10.dp))
+                    indication = null, // Отключение эффекта затемнения
 
-                Text(
-                    description, fontSize = 13.sp,maxLines = 4, color = Color.LightGray, // Укажите максимальное количество строк
-                    overflow = TextOverflow.Ellipsis // Чтобы обрезать текст и добавить многоточие, если он превышает maxLines
-                )
+                    interactionSource = remember { MutableInteractionSource() })
 
-                Spacer(modifier = Modifier.height(15.dp))
+                { onClick() }.shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                backgroundColor = Color.White, shape = RoundedCornerShape(8.dp)
+            ) {
+
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+
+                        .align(Alignment.BottomCenter).padding(12.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+
                     Text(
-                        date,
-                        fontSize = 12.sp
+                        title,
+                        fontSize = 18.sp,
+                        maxLines = 1, // Укажите максимальное количество строк
+
+                        overflow = TextOverflow.Ellipsis // Чтобы обрезать текст и добавить многоточие, если он превышает maxLines
                     )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(
+                        description,
+                        fontSize = 13.sp,
+                        maxLines = 4,
+                        color = Color.LightGray, // Укажите максимальное количество строк
+
+                        overflow = TextOverflow.Ellipsis // Чтобы обрезать текст и добавить многоточие, если он превышает maxLines
+                    )
+
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+
+                        Text(text = date, fontSize = 12.sp)
+                    }
+
                 }
 
             }
-
         }
-    }
     }
 }

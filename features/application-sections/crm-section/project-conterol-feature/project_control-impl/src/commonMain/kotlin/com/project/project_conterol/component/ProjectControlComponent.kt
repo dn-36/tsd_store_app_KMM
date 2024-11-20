@@ -3,6 +3,7 @@ package com.project.project_conterol.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,13 +17,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,6 +36,7 @@ import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.components.PlusButton
 import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
+import com.project.core_app.utils.boxHeight
 import com.project.project_conterol.component.data_entry_project_control.ui.DataEntryProjectControlComponent
 import org.example.project.presentation.project_control.viewmodel.ProjectControlIntents
 import org.example.project.presentation.project_control.viewmodel.ProjectControlViewModel
@@ -37,6 +44,7 @@ import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.cancel
+import project.core.resources.dots
 import project.core.resources.update_pencil
 
 class ProjectControlComponent ( override val viewModel: ProjectControlViewModel
@@ -101,19 +109,23 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel
 
                     LazyColumn {
 
-                        itemsIndexed ( viewModel.state.listFilteredProjectsControl!!.data?: emptyList() ) { index, item ->
+                        itemsIndexed (
+
+                            viewModel.state.listFilteredProjectsControl!!.data?: emptyList() )
+
+                        { index, item ->
 
                             Box () {
+
                                 Column(modifier = Modifier.fillMaxWidth().clickable(
                                     indication = null, // Отключение эффекта затемнения
                                     interactionSource = remember { MutableInteractionSource() })
 
                                 {
                                     viewModel.processIntents(
-                                        ProjectControlIntents.OpenDescription(
-                                            index
-                                        )
-                                    )
+
+                                        ProjectControlIntents.OpenDescription(index))
+
                                 }) {
 
                                     Spacer(modifier = Modifier.height(10.dp))
@@ -121,7 +133,7 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel
                                     Text(
                                         "Проект : ${item.project?.name?: "не указан"}", fontSize = 16.sp,
 
-                                        modifier = Modifier.fillMaxWidth(0.9f)
+                                        modifier = Modifier.fillMaxWidth(0.75f)
                                     )
 
                                     Spacer(modifier = Modifier.height(8.dp))
@@ -171,45 +183,98 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel
 
                                 }
 
-                                Row(modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)) {
+                                Column ( modifier = Modifier.align(Alignment.TopEnd)
 
-                                    Image(painter = painterResource(Res.drawable.update_pencil),
+                                    .padding(8.dp), horizontalAlignment = Alignment.End) {
+
+                                    Image(painterResource(Res.drawable.dots),
                                         contentDescription = null,
-                                        modifier = Modifier.size(17.dp)
-                                            .clickable(
+
+                                        modifier = Modifier.size(25.dp).clickable(
                                                 indication = null, // Отключение эффекта затемнения
-                                                interactionSource = remember { MutableInteractionSource() })
+                                                interactionSource = remember {
 
-                                            { if ( !viewModel.state.isVisibilityDeleteComponent ) {
+                                                    MutableInteractionSource()
+                                                })
 
+                                            {
                                                 viewModel.processIntents(
-                                                    ProjectControlIntents
 
-                                                        .OpenUpdateDataEntryComponent(scope, item)
+                                                    ProjectControlIntents.Dots(index)
                                                 )
-                                            } })
+                                            })
 
+                                    if (viewModel.state.listAlphaTools.size > index &&
 
-                                    Spacer(modifier = Modifier.width(20.dp))
+                                        viewModel.state.listAlphaTools[index]
+                                    ) {
 
-                                    Image(painter = painterResource(Res.drawable.cancel),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(15.dp)
-                                            .clickable(
-                                                indication = null, // Отключение эффекта затемнения
-                                                interactionSource = remember { MutableInteractionSource() })
+                                        Spacer(modifier = Modifier.height(15.dp))
 
-                                            { viewModel.processIntents(ProjectControlIntents.
+                                        Box(modifier = Modifier.fillMaxWidth(0.4f).height(80.dp)) {
+                                            Card(
+                                                modifier = Modifier.fillMaxSize()
+                                                    .shadow(
+                                                        elevation = 8.dp,
+                                                        shape = RoundedCornerShape(8.dp)
+                                                    ),
+                                                backgroundColor = Color.White,
+                                                shape = RoundedCornerShape(8.dp)
+                                            ) {}
 
-                                            OpenDeleteComponent(item)) })
+                                            Column ( modifier = Modifier.padding(10.dp) ) {
 
+                                                Text("Обновить", fontSize = 16.sp,
+
+                                                    modifier = Modifier.clickable(
+                                                        indication = null, // Отключение затемнения
+                                                        interactionSource = remember {
+
+                                                            MutableInteractionSource()
+                                                        })
+
+                                                    {
+                                                        if (!viewModel.state.isVisibilityDeleteComponent) {
+
+                                                            viewModel.processIntents(
+
+                                                                ProjectControlIntents
+
+                                                                    .OpenUpdateDataEntryComponent(
+                                                                        scope,
+                                                                        item
+                                                                    )
+                                                            )
+                                                        }
+                                                    })
+
+                                                Spacer(modifier = Modifier.height(20.dp))
+
+                                                Text("Удалить", fontSize = 16.sp,
+
+                                                    modifier = Modifier.clickable(
+                                                        indication = null, // Отключение эффекта затемнения
+                                                        interactionSource = remember {
+
+                                                            MutableInteractionSource()
+                                                        })
+
+                                                    {
+                                                        viewModel.processIntents(
+                                                            ProjectControlIntents.OpenDeleteComponent(
+                                                                item
+                                                            )
+                                                        )
+                                                    })
+                                            }
+
+                                        }
+
+                                    }
                                 }
-
                             }
-
                         }
                     }
-
                 }
             }
 

@@ -14,6 +14,8 @@ data class ProjectControlState(
 
     val listProjects: List<ProjectResponseModel> = emptyList(),
 
+    val listAlphaTools: List<Boolean> = emptyList(),
+
     val isSet: Boolean = true,
 
     val isVisibilityDataEntryComponent: Boolean = false,

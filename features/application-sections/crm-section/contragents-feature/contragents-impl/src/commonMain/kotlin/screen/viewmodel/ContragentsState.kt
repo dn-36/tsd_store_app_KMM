@@ -8,6 +8,8 @@ data class ContragentsState(
 
     val listFilteredContragents: List<ContragentResponseModel> = emptyList(),
 
+    val listAlphaTools: List<Float> = emptyList(),
+
     val isSet: Boolean = true,
 
     val isVisibleCreateAndUpdateComponent: Float = 0f,
