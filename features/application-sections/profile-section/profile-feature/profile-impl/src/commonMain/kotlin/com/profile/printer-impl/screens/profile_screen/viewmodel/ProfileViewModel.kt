@@ -7,6 +7,7 @@ import com.project.chats.WarehouseScreensApi
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
+import com.project.`menu-crm-api`.ProjectControlScreenApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -24,7 +25,9 @@ class ProfileViewModel : NetworkViewModel() {
 
         when(intents) {
 
-            is ProfileIntents.Warehouse -> { warehouse() }
+            is ProfileIntents.Warehouse -> warehouse()
+
+            is ProfileIntents.Projects -> projects()
 
             is ProfileIntents.SetScreen -> { setScreen(intents.coroutineScope) }
             ProfileIntents.Tools -> {tools()}
@@ -43,6 +46,14 @@ class ProfileViewModel : NetworkViewModel() {
         val warehouseScreen: WarehouseScreensApi = getKoin().get()
 
         Navigation.navigator.push(warehouseScreen.warehouse())
+
+    }
+
+    fun projects(){
+
+        val projectsScreen: ProjectControlScreenApi = getKoin().get()
+
+        Navigation.navigator.push(projectsScreen.projectControl())
 
     }
 

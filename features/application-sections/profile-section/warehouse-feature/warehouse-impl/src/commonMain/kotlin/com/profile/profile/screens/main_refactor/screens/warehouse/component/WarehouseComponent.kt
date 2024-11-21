@@ -33,6 +33,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ProductsMenuScreenApi
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.screen.ArrivalAndConsumptionScreen
 import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseIntents
 import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseViewModel
@@ -59,6 +60,8 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
         val warehouseScreens: WarehouseScreensApi = KoinPlatform.getKoin().get()
 
         val profileScreens: ProfileScreensApi = KoinPlatform.getKoin().get()
+
+        val productsMenuScreens: ProductsMenuScreenApi  = KoinPlatform.getKoin().get()
 
         val scope = rememberCoroutineScope()
 
@@ -235,6 +238,7 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                     warehouseScreens.warehouse(),
                     profileScreens.profile(),
                     ArrivalAndConsumptionScreen(),
+                    productsMenuScreens.productsMenuScreen()
 
                 ).Content(MenuBottomBarWarehouseSection.WAREHOUSE)
             }

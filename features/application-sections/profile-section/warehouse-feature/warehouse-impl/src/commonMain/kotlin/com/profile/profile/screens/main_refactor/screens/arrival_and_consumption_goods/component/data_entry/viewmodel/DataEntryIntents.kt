@@ -6,19 +6,25 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 
 sealed class DataEntryIntents {
 
-    data class SetScreen ( val listContragents: List<ContragentResponseArrivalAndConsumption>,
+    data class SetScreen(
 
-                           val listWarehouse: List<WarehouseArrivalAndConsumption>,
+        val description: String,
 
-                           val updatedContragentExpense : ContragentResponseArrivalAndConsumption?,
+        val listContragents: List<ContragentResponseArrivalAndConsumption>,
 
-                           val updatedContragentParish : ContragentResponseArrivalAndConsumption?,
+        val listWarehouse: List<WarehouseArrivalAndConsumption>,
 
-                           val updatedEntityExpense : ContragentResponseArrivalAndConsumption?,
+        val updatedContragentExpense: ContragentResponseArrivalAndConsumption?,
 
-                           val updatedEntityParish: ContragentResponseArrivalAndConsumption?,
+        val updatedContragentParish: ContragentResponseArrivalAndConsumption?,
 
-                           val updatedWarehouse : WarehouseArrivalAndConsumption? ): DataEntryIntents()
+        val updatedEntityExpense: ContragentResponseArrivalAndConsumption?,
+
+        val updatedEntityParish: ContragentResponseArrivalAndConsumption?,
+
+        val updatedWarehouse: WarehouseArrivalAndConsumption?
+
+    ) : DataEntryIntents()
 
 
     object MenuContragentsParish: DataEntryIntents()

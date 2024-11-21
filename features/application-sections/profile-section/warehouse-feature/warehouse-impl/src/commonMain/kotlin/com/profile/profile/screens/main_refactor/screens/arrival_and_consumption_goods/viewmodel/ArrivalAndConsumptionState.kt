@@ -31,21 +31,23 @@ data class ArrivalAndConsumptionState (
 
     val isPush: Int = 0,
 
-    val isVisibilityListProducts: MutableState<Float> = mutableStateOf(0f),
+    val isVisibilityListProducts: Float = 0f,
 
-    val isVisibilityCountProducts: MutableState<Float> = mutableStateOf(0f),
+    val isVisibilityCountProducts: Float = 0f,
 
-    val isVisibilityDataEntryComponent: MutableState<Float> = mutableStateOf(0f),
+    val isVisibilityDataEntryComponent: Float = 0f,
 
-    val isVisibilityScannerComponent: MutableState<Float> = mutableStateOf(0f),
+    val isVisibilityScannerComponent: Float = 0f,
 
-    val isVisibilityAddProductsComponent: MutableState<Float> = mutableStateOf(0f),
+    val isVisibilityAddProductsComponent: Float = 0f,
 
-    val isVisibilityDeleteComponent: MutableState<Float> = mutableStateOf(0f),
+    val isVisibilityDeleteComponent: Float = 0f,
 
     val listProducts:List<AllProductArrivalAndConsumption> = emptyList(),
 
-    val listAllArrivalOrConsumption: List<StoreResponseArrivalAndConsumption> = emptyList(),
+    val listArrivalOrConsumption: List<StoreResponseArrivalAndConsumption> = emptyList(),
+
+    val listFilteredArrivalOrConsumption: List<StoreResponseArrivalAndConsumption> = emptyList(),
 
     val selectedProduct: ProductArrivalAndConsumption? = null,
 
@@ -64,6 +66,8 @@ data class ArrivalAndConsumptionState (
     val updatedWarehouse : WarehouseArrivalAndConsumption? = null,
 
     val isUpdate: Boolean = false,
+
+    val isSet: Boolean = true,
 
     val colorBorderCountTF: Color = Color.LightGray
 

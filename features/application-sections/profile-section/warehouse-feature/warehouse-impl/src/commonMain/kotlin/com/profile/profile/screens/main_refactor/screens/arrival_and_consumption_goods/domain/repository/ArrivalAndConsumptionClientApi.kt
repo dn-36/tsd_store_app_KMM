@@ -8,12 +8,14 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 
 interface ArrivalAndConsumptionClientApi {
 
-    suspend fun getContragents(onGet: (newListContragents: List<ContragentResponseArrivalAndConsumption>) -> Unit)
+    suspend fun getContragents(): List<ContragentResponseArrivalAndConsumption>
 
-    suspend fun getWarehouseArrivalAndConsumption(onGet: (listAllWarehouse: List<WarehouseArrivalAndConsumption>) -> Unit)
+    suspend fun getWarehouseArrivalAndConsumption(): List<WarehouseArrivalAndConsumption>
 
-    suspend fun getProducts(onGet: (listAllProducts: List<AllProductArrivalAndConsumption>) -> Unit)
+    suspend fun getProducts(): List<AllProductArrivalAndConsumption>
+
     suspend fun deleteArrivalOrConsumption( ui:String )
+
     suspend fun createArrivalOrConsumption(
 
         description: String,
@@ -38,6 +40,8 @@ interface ArrivalAndConsumptionClientApi {
 
         productUi: String ,
 
+        description: String,
+
         idLegalEntityParish: Int?,
 
         idLegalEntityExpense: Int?,
@@ -54,6 +58,6 @@ interface ArrivalAndConsumptionClientApi {
 
     )
 
-    suspend fun getArrivalAndConsumption(onGet: (listArrivalAndConsumption: List<StoreResponseArrivalAndConsumption>) -> Unit)
+    suspend fun getArrivalAndConsumption(): List<StoreResponseArrivalAndConsumption>
 
 }

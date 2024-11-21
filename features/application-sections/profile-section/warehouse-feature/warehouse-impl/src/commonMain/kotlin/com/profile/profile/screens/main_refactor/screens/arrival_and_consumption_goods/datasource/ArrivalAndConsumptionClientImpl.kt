@@ -30,7 +30,7 @@ class ArrivalAndConsumptionClientImpl (
 
 ) : ArrivalAndConsumptionClientApi {
 
-    override suspend fun getContragents( onGet: (newListContragents: List<ContragentResponseArrivalAndConsumption> ) -> Unit) {
+    override suspend fun getContragents(): List<ContragentResponseArrivalAndConsumption> {
 
         val newList = mutableListOf<ContragentResponseArrivalAndConsumption>()
 
@@ -77,7 +77,7 @@ class ArrivalAndConsumptionClientImpl (
 
         }
 
-        onGet( newList )
+        return newList
 
     }
 
@@ -87,15 +87,15 @@ class ArrivalAndConsumptionClientImpl (
 
     }
 
-    override suspend fun getWarehouseArrivalAndConsumption( onGet: (listAllWarehouse: List<WarehouseArrivalAndConsumption> ) -> Unit) {
+    override suspend fun getWarehouseArrivalAndConsumption(): List<WarehouseArrivalAndConsumption> {
 
         val newListWarehouse = mutableListOf<WarehouseArrivalAndConsumption>()
 
         warehouseClient.getWarehouse().forEach {
 
-            if(it.stores.isNotEmpty()) {
+            if( it.stores.isNotEmpty()) {
 
-                var newListStores = mutableListOf<StoreArrivalAndConsumption>()
+                val newListStores = mutableListOf<StoreArrivalAndConsumption>()
 
                 it.stores.forEach { store ->
 
@@ -107,17 +107,15 @@ class ArrivalAndConsumptionClientImpl (
 
                             id = store!!.id,
 
-                            name = store!!.name,
+                            name = store.name,
 
-                            ui = store!!.ui
+                            ui = store.ui
 
 
                         )
                     )
-                  //  println("NewListStores: ${newListStores}")
-                }
 
-               // println("NewListStoresTwo: ${newListStores}")
+                }
 
                 newListWarehouse.add(
 
@@ -136,10 +134,10 @@ class ArrivalAndConsumptionClientImpl (
 
         println("WarehouseCHeck : ${newListWarehouse}")
 
-        onGet( newListWarehouse )
+       return newListWarehouse
     }
 
-    override suspend fun getProducts( onGet: (listAllProducts: List<AllProductArrivalAndConsumption> ) -> Unit ) {
+    override suspend fun getProducts(): List<AllProductArrivalAndConsumption> {
 
         val newList = mutableListOf<AllProductArrivalAndConsumption>()
 
@@ -163,85 +161,62 @@ class ArrivalAndConsumptionClientImpl (
 
         }
 
-        onGet ( newList )
-
-       // println("ALL PRODUCTS: ${ newList }")
+       return newList
 
     }
 
-    override suspend fun getArrivalAndConsumption( onGet: (listArrivalAndConsumption: List<StoreResponseArrivalAndConsumption> ) -> Unit ) {
+    override suspend fun getArrivalAndConsumption(): List<StoreResponseArrivalAndConsumption> {
 
-        val newListArrivalAndConsumption = mutableListOf<StoreResponseArrivalAndConsumption>()
+        val newListArrivalAndConsumption = arrivalAndConsumptionClient.getProducts().map { item ->
 
-        arrivalAndConsumptionClient.getProducts().forEach {
+            StoreResponseArrivalAndConsumption(
 
-            val newListProducts = mutableListOf<ProductDataArrivalAndConsumption>()
+                id = item.id!!,
 
-            if(it.products != null) {
+                text = item.text ?: "",
 
-                it.products!!.forEach { product ->
+                store_id = item.store_id!!,
 
-                newListProducts.add(ProductDataArrivalAndConsumption(
+                contragent_id = item.contragent_id!!,
 
-                  product_id = product!!.product_id,
+                ui = item.ui!!,
 
-                    count = product!!.count!!
+                is_push = item.is_push!!,
 
-                )
+                contragent_push_id = item.contragent_push_id!!,
 
-                )
+                entity_id = item.entity_id!!,
 
-                }
+                entity_push_id = item.entity_push_id!!,
 
-            }
+                products = item.products?.map { product ->
 
-            newListArrivalAndConsumption.add ( StoreResponseArrivalAndConsumption(
+                    ProductDataArrivalAndConsumption(
 
-             id = it.id!!,
+                        product_id = product!!.product_id,
 
-                text = it.text?:"",
-
-                store_id = it.store_id!!,
-
-                contragent_id = it.contragent_id!!,
-
-                ui = it.ui!!,
-
-                is_push = it.is_push!!,
-
-                contragent_push_id = it.contragent_push_id!!,
-
-                entity_id = it.entity_id!!,
-
-                entity_push_id = it.entity_push_id!!,
-
-                products = newListProducts,
+                        count = product.count!!
+                    )
+                } ?: emptyList(),
 
                 store = StoreInfoArrivalAndConsumption(
 
-                   id = it.store!!.id,
+                    id = item.store!!.id,
 
-                    name = it.store!!.name
-
+                    name = item.store!!.name
                 ),
-
-                created_at = it.created_at,
+                created_at = item.created_at,
 
                 contragent = ContragentInfoArrivalAndConsumption(
 
-                    id = if(it.is_push == 0) it.contragent_id else it.contragent_push_id,
+                    id = if (item.is_push == 0) item.contragent_id else item.contragent_push_id,
 
-                    name = if(it.is_push == 0) it.contragent!!.name else it.contragent_push!!.name
-
+                    name = if (item.is_push == 0) item.contragent!!.name else item.contragent_push!!.name
                 )
-
-
-
-            ))
-
+            )
         }
 
-        onGet ( newListArrivalAndConsumption )
+        return newListArrivalAndConsumption
 
     }
 
@@ -289,6 +264,8 @@ class ArrivalAndConsumptionClientImpl (
 
         productUi: String ,
 
+        description: String,
+
         idLegalEntityParish: Int?,
 
         idLegalEntityExpense: Int?,
@@ -309,7 +286,7 @@ class ArrivalAndConsumptionClientImpl (
 
             productUi = productUi ,
 
-            CreateRequest( text = "",
+            CreateRequest( text = description,
             idContragentExpense?:0,
             idContragentParish?:0,
             idLegalEntityExpense?:0,

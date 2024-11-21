@@ -14,14 +14,14 @@ enum class MenuBottomBarWarehouseSection(
 
     val FinanceButtonCollor:Color,
 
-    val PrintButtonCollor:Color,
+    val ProductsButtonCollor:Color,
 
     ) {
 
     FINANCE(Color.White,Color(0xFFFF9800), Color.White),
 
-    PRINT(Color.White, Color.White, Color(0xFFFF9800)),
+    WAREHOUSE ( Color(0xFFFF9800), Color.White, Color.White ),
 
-    WAREHOUSE ( Color(0xFFFF9800), Color.White, Color.White )
+    PRODUCTS ( Color.White, Color.White, Color(0xFFFF9800) )
 
 }

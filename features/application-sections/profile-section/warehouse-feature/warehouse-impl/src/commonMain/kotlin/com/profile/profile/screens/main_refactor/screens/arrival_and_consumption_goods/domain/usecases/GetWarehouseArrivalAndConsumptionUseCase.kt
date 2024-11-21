@@ -10,14 +10,8 @@ class GetWarehouseArrivalAndConsumptionUseCase (
 
     ) {
 
-    suspend fun execute( onGet: (listAllWarehouse: List<WarehouseArrivalAndConsumption>) -> Unit
+    suspend fun execute(): List<WarehouseArrivalAndConsumption>{
 
-    ){
-
-        client.getWarehouseArrivalAndConsumption (
-
-            onGet
-
-        )
+        return client.getWarehouseArrivalAndConsumption ()
     }
 }

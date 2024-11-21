@@ -5,11 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cafe.adriel.voyager.core.screen.Screen
-import com.project.core_app.components.menu_bottom_bar_warehouse.viewmodel.MenuBottomBarWarehouseIntents
-import com.project.core_app.components.menu_bottom_tools.viewmodel.MenuBottomBarToolsIntents
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseState
 import com.project.network.Navigation
-import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
 
 class MenuBottomBarWarehouseViewModel : ViewModel() {
@@ -22,7 +19,7 @@ class MenuBottomBarWarehouseViewModel : ViewModel() {
         when(intent){
             is MenuBottomBarWarehouseIntents.Finance -> { finance(intent.screen) }
 
-            is MenuBottomBarWarehouseIntents.Print -> { print(intent.screen) }
+            is MenuBottomBarWarehouseIntents.Products -> { products(intent.screen) }
 
             is MenuBottomBarWarehouseIntents.Warehouse -> { warehouse(intent.screen) }
 
@@ -46,7 +43,7 @@ class MenuBottomBarWarehouseViewModel : ViewModel() {
 
     }
 
-    fun print(screen:Screen) {
+    fun products(screen:Screen) {
 
         Navigation.navigator.push(screen)
 

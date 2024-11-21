@@ -1,12 +1,10 @@
-package org.example.project.presentation.menu_feature.viewmodel
+package com.project.menu_crm_api.viewmodel
 
 sealed class MenuIntents {
     object Notes: MenuIntents()
     object Contragents: MenuIntents()
     object CRM: MenuIntents()
-    object ProjectControl: MenuIntents()
     object Specifications: MenuIntents()
     object Locations: MenuIntents()
-    object Categories: MenuIntents()
 
 }

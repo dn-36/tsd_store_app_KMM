@@ -7,9 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 sealed class ArrivalAndConsumptionIntents {
 
     data class ArrivalOrConsumption (val coroutineScope: CoroutineScope, val isPush: Int ) : ArrivalAndConsumptionIntents()
-    object BackDataEntry : ArrivalAndConsumptionIntents()
+    object BackFromDataEntry : ArrivalAndConsumptionIntents()
 
-    object BackAddProducts : ArrivalAndConsumptionIntents()
+    object BackFromAddProducts : ArrivalAndConsumptionIntents()
     object NoDelete : ArrivalAndConsumptionIntents()
     data class OpenDeleteComponent ( val item: StoreResponseArrivalAndConsumption? )
 
@@ -31,7 +31,7 @@ sealed class ArrivalAndConsumptionIntents {
 
     ) : ArrivalAndConsumptionIntents()
 
-    object BackListProducts : ArrivalAndConsumptionIntents()
+    object BackFromListProducts : ArrivalAndConsumptionIntents()
 
     data class SelectProducts(val selectedProducts: ProductArrivalAndConsumption) :
 
@@ -41,7 +41,7 @@ sealed class ArrivalAndConsumptionIntents {
     object  CanselScanner : ArrivalAndConsumptionIntents()
     data class AddProductScanner( val name: String ) : ArrivalAndConsumptionIntents()
 
-    data class UpdateButton(
+    data class OpenUpdateDataEntry(
 
         val coroutineScope: CoroutineScope,
 
@@ -70,5 +70,9 @@ sealed class ArrivalAndConsumptionIntents {
 
     data class LongPressItem( val index: Int ): ArrivalAndConsumptionIntents()
     object OnePressItem: ArrivalAndConsumptionIntents()
+
+
+    data class InputTextSearchComponent( val text: String ): ArrivalAndConsumptionIntents()
+
 
 }

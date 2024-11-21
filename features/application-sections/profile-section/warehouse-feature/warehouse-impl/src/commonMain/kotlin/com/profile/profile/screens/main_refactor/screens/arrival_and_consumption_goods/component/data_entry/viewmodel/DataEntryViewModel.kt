@@ -18,7 +18,9 @@ class DataEntryViewModel: ViewModel() {
 
         when (intent) {
 
-            is DataEntryIntents.SetScreen -> { setScreen( intent.listContragents,
+            is DataEntryIntents.SetScreen -> { setScreen( intent.description,
+
+                intent.listContragents,
 
                 intent.listWarehouse, intent.updatedEntityParish,
 
@@ -335,21 +337,27 @@ class DataEntryViewModel: ViewModel() {
 
     }
 
-    fun setScreen ( listContragents: List<ContragentResponseArrivalAndConsumption>,
+    fun setScreen(
 
-                    listWarehouse: List<WarehouseArrivalAndConsumption>,
+        description: String,
 
-                    updatedContragentExpense : ContragentResponseArrivalAndConsumption?,
+        listContragents: List<ContragentResponseArrivalAndConsumption>,
 
-                    updatedContragentParish : ContragentResponseArrivalAndConsumption?,
+        listWarehouse: List<WarehouseArrivalAndConsumption>,
 
-                    updatedEntityExpense : ContragentResponseArrivalAndConsumption?,
+        updatedContragentExpense: ContragentResponseArrivalAndConsumption?,
 
-                    updatedEntityParish: ContragentResponseArrivalAndConsumption?,
+        updatedContragentParish: ContragentResponseArrivalAndConsumption?,
 
-                    updatedWarehouse : WarehouseArrivalAndConsumption? ) {
+        updatedEntityExpense: ContragentResponseArrivalAndConsumption?,
+
+        updatedEntityParish: ContragentResponseArrivalAndConsumption?,
+
+        updatedWarehouse: WarehouseArrivalAndConsumption?
+    ) {
 
         if ( state.isUsed ) {
+
 
             val selectedContragentParish =  if( updatedContragentParish != null ) updatedContragentParish else null
 
@@ -361,11 +369,11 @@ class DataEntryViewModel: ViewModel() {
 
             val selectedWarehouse = if( updatedWarehouse != null ) updatedWarehouse else null
 
-            println("WAREHOUSE DATA: ${ listWarehouse }")
+            println("Updated Elements: ${ selectedContragentParish } ${ selectedContragentExpense }" +
+                    "" +
+                    "${ selectedLegalEntityParish  } ${ selectedLegalEntityExpense  } ${selectedWarehouse}")
 
             state = state.copy (
-
-                isUsed = false,
 
                 filteredContragentParish = listContragents,
 
@@ -381,8 +389,11 @@ class DataEntryViewModel: ViewModel() {
 
                 selectedLegalEntityParish = selectedLegalEntityParish,
 
-                selectedWarehouse = selectedWarehouse
+                selectedWarehouse = selectedWarehouse,
 
+                description = description,
+
+                isUsed = false
 
             )
 

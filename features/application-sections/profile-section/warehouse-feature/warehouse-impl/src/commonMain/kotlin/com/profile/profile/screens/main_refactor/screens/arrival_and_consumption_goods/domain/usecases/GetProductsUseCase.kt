@@ -9,10 +9,8 @@ class GetProductsUseCase (
 
     ) {
 
-    suspend fun execute( onGet: (listAllProducts: List<AllProductArrivalAndConsumption>) -> Unit ) {
+    suspend fun execute(): List<AllProductArrivalAndConsumption> {
 
-        client.getProducts  (
-            onGet
-        )
+        return client.getProducts  ()
     }
 }

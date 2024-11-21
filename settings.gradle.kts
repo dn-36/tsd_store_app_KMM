@@ -91,10 +91,10 @@ include(":features:application-sections")
 /*------*/include(":features:application-sections:crm-section:munu-feature:menu-impl")
 
 /**features**/
-/*----*/include(":features:application-sections:crm-section:project-conterol-feature")
+/*----*/include(":features:application-sections:profile-section:project-control-feature")
 /** api and impl **/
-/*------*/include(":features:application-sections:crm-section:project-conterol-feature:project_control-impl")
-/*------*/include(":features:application-sections:crm-section:project-conterol-feature:project-control-api")
+/*------*/include(":features:application-sections:profile-section:project-control-feature:project-control-impl")
+/*------*/include(":features:application-sections:profile-section:project-control-feature:project-control-api")
 /**features**/
 /*----*/include(":features:application-sections:crm-section:specifications-feature")
 /** api and impl**/
@@ -106,12 +106,6 @@ include(":features:application-sections")
 /** api and impl**/
 /*------*/include(":features:application-sections:crm-section:locations-feature:locations-api")
 /*------*/include(":features:application-sections:crm-section:locations-feature:locations-impl")
-
-/**features**/
-///*----*/include(":features:application-sections:crm-section:categories-feature")
-///** api and impl**/
-///*------*/include(":features:application-sections:crm-section:categories-feature:categories-api")
-///*------*/include(":features:application-sections:crm-section:categories-feature:categories-impl")
 
 /**home-section**/
 /*--*/include(":features:application-sections:organization-section")
@@ -146,6 +140,18 @@ include(":features:application-sections")
 /** api and impl **/
 /*----*/include(":features:application-sections:profile-section:printer-feature:printer-impl")
 /*----*/include(":features:application-sections:profile-section:printer-feature:printer-api")
+
+/**profile-feature**/
+/*--*/include(":features:application-sections:profile-section:products-menu-feature")
+/** api and impl **/
+/*----*/include(":features:application-sections:profile-section:products-menu-feature:products-menu-impl")
+/*----*/include(":features:application-sections:profile-section:products-menu-feature:products-menu-api")
+
+/**profile-feature**/
+/*--*/include(":features:application-sections:profile-section:categories-feature")
+/** api and impl **/
+/*----*/include(":features:application-sections:profile-section:categories-feature:categories-impl")
+/*----*/include(":features:application-sections:profile-section:categories-feature:categories-api")
 
 /**profile-section**/
 /*--*/include(":features:application-sections:tape-section")

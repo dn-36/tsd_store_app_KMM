@@ -9,11 +9,8 @@ class GetArrivalAndConsumptionUseCase (
 
     ) {
 
-    suspend fun execute( onGet: (listArrivalAndConsumption: List<StoreResponseArrivalAndConsumption>  ) -> Unit ) {
+    suspend fun execute(): List<StoreResponseArrivalAndConsumption> {
 
-        client.getArrivalAndConsumption  (
-
-            onGet
-        )
+       return client.getArrivalAndConsumption  ()
     }
 }

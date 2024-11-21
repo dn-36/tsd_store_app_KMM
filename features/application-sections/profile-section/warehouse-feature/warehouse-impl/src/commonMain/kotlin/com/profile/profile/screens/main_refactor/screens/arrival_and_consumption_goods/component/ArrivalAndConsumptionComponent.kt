@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -40,6 +39,7 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
 import com.project.core_app.components.delete_component.DeleteComponent
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
@@ -66,9 +66,13 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                SearchComponent( onValueChange = { text -> viewModel.processIntent(
+
+                    ArrivalAndConsumptionIntents.InputTextSearchComponent(text)) } ).Content()
+
                 LazyColumn (modifier = Modifier.fillMaxHeight(0.8f)) {
 
-                    itemsIndexed(viewModel.state.listAllArrivalOrConsumption)
+                    itemsIndexed(viewModel.state.listFilteredArrivalOrConsumption)
 
                     { index,item ->
 
@@ -148,7 +152,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                                         {
                                             viewModel.processIntent(
-                                                ArrivalAndConsumptionIntents.UpdateButton(
+                                                ArrivalAndConsumptionIntents.OpenUpdateDataEntry(
                                                     scope,
                                                     item
                                                 )
@@ -196,7 +200,12 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Button(
-                            onClick = { viewModel.processIntent(ArrivalAndConsumptionIntents.ArrivalOrConsumption( scope, 1 )) },
+                            onClick = { viewModel.processIntent(
+
+                                ArrivalAndConsumptionIntents.ArrivalOrConsumption(
+
+                                    scope, 1 )) },
+
                             modifier = Modifier
                                 .clip(RoundedCornerShape(70.dp))
                                 .height(40.dp)
@@ -205,7 +214,12 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                             Text(text = "Приход")
                         }
                         Button(
-                            onClick = { viewModel.processIntent(ArrivalAndConsumptionIntents.ArrivalOrConsumption( scope, 0 )) },
+                            onClick = { viewModel.processIntent(
+
+                                ArrivalAndConsumptionIntents.ArrivalOrConsumption(
+
+                                    scope, 0 )) },
+
                             modifier = Modifier
                                 .clip(RoundedCornerShape(70.dp))
                                 .height(40.dp)
@@ -215,7 +229,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                         }
                     }
 
-                    if( viewModel.state.isVisibilityAddProductsComponent.value != 1f ) {
+                    if( viewModel.state.isVisibilityAddProductsComponent != 1f ) {
 
                         MenuBottomBarWarehouse().Content(MenuBottomBarWarehouseSection.FINANCE)
 
@@ -224,9 +238,13 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                 }
             }
         }
-        if (viewModel.state.isVisibilityDataEntryComponent.value == 1f) {
+        if ( viewModel.state.isVisibilityDataEntryComponent == 1f) {
 
             DataEntryComponent(
+
+                viewModel.state.description,
+
+                viewModel.state.isPush,
 
                 viewModel.state.updatedContragentExpense,
 
@@ -242,7 +260,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 listAllWarehouse = viewModel.state.listAllWarehouse,
 
-                onClickBack = { viewModel.processIntent(ArrivalAndConsumptionIntents.BackDataEntry) },
+                onClickBack = { viewModel.processIntent(ArrivalAndConsumptionIntents.BackFromDataEntry) },
 
                 onClickNext = { description, idLegalEntityParish, idLegalEntityExpense,
 
@@ -261,13 +279,13 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
             ).Content()
 
-        } else if (viewModel.state.isVisibilityListProducts.value == 1f) {
+        } else if (viewModel.state.isVisibilityListProducts == 1f) {
 
             println("AAAA: ${viewModel.state.listProducts}")
 
             ListProductsComponent(viewModel.state.listProducts, onClickBack = {
 
-                viewModel.processIntent(ArrivalAndConsumptionIntents.BackListProducts)
+                viewModel.processIntent(ArrivalAndConsumptionIntents.BackFromListProducts)
 
             }, onClickProduct = { selectedProducts ->
 
@@ -275,7 +293,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
             }).Content()
 
-        } else if (viewModel.state.isVisibilityCountProducts.value == 1f) {
+        } else if (viewModel.state.isVisibilityCountProducts == 1f) {
 
             CountProductComponent(
 
@@ -291,7 +309,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
             ).Content()
 
-        } else if (viewModel.state.isVisibilityAddProductsComponent.value == 1f) {
+        } else if ( viewModel.state.isVisibilityAddProductsComponent == 1f) {
 
             AddProductsComponent(
 
@@ -299,15 +317,15 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 viewModel.state.listSelectedProducts,
 
-                onClickSelectFromList = { scope ->
+                onClickSelectFromList = {
 
                     viewModel.processIntent(ArrivalAndConsumptionIntents.SelectFromList)
 
                 },
 
-                onClickBack = { viewModel.processIntent(ArrivalAndConsumptionIntents.BackAddProducts) },
+                onClickBack = { viewModel.processIntent(ArrivalAndConsumptionIntents.BackFromAddProducts) },
 
-                onClickCreate = { scope ->
+                onClickCreate = {
                     viewModel.processIntent(
                         ArrivalAndConsumptionIntents.CreateArrivalOrConsumption(
                             scope
@@ -315,7 +333,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                     )
                 },
 
-                onClickUpdate = { scope ->
+                onClickUpdate = {
 
                     viewModel.processIntent( ArrivalAndConsumptionIntents.Update( scope ) )
 
@@ -331,7 +349,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
         }
 
-        else if ( viewModel.state.isVisibilityScannerComponent.value == 1f ) {
+        else if ( viewModel.state.isVisibilityScannerComponent == 1f ) {
 
             ScannerComponent( onClickAdd = { name ->
 
@@ -343,7 +361,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
         }
 
-        else if ( viewModel.state.isVisibilityDeleteComponent.value == 1f ) {
+        else if ( viewModel.state.isVisibilityDeleteComponent == 1f ) {
 
             DeleteComponent(
 

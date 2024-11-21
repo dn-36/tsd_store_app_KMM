@@ -39,97 +39,177 @@ import project.core.resources.down_arrow
 import project.core.resources.photo_profie
 
 
-class ProfileComponent ( override val viewModel: ProfileViewModel ) : NetworkComponent {
+class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkComponent {
 
     @Composable
-    override fun Component () {
+    override fun Component() {
 
         val scope = rememberCoroutineScope()
 
         viewModel.processIntent(ProfileIntents.SetScreen(scope))
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.LightGray)){
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight(0.2f).background(Color.White))
+        Box( modifier = Modifier.fillMaxSize().background(Color.LightGray) )  {
+
+            Box( modifier = Modifier.fillMaxWidth()
+
+                    .fillMaxHeight(0.2f).background(Color.White) )
+
             Column {
+
                 Box(
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(0.45f)
+
                         .clip(RoundedCornerShape(15.dp)).background(Color.White)
+
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
+
                         Text("Профиль", color = Color.Black, fontSize = 20.sp)
 
                         Spacer(modifier = Modifier.height(30.dp))
 
-                        Column(horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.fillMaxWidth()) {
+                        Column( horizontalAlignment = Alignment.CenterHorizontally,
+
+                            modifier = Modifier.fillMaxWidth()
+
+                        ) {
                             Text(viewModel.profileState.name, fontSize = 20.sp)
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            Text(viewModel.profileState.numberPhone, fontSize = 15.sp, color = Color.LightGray)
+                            Text(
+                                viewModel.profileState.numberPhone,
+
+                                fontSize = 15.sp,
+
+                                color = Color.LightGray
+                            )
 
                             Spacer(modifier = Modifier.height(15.dp))
 
                             Image(
                                 painter = painterResource(Res.drawable.photo_profie),
+
                                 contentDescription = null,
+
                                 modifier = Modifier.size(150.dp)
                             )
                         }
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
+
                 Box(
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(0.95f)
+
                         .clip(RoundedCornerShape(15.dp)).background(Color.White)
                 ) {
-                    Column(modifier = Modifier.padding(16.dp).align(Alignment.TopCenter)
-                        , horizontalAlignment = Alignment.CenterHorizontally) {
-                        Row(modifier = Modifier.fillMaxWidth(0.9f)
-                            , horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                            Text("Контроль проектов", fontSize = 15.sp)
-                            Image(painter = painterResource(Res.drawable.down_arrow),contentDescription = null,
-                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f))
-                        }
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Row(modifier = Modifier.fillMaxWidth(0.9f).clickable (
+                    Column(
+                        modifier = Modifier.padding(16.dp).align(Alignment.TopCenter),
+
+                        horizontalAlignment = Alignment.CenterHorizontally
+
+                    ) {
+                        Row(modifier = Modifier.fillMaxWidth(0.9f).clickable(
+
                             indication = null, // Отключение эффекта затемнения
+
                             interactionSource = remember { MutableInteractionSource() })
-                        { viewModel.processIntent(ProfileIntents.Tools) }
-                            , horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                            Text("Инструменты", fontSize = 15.sp)
-                            Image(painter = painterResource(Res.drawable.down_arrow),contentDescription = null,
-                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f))
+
+                        { viewModel.processIntent(ProfileIntents.Projects) },
+
+                            horizontalArrangement = Arrangement.SpaceBetween,
+
+                            verticalAlignment = Alignment.CenterVertically) {
+
+                            Text("Проекты", fontSize = 15.sp)
+
+                            Image(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f)
+                            )
                         }
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Row(modifier = Modifier.fillMaxWidth(0.9f).clickable (
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() })
-                        { viewModel.processIntent(ProfileIntents.Warehouse) }
-                            , horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                            Text("Склад", fontSize = 15.sp)
-                            Image(painter = painterResource(Res.drawable.down_arrow),contentDescription = null,
-                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f))
-                        }
+
                         Spacer(modifier = Modifier.height(20.dp))
 
-                        Row(modifier = Modifier.fillMaxWidth(0.9f)
-                            , horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+                        Row(modifier = Modifier.fillMaxWidth(0.9f).clickable(
+
+                            indication = null, // Отключение эффекта затемнения
+
+                            interactionSource = remember { MutableInteractionSource() })
+
+                        { viewModel.processIntent(ProfileIntents.Tools) },
+
+                            horizontalArrangement = Arrangement.SpaceBetween,
+
+                            verticalAlignment = Alignment.CenterVertically) {
+
+                            Text("Инструменты", fontSize = 15.sp)
+
+                            Image(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Row(modifier = Modifier.fillMaxWidth(0.9f).clickable(
+
+                            indication = null,
+
+                            interactionSource = remember { MutableInteractionSource() })
+
+                        { viewModel.processIntent(ProfileIntents.Warehouse) },
+
+                            horizontalArrangement = Arrangement.SpaceBetween,
+
+                            verticalAlignment = Alignment.CenterVertically) {
+
+                            Text("Склад", fontSize = 15.sp)
+
+                            Image(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(0.9f),
+
+                            horizontalArrangement = Arrangement.SpaceBetween,
+
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
                             Text("О приложении", fontSize = 15.sp)
-                            Image(painter = painterResource(Res.drawable.down_arrow),contentDescription = null,
-                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f))
+
+                            Image(
+                                painter = painterResource(Res.drawable.down_arrow),
+
+                                contentDescription = null,
+
+                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f)
+                            )
                         }
                     }
                 }
             }
             Box(
                 modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
-                    .fillMaxHeight(0.2f).background(Color.White))
-            Column(modifier = Modifier.align(Alignment.BottomCenter), horizontalAlignment = Alignment.CenterHorizontally) {
+                    .fillMaxHeight(0.2f).background(Color.White)
+            )
+            Column(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Button(
-                    onClick = {  },
+                    onClick = { },
                     modifier = Modifier
                         .clip(RoundedCornerShape(50.dp))
                         .height(40.dp)

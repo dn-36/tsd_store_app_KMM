@@ -1,7 +1,9 @@
 package org.example.project
 
+import com.categoriesModule
 import com.example.notes_screens_impl.notesModule
 import com.locationsModule
+import com.productsMenuModule
 import com.profile.`printer-impl`.profileScreensModule
 import com.profile.profile.toolsScreensModule
 import com.profile.profile.udpPlayer.printerPlatformModule
@@ -12,7 +14,7 @@ import com.project.core_app.components.menu_bottom_bar.menuBottomBarMudule
 import org.example.project.app.moduls_di.appModule
 import com.project.`local-storage`.`profile-storage`.localStorageModule
 import com.project.organizationScreenModule
-import com.project.`menu-crm-impl`.menuCrmModule
+import com.project.menu_crm_api.menuCrmModule
 import com.project.network.common.networkModule
 import com.project.`outhorization-screen-impl`.authorizationModule
 import com.project.project_conterol.projectControlModule
@@ -49,7 +51,9 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             specificationsModule,
             locationsModule,
             menuBottomBarMudule,
-            toolsScreensModule
+            toolsScreensModule,
+            productsMenuModule,
+            categoriesModule,
 
         )
     }

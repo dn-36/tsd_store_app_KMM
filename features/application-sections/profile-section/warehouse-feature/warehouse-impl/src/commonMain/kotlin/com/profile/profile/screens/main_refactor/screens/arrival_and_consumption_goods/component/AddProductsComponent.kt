@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
+import com.project.core_app.utils.convertDoubleToIntIfWhole
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
@@ -56,13 +57,13 @@ class AddProductsComponent(
 
     val onClickScanner: () -> Unit,
 
-    val onClickSelectFromList: (scope: CoroutineScope) -> Unit,
+    val onClickSelectFromList: () -> Unit,
 
-    val onClickCreate: (scope: CoroutineScope) -> Unit,
+    val onClickCreate: () -> Unit,
 
     val onClickBack: () -> Unit,
 
-    val onClickUpdate: (scope: CoroutineScope) -> Unit,
+    val onClickUpdate: () -> Unit,
 
     val onClickCansel: ( index:Int ) -> Unit
 
@@ -70,19 +71,9 @@ class AddProductsComponent(
 
     var expendedMenu by mutableStateOf(false)
 
-    fun convertDoubleToIntIfWhole(value: Double): Any {
-        return if (value % 1 == 0.0) {
-            value.toInt() // Преобразуем в Int, если дробная часть нулевая
-        } else {
-            value // Возвращаем как есть, если дробная часть не нулевая
-        }
-    }
-
     @Composable
 
     override fun Content() {
-
-        val scope = rememberCoroutineScope()
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
 
@@ -124,7 +115,7 @@ class AddProductsComponent(
                                 )
 
                                 Text(
-                                    "${convertDoubleToIntIfWhole(item.count)} шт.",
+                                    "${ convertDoubleToIntIfWhole(item.count) } шт.",
                                     fontSize = 17.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -187,7 +178,7 @@ class AddProductsComponent(
                                     modifier = Modifier.clickable(
                                         indication = null, // Отключение эффекта затемнения
                                         interactionSource = remember { MutableInteractionSource() })
-                                    { onClickSelectFromList(scope) })
+                                    { onClickSelectFromList() })
                             }
 
                             Spacer(modifier = Modifier.height(10.dp))
@@ -204,7 +195,7 @@ class AddProductsComponent(
                     if ( !isUpdate ) {
 
                         Button(
-                            onClick = { onClickCreate(scope) },
+                            onClick = { onClickCreate() },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(70.dp))
                                 .height(40.dp)
@@ -218,7 +209,7 @@ class AddProductsComponent(
                     else {
 
                         Button(
-                            onClick = { onClickUpdate(scope) },
+                            onClick = { onClickUpdate() },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(70.dp))
                                 .height(40.dp)

@@ -9,10 +9,8 @@ class GetContagentsUseCase (
 
     ) {
 
-    suspend fun execute( onGet:( newListContragents: List<ContragentResponseArrivalAndConsumption>) -> Unit ) {
+    suspend fun execute(): List<ContragentResponseArrivalAndConsumption> {
 
-        client.getContragents  (
-           onGet
-        )
+        return client.getContragents  ()
     }
 }

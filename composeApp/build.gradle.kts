@@ -49,8 +49,10 @@ kotlin {
 
             implementation(project(":features:application-sections:crm-section:locations-feature:locations-impl"))
             implementation(project(":features:application-sections:crm-section:locations-feature:locations-api"))
+
             implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-impl"))
-            implementation(project(":features:application-sections:crm-section:project-conterol-feature:project_control-impl"))
+
+            implementation(project(":features:application-sections:profile-section:project-control-feature:project-control-impl"))
 
             implementation(project(":core:app"))
             implementation(project(":core:local-storage"))
@@ -74,6 +76,8 @@ kotlin {
             implementation(project(":features:application-sections:profile-section:printer-feature:printer-impl"))
             implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-api"))
             implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-impl"))
+            implementation(project(":features:application-sections:profile-section:products-menu-feature:products-menu-impl"))
+            implementation(project(":features:application-sections:profile-section:categories-feature:categories-impl"))
             implementation(project(":core:network"))
             api(libs.koin.core)
             implementation(compose.runtime)

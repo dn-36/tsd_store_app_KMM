@@ -52,6 +52,10 @@ import com.project.core_app.utils.boxHeight
 
 class DataEntryComponent(
 
+    val updatedText: String,
+
+    val isPush: Int,
+
     val updatedContragentExpense : ContragentResponseArrivalAndConsumption?,
 
     val updatedContragentParish : ContragentResponseArrivalAndConsumption?,
@@ -91,9 +95,9 @@ class DataEntryComponent(
     @Composable
     fun Content() {
 
-        vm.processIntents(DataEntryIntents.SetScreen( listAllContragents, listAllWarehouse,
+        vm.processIntents(DataEntryIntents.SetScreen( updatedText, listAllContragents,
 
-            updatedContragentExpense, updatedContragentParish,
+            listAllWarehouse, updatedContragentExpense, updatedContragentParish,
 
             updatedEntityExpense, updatedEntityParish, updatedWarehouse ))
 
@@ -115,7 +119,16 @@ class DataEntryComponent(
 
                     Spacer(modifier = Modifier.width(10.dp))
 
-                    Text("Приход", color = Color.Black, fontSize = 20.sp)
+                    if ( isPush == 1 ) {
+
+                        Text("Приход", color = Color.Black, fontSize = 20.sp)
+
+                    }
+                    else if ( isPush == 0 ) {
+
+                        Text("Расход", color = Color.Black, fontSize = 20.sp)
+
+                    }
 
                 }
 

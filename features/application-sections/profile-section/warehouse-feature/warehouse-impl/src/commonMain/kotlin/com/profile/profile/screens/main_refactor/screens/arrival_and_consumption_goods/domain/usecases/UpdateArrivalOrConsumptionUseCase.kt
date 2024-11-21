@@ -13,6 +13,8 @@ class UpdateArrivalOrConsumptionUseCase(
 
         productUi: String,
 
+        description: String,
+
         idLegalEntityParish: Int?,
 
         idLegalEntityExpense: Int?,
@@ -32,6 +34,8 @@ class UpdateArrivalOrConsumptionUseCase(
         client.updateArrivalOrConsumption(
 
             productUi,
+
+            description,
 
             idLegalEntityParish,
 
