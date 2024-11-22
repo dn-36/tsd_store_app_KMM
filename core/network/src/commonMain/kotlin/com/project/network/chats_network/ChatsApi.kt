@@ -115,7 +115,7 @@ class ChatsApi() {
                         cutList.add(messageData)
                     }
             }*/
-
+            SocketClient(listMassengers[0].user?.ui?:"").connect()
             listMassengers.forEachIndexed { index, messageData ->
                 if(myNumber!= listMassengers[listMassengers.size - index -1].user?.phone){//:"") {
                     println("!!!!\n" +

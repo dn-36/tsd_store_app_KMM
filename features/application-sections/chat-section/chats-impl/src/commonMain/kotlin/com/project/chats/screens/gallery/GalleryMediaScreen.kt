@@ -43,14 +43,12 @@ fun ImageViewer(imageUrls: List<String>,initPossition:Int = 0) {
     Box(modifier = Modifier.fillMaxSize()) {
         // ViewPager for images
         HorizontalPager(
-            //state = imageUrls.size,
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->
             FullScreenImage(imageUrl = imageUrls[page])
         }
 
-        // Top bar with image index
         Box(
             modifier = Modifier
                 .fillMaxWidth()

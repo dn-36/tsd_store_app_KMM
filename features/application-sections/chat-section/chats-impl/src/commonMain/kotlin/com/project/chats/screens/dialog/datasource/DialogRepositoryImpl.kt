@@ -42,7 +42,7 @@ class DialogRepositoryImpl(
                 ui = it.ui?:"",
                 isReaded = it.status_view == 1,
                 answerMessage = replyMessage,
-                url_icon = if(it.image != null)"https://delta.online/storage/" + it.image else null,
+                url_icon = if(it.image != null) "https://delta.online/storage/" + it.image else null,
             )
         }
     }

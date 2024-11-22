@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,8 +28,9 @@ fun ConfirmationDialog(
     question:String,
     agreeButtonText:String,
     dismissedButtonText:String,
-    onDelete: () -> Unit,
-    onCancel: () -> Unit
+    сontentBetweenQuestionAndButtons:@Composable ()->Unit = {},
+    onClickAgree: () -> Unit,
+    onClickCancel: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -59,12 +59,15 @@ fun ConfirmationDialog(
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
+
                 Text(
                     text = question,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
+
+                сontentBetweenQuestionAndButtons()
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -74,7 +77,7 @@ fun ConfirmationDialog(
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { onCancel() },
+                            .clickable { onClickCancel() },
                         contentAlignment = Alignment.Center
                     ) {
 
@@ -93,7 +96,7 @@ fun ConfirmationDialog(
                     Box(
                         modifier =  Modifier
                             .weight(1f)
-                            .clickable { onDelete() },
+                            .clickable { onClickAgree() },
                         contentAlignment = Alignment.Center
                     ) {
 

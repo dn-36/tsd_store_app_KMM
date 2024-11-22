@@ -1,4 +1,4 @@
-package com.profile.profile.screens.settings_screen
+package com.profile.profile.screens.settings
 
 import android.content.ClipData
 import android.content.ClipboardManager

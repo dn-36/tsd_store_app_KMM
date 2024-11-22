@@ -1,4 +1,4 @@
-package com.profile.profile.screens.settings_screen
+package com.profile.profile.screens.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -15,12 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import com.profile.profile.screens.ip_camera_screen.IpCameraScreen
+import com.profile.profile.screens.ip_camera.IpCameraScreen
 import com.project.core_app.components.ScannerComponent
 import com.project.network.Navigation
 import org.jetbrains.compose.resources.painterResource
@@ -32,16 +31,18 @@ class SettingsConnectIpCameraScreen():Screen {
 
     @Transient val dataWofi = mutableStateOf<DataWifi?>(null)
 
-
     @Composable
     override fun Content() {
+
+
+
         Box {
             ScannerComponent().Show(
                 "Сканер",
                 "Подключиться к сети",
                 isShowInfo = false,
                 {
-                    Navigation.navigator.push(IpCameraScreen())
+
                     openWifiSettings()
                 },
                 { Navigation.navigator.pop() },

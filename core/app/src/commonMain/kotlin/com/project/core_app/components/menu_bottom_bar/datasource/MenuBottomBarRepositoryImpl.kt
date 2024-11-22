@@ -20,20 +20,3 @@ class MenuBottomBarRepositoryImpl(
 
 }
 
-/*
-class MenuBottomBarRepositoryImpl(
-    private val chatApi:ChatsApi,
-    private val sharedPrefsApi: SharedPrefsApi
-):MenuBottomBarRepositoryApi {
-    override suspend fun getAllChatCountNewMessage(): Int {
-     var newMessage = 0
-        chatApi.init(sharedPrefsApi.getToken()?:"")
-        chatApi.getListChats().forEach {
-         if((it.count_new_message ?: 0) != 0){
-             newMessage += it.count_new_message!!
-         }
-     }
-     return newMessage
-    }
-}
- */

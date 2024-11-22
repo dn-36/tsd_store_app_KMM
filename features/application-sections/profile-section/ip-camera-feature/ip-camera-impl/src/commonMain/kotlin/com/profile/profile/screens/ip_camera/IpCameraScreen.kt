@@ -1,4 +1,4 @@
-package com.profile.profile.screens.ip_camera_screen
+package com.profile.profile.screens.ip_camera
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import com.profile.profile.screens.settings_screen.SettingsConnectIpCameraScreen
+import com.profile.profile.screens.settings.SettingsConnectIpCameraScreen
 import com.profile.profile.udpPlayer.StreamUdpPlayer
 import com.project.core_app.components.menu_bottom_tools.ui.MenuBottomBarTools
 import com.project.core_app.components.menu_bottom_tools.viewmodel.MenuBottomBarToolsSection
