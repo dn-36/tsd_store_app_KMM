@@ -28,6 +28,7 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
+import com.project.core_app.components.ScannerComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
@@ -223,13 +224,12 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
         else if ( viewModel.state.isVisibilityScannerComponent.value == 1f ) {
 
-            ScannerComponent( onClickAdd = { name ->
-
-                viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( name ))
-
-            }, onClickCansel = { viewModel.processIntent(ArrivalAndConsumptionIntents.CanselScanner) } )
-
-                .QrScannerView()
+            ScannerComponent()
+                .Show("Приход",
+                    "Добавить",
+                    isShowInfo = true,
+                    { name -> viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( name )) }, { viewModel.processIntent(ArrivalAndConsumptionIntents.CanselScanner) }
+                    )
 
         }
 

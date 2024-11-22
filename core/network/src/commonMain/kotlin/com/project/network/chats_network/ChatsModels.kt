@@ -2,6 +2,8 @@ package com.project.network.chats_network
 
 import kotlinx.serialization.Serializable
 
+
+
 @Serializable
 data class ChatsResponse(
     val name: String? = null,

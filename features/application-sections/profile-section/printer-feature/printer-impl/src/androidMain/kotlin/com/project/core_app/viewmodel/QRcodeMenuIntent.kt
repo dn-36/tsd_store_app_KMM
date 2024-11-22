@@ -22,6 +22,7 @@ sealed class QRcodeMenuIntent {
      data class SelectBluetoothDevice (val device: String, val scope:CoroutineScope):
          QRcodeMenuIntent()
      object CloseSettingsVKP: QRcodeMenuIntent()
+     data class InputTextProduct(val text:String): QRcodeMenuIntent()
      data class SearchBluetoothDevice(val scope: CoroutineScope): QRcodeMenuIntent()
      data class СhoicePrinter(val category: CategoryPrinter): QRcodeMenuIntent()
      data class CloseSettingsBluetooth(val scope:CoroutineScope): QRcodeMenuIntent()

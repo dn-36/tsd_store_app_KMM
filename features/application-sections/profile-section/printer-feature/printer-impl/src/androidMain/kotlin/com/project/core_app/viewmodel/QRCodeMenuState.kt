@@ -23,5 +23,6 @@ data class QRCodeMenuState(
     val x: Float = 0F,
     val y: Float = 0F,
     val heightTicketTsc: Int = 60,
-    val weightTicketTsc: Int = 60
+    val weightTicketTsc: Int = 60,
+    val qrCodeDataText:String = ""
 )

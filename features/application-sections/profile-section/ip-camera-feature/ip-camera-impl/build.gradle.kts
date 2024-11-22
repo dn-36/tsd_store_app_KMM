@@ -38,6 +38,7 @@ kotlin {
             implementation(project(":core:network"))
             implementation(project(":common:ip-camera-udp-client"))
 
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

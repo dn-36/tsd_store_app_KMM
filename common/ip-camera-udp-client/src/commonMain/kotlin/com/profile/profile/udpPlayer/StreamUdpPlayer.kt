@@ -13,7 +13,7 @@ expect class StreamUdpPlayer(
 ) {
 
     fun startVideoStream(scope: CoroutineScope)
-
+    fun stopVideoStream()
 
          @Composable
      fun VideoStream(modifier: Modifier)

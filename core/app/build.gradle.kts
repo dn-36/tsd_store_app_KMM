@@ -63,6 +63,9 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
             implementation(libs.koin.core)
+            implementation("network.chaintech:qr-kit:2.0.0")
+            implementation(dependencyNotation = libs.peekaboo.ui)
+            implementation(dependencyNotation = libs.peekaboo.imagepicker)
         }
 
     }

@@ -47,6 +47,7 @@ include(":common")
 include(":common:printer-impl")
 include(":common:ip-camera-udp-client")
 
+
 include(":core:recources")
 include(":common:phone")
 include(":common:printer-barcode-vkp")

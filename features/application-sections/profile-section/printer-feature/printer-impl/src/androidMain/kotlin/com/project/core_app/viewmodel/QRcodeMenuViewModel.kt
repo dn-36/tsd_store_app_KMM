@@ -46,17 +46,34 @@ class QRcodeMenuViewModel(
             is QRcodeMenuIntent.SetScreen -> {
                 if (isSetedScreen) return
                 isSetedScreen = true
+               state.update {
+                   it.copy(
+                       qrCodeDataText = if(!intent.product.title.isNullOrBlank())
+                           intent.product.title
+                       else
+                           state.value.qrCodeDataText
+                   )
+               }
+                val qrCodeDataText = if(!intent.product.qrCodeData.isNullOrBlank())
+                    intent.product.qrCodeData
+                else state.value.qrCodeDataText
+
+                val titleProduct = if(!intent.product.title.isNullOrBlank())
+                    intent.product.title
+                else
+                    state.value.qrCodeDataText
 
                 val qrCodeBiteMap = getQRcodeBitmapUseCase
                     .execute(
-                        intent.product.qrCodeData ?: "",
+                        qrCodeDataText,
                         state.value.heightQRcode
                     )
                 state.value = state.value.copy(imgBitmap = qrCodeBiteMap)
 
                 state.value = state.value.copy(
                     titleProductQRcodeBiteMap = getTitleProductUseCase.execute(
-                        intent.product.title,
+                        titleProduct,
+                        //intent.product.title,
                         intent.product.fontSize
                     )
                 )
@@ -75,8 +92,10 @@ class QRcodeMenuViewModel(
                 when(state.value.categoryPrinter){
                     CategoryPrinter.VKP -> {
                         printerVkpUseCase.execute(
-                            intent.product.qrCodeData?:"",//"QR code",
-                            intent.product.title,//"Описание",
+                            state.value.qrCodeDataText,
+                            state.value.qrCodeDataText,
+                            //intent.product.qrCodeData?:"",//"QR code",
+                         //   intent.product.title,//"Описание",
                             heightQRCodeMM = intent.product.heightQRcode,
                             fontSize = intent.product.fontSize
                         )
@@ -283,6 +302,12 @@ is QRcodeMenuIntent.CloseSettingsBluetooth -> {
 
                 height = intent.height
                 weight = intent.weight
+            }
+
+            is QRcodeMenuIntent.InputTextProduct -> state.update {
+                it.copy(
+                    qrCodeDataText = intent.text
+                )
             }
         }
 }

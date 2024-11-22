@@ -60,10 +60,11 @@ import project.core.resources.bluetooth
 import project.core.resources.search
 import project.core.resources.settings
 
-actual class QRCodeMenuScreen : Screen {
-   actual var product = ProductPresentationModel()
 
-    val viewModel =
+actual class QRCodeMenuScreen : Screen {
+    @Transient actual var product = ProductPresentationModel()
+
+    @Transient val viewModel =
         QRcodeMenuViewModel(
             getKoin().get(),
             getKoin().get(),
@@ -107,9 +108,9 @@ actual class QRCodeMenuScreen : Screen {
             ) {
                 Column {
                     OutlinedTextField(
-                        value = product.title,
+                        value = viewModel.state?.value?.qrCodeDataText?:"",
                         onValueChange = {
-
+                          viewModel.processIntent(QRcodeMenuIntent.InputTextProduct(it))
                         },
                         label = { Text("Штрих-код") },
                         trailingIcon = {

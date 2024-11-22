@@ -11,7 +11,7 @@ class MenuBottomBarRepositoryImpl(
     override suspend fun getAllChatCountNewMessage(token:String): List<Int> {
     // var newMessage = 0
         chatApi.init(token)
-        return chatApi.getListChats().map { it.count_new_message?:0 }
+        return chatApi.getListChats()?.map { it.count_new_message?:0 }?: listOf()
     }
 
     override suspend fun getToken(): String = sharedPrefsApi.getToken()?:""

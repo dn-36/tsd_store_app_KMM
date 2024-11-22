@@ -201,7 +201,7 @@ class DialogComponentScreen(
             }
             Column(modifier = Modifier.align(Alignment.BottomCenter)) {
                 LazyRow(modifier = Modifier.fillMaxWidth()) {
-                    items(viewModel.state.listImages ?: listOf()) { item ->
+                    items(viewModel.state.listImages) { item ->
 
                         Box(modifier = Modifier.size(95.dp)) {
                             Image(
@@ -327,8 +327,6 @@ class DialogComponentScreen(
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                             )
 
-
-                            // Spacer(modifier = Modifier.width(7.dp))
                             Image(
                                 painter = painterResource(Res.drawable.back),
                                 contentDescription = null,

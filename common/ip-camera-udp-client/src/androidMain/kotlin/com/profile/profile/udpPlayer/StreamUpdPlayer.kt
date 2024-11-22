@@ -4,16 +4,21 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
@@ -50,7 +55,7 @@ actual class StreamUdpPlayer actual constructor(
     suspend fun decodeMjpegFrame(data: ByteArray) {
         withContext(Dispatchers.IO) {
             try {
-                // Пример: замените "BoundaryString" на ваше реальное значение границы
+
                 val boundary = "--BoundaryString".toByteArray()
                 val frames = splitByteArray(data, boundary)
 
@@ -152,7 +157,7 @@ actual class StreamUdpPlayer actual constructor(
                                 val fullFrame = frameBuffer.copyOfRange(0, endIndex + 2)
 
                                 // Передаем кадр в обработчик
-                                withContext(Dispatchers.Main) {
+                                withContext(Dispatchers.IO) {
                                     onFrameReceived(fullFrame)
                                 }
 
@@ -202,9 +207,23 @@ actual class StreamUdpPlayer actual constructor(
             Image(
                 bitmap = bitmap.value!!.asImageBitmap(),
                 contentDescription = null,
-            //    contentScale = ContentScale.FillBounds,
                 modifier = modifier
             )
+        }else{
+         Box(modifier = Modifier.fillMaxSize()) {
+             Column(modifier = Modifier.align(Alignment.Center)) {
+                 CircularProgressIndicator(modifier = Modifier.size(35.dp).align(Alignment.CenterHorizontally))
+                 Text(
+                     "соединение...",
+                     modifier = Modifier.align(Alignment.CenterHorizontally),
+                     fontSize = 30.sp
+                     )
+             }
+         }
         }
+    }
+
+    actual fun stopVideoStream() {
+       udpReceiver?.stopReceiving()
     }
 }

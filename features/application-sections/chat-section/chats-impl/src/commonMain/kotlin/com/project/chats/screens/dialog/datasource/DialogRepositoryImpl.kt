@@ -8,6 +8,7 @@ import com.project.chats.screens.dialog.domain.models.ReplyMessage
 import com.project.chats.screens.dialog.domain.models.WhoseMessage
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.chats_network.ChatsApi
+import kotlinx.coroutines.CoroutineScope
 import util.NetworkError
 import util.Result
 
@@ -20,7 +21,7 @@ class DialogRepositoryImpl(
         uiChats: String,
         userToken:String,
     ): List<Message>? {
-        return chatApi.getListMassengers(uiChats).messages?.data?.map {
+        return chatApi.getListMassengers(uiChats)?.messages?.data?.map {
         val replyMessage:ReplyMessage? = if(it.feedback != null){
             ReplyMessage(
              "Reply message",
