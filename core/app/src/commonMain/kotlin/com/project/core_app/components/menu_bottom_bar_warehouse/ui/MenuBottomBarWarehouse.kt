@@ -86,7 +86,7 @@ val vm = MenuBottomBarWarehouseViewModel()
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.state.section.WarehouseButtonCollor)
-                        .width(80.dp).height(50.dp).clickable {
+                        .width(70.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarWarehouseIntents.Warehouse(
                                     _warehouseScreen!!)
@@ -94,7 +94,7 @@ val vm = MenuBottomBarWarehouseViewModel()
                         }) {
                         Image(
                             painter = painterResource(Res.drawable.warehouse), contentDescription = null,
-                            modifier = Modifier.size(40.dp).align(Alignment.Center)
+                            modifier = Modifier.size(30.dp).align(Alignment.Center)
                         )
                     }
                     Text("Склад", color = Color.Black, fontSize = 12.sp)
@@ -120,14 +120,14 @@ val vm = MenuBottomBarWarehouseViewModel()
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.state.section.FinanceButtonCollor)
-                        .width(80.dp).height(50.dp).clickable {
+                        .width(70.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarWarehouseIntents.Finance(
                                     _financeScreen!!))
                         }) {
                         Image(
                             painter = painterResource(Res.drawable.exchange), contentDescription = null,
-                            modifier = Modifier.size(40.dp).align(Alignment.Center)
+                            modifier = Modifier.size(30.dp).align(Alignment.Center)
                         )
                     }
                     Text("Приход Расход", color = Color.Black, fontSize = 12.sp)
@@ -138,14 +138,14 @@ val vm = MenuBottomBarWarehouseViewModel()
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.state.section.ProductsButtonCollor)
-                        .width(80.dp).height(50.dp).clickable {
+                        .width(70.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarWarehouseIntents.Products(
                                     _productsScreen!! ))
                         }) {
                         Image(
                             painter = painterResource(Res.drawable.sign_items), contentDescription = null,
-                            modifier = Modifier.size(40.dp).align(Alignment.Center)
+                            modifier = Modifier.size(30.dp).align(Alignment.Center)
                         )
                     }
                     Text("Товары", color = Color.Black, fontSize = 12.sp)

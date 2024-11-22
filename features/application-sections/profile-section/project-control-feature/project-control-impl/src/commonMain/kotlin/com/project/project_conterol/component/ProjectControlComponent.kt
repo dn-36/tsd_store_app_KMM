@@ -2,14 +2,13 @@ package com.project.project_conterol.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -27,11 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,21 +36,15 @@ import com.project.core_app.components.menu_bottom_bar_projects.ui.MenuBottomBar
 import com.project.core_app.components.menu_bottom_bar_projects.viewmodel.MenuBottomBarProjectsSection
 import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
-import com.project.core_app.utils.boxHeight
 import com.project.`menu-crm-api`.ProjectControlScreenApi
 import com.project.project_conterol.component.data_entry_project_control.ui.DataEntryProjectControlComponent
-import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
-import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
 import org.example.project.presentation.project_control.viewmodel.ProjectControlIntents
 import org.example.project.presentation.project_control.viewmodel.ProjectControlViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform
 import project.core.resources.Res
 import project.core.resources.back
-import project.core.resources.cancel
 import project.core.resources.dots
-import project.core.resources.plus
-import project.core.resources.update_pencil
 
 class ProjectControlComponent ( override val viewModel: ProjectControlViewModel
 
@@ -83,7 +72,7 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel
                         {
                             if ( !viewModel.state.isVisibilityDeleteComponent ) {
 
-                               // viewModel.processIntents(ProjectControlIntents.Back)
+                                viewModel.processIntents(ProjectControlIntents.Back)
 
                             }
 
@@ -112,14 +101,14 @@ class ProjectControlComponent ( override val viewModel: ProjectControlViewModel
                 if ( viewModel.state.listProjectsControl != null ) {
 
                     Text(
-                        "Общая сумма  ${viewModel.state.listProjectsControl!!.balans?:0}",
+                        "Общая сумма  ${ viewModel.state.listProjectsControl!!.balans?:0 }",
 
                         color = Color.Black, fontSize = 20.sp
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    LazyColumn {
+                    LazyColumn ( modifier = Modifier.fillMaxHeight(0.85f) ) {
 
                         itemsIndexed (
 

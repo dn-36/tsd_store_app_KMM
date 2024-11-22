@@ -29,6 +29,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":features:application-sections:profile-section:project-control-feature:project-control-api"))
+            implementation(project(":features:application-sections:profile-section:profile-feature:profile-api"))
             implementation(project(":core:app"))
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))

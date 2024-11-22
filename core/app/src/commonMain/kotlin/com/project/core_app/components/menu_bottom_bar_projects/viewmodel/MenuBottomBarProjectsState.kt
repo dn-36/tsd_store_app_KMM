@@ -10,15 +10,14 @@ data class MenuBottomBarProjectsState(
 
 enum class MenuBottomBarProjectsSection(
 
-    val ProjectsButtonCollor:Color,
-
     val ControlProjectsButtonCollor:Color,
+
+    val ProjectsButtonCollor:Color
 
     ) {
 
-    PROJECTS_CONTROL(Color.White,Color(0xFFFF9800)),
+    PROJECTS_CONTROL(Color(0xFFFF9800), Color.White),
 
-    PROJECTS ( Color(0xFFFF9800),Color.White ),
-
+    PROJECTS ( Color.White, Color(0xFFFF9800) ),
 
 }

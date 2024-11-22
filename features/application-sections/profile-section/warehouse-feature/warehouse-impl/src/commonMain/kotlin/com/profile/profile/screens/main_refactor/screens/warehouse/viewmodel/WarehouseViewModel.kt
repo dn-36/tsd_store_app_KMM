@@ -10,12 +10,14 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecas
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecases.GetWarehouseUseCase
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecases.UpdateWarehouseUseCase
 import com.profile.profile.screens.main_refactor.screens.warehouse.screen.WarehouseScreen
+import com.project.chats.ProfileScreensApi
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
+import org.koin.mp.KoinPlatform
 
 class WarehouseViewModel (
 
@@ -228,11 +230,17 @@ class WarehouseViewModel (
 
             is WarehouseIntents.OnePressItem -> onePressItem()
 
-            is WarehouseIntents.GetStoreIndex -> getStoreIndex()
-
-            is WarehouseIntents.ResetStoreIndex -> resetStoreIndex()
+            is WarehouseIntents.Back -> back()
 
         }
+
+    }
+
+    fun back () {
+
+        val profileScreen: ProfileScreensApi = KoinPlatform.getKoin().get()
+
+        Navigation.navigator.push(profileScreen.profile())
 
     }
 
@@ -327,26 +335,5 @@ class WarehouseViewModel (
 
     }
 
-    fun getStoreIndex(): Int {
-
-        val currentIndex = state.indexStore
-
-        state = state.copy(
-
-            indexStore = currentIndex + 1
-
-        )
-
-        return currentIndex
-    }
-
-    fun resetStoreIndex() {
-
-        state = state.copy(
-
-            indexStore = 0
-
-        )
-    }
 
 }

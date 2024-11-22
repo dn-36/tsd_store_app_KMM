@@ -8,6 +8,12 @@ sealed class ProfileIntents {
 
     object Projects: ProfileIntents()
 
+    object Contragents: ProfileIntents()
+
+    object Specifications: ProfileIntents()
+
+    object Notes: ProfileIntents()
+
     object Tools: ProfileIntents()
 
     data class SetScreen(val coroutineScope: CoroutineScope): ProfileIntents()

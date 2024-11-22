@@ -60,6 +60,7 @@ include(":features:application-sections")
 /*--*/include(":features:application-sections:chat-section:chats-impl")
 /**crm-section**/
 /*--*/include(":features:application-sections:crm-section")
+
 /**features**/
 /*----*/include(":features:application-sections:crm-section:munu-crm-feature")
 /** api and impl**/
@@ -67,16 +68,22 @@ include(":features:application-sections")
 /*------*/include(":features:application-sections:crm-section:munu-crm-feature:menu-crm-impl")
 
 /**features**/
-/*----*/include(":features:application-sections:crm-section:notes-feature")
+/*----*/include(":features:application-sections:profile-section:notes-feature")
 /** api and impl**/
-/*------*/include(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api")
-/*------*/include(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-impl")
+/*------*/include(":features:application-sections:profile-section:notes-feature:notes-screens:notes-screens-api")
+/*------*/include(":features:application-sections:profile-section:notes-feature:notes-screens:notes-screens-impl")
 
 /**features**/
-/*----*/include(":features:application-sections:crm-section:contragents-feature")
+/*----*/include(":features:application-sections:profile-section:contragents-feature")
 /** api and impl**/
-/*------*/include(":features:application-sections:crm-section:contragents-feature:contragents-api")
-/*------*/include(":features:application-sections:crm-section:contragents-feature:contragents-impl")
+/*------*/include(":features:application-sections:profile-section:contragents-feature:contragents-api")
+/*------*/include(":features:application-sections:profile-section:contragents-feature:contragents-impl")
+
+/**features**/
+/*----*/include(":features:application-sections:profile-section:units-measurement-feature")
+/** api and impl**/
+/*------*/include(":features:application-sections:profile-section:units-measurement-feature:units-measurement-api")
+/*------*/include(":features:application-sections:profile-section:units-measurement-feature:units-measurement-impl")
 
 /**features**/
 /*----*/include(":features:application-sections:crm-section:crm-feature")
@@ -96,16 +103,16 @@ include(":features:application-sections")
 /*------*/include(":features:application-sections:profile-section:project-control-feature:project-control-impl")
 /*------*/include(":features:application-sections:profile-section:project-control-feature:project-control-api")
 /**features**/
-/*----*/include(":features:application-sections:crm-section:specifications-feature")
+/*----*/include(":features:application-sections:profile-section:specifications-feature")
 /** api and impl**/
-/*------*/include(":features:application-sections:crm-section:specifications-feature:specifications-api")
-/*------*/include(":features:application-sections:crm-section:specifications-feature:specifications-impl")
+/*------*/include(":features:application-sections:profile-section:specifications-feature:specifications-api")
+/*------*/include(":features:application-sections:profile-section:specifications-feature:specifications-impl")
 
 /**features**/
-/*----*/include(":features:application-sections:crm-section:locations-feature")
+/*----*/include(":features:application-sections:profile-section:locations-feature")
 /** api and impl**/
-/*------*/include(":features:application-sections:crm-section:locations-feature:locations-api")
-/*------*/include(":features:application-sections:crm-section:locations-feature:locations-impl")
+/*------*/include(":features:application-sections:profile-section:locations-feature:locations-api")
+/*------*/include(":features:application-sections:profile-section:locations-feature:locations-impl")
 
 /**home-section**/
 /*--*/include(":features:application-sections:organization-section")

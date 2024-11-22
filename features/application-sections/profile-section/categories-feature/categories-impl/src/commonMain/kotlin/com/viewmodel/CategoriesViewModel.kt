@@ -43,11 +43,13 @@ class CategoriesViewModel (
 
                     if (state.isSet) {
 
+                        val listCategories = getCategoriesUseCase.execute()
+
                         state = state.copy(
 
-                            listCategories = getCategoriesUseCase.execute(),
+                            listCategories = listCategories,
 
-                            filteredListCategories = getCategoriesUseCase.execute(),
+                            filteredListCategories = listCategories,
 
                             isSet = false
 
@@ -76,13 +78,15 @@ class CategoriesViewModel (
 
                  createCategoryUseCase.execute(intent.name)
 
+                 val listCategories = getCategoriesUseCase.execute()
+
                  state = state.copy(
 
                      isVisibilityDataEntryComponent = false,
 
-                     listCategories = getCategoriesUseCase.execute(),
+                     listCategories = listCategories,
 
-                     filteredListCategories = getCategoriesUseCase.execute(),
+                     filteredListCategories = listCategories,
 
                  )
 
@@ -102,15 +106,17 @@ class CategoriesViewModel (
 
                     deleteCategoryUseCase.execute(state.updateItem!!.id)
 
+                    val listCategories = getCategoriesUseCase.execute()
+
                     state = state.copy(
 
                         isVisibilityDeleteComponent = false,
 
                         updateItem = null,
 
-                        listCategories = getCategoriesUseCase.execute(),
+                        listCategories = listCategories,
 
-                        filteredListCategories = getCategoriesUseCase.execute(),
+                        filteredListCategories = listCategories,
 
                     )
 
@@ -128,13 +134,17 @@ class CategoriesViewModel (
 
                     updateCategoryUseCase.execute( intent.name, state.updateItem!!.id )
 
+                    val listCategories = getCategoriesUseCase.execute()
+
                     state = state.copy(
 
                         isVisibilityDataEntryComponent = false,
 
-                        listCategories = getCategoriesUseCase.execute(),
+                        listCategories = listCategories,
 
-                        filteredListCategories = getCategoriesUseCase.execute(),
+                        filteredListCategories = listCategories,
+
+                        updateItem = null
 
                         )
 
@@ -192,7 +202,7 @@ class CategoriesViewModel (
 
     fun backToProductsMenu() {
 
-        val productsMenuScreen:ProductsMenuScreenApi  = KoinPlatform.getKoin().get()
+        val productsMenuScreen: ProductsMenuScreenApi = KoinPlatform.getKoin().get()
 
         Navigation.navigator.push(productsMenuScreen.productsMenuScreen())
 

@@ -48,6 +48,7 @@ import org.example.project.presentation.profile_feature.core.menu_bottom_bar_pro
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform
 import project.core.resources.Res
+import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.plus
 import project.core.resources.update_pencil
@@ -71,7 +72,27 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
 
             Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
 
-                Text("Склад", color = Color.Black, fontSize = 20.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+
+                    Image(
+                        painter = painterResource(Res.drawable.back), contentDescription = null,
+                        modifier = Modifier.size(20.dp).clickable(
+                            indication = null, // Отключение эффекта затемнения
+                            interactionSource = remember { MutableInteractionSource() })
+
+                        { if (
+
+                            viewModel.state.isVisibilityDeleteComponent == 0f
+
+                        ) { viewModel.processIntents(WarehouseIntents.Back) } }
+                    )
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+
+                    Text("Склад", color = Color.Black, fontSize = 20.sp)
+
+                }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -81,7 +102,7 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
 
                 var globalIndex = 0
 
-                LazyColumn ( modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f) ) {
+                LazyColumn ( modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f) ) {
 
                     items(viewModel.state.listFilteredWarehouse) { item ->
 

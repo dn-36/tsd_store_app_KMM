@@ -31,7 +31,10 @@ kotlin {
             implementation(project(":features:application-sections:profile-section:profile-feature:profile-api"))
             implementation(project(":features:application-sections:profile-section:printer-feature:printer-api"))
             implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-api"))
+            implementation(project(":features:application-sections:profile-section:notes-feature:notes-screens:notes-screens-api"))
             implementation(project(":features:application-sections:profile-section:project-control-feature:project-control-api"))
+            implementation(project(":features:application-sections:profile-section:contragents-feature:contragents-api"))
+            implementation(project(":features:application-sections:profile-section:specifications-feature:specifications-api"))
             implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-api"))
             implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-impl"))
 

@@ -228,7 +228,7 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
                                 Box(
                                     modifier = Modifier.height(1.dp).fillMaxWidth()
 
-                                        .background(Color.Gray)
+                                        .background(Color.LightGray)
                                 )
 
                             }
@@ -342,7 +342,7 @@ class CRMComponent ( override val viewModel: CRMViewModel ) : NetworkComponent {
                                     Box(
                                         modifier = Modifier.height(1.dp).fillMaxWidth()
 
-                                            .background(Color.Gray)
+                                            .background(Color.LightGray)
                                     )
 
                                 }

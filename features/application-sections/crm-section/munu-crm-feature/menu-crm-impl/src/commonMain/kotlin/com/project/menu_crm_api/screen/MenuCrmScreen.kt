@@ -38,22 +38,14 @@ class MenuCrmScreen:Screen{
 
         Navigation.navigator =  LocalNavigator.currentOrThrow
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.White)){
+        Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+
             Column(modifier = Modifier.padding(16.dp),) {
+
                 Text("CRM", color = Color.Black, fontSize = 20.sp)
+
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Button(
-                    onClick = { vm.processIntent(MenuIntents.Notes) },
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(50.dp))
-                        .height(40.dp)
-                        .fillMaxWidth()
-
-                ) {
-                    Text(text = "Заметки", modifier = Modifier)
-                }
-                Spacer(modifier = Modifier.height(20.dp))
                 Button(
                     onClick = { vm.processIntent(MenuIntents.CRM) },
                     modifier = Modifier
@@ -83,39 +75,6 @@ class MenuCrmScreen:Screen{
                         .fillMaxWidth()
                 ) {
                     Text(text = "Share log file")
-                }
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(
-                    onClick = { vm.processIntent(MenuIntents.Contragents) },
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(70.dp))
-                        .height(40.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(text = "Контрагенты")
-                }
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(
-                    onClick = { vm.processIntent(MenuIntents.Specifications) },
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(70.dp))
-                        .height(40.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(text = "Спецификации")
-                }
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(
-                    onClick = { vm.processIntent(MenuIntents.Locations) },
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(70.dp))
-                        .height(40.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(text = "Локации")
                 }
 
             }

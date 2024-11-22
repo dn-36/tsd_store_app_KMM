@@ -1,8 +1,11 @@
 package org.example.project.presentation.profile_feature.main_feature.viewmodel
 
+import ContragentsScreensApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.SpecificationsScreenApi
+import com.example.`notes-screens-api`.NotesScreensApi
 import com.project.chats.WarehouseScreensApi
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
@@ -29,7 +32,14 @@ class ProfileViewModel : NetworkViewModel() {
 
             is ProfileIntents.Projects -> projects()
 
-            is ProfileIntents.SetScreen -> { setScreen(intents.coroutineScope) }
+            is ProfileIntents.Contragents -> contragents()
+
+            is ProfileIntents.Specifications -> specifications()
+
+            is ProfileIntents.Notes -> notes()
+
+            is ProfileIntents.SetScreen -> setScreen(intents.coroutineScope)
+
             ProfileIntents.Tools -> {tools()}
         }
     }
@@ -49,11 +59,35 @@ class ProfileViewModel : NetworkViewModel() {
 
     }
 
+    fun notes(){
+
+        val notesScreen: NotesScreensApi = getKoin().get()
+
+        Navigation.navigator.push(notesScreen.notesScreen())
+
+    }
+
     fun projects(){
 
         val projectsScreen: ProjectControlScreenApi = getKoin().get()
 
         Navigation.navigator.push(projectsScreen.projectControl())
+
+    }
+
+    fun contragents(){
+
+        val contragentsScreen: ContragentsScreensApi = getKoin().get()
+
+        Navigation.navigator.push(contragentsScreen.contragents())
+
+    }
+
+    fun specifications(){
+
+        val specificationsScreen: SpecificationsScreenApi = getKoin().get()
+
+        Navigation.navigator.push(specificationsScreen.specifications())
 
     }
 

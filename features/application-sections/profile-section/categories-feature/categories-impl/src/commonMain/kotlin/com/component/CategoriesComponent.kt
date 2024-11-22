@@ -35,6 +35,7 @@ import com.viewmodel.CategoriesIntents
 import com.viewmodel.CategoriesViewModel
 import com.component.data_entry_category.ui.DataEntryCategoryComponent
 import org.jetbrains.compose.resources.painterResource
+import org.koin.mp.KoinPlatform
 import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.cancel
@@ -110,15 +111,17 @@ class CategoriesComponent ( override val viewModel: CategoriesViewModel) : Netwo
 
                            Column(modifier = Modifier.fillMaxWidth()) {
 
-                               Text(text = "${index + 1}  ${item.name}", fontSize = 20.sp)
+                               Spacer(modifier = Modifier.height(10.dp))
 
-                               Spacer(modifier = Modifier.height(8.dp))
+                               Text(text = "${index + 1}.  ${item.name}", fontSize = 20.sp)
+
+                               Spacer(modifier = Modifier.height(10.dp))
 
                                Box(
 
                                    modifier = Modifier.height(1.dp).fillMaxWidth()
 
-                                       .background(Color.Gray)
+                                       .background(Color.LightGray)
                                )
 
                            }
@@ -129,7 +132,7 @@ class CategoriesComponent ( override val viewModel: CategoriesViewModel) : Netwo
 
                            ) {
 
-                               Row(modifier = Modifier.align(Alignment.TopEnd)) {
+                               Row(modifier = Modifier.align(Alignment.CenterEnd)) {
 
                                    Image(painter = painterResource(Res.drawable.update_pencil),
                                        contentDescription = null,

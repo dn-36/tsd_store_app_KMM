@@ -3,6 +3,7 @@ package org.example.project.presentation.project_control.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.project.chats.ProfileScreensApi
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
@@ -276,7 +277,17 @@ class ProjectControlViewModel (
 
             is ProjectControlIntents.Dots -> dots(intent.index)
 
+            is ProjectControlIntents.Back -> back()
+
         }
+
+    }
+
+    fun back() {
+
+        val profileScreen: ProfileScreensApi = KoinPlatform.getKoin().get()
+
+        Navigation.navigator.push(profileScreen.profile())
 
     }
 

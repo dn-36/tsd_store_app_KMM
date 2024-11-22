@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 
 sealed class ProjectControlIntents {
 
-    //object Back:ProjectControlIntents()
+    object Back:ProjectControlIntents()
 
     object BackFromDataEntry:ProjectControlIntents()
 

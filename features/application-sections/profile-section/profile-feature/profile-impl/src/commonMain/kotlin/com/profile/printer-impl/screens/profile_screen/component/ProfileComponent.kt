@@ -179,15 +179,68 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
 
                         Spacer(modifier = Modifier.height(20.dp))
 
+                        Row(modifier = Modifier.fillMaxWidth(0.9f).clickable(
+
+                            indication = null,
+
+                            interactionSource = remember { MutableInteractionSource() })
+
+                        { viewModel.processIntent(ProfileIntents.Contragents) },
+
+                            horizontalArrangement = Arrangement.SpaceBetween,
+
+                            verticalAlignment = Alignment.CenterVertically) {
+
+                            Text("Контрагенты", fontSize = 15.sp)
+
+                            Image(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Row(modifier = Modifier.fillMaxWidth(0.9f).clickable(
+
+                            indication = null,
+
+                            interactionSource = remember { MutableInteractionSource() })
+
+                        { viewModel.processIntent(ProfileIntents.Specifications) },
+
+                            horizontalArrangement = Arrangement.SpaceBetween,
+
+                            verticalAlignment = Alignment.CenterVertically) {
+
+                            Text("Спецификации", fontSize = 15.sp)
+
+                            Image(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
                         Row(
-                            modifier = Modifier.fillMaxWidth(0.9f),
+                            modifier = Modifier.fillMaxWidth(0.9f).clickable(
+
+                                indication = null,
+
+                                interactionSource = remember { MutableInteractionSource() })
+
+                            { viewModel.processIntent(ProfileIntents.Notes) },
 
                             horizontalArrangement = Arrangement.SpaceBetween,
 
                             verticalAlignment = Alignment.CenterVertically
+
                         ) {
 
-                            Text("О приложении", fontSize = 15.sp)
+                            Text("Заметки", fontSize = 15.sp)
 
                             Image(
                                 painter = painterResource(Res.drawable.down_arrow),
@@ -217,7 +270,7 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
                 ) {
                     Text(text = "Выйти из профиля")
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(5.dp))
 
                 Box() {
                     MenuBottomBar().Content(MenuBottomBarSection.PROFILE)

@@ -32,9 +32,7 @@ import com.project.core_app.components.menu_bottom_bar_projects.viewmodel.MenuBo
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.clock
-import project.core.resources.exchange
 import project.core.resources.projects
-import project.core.resources.warehouse
 
 class MenuBottomBarProjects {
 
@@ -83,14 +81,14 @@ val vm = MenuBottomBarProjectsViewModel()
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.state.section.ControlProjectsButtonCollor)
-                        .width(80.dp).height(50.dp).clickable {
+                        .width(70.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarProjectsIntents.ProjectsControl(
                                     _projectsControlScreen!!))
                         }) {
                         Image(
                             painter = painterResource(Res.drawable.clock), contentDescription = null,
-                            modifier = Modifier.size(40.dp).align(Alignment.Center)
+                            modifier = Modifier.size(30.dp).align(Alignment.Center)
                         )
                     }
                     Text("Контроль проектов", color = Color.Black, fontSize = 12.sp,
@@ -105,7 +103,7 @@ val vm = MenuBottomBarProjectsViewModel()
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.state.section.ProjectsButtonCollor)
-                        .width(80.dp).height(50.dp).clickable {
+                        .width(70.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarProjectsIntents.Projects(
                                     _projectsScreen!!
@@ -115,7 +113,7 @@ val vm = MenuBottomBarProjectsViewModel()
                         Image(
                             painter = painterResource(Res.drawable.projects),
                             contentDescription = null,
-                            modifier = Modifier.size(40.dp).align(Alignment.Center)
+                            modifier = Modifier.size(30.dp).align(Alignment.Center)
                         )
                     }
                     Text(

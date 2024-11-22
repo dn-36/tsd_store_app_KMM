@@ -30,6 +30,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":features:application-sections:profile-section:products-menu-feature:products-menu-api"))
             implementation(project(":features:application-sections:profile-section:categories-feature:categories-api"))
+            implementation(project(":features:application-sections:profile-section:units-measurement-feature:units-measurement-api"))
 
             implementation(project(":core:app"))
             implementation(project(":core:recources"))

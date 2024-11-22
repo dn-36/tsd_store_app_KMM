@@ -92,7 +92,7 @@ class MenuBottomBar {
         Box(
             modifier = Modifier
                 .padding(bottom = 16.dp)
-                .fillMaxHeight(0.15f)
+                .fillMaxHeight(0.1f)
                 .fillMaxWidth()
                 .background(Color.White)
         ) {

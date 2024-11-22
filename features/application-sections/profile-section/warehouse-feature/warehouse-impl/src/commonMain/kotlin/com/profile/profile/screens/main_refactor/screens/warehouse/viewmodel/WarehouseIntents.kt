@@ -25,8 +25,6 @@ sealed class WarehouseIntents {
     data class LongPressItem( val index: Int ): WarehouseIntents()
     object OnePressItem: WarehouseIntents()
 
-    object GetStoreIndex: WarehouseIntents()
-
-    object ResetStoreIndex: WarehouseIntents()
+    object Back: WarehouseIntents()
 
 }

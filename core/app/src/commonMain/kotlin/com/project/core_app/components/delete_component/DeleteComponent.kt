@@ -65,10 +65,10 @@ class DeleteComponent (
 
                 Column( modifier = Modifier.padding(16.dp)
 
-                        .align(Alignment.Center)
+                        .align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally
 
                 ) {
-                    Text("Удаление", fontSize = 12.sp)
+                    Text("Удаление", fontSize = 12.sp, modifier = Modifier.fillMaxWidth())
 
                     Spacer(modifier = Modifier.height(15.dp))
 
