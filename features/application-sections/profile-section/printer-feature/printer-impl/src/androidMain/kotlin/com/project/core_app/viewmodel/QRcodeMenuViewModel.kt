@@ -39,7 +39,7 @@ class QRcodeMenuViewModel(
     private var y: Int = 0
     private var height: Int = 40
     private var weight: Int = 40
-
+    private val CEF_FONT_SIZE: Int = 5
     fun processIntent(intent: QRcodeMenuIntent) {
 
         when (intent) {
@@ -74,7 +74,7 @@ class QRcodeMenuViewModel(
                     titleProductQRcodeBiteMap = getTitleProductUseCase.execute(
                         titleProduct,
                         //intent.product.title,
-                        intent.product.fontSize
+                        intent.product.fontSize+CEF_FONT_SIZE
                     )
                 )
                 state.update { state.value.copy(isLoadingDataOnScreen = false) }
@@ -97,7 +97,7 @@ class QRcodeMenuViewModel(
                             //intent.product.qrCodeData?:"",//"QR code",
                          //   intent.product.title,//"Описание",
                             heightQRCodeMM = intent.product.heightQRcode,
-                            fontSize = intent.product.fontSize
+                            fontSize = intent.product.fontSize+CEF_FONT_SIZE
                         )
                     }
                     CategoryPrinter.TSC -> {
@@ -190,10 +190,11 @@ class QRcodeMenuViewModel(
 
 is QRcodeMenuIntent.ChangeFontSize -> {
  state.update {
-     it.copy(fontSize = intent.fontSize ,
+     it.copy(
+     fontSize = intent.fontSize ,
      titleProductQRcodeBiteMap = getTitleProductUseCase.execute(
          intent.title,
-         intent.fontSize
+         intent.fontSize+CEF_FONT_SIZE
      )
      )
  }
@@ -201,7 +202,8 @@ is QRcodeMenuIntent.ChangeFontSize -> {
 
 is QRcodeMenuIntent.ChangeHeightQrCode -> {
  state.update {
-     it.copy(heightQRcode = intent.heightQRcode,
+     it.copy(
+     heightQRcode = intent.heightQRcode,
      imgBitmap = getQRcodeBitmapUseCase.execute(
          intent.dataQRcode ,
          intent.heightQRcode

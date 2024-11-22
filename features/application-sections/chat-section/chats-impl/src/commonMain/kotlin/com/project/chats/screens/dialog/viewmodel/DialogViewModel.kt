@@ -315,6 +315,7 @@ class DialogViewModel(
                  DELETE_FOR_ALL else DELETE_FOR_SOMESELVE)
          //)
          //println("println(ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL))")
+            selectedMessage = listOf()
          jobUpdate = updateDate()
         }
 

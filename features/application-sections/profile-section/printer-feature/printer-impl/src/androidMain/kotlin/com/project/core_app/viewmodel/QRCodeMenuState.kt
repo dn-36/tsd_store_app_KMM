@@ -10,7 +10,7 @@ data class QRCodeMenuState(
     val imgBitmap: Bitmap? = null,
     val isLoadingDataOnScreen:Boolean = true,
     val heightQRcode:Float = 20F,
-    val fontSize:Float = 10F,
+    val fontSize:Float = 5F,
     val categoryPrinter: CategoryPrinter = CategoryPrinter.VKP,
     val isOpenedSettingsVKP:Boolean = false,
     val isOpenedBluetoothSettingsTSC:Boolean = false,
