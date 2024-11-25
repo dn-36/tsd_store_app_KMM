@@ -25,6 +25,7 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+
     }
 }
 
@@ -37,6 +38,7 @@ include(":features:tape")
 include(":core:local-storage")
 include(":core:network")
 include(":core:app")
+include(":core:video-player")
 include(":core:contact-provider")
 /*--*/include(":features:application-sections:crm-section:notes-features")
 
