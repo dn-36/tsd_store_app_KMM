@@ -49,12 +49,17 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
         }
+
+
+
         androidMain.dependencies {
             implementation(project(":common:printer-barcode-tsc"))
             implementation(project(":common:printer-barcode-vkp"))
-          //  implementation(project(":common:phone"))
-
-        }
+           implementation("org.videolan.android:libvlc-all:3.1.12")
+            implementation ("com.google.code.gson:gson:2.11.0")
+            implementation ("com.github.mwiede:jsch:0.2.19")
+          //  implementation ("com.arthenica:ffmpeg-kit-full:5.1")
+}
         nativeMain.dependencies{
             implementation(libs.ktor.client.darwin)
         }
@@ -67,4 +72,5 @@ android {
     defaultConfig {
         minSdk = 24
     }
+
 }

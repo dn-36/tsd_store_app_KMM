@@ -11,10 +11,16 @@ expect class StreamUdpPlayer(
     multicastPort: Int,
     packetSize: Int
 ) {
-
     fun startVideoStream(scope: CoroutineScope)
-    fun stopVideoStream()
 
+    fun stopVideoStream()
          @Composable
      fun VideoStream(modifier: Modifier)
+
+   //  fun rtspCamera(setImage: (image: Bitmap) -> Unit)
+
+
+
 }
+
+ //fun rtspCamera(setImage: (image: Bitmap) -> Unit)

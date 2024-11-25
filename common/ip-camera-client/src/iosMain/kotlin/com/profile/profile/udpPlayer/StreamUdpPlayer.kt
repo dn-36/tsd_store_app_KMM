@@ -37,4 +37,7 @@ actual class StreamUdpPlayer actual constructor(
         // Реализация для отображения данных на iOS
         // Используйте SwiftUI или другую библиотеку
     }
+
+    actual fun stopVideoStream() {
+    }
 }

@@ -43,7 +43,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
-            implementation(project(":common:ip-camera-udp-client"))
+            implementation(project(":common:ip-camera-client"))
             implementation(project(":core:app"))
             implementation(project(":core:local-storage"))
             implementation(project(":core:camera-provider"))
@@ -70,7 +70,6 @@ kotlin {
             //implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-api"))
 
             implementation(project(":core:network"))
-            implementation ("org.videolan.android:libvlc-all:3.5.1")
             api(libs.koin.core)
             implementation(compose.runtime)
             implementation(compose.foundation)

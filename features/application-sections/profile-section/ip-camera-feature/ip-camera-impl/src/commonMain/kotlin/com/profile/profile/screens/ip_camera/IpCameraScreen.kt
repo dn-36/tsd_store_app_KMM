@@ -82,6 +82,9 @@ class IpCameraScreen:Screen{
               player.stopVideoStream()
             }
         }
-
+      player//rtspCamera()
     }
+   // player. rtspCamera(getKoin().get())
+
+
 }

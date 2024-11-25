@@ -73,7 +73,6 @@ class QRcodeMenuViewModel(
                 state.value = state.value.copy(
                     titleProductQRcodeBiteMap = getTitleProductUseCase.execute(
                         titleProduct,
-                        //intent.product.title,
                         intent.product.fontSize+CEF_FONT_SIZE
                     )
                 )
@@ -88,14 +87,12 @@ class QRcodeMenuViewModel(
             }
 
             is QRcodeMenuIntent.PrintQRcode -> {
-                //Log.d("testssss",state.value.titleProductQRcodeBiteMap!!.width.toString()/50)
+
                 when(state.value.categoryPrinter){
                     CategoryPrinter.VKP -> {
                         printerVkpUseCase.execute(
                             state.value.qrCodeDataText,
                             state.value.qrCodeDataText,
-                            //intent.product.qrCodeData?:"",//"QR code",
-                         //   intent.product.title,//"Описание",
                             heightQRCodeMM = intent.product.heightQRcode,
                             fontSize = intent.product.fontSize+CEF_FONT_SIZE
                         )

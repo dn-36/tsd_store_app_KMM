@@ -1,7 +1,9 @@
 package com.profile.profile.udpPlayer
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -202,7 +204,7 @@ actual class StreamUdpPlayer actual constructor(
 
     @Composable
     actual fun VideoStream(modifier: Modifier) {
-        if (bitmap.value != null) {
+      /*  if (bitmap.value != null) {
 
             Image(
                 bitmap = bitmap.value!!.asImageBitmap(),
@@ -220,10 +222,13 @@ actual class StreamUdpPlayer actual constructor(
                      )
              }
          }
-        }
+        }*/
+
+        VideoPlayerScreen().Content()
     }
 
     actual fun stopVideoStream() {
        udpReceiver?.stopReceiving()
     }
 }
+
