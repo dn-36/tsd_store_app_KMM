@@ -2,7 +2,7 @@ package com.project.project_conterol.datasource
 
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.projects_control_network.ProjectControlClient
-import com.project.network.projects_network.ProjectsClient
+import com.project.network.projects_network.ProjectClient
 import com.project.project_conterol.domain.repository.ProjectControlClientApi
 import com.project.project_conterol.model.ProjectModel
 import com.project.project_conterol.model.ProjectResponseModel
@@ -16,7 +16,7 @@ class ProjectsControlClientImpl (
 
     private val sharedPrefsApi: SharedPrefsApi,
 
-    private val projectsClient: ProjectsClient
+    private val projectsClient: ProjectClient
 
     ) : ProjectControlClientApi {
 

@@ -1,10 +1,10 @@
-package com.project.network.lenta_network.model
+package com.project.network.tape_network.model
 
 import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class LentaResponse(
+data class TapeResponse(
     val id: Int,
     val name: String?,
     val text: String?,

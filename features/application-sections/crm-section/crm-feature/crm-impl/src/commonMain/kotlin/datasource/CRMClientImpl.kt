@@ -7,7 +7,7 @@ import com.project.network.crm_network.CRMClient
 import com.project.network.crm_network.model.ServiceItem
 import com.project.network.group_entity_network.GroupEntityClient
 import com.project.network.locations_network.LocationsClient
-import com.project.network.projects_network.ProjectsClient
+import com.project.network.projects_network.ProjectClient
 import com.project.network.services_network.ServicesClient
 import com.project.network.specifications_network.SpecificationsClient
 import com.project.network.users_network.UsersClient
@@ -57,7 +57,7 @@ class CRMClientImpl(
 
     private val locationsClient: LocationsClient,
 
-    private val projectsClient: ProjectsClient,
+    private val projectsClient: ProjectClient,
 
     private val cargoClient: CargoClient,
 

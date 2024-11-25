@@ -1,9 +1,7 @@
-package com.project.network.projects_network
+package com.project.network.tape_network
 
 import com.project.network.common.httpClientEngine
-import com.project.network.crm_network.CRMClient
-import com.project.network.crm_network.model.ApiResponseCRMOutgoing
-import com.project.network.projects_network.model.ProjectResponse
+import com.project.network.tape_network.model.TapeResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -12,16 +10,15 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-class ProjectsClient {
+class TapeClient {
 
     companion object{
         private var _token: String = ""
     }
-    fun init(token: String): ProjectsClient {
+    fun init(token: String): TapeClient {
         _token = token
         return this
     }
@@ -29,8 +26,10 @@ class ProjectsClient {
     private val client = HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
             json(Json {
-               // ignoreUnknownKeys = true // Игнорировать неизвестные поля
+                ignoreUnknownKeys = true // Игнорировать неизвестные поля
                 isLenient = true// Быть гибким с форматом JSON
+                explicitNulls = false
+
             })
         }
         install(Logging) {
@@ -41,17 +40,17 @@ class ProjectsClient {
         }
     }
 
-    // получение всех проектов
+    // получение видео
 
-    suspend fun getProjects (): List<ProjectResponse> {
+    suspend fun getVideo(): List<TapeResponse> {
 
-        val response = client.get("https://delta.online/api/project?active=1&all=0") {
+        val response = client.get("https://delta.online/api/lenta") {
 
         }
         println(" ////////////////////++++++++++")
-        println("получение проектов :  ${response.bodyAsText()}")
+        println("получение видео:  ${response}")
         println(" ////////////////////++++++++++")
-        return response.body<List<ProjectResponse>>()
+        return response.body<List<TapeResponse>>()
     }
 
 }

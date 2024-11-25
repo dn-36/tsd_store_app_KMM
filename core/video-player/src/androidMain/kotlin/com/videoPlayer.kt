@@ -27,25 +27,14 @@ actual fun GoBackToPortraitMode(triggerEffect: Boolean) {
 @Composable
 actual fun VideoPlayer(
     modifier: Modifier,
-    url: String, // Относительный путь к видео, который приходит в JSON
+    url: String,
     isLandscape: Boolean,
     shouldStop: Boolean,
     onMediaReadyToPlay: () -> Unit
 ) {
-    val context = LocalContext.current
     val activity = LocalContext.current as? ComponentActivity
 
-    // Базовый URL сервера
-    val baseUrl = "https://delta.online/storage/"
-
-    // Полный URL для видео
-    val videoUrl = if (url.startsWith("http")) url else "$baseUrl$url"
-
-    println("Полный url: ${baseUrl}")
-
     if (isLandscape) {
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT//ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-    } else {
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
@@ -53,16 +42,17 @@ actual fun VideoPlayer(
         modifier = modifier.fillMaxSize(),
         factory = { context ->
             VideoView(context).apply {
-                setVideoPath(videoUrl) // Установка полного URL
+                setVideoPath(url)
                 val mediaController = MediaController(context)
                 mediaController.setAnchorView(this)
                 setMediaController(mediaController)
                 setOnPreparedListener {
-                    onMediaReadyToPlay() // Уведомление о готовности
                     start()
+                    onMediaReadyToPlay()
+
                 }
                 setOnErrorListener { _, _, _ ->
-                    onMediaReadyToPlay() // Уведомление об ошибке
+                    onMediaReadyToPlay()
                     true
                 }
                 layoutParams = FrameLayout.LayoutParams(

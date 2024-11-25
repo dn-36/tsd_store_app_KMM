@@ -1,9 +1,8 @@
 package com.project.project_conterol
 
-import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.`menu-crm-api`.ProjectControlScreenApi
 import com.project.network.projects_control_network.ProjectControlClient
-import com.project.network.projects_network.ProjectsClient
+import com.project.network.projects_network.ProjectClient
 import com.project.project_conterol.datasource.ProjectsControlClientImpl
 import com.project.project_conterol.domain.repository.ProjectControlClientApi
 import com.project.project_conterol.domain.usecases.CreateProjectControlUseCase
@@ -32,7 +31,7 @@ val projectControlModule = module {
 
     factory { ProjectControlClient() }
 
-    factory { ProjectsClient() }
+    factory { ProjectClient() }
 
     factory { ProjectControlViewModel( get(), get(), get(), get(), get()) }
 

@@ -27,6 +27,8 @@ kotlin {
         it.binaries.framework {
             baseName = "core"
             isStatic = true
+
+            linkerOpts("-framework", "Foundation", "-framework", "AVFoundation")
         }
     }
 
@@ -72,4 +74,5 @@ android {
         implementation(libs.koin.android)
     }
 }
+
 

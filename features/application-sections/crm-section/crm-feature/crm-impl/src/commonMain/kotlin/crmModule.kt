@@ -4,7 +4,7 @@ import com.project.network.contragent_network.ContragentClient
 import com.project.network.crm_network.CRMClient
 import com.project.network.group_entity_network.GroupEntityClient
 import com.project.network.locations_network.LocationsClient
-import com.project.network.projects_network.ProjectsClient
+import com.project.network.projects_network.ProjectClient
 import com.project.network.services_network.ServicesClient
 import com.project.network.specifications_network.SpecificationsClient
 import com.project.network.users_network.UsersClient
@@ -65,7 +65,7 @@ val crmModule = module {
 
     factory { LocationsClient() }
 
-    factory { ProjectsClient() }
+    factory { ProjectClient() }
 
     factory { ServicesClient() }
 

@@ -35,6 +35,9 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:app"))
             implementation(project(":core:video-player"))
+            implementation(project(":core:recources"))
+            implementation(project(":core:network"))
+            implementation(project(":core:local-storage"))
             implementation(project(":features:application-sections:tape-section:tape-api"))
 
             implementation(compose.runtime)
