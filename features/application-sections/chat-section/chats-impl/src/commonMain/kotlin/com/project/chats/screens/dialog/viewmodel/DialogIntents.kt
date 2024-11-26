@@ -15,7 +15,10 @@ sealed class DialogIntents {
     data class DeleteSelectedPhoto ( val image: ImageBitmap ): DialogIntents()
 
     data class SetScreen(
+
         val uiChats:String,
+
         val scope:CoroutineScope
+
     ) : DialogIntents()
 }

@@ -137,4 +137,21 @@ class TapeClientImpl(
 
     }
 
+    override suspend fun createPhotoOrVideo(
+        name: String,
+        text: String,
+        image: String?,
+        format_image: String,
+        video: String?,
+        format_video: String
+    ) {
+
+       tapeClient.init(getToken())
+
+        tapeClient.createPhotoOrVideo( name = name, text = text, image = image,
+
+            format_image = format_image, video = video, format_video = format_video)
+
+    }
+
 }

@@ -66,7 +66,7 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
                             contentAlignment = Alignment.Center
                         ) {
 
-                            if ( it.video != null ) {
+                            if ( it.video != null && !viewModel.state.isVisibilityDataEntry ) {
 
                                 VideoPlayer(
                                     modifier = Modifier,
@@ -85,9 +85,7 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
                             }
                         }
                     }
-
                 }
-
             }
 
             Column(
@@ -112,7 +110,9 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
 
                 viewModel.processIntents(TapeIntents.BackFromDataEntry)
 
-            }, listProjects = viewModel.state.listProjects ).Content()
+            }, listProjects = viewModel.state.listProjects,
+
+                listContragents = viewModel.state.listContragents ).Content()
 
         }
 

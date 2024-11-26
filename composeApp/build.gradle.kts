@@ -55,6 +55,8 @@ kotlin {
             implementation(project(":core:app"))
             implementation(project(":core:local-storage"))
             implementation(project(":common:camera-provider"))
+            implementation(project(":common:file-provider"))
+            implementation(project(":common:video-player"))
             implementation(project(":core:contact-provider"))
             implementation(project(":features:authorization-feature:authorization-screen-api"))
             implementation(project(":features:application-sections:organization-section:organization-api"))

@@ -14,4 +14,8 @@ interface TapeClientApi {
 
     suspend fun getContragents(): List<ContragentsResponseModel>
 
+    suspend fun createPhotoOrVideo ( name: String,text: String, image: String?,
+
+                                     format_image: String, video: String?, format_video: String )
+
 }

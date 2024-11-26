@@ -47,8 +47,8 @@ actual fun VideoPlayer(
                 mediaController.setAnchorView(this)
                 setMediaController(mediaController)
                 setOnPreparedListener {
-                    start()
                     onMediaReadyToPlay()
+                    start()
 
                 }
                 setOnErrorListener { _, _, _ ->

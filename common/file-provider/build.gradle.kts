@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+
+
 kotlin {
     androidTarget {
         compilations.all {
@@ -14,6 +16,8 @@ kotlin {
             }
         }
     }
+
+
     
     listOf(
         iosX64(),
@@ -21,26 +25,20 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "menu"
+            baseName = "core"
             isStatic = true
         }
     }
 
     sourceSets {
-
         androidMain.dependencies {
-
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+            implementation(libs.ktor.client.okhttp)
         }
-
         commonMain.dependencies {
-            implementation(project(":core:app"))
-            implementation(project(":common:video-player"))
-            implementation(project(":common:file-provider"))
-            implementation(project(":core:recources"))
-            implementation(project(":core:network"))
-            implementation(project(":core:local-storage"))
-            implementation(project(":features:application-sections:tape-section:tape-api"))
-
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -49,26 +47,27 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.koin.core)
+            // implementation(libs.koin.core)
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
-
-            implementation(dependencyNotation = libs.peekaboo.ui)
-            implementation(dependencyNotation = libs.peekaboo.imagepicker)
-
+            implementation(libs.koin.core)
         }
-
         nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
 
         }
     }
 }
 
 android {
-    namespace = "com.project.menu"
+    namespace = "com.project.core"
     compileSdk = 34
     defaultConfig {
         minSdk = 24
     }
+    dependencies {
+        implementation(libs.koin.android)
+    }
 }
+

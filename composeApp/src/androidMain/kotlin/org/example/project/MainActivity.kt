@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
         permissionManeger.askPermissions(
             PermissionManeger.PERMISSION.CONTACTS_PERMISSION,
             PermissionManeger.PERMISSION.CAMERA_PERMISSION,
-            PermissionManeger.PERMISSION.BLUETOOTH_PERMISSION
+            PermissionManeger.PERMISSION.BLUETOOTH_PERMISSION,
         )
 
         setContent {

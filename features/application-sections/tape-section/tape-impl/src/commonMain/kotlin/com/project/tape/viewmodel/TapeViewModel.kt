@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
+import com.project.tape.domain.usecases.CreatePhotoOrVideoUseCase
+import com.project.tape.domain.usecases.GetContragentsUseCase
 import com.project.tape.domain.usecases.GetProjectsUseCase
 import com.project.tape.domain.usecases.GetVideoUseCase
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +17,11 @@ class TapeViewModel (
 
     val getVideoUseCase: GetVideoUseCase,
 
-    val getProjectsUseCase: GetProjectsUseCase
+    val getProjectsUseCase: GetProjectsUseCase,
+
+    val getContragentsUseCase: GetContragentsUseCase,
+
+    val createPhotoOrVideoUseCase: CreatePhotoOrVideoUseCase
 
 ): NetworkViewModel() {
 
@@ -48,15 +54,21 @@ class TapeViewModel (
 
            is TapeIntents.OpenCreateDataEntry -> {
 
+               setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
                intent.coroutineScope.launch( Dispatchers.IO ) {
 
                    state = state.copy(
 
                        listProjects = getProjectsUseCase.execute(),
 
+                       listContragents = getContragentsUseCase.execute(),
+
                        isVisibilityDataEntry = true
 
                    )
+
+                   setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                }
 

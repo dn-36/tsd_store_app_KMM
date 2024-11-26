@@ -10,6 +10,11 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -52,5 +57,43 @@ class TapeClient {
         println(" ////////////////////++++++++++")
         return response.body<List<TapeResponse>>()
     }
+
+    // Создание нового элемента ленты
+    suspend fun createPhotoOrVideo ( name: String,text: String, image: String?,
+
+                                     format_image: String, video: String?, format_video: String
+
+    ): HttpResponse {
+
+        val requestBody = mapOf(
+            "name" to name,
+            "text" to text,
+            "image" to image,
+            "format_image" to format_image,
+            "video" to video,
+            "format_video" to format_video
+        )
+        return try {
+
+            val response = client.post("https://delta.online/api/lenta") {
+
+                contentType(ContentType.Application.Json)
+
+                setBody(requestBody)
+            }
+            println("Создание элемента ленты: ${response.toString()}")
+            response
+        } catch (e: Exception) {
+            println("Ошибка создания элемента ленты: Error - ${e.message}")
+            throw e
+        }
+    }
+
+    /*name*: 'ewgweg'
+text: ''
+image: base64
+format_image: 'jpg'
+video: base64
+format_video: 'mp4'*/
 
 }

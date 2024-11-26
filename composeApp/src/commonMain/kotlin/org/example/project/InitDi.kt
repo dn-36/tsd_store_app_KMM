@@ -23,6 +23,7 @@ import com.specificationsModule
 import contactProviderModule
 import contragentsModule
 import crmModule
+import file_provider.fileProviderModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import unitsMeasurementModule
@@ -55,7 +56,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             toolsScreensModule,
             productsMenuModule,
             categoriesModule,
-            unitsMeasurementModule
+            unitsMeasurementModule,
+            fileProviderModule
 
         )
     }
