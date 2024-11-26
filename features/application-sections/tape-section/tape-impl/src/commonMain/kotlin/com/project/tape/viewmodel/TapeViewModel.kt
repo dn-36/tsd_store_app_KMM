@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
+import com.project.core_app.utils.imageBitmapToBase64
 import com.project.tape.domain.usecases.CreatePhotoOrVideoUseCase
 import com.project.tape.domain.usecases.GetContragentsUseCase
 import com.project.tape.domain.usecases.GetProjectsUseCase
@@ -75,6 +76,34 @@ class TapeViewModel (
            }
 
            is TapeIntents.BackFromDataEntry -> backFromDataEntry()
+
+           is TapeIntents.CreateElement -> {
+
+               setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+               intent.coroutineScope.launch( Dispatchers.IO ) {
+
+                   val imageBase64 = if ( intent.image != null ) imageBitmapToBase64(intent.image)
+
+                   else ""
+
+                   createPhotoOrVideoUseCase.execute(intent.name,intent.description,
+
+                       imageBase64, "jpg",video = "", format_video = "",
+
+                       intent.idContragent, intent.idProject)
+
+                   state = state.copy(
+
+                       isVisibilityDataEntry = false
+
+                   )
+
+                   setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+               }
+
+           }
 
        }
 

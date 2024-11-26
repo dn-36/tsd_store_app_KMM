@@ -22,6 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -61,7 +63,11 @@ class DataEntryTapeComponent (
 
     val listProjects: List<ProjectResponseModel>,
 
-    val listContragents: List<ContragentsResponseModel>
+    val listContragents: List<ContragentsResponseModel>,
+
+    val onClickCreate:( name: String,text: String, image: ImageBitmap?, video: String?,
+
+                        contragent_id: String, project_id: String) -> Unit
 
     ) {
 
@@ -456,9 +462,35 @@ class DataEntryTapeComponent (
                             )
 
                         }
-
                     }
+                }
 
+                Spacer(modifier = Modifier.height(30.dp))
+
+                Button(
+
+                    onClick = { onClickCreate(
+
+                        viewModel.state.name, viewModel.state.description,
+
+                        viewModel.state.image, "",
+
+                        if ( viewModel.state.selectedContragent != null )
+
+                            viewModel.state.selectedContragent!!.id.toString() else "",
+
+                        if ( viewModel.state.selectedProject != null )
+
+                            viewModel.state.selectedProject!!.id.toString() else ""
+
+                    ) },
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .clip(RoundedCornerShape(70.dp))
+                        .height(40.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Создать")
                 }
             }
         }

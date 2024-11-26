@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
             PermissionManeger.PERMISSION.CONTACTS_PERMISSION,
             PermissionManeger.PERMISSION.CAMERA_PERMISSION,
             PermissionManeger.PERMISSION.BLUETOOTH_PERMISSION,
+            PermissionManeger.PERMISSION.STORAGE_PERMISSION
         )
 
         setContent {

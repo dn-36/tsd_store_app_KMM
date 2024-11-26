@@ -24,6 +24,8 @@ serialization = "1.6.0"
 org-jetbrains-kotlin-jvm = "1.9.10"
 peekaboo = "0.5.2"
 runtimeAndroid = "1.6.7"
+image_loader_version = "1.8.1"
+media-player-version = "1.0.26"
 
 
 [libraries]
@@ -62,6 +64,9 @@ multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings
 peekaboo-ui = { group = "io.github.onseok", name = "peekaboo-ui", version.ref = "peekaboo" }
 peekaboo-imagepicker = { group = "io.github.onseok", name = "peekaboo-image-picker", version.ref = "peekaboo" }
 androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
+
+image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image_loader_version" }
+media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "media-player-version" }
 
 
 [plugins]

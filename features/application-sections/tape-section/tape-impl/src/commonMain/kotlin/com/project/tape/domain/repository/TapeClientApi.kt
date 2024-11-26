@@ -16,6 +16,8 @@ interface TapeClientApi {
 
     suspend fun createPhotoOrVideo ( name: String,text: String, image: String?,
 
-                                     format_image: String, video: String?, format_video: String )
+                                     format_image: String, video: String?, format_video: String,
+
+                                     contragent_id: String, project_id: String)
 
 }

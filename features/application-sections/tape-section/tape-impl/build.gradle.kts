@@ -30,6 +30,11 @@ kotlin {
 
         androidMain.dependencies {
 
+            implementation(compose.preview)
+
+            implementation(libs.androidx.activity.compose)
+
+
         }
 
         commonMain.dependencies {
@@ -57,6 +62,11 @@ kotlin {
             implementation(dependencyNotation = libs.peekaboo.ui)
             implementation(dependencyNotation = libs.peekaboo.imagepicker)
 
+            //implementation(libs.image.loader)
+
+            //implementation(libs.media.player)
+
+            //implementation( "org.robolectric:robolectric:4.0.2")
         }
 
         nativeMain.dependencies {
@@ -71,4 +81,5 @@ android {
     defaultConfig {
         minSdk = 24
     }
+
 }

@@ -61,7 +61,11 @@ class TapeClient {
     // Создание нового элемента ленты
     suspend fun createPhotoOrVideo ( name: String,text: String, image: String?,
 
-                                     format_image: String, video: String?, format_video: String
+                                     format_image: String, video: String?, format_video: String,
+
+                                     contragent_id: String, project_id: String
+
+
 
     ): HttpResponse {
 
@@ -71,7 +75,10 @@ class TapeClient {
             "image" to image,
             "format_image" to format_image,
             "video" to video,
-            "format_video" to format_video
+            "format_video" to format_video,
+            "contragent_id" to contragent_id,
+            "project_id" to project_id,
+            "position_vertical" to "0"
         )
         return try {
 
@@ -88,12 +95,5 @@ class TapeClient {
             throw e
         }
     }
-
-    /*name*: 'ewgweg'
-text: ''
-image: base64
-format_image: 'jpg'
-video: base64
-format_video: 'mp4'*/
 
 }

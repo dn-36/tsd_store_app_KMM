@@ -143,14 +143,18 @@ class TapeClientImpl(
         image: String?,
         format_image: String,
         video: String?,
-        format_video: String
+        format_video: String,
+        contragent_id: String,
+        project_id: String
     ) {
 
        tapeClient.init(getToken())
 
         tapeClient.createPhotoOrVideo( name = name, text = text, image = image,
 
-            format_image = format_image, video = video, format_video = format_video)
+            format_image = format_image, video = video, format_video = format_video,
+
+            contragent_id, project_id)
 
     }
 

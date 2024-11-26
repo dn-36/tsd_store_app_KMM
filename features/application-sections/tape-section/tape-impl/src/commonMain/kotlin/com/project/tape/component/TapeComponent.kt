@@ -82,6 +82,8 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
                                         color = Color.White
                                     )
                                 }
+
+                                Spacer(modifier = Modifier.height(10.dp))
                             }
                         }
                     }
@@ -90,7 +92,9 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
 
             Column(
                 horizontalAlignment = Alignment.End,
+
                 modifier = Modifier.align(Alignment.BottomCenter)
+
             ) {
 
                 PlusButton {
@@ -112,7 +116,15 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
 
             }, listProjects = viewModel.state.listProjects,
 
-                listContragents = viewModel.state.listContragents ).Content()
+                listContragents = viewModel.state.listContragents,
+
+                onClickCreate = { name, text, image, video, contragnt_id, project_id ->
+
+                    viewModel.processIntents(TapeIntents.CreateElement(scope,name, text,
+
+                        contragnt_id,project_id, image, video?:""  ))
+
+                }).Content()
 
         }
 
