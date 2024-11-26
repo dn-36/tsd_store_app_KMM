@@ -5,9 +5,12 @@ import androidx.compose.ui.Modifier
 
 
 expect class  RtspVideoStreamPlayer(){
+
+    fun init(  rtspUrl:String)
+
     @Composable
     fun Content(
-        rtspUrl:String,
-        modifier: Modifier = Modifier)
+        modifier: Modifier = Modifier
+    )
 
 }

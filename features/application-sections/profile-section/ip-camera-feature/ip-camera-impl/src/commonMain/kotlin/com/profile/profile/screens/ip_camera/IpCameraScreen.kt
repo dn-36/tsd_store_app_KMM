@@ -18,16 +18,19 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.ip_camera.viewmodel.IpCameraViewModel
 import com.profile.profile.screens.settings.SettingsConnectIpCameraScreen
+import com.profile.profile.udpPlayer.rtsp_protocol.RtspVideoStreamPlayer
 import com.project.network.Navigation
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.back_white
 import project.core.resources.settings
+import project.core.resources.settings_wrhite
+import kotlin.jvm.Transient
 
 class IpCameraScreen:Screen{
 
-    private val viewModel:IpCameraViewModel = getKoin().get()
+   @Transient private val viewModel:IpCameraViewModel = getKoin().get()
 
 
     @Composable
@@ -57,6 +60,8 @@ class IpCameraScreen:Screen{
             )
 
               viewModel.IpCameraView()
+           // stream.Content("rtsp://192.168.1.150:2000/unicast")
+
 
                 Image(
                     painter = painterResource(Res.drawable.back_white),
@@ -70,14 +75,14 @@ class IpCameraScreen:Screen{
                     }
                     )
             Image(
-                painter = painterResource(Res.drawable.settings),
+                painter = painterResource(Res.drawable.settings_wrhite),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(15.dp)
                     .size(30.dp)
                     .align(Alignment.TopEnd)
                     .clickable {
-                        viewModel.back()
+                        viewModel.goToSetting()
                     }
             )
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.profile.profile.screens.ip_camera.IpCameraScreen
 import com.project.core_app.components.ScannerComponent
 import com.project.network.Navigation
 import org.jetbrains.compose.resources.painterResource
@@ -44,7 +45,7 @@ class SettingsConnectIpCameraScreen():Screen {
 
                     openWifiSettings()
                 },
-                { Navigation.navigator.pop() },
+                { Navigation.navigator.push(IpCameraScreen()) },
                 { result ->
                     dataWofi.value =  parseWifiData(result)
                 }

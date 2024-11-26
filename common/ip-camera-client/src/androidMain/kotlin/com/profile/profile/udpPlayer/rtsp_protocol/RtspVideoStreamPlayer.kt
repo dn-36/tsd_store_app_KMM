@@ -16,12 +16,94 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import org.koin.mp.KoinPlatform.getKoin
 import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media
 import org.videolan.libvlc.MediaPlayer
 import org.videolan.libvlc.util.VLCVideoLayout
 
+actual class  RtspVideoStreamPlayer {
 
+    private lateinit var libVLC:LibVLC
+    private lateinit var mediaPlayer: MediaPlayer
+    private var rtspUrl:String = ""
+
+    companion object {
+        lateinit var context: Context
+    }
+
+   actual fun init (
+        rtspUrl:String
+    ) {
+        this.rtspUrl = rtspUrl
+        context = getKoin().get()
+        libVLC = LibVLC(context, arrayListOf("--file-caching=2000", "--rtsp-tcp"))
+        mediaPlayer = MediaPlayer(libVLC)
+        try {
+            val media = Media(libVLC, Uri.parse(rtspUrl)).apply {
+                setHWDecoderEnabled(true, false)
+                addOption(":network-caching=10")
+                addOption(":clock-jitter=0")
+                addOption(":clock-synchro=0")
+               // addOption(":skip-frames")
+              //  addOption(":drop-late-frames")
+            }
+            mediaPlayer.media = media
+            media.release()
+            mediaPlayer.play()
+        } catch (e: Exception) {
+            Log.e("VideoPlayer", "Failed to start playback: ${e.localizedMessage}")
+        }
+    }
+
+
+
+    @Composable
+    actual fun Content(
+        modifier: Modifier
+    ) {
+
+        val isAttached = remember { mutableStateOf(false) }
+
+        // Освобождение ресурсов
+        DisposableEffect(true) {
+            onDispose {
+                mediaPlayer.stop()
+                mediaPlayer.detachViews()
+                mediaPlayer.release()
+                libVLC.release()
+            }
+        }
+
+        // Отображение видео с фоном
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            AndroidView(
+                factory = { context ->
+                    VLCVideoLayout(context).apply {
+                        post {
+                            if (!isAttached.value) {
+                                mediaPlayer.attachViews(this, null, false, false)
+                                isAttached.value = true
+                            }
+                        }
+                    }
+                },
+                update = { videoLayout ->
+                    if (!isAttached.value) {
+                        mediaPlayer.attachViews(videoLayout, null, false, false)
+                        isAttached.value = true
+                    }
+                }
+            )
+        }
+    }
+}
+
+/*
 actual class  RtspVideoStreamPlayer {
     companion object {
         lateinit var context: Context
@@ -92,3 +174,4 @@ actual class  RtspVideoStreamPlayer {
             )
         }
     }}
+ */

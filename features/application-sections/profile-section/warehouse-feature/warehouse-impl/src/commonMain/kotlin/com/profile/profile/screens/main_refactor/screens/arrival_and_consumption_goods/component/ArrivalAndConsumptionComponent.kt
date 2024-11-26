@@ -38,6 +38,7 @@ import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.util.formatDateTime
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
+import com.project.core_app.components.ScannerComponent
 import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
@@ -351,13 +352,14 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
         else if ( viewModel.state.isVisibilityScannerComponent == 1f ) {
 
-            ScannerComponent( onClickAdd = { name ->
+            ScannerComponent().Show(
+                "Сканер","",false,
+                onClickAdd = { name ->
+                viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( name )) },
+                onClickCansel = { viewModel.processIntent(ArrivalAndConsumptionIntents.CanselScanner) },
+                 )
 
-                viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( name ))
 
-            }, onClickCansel = { viewModel.processIntent(ArrivalAndConsumptionIntents.CanselScanner) } )
-
-                .QrScannerView()
 
         }
 

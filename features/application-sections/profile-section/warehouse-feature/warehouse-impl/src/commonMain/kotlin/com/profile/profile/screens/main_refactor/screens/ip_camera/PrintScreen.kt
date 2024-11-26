@@ -1,4 +1,4 @@
-package com.profile.profile.screens.profile_screen.screens.print
+package com.profile.profile.screens.main_refactor.screens.ip_camera
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,7 +25,7 @@ class PrintScreen:Screen{
                 Text("Печать", color = Color.Black, fontSize = 20.sp)
             }
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                MenuBottomBarWarehouse().Content(MenuBottomBarWarehouseSection.PRINT)
+              //  MenuBottomBarWarehouse().Content(MenuBottomBarWarehouseSection.PRINT)
             }
         }
     }
