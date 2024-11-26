@@ -12,7 +12,7 @@ class ChatRepositoryImpl(
     ):ChatsRepositoryApi {
     override suspend fun getListChats():List<ChatsModel>{
         chatApi.init(sharedPrefsApi.getToken()?:"")
-       val listChats = chatApi.getListChats().map {
+       val listChats = chatApi.getListChats()?.map {
 
            ChatsModel(
                if(!it.image.isNullOrBlank())
@@ -26,7 +26,7 @@ class ChatRepositoryImpl(
                it.count_new_message
            )
        }
-        return Utils.sortByNearestDate(listChats)
+        return Utils.sortByNearestDate(listChats?: listOf())
     }
 
     override suspend fun deleteChat(ui: String):String {

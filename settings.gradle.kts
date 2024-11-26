@@ -46,7 +46,8 @@ include(":core:contact-provider")
 
 include(":common")
 include(":common:printer-impl")
-include(":common:ip-camera-udp-client")
+include(":common:ip-camera-client")
+
 
 include(":core:recources")
 include(":common:phone")

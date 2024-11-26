@@ -23,8 +23,10 @@ import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import io.ktor.serialization.JsonConvertException
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import util.NetworkError
 import util.Result
@@ -51,7 +53,7 @@ class ChatsApi() {
             })
         }
         install(Logging) {
-            level = LogLevel.BODY // Включить логирование для отладки
+            level = LogLevel.BODY
         }
         defaultRequest {
             header("Authorization", "Bearer $_token")
@@ -59,21 +61,25 @@ class ChatsApi() {
     }
 
     // Получение списка заметок
-    suspend fun getListChats(): List<ChatsResponse> {
+    suspend fun getListChats(): List<ChatsResponse>? {
 
-      //  SocketClient(_token!!).connect()
+      try {
 
-        val response = client.get(baseUrl+"api/chats") {
-            parameter("active", 1)
-        }
 
-        return response.body()
+          val response = client.get(baseUrl + "api/chats") {
+              parameter("active", 1)
+          }
+
+          return response.body()
+      } catch (innerException: JsonConvertException) {
+          return null
+      }
 
     }
 
 
     // Обновление заметки
-    suspend fun getListMassengers(chatId: String): ChatResponseMessages {
+    suspend fun getListMassengers(chatId: String): ChatResponseMessages? {
 
 
             val response = client.get(baseUrl+"api/chats/${chatId}?page=1") {
@@ -82,33 +88,40 @@ class ChatsApi() {
 
             return response.body()
 
+
+
     }
 
 
     suspend fun readAllMesanger(uiChat: String,myNumber:String): Result<String,NetworkError> {
 
         return try {
-            val listMassengers = (getListMassengers(uiChat).messages?.data?: listOf())
 
-            val cutList:MutableList<MessageData?> =  mutableListOf()
+            val listMassengers = (getListMassengers(uiChat)?.messages?.data?: listOf())
+
+          /* val cutList:MutableList<MessageData?> =  mutableListOf()
+          //  getListChats()?.forEach {
+               // if (uiChat == it.ui) {
+                   // countNewMessages = //it.count_new_message ?: 0
+                //}
+           // }
 
             listMassengers.forEachIndexed { index, messageData ->
                 if(
-                    listMassengers.size <= 12
+                    listMassengers.size <= countNewMessages
                 ) cutList.add(messageData)
                 else
-                    if(index in (listMassengers.size - 12)..listMassengers.size){
+                    if(index in (listMassengers.size - countNewMessages)..listMassengers.size){
                         cutList.add(messageData)
                     }
-            }
-
-            cutList.forEach {
-                if(myNumber!= it?.user?.phone?:"") {
-
+            }*/
+            //SocketClient(listMassengers[0].user?.ui?:"").connect()
+            listMassengers.forEachIndexed { index, messageData ->
+                if(myNumber!= listMassengers[listMassengers.size - index -1].user?.phone){//:"") {
                     println("!!!!\n" +
-                            "${it?.user?.phone}"+
+                            "${messageData?.user?.phone}"+
                             "\n\n " + client
-                        .post("https://delta.online/api/view-message/${it?.ui?: ""}")
+                        .post("https://delta.online/api/view-message/${listMassengers[listMassengers.size - index -1].ui}")
                         .status +
                             "\n" +
                             "\n !!!!"
@@ -243,8 +256,5 @@ class ChatsApi() {
         }.body<HttpResponse>().status.toString()
         return  response
     }
-
-
-
 
 }

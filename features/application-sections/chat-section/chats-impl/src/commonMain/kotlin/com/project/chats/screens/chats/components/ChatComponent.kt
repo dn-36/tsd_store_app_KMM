@@ -99,8 +99,8 @@ class ChatComponent(override val viewModel: ChatsViewModel) : NetworkComponent {
                 question = "Вы уверены что хотите удалить чат?",
                 "Удалить",
                 "Отмена",
-                { this.viewModel.processIntent(ChatsIntents.DeleteChat(scope))},
-                { this.viewModel.processIntent(ChatsIntents.CancelDeleteDialog)})
+                onClickAgree = { this.viewModel.processIntent(ChatsIntents.DeleteChat(scope))},
+                onClickCancel = { this.viewModel.processIntent(ChatsIntents.CancelDeleteDialog)})
         }
 
     }

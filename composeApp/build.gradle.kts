@@ -43,21 +43,12 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
-            implementation(project(":common:ip-camera-udp-client"))
-            implementation(project(":features:application-sections:profile-section:specifications-feature:specifications-impl"))
-
-            implementation(project(":features:application-sections:profile-section:locations-feature:locations-impl"))
-
-            implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-impl"))
-
-            implementation(project(":features:application-sections:profile-section:project-control-feature:project-control-impl"))
-
+            implementation(project(":common:ip-camera-client"))
             implementation(project(":core:app"))
             implementation(project(":core:local-storage"))
-            implementation(project(":common:camera-provider"))
-            implementation(project(":common:file-provider"))
-            implementation(project(":common:video-player"))
+            implementation(project(":core:camera-provider"))
             implementation(project(":core:contact-provider"))
+            implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-api"))
             implementation(project(":features:authorization-feature:authorization-screen-api"))
             implementation(project(":features:application-sections:organization-section:organization-api"))
             implementation(project(":features:application-sections:chat-section:chats-api"))
@@ -65,8 +56,8 @@ kotlin {
             implementation(project(":features:application-sections:organization-section:organization-impl"))
             implementation(project(":features:application-sections:crm-section:munu-crm-feature:menu-crm-impl"))
             implementation(project(":features:application-sections:crm-section:munu-crm-feature:menu-crm-api"))
-            implementation(project(":features:application-sections:profile-section:notes-feature:notes-screens:notes-screens-impl"))
-            implementation(project(":features:application-sections:profile-section:contragents-feature:contragents-impl"))
+            implementation(project(":features:application-sections:crm-section:notes-feature:notes-screens:notes-screens-impl"))
+            implementation(project(":features:application-sections:crm-section:contragents-feature:contragents-impl"))
             implementation(project(":features:application-sections:crm-section:crm-feature:crm-impl"))
             implementation(project(":features:application-sections:tape-section:tape-impl"))
             implementation(project(":features:application-sections:profile-section:profile-feature:profile-api"))
@@ -75,9 +66,9 @@ kotlin {
             implementation(project(":features:application-sections:profile-section:printer-feature:printer-impl"))
             implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-api"))
             implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-impl"))
-            implementation(project(":features:application-sections:profile-section:products-menu-feature:products-menu-impl"))
-            implementation(project(":features:application-sections:profile-section:categories-feature:categories-impl"))
-            implementation(project(":features:application-sections:profile-section:units-measurement-feature:units-measurement-impl"))
+            implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-impl"))
+            //implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-api"))
+
             implementation(project(":core:network"))
             api(libs.koin.core)
             implementation(compose.runtime)

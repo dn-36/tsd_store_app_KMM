@@ -67,7 +67,7 @@ object QRcodeSizeComponent {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(30.dp))
-                    .fillMaxHeight(0.85f)
+                    .fillMaxHeight(0.85f+heightQrCode/300)
                     .fillMaxWidth()
                     .align(BottomCenter)
                     .background(Color.White)
@@ -148,9 +148,9 @@ object QRcodeSizeComponent {
                             Spacer(modifier = Modifier.width(10.dp))
 
                             Slider(
-                                value = fontSize.toFloat(),
+                                value = fontSize,
                                 onValueChange = { actionChangeFontSize(it) },
-                                valueRange = 5f..15f,
+                                valueRange = 1f..9f,
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
@@ -159,7 +159,10 @@ object QRcodeSizeComponent {
                     Spacer(modifier = Modifier.height(22.dp))
 
                         Button(
-                            onClick = {isClicked.value = true},
+                            onClick = {
+                                isClicked.value = true
+                                actionSavedSettings()
+                                      },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(50.dp))
                                 .height(40.dp)

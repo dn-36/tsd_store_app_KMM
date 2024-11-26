@@ -36,7 +36,8 @@ kotlin {
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
             implementation(project(":core:network"))
-            implementation(project(":common:ip-camera-udp-client"))
+            implementation(project(":common:ip-camera-client"))
+
 
             implementation(compose.runtime)
             implementation(compose.foundation)

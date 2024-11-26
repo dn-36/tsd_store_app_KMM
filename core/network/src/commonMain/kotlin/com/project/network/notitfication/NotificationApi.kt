@@ -22,7 +22,7 @@ class SocketClient(private val userId: String) {
         install(WebSockets)
     }
 
-    private val socketUrl = "wss://delta.online:6001"
+    private val socketUrl = "ws://delta.online:6001"
 
     private val channelName = "laravel_database_channel_${userId}:message"
 
@@ -38,13 +38,13 @@ class SocketClient(private val userId: String) {
             try {
                 client.webSocket(
                     method = HttpMethod.Get,
-                    host = socketUrl.replace("wss://", "").split(":")[0],
+                    host = socketUrl.replace("ws://", "").split(":")[0],
                     port = socketUrl.split(":")[2].toInt(),
                     path = "/"
                 ) {
                     socket = this
 
-                    println("Connected to WebSocket!")
+                    println("/////////////////////////------------Connected to WebSocket!---------------///////////////////////////////")
 
                     send(Frame.Text("{\"subscribe\":\"$channelName\"}"))
 
@@ -63,6 +63,8 @@ class SocketClient(private val userId: String) {
                     }
                 }
             } catch (e: Exception) {
+                println("/////////////////////////------------WebSocket error!---------------///////////////////////////////")
+
                 println("WebSocket error: ${e.message}")
             }
         }
@@ -82,5 +84,3 @@ class SocketClient(private val userId: String) {
         }
     }
 }
-
-//val webSocket = client.newWebSocket(request, listener)

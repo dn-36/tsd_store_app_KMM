@@ -1,6 +1,7 @@
 package com.project.chats.screens.dialog.domain
 
 import com.project.chats.screens.dialog.domain.models.Message
+import kotlinx.coroutines.CoroutineScope
 
 interface DialogRepositoryApi {
         companion object{
