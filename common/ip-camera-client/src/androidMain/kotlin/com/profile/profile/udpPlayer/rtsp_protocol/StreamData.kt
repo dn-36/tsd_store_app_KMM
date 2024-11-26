@@ -1,12 +1,11 @@
-package com.vladpen
+package com.profile.profile.udpPlayer.rtsp_protocol
 
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.profile.profile.udpPlayer.VideoPlayerScreen
-import com.vladpen.Utils.getOption
-import com.vladpen.Utils.saveOption
+import com.profile.profile.udpPlayer.rtsp_protocol.Utils.getOption
+import com.profile.profile.udpPlayer.rtsp_protocol.Utils.saveOption
 
 data class StreamDataModel(
     val name: String,
@@ -30,7 +29,7 @@ object StreamData {
             return streams
 
         return try {
-            VideoPlayerScreen.context.openFileInput(STREAM_FILE_NAME).use { inputStream ->
+            RtspVideoStreamPlayer.context.openFileInput(STREAM_FILE_NAME).use { inputStream ->
                 val json = inputStream.bufferedReader().use {
                     it.readText()
                 }
@@ -43,7 +42,7 @@ object StreamData {
 
     fun getById(streamId: Int): StreamDataModel? {
         if (streams.isEmpty()) {
-            this.getAll()
+            getAll()
         }
         if (streamId < 0 || streamId >= streams.count())
             return null
@@ -62,7 +61,7 @@ object StreamData {
     }
 
     fun save() {
-        VideoPlayerScreen. context.openFileOutput(STREAM_FILE_NAME, Context.MODE_PRIVATE).use {
+        RtspVideoStreamPlayer. context.openFileOutput(STREAM_FILE_NAME, Context.MODE_PRIVATE).use {
             it.write(toJson(streams).toByteArray())
         }
     }

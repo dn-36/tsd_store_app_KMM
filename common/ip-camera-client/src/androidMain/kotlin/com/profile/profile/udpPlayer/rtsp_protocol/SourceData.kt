@@ -1,12 +1,11 @@
-package com.vladpen
+package com.profile.profile.udpPlayer.rtsp_protocol
 
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.profile.profile.udpPlayer.VideoPlayerScreen
-import com.vladpen.Utils.getOption
-import com.vladpen.Utils.saveOption
+import com.profile.profile.udpPlayer.rtsp_protocol.Utils.getOption
+import com.profile.profile.udpPlayer.rtsp_protocol.Utils.saveOption
 
 data class SourceDataModel(val type: String, var id: Int)
 
@@ -21,7 +20,7 @@ object SourceData {
             return sources
 
         try {
-            VideoPlayerScreen. context.openFileInput(SOURCES_FILE_NAME).use { inputStream ->
+            RtspVideoStreamPlayer. context.openFileInput(SOURCES_FILE_NAME).use { inputStream ->
                 val json = inputStream.bufferedReader().use {
                     it.readText()
                 }
@@ -46,7 +45,7 @@ object SourceData {
     }
 
     fun save() {
-        VideoPlayerScreen.context.openFileOutput(SOURCES_FILE_NAME, Context.MODE_PRIVATE).use {
+        RtspVideoStreamPlayer.context.openFileOutput(SOURCES_FILE_NAME, Context.MODE_PRIVATE).use {
             it.write(toJson(sources).toByteArray())
         }
     }
@@ -126,14 +125,14 @@ object SourceData {
     }
 
     fun saveStartup(source: SourceDataModel?) {
-        VideoPlayerScreen.context.openFileOutput(STARTUP_FILE_NAME, Context.MODE_PRIVATE).use {
+        RtspVideoStreamPlayer.context.openFileOutput(STARTUP_FILE_NAME, Context.MODE_PRIVATE).use {
             it.write(Gson().toJson(source).toByteArray())
         }
     }
 
     fun getStartup(): SourceDataModel? {
         try {
-            VideoPlayerScreen.context.openFileInput(STARTUP_FILE_NAME).use { inputStream ->
+            RtspVideoStreamPlayer.context.openFileInput(STARTUP_FILE_NAME).use { inputStream ->
                 val json = inputStream.bufferedReader().use {
                     it.readText()
                 }

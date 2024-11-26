@@ -2,6 +2,7 @@ package org.example.project
 
 import com.example.notes_screens_impl.notesModule
 import com.profile.`printer-impl`.profileScreensModule
+import com.profile.profile.screens.ip_camera.ipCameraModel
 import com.profile.profile.udpPlayer.printerPlatformModule
 import com.profile.profile.udpPlayer.printerScreenModule
 import com.profile.profile.toolsScreensModule
@@ -25,6 +26,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
     startKoin {
         config?.invoke(this)
         modules(
+            ipCameraModel,
             chatsModule,
             organizationScreenModule,
             menuCrmModule,

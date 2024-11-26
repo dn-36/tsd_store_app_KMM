@@ -1,10 +1,8 @@
-package com.profile.profile.udpPlayer
+package com.profile.profile.udpPlayer.udp_protocol
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
-
 
 expect class StreamUdpPlayer(
     multicastAddress: String,
@@ -17,10 +15,4 @@ expect class StreamUdpPlayer(
          @Composable
      fun VideoStream(modifier: Modifier)
 
-   //  fun rtspCamera(setImage: (image: Bitmap) -> Unit)
-
-
-
 }
-
- //fun rtspCamera(setImage: (image: Bitmap) -> Unit)

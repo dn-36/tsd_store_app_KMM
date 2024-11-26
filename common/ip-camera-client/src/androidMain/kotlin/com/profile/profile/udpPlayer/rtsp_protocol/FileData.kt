@@ -1,11 +1,10 @@
-package com.vladpen
+package com.profile.profile.udpPlayer.rtsp_protocol
 
 import android.os.StrictMode
 import android.util.Log
 import com.jcraft.jsch.ChannelSftp
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
-import com.profile.profile.udpPlayer.VideoPlayerScreen
 import java.io.File
 import java.io.IOException
 import java.lang.Thread.sleep
@@ -28,7 +27,7 @@ class FileData(private val sftpUrl: String?) {
 
         fun getTmpFile(file: String): File {
             val ext = file.substring(file.lastIndexOf(".") + 1)
-            return File(VideoPlayerScreen.context.cacheDir.path + "/video." + ext)
+            return File(RtspVideoStreamPlayer.context.cacheDir.path + "/video." + ext)
         }
     }
 

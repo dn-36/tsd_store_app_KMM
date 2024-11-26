@@ -1,10 +1,9 @@
-package com.vladpen
+package com.profile.profile.udpPlayer.rtsp_protocol
 
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.profile.profile.udpPlayer.VideoPlayerScreen
 
 data class GroupDataModel(val name: String, var streams: MutableList<Int>)
 
@@ -18,7 +17,7 @@ object GroupData {
             return groups
 
         return try {
-            VideoPlayerScreen. context.openFileInput(FILE_NAME).use { inputStream ->
+            RtspVideoStreamPlayer. context.openFileInput(FILE_NAME).use { inputStream ->
                 val json = inputStream.bufferedReader().use {
                     it.readText()
                 }
@@ -47,7 +46,7 @@ object GroupData {
     }
 
     fun save() {
-        VideoPlayerScreen.context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE).use {
+        RtspVideoStreamPlayer.context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE).use {
             it.write(toJson(groups).toByteArray())
         }
     }

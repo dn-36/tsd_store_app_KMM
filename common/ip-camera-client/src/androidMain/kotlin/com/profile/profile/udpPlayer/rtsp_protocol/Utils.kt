@@ -1,4 +1,4 @@
-package com.vladpen
+package com.profile.profile.udpPlayer.rtsp_protocol
 
 import android.content.Context
 import android.content.pm.PackageInfo
@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.DisplayMetrics
 import android.util.Log
-import com.profile.profile.udpPlayer.VideoPlayerScreen
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
@@ -168,13 +167,13 @@ object Utils {
     }
 
     fun getPackageInfo(): PackageInfo {
-        if (::packageInfo.isInitialized)
+        if (Utils::packageInfo.isInitialized)
             return packageInfo
         return if (Build.VERSION.SDK_INT >= 33) // Android 13 API 33 (T)
-            VideoPlayerScreen. context.packageManager.getPackageInfo(
-                VideoPlayerScreen.context.packageName, PackageManager.PackageInfoFlags.of(0))
+            RtspVideoStreamPlayer. context.packageManager.getPackageInfo(
+                RtspVideoStreamPlayer.context.packageName, PackageManager.PackageInfoFlags.of(0))
         else
-            VideoPlayerScreen.context.packageManager.getPackageInfo(VideoPlayerScreen.context.packageName, 0)
+            RtspVideoStreamPlayer.context.packageManager.getPackageInfo(RtspVideoStreamPlayer.context.packageName, 0)
     }
 
     fun getColumnCount(metrics: DisplayMetrics): Int {
@@ -195,7 +194,7 @@ object Utils {
 
     fun saveOption(fileName: String, option: Int) {
         try {
-            VideoPlayerScreen. context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
+            RtspVideoStreamPlayer. context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
                 it.write(option)
             }
         } catch (e: Exception) {
@@ -205,7 +204,7 @@ object Utils {
 
     fun getOption(fileName: String, default: Int = 0): Int {
         return try {
-            VideoPlayerScreen.context.openFileInput(fileName).use {
+            RtspVideoStreamPlayer.context.openFileInput(fileName).use {
                 it.read()
             }
         } catch (e: Exception) {

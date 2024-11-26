@@ -1,9 +1,7 @@
-package com.profile.profile.udpPlayer
+package com.profile.profile.udpPlayer.udp_protocol
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -38,6 +36,7 @@ actual class StreamUdpPlayer actual constructor(
     val bitmap = mutableStateOf<Bitmap?>(null)
 
     actual fun startVideoStream(scope: CoroutineScope) {
+
         udpReceiver = UdpMulticastReceiver(
             address = multicastAddress,
             port = multicastPort,
@@ -144,14 +143,11 @@ actual class StreamUdpPlayer actual constructor(
                         try {
                             val packet = DatagramPacket(buffer, buffer.size)
 
-                            // Получаем пакет
                             socket?.receive(packet)
 
-                            // Добавляем данные в буфер
                             val receivedData = packet.data.copyOf(packet.length)
                             frameBuffer += receivedData
 
-                            // Проверяем, есть ли конец кадра (FFD9)
                             val endIndex = frameBuffer.indexOfSequence(byteArrayOf(0xFF.toByte(), 0xD9.toByte()))
 
                             if (endIndex != -1) {
@@ -204,7 +200,7 @@ actual class StreamUdpPlayer actual constructor(
 
     @Composable
     actual fun VideoStream(modifier: Modifier) {
-      /*  if (bitmap.value != null) {
+        if (bitmap.value != null) {
 
             Image(
                 bitmap = bitmap.value!!.asImageBitmap(),
@@ -222,9 +218,7 @@ actual class StreamUdpPlayer actual constructor(
                      )
              }
          }
-        }*/
-
-        VideoPlayerScreen().Content()
+        }
     }
 
     actual fun stopVideoStream() {

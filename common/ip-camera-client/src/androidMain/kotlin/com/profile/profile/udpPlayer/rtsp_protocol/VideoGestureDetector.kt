@@ -1,10 +1,9 @@
-package com.vladpen
+package com.profile.profile.udpPlayer.rtsp_protocol
 
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
-import com.profile.profile.udpPlayer.VideoPlayerScreen
 import kotlin.math.*
 
 /**
@@ -18,12 +17,12 @@ class VideoGestureDetector(private val view: View, private val videoView: View) 
     private var maxY = 0f
 
     private val gestureDetector = GestureDetector(
-        VideoPlayerScreen.context,
+        RtspVideoStreamPlayer.context,
         VideoDetectorListener()
     )
 
     private val scaleGestureDetector = ScaleGestureDetector(
-        VideoPlayerScreen.context,
+        RtspVideoStreamPlayer.context,
         VideoScaleDetectorListener()
     )
 
