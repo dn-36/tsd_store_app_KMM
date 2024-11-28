@@ -29,7 +29,7 @@ object StreamData {
             return streams
 
         return try {
-            RtspVideoStreamPlayer.context.openFileInput(STREAM_FILE_NAME).use { inputStream ->
+            RtspVideoStreamPlayerComponent.context.openFileInput(STREAM_FILE_NAME).use { inputStream ->
                 val json = inputStream.bufferedReader().use {
                     it.readText()
                 }
@@ -61,7 +61,7 @@ object StreamData {
     }
 
     fun save() {
-        RtspVideoStreamPlayer. context.openFileOutput(STREAM_FILE_NAME, Context.MODE_PRIVATE).use {
+        RtspVideoStreamPlayerComponent. context.openFileOutput(STREAM_FILE_NAME, Context.MODE_PRIVATE).use {
             it.write(toJson(streams).toByteArray())
         }
     }

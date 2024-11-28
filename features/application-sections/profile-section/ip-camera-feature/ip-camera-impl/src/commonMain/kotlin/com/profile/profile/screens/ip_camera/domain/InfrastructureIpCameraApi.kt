@@ -1,11 +1,15 @@
 package com.profile.profile.screens.ip_camera.domain
 
 import androidx.compose.runtime.Composable
-import io.ktor.http.Url
+import kotlinx.coroutines.CoroutineScope
 
 interface InfrastructureIpCameraApi {
 
-        @Composable
+    @Composable
     fun RtspStreamPlayer(url: String)
+   suspend fun startRecordStream(url: String)
+   suspend fun startStream(url: String)
+   suspend fun stopStream()
+   suspend fun stopRecordStream()
 
 }

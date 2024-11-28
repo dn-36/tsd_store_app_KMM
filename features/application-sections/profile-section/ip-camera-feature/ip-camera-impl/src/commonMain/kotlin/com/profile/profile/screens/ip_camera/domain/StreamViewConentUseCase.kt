@@ -2,11 +2,13 @@ package com.profile.profile.screens.ip_camera.domain
 
 import androidx.compose.runtime.Composable
 
-class IpCameraUseCase(
+class StreamViewConentUseCase(
     private val infrastructure:InfrastructureIpCameraApi
 ) {
+
           @Composable
-       fun execute(url:String){
-           infrastructure.RtspStreamPlayer(url)
+     fun execute(url:String){
+              infrastructure.RtspStreamPlayer(url)
        }
+
 }

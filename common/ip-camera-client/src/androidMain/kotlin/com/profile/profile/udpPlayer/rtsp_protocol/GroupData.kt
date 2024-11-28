@@ -17,7 +17,7 @@ object GroupData {
             return groups
 
         return try {
-            RtspVideoStreamPlayer. context.openFileInput(FILE_NAME).use { inputStream ->
+            RtspVideoStreamPlayerComponent. context.openFileInput(FILE_NAME).use { inputStream ->
                 val json = inputStream.bufferedReader().use {
                     it.readText()
                 }
@@ -46,7 +46,7 @@ object GroupData {
     }
 
     fun save() {
-        RtspVideoStreamPlayer.context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE).use {
+        RtspVideoStreamPlayerComponent.context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE).use {
             it.write(toJson(groups).toByteArray())
         }
     }

@@ -20,7 +20,7 @@ object SourceData {
             return sources
 
         try {
-            RtspVideoStreamPlayer. context.openFileInput(SOURCES_FILE_NAME).use { inputStream ->
+            RtspVideoStreamPlayerComponent. context.openFileInput(SOURCES_FILE_NAME).use { inputStream ->
                 val json = inputStream.bufferedReader().use {
                     it.readText()
                 }
@@ -45,7 +45,7 @@ object SourceData {
     }
 
     fun save() {
-        RtspVideoStreamPlayer.context.openFileOutput(SOURCES_FILE_NAME, Context.MODE_PRIVATE).use {
+        RtspVideoStreamPlayerComponent.context.openFileOutput(SOURCES_FILE_NAME, Context.MODE_PRIVATE).use {
             it.write(toJson(sources).toByteArray())
         }
     }
@@ -125,14 +125,14 @@ object SourceData {
     }
 
     fun saveStartup(source: SourceDataModel?) {
-        RtspVideoStreamPlayer.context.openFileOutput(STARTUP_FILE_NAME, Context.MODE_PRIVATE).use {
+        RtspVideoStreamPlayerComponent.context.openFileOutput(STARTUP_FILE_NAME, Context.MODE_PRIVATE).use {
             it.write(Gson().toJson(source).toByteArray())
         }
     }
 
     fun getStartup(): SourceDataModel? {
         try {
-            RtspVideoStreamPlayer.context.openFileInput(STARTUP_FILE_NAME).use { inputStream ->
+            RtspVideoStreamPlayerComponent.context.openFileInput(STARTUP_FILE_NAME).use { inputStream ->
                 val json = inputStream.bufferedReader().use {
                     it.readText()
                 }

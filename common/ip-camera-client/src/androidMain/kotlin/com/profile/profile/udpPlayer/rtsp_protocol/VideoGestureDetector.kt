@@ -17,12 +17,12 @@ class VideoGestureDetector(private val view: View, private val videoView: View) 
     private var maxY = 0f
 
     private val gestureDetector = GestureDetector(
-        RtspVideoStreamPlayer.context,
+        RtspVideoStreamPlayerComponent.context,
         VideoDetectorListener()
     )
 
     private val scaleGestureDetector = ScaleGestureDetector(
-        RtspVideoStreamPlayer.context,
+        RtspVideoStreamPlayerComponent.context,
         VideoScaleDetectorListener()
     )
 

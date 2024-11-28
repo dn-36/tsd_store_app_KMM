@@ -170,10 +170,10 @@ object Utils {
         if (Utils::packageInfo.isInitialized)
             return packageInfo
         return if (Build.VERSION.SDK_INT >= 33) // Android 13 API 33 (T)
-            RtspVideoStreamPlayer. context.packageManager.getPackageInfo(
-                RtspVideoStreamPlayer.context.packageName, PackageManager.PackageInfoFlags.of(0))
+            RtspVideoStreamPlayerComponent. context.packageManager.getPackageInfo(
+                RtspVideoStreamPlayerComponent.context.packageName, PackageManager.PackageInfoFlags.of(0))
         else
-            RtspVideoStreamPlayer.context.packageManager.getPackageInfo(RtspVideoStreamPlayer.context.packageName, 0)
+            RtspVideoStreamPlayerComponent.context.packageManager.getPackageInfo(RtspVideoStreamPlayerComponent.context.packageName, 0)
     }
 
     fun getColumnCount(metrics: DisplayMetrics): Int {
@@ -194,7 +194,7 @@ object Utils {
 
     fun saveOption(fileName: String, option: Int) {
         try {
-            RtspVideoStreamPlayer. context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
+            RtspVideoStreamPlayerComponent. context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
                 it.write(option)
             }
         } catch (e: Exception) {
@@ -204,7 +204,7 @@ object Utils {
 
     fun getOption(fileName: String, default: Int = 0): Int {
         return try {
-            RtspVideoStreamPlayer.context.openFileInput(fileName).use {
+            RtspVideoStreamPlayerComponent.context.openFileInput(fileName).use {
                 it.read()
             }
         } catch (e: Exception) {

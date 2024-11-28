@@ -27,7 +27,7 @@ class FileData(private val sftpUrl: String?) {
 
         fun getTmpFile(file: String): File {
             val ext = file.substring(file.lastIndexOf(".") + 1)
-            return File(RtspVideoStreamPlayer.context.cacheDir.path + "/video." + ext)
+            return File(RtspVideoStreamPlayerComponent.context.cacheDir.path + "/video." + ext)
         }
     }
 
