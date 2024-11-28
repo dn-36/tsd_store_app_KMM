@@ -1,8 +1,12 @@
 package com.project.tape.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
@@ -55,6 +60,67 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
                 var shouldGoBackToPortraitMode by remember { mutableStateOf(false) }
                 var showLoading by remember { mutableStateOf(true) }
 
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+
+                    Column(horizontalAlignment = Alignment.CenterHorizontally,
+
+                        modifier = Modifier.clickable(
+                            indication = null, // Отключение эффекта затемнения
+                            interactionSource = remember { MutableInteractionSource() })
+
+                        { // viewModel.processIntents(CRMIntents.SelectTypeCRM(1))
+                        }) {
+
+                        Text("лента", fontSize = 18.sp)
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Box(
+                            modifier = Modifier.height(1.dp).width(100.dp)
+
+                                .background(
+                                    if (viewModel.state.isTape) Color.Gray
+
+                                   else Color.Transparent
+                                )
+                        )
+
+                    }
+
+                    Column(horizontalAlignment = Alignment.CenterHorizontally,
+
+                        modifier = Modifier.clickable(
+                            indication = null, // Отключение эффекта затемнения
+                            interactionSource = remember { MutableInteractionSource() })
+
+                        { //viewModel.processIntents(CRMIntents.SelectTypeCRM(2))
+                        }) {
+
+                        Text("архив", fontSize = 18.sp)
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Box(
+                            modifier = Modifier.height(1.dp).width(110.dp)
+
+                                .background(
+
+                                    if (viewModel.state.isArchive) Color.Gray
+
+                                    else Color.Transparent
+                                )
+                        )
+
+                    }
+
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
 
                 LazyColumn( modifier = Modifier.fillMaxHeight(0.85f) ) {
 
@@ -68,22 +134,23 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
 
                             if ( it.video != null && !viewModel.state.isVisibilityDataEntry ) {
 
-                                VideoPlayer(
-                                    modifier = Modifier,
-                                    url = "https://delta.online/storage/${it.video}",
-                                    isLandscape = true,
-                                    shouldStop = shouldStop,
-                                    onMediaReadyToPlay = { showLoading = false }
-                                )
-                                if (showLoading) {
-
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(40.dp),
-                                        color = Color.White
+                                    VideoPlayer(
+                                        modifier = Modifier,
+                                        url = "https://delta.online/storage/${it.video}",
+                                        isLandscape = true,
+                                        shouldStop = shouldStop,
+                                        onMediaReadyToPlay = { showLoading = false }
                                     )
-                                }
+                                    if (showLoading) {
 
-                                Spacer(modifier = Modifier.height(10.dp))
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(40.dp),
+                                            color = Color.White
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.height(10.dp))
+
                             }
                         }
                     }

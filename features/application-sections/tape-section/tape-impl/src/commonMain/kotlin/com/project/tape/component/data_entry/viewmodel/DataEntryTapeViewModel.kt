@@ -54,7 +54,7 @@ class DataEntryTapeViewModel: ViewModel() {
             is DataEntryTapeIntents.DeleteSelectedProject -> deleteSelectedProject()
 
 
-            is DataEntryTapeIntents.OpenMenuFiles -> openMenuFiles()
+            is DataEntryTapeIntents.OpenMenuFiles -> openMenuFiles(intent.coroutineScope)
 
 
             is DataEntryTapeIntents.DeleteSelectedPhoto -> deleteSelectedPhoto()
@@ -105,6 +105,8 @@ class DataEntryTapeViewModel: ViewModel() {
             description = text
 
         )
+
+        println("VIDEO ${state.video}")
 
     }
 
@@ -205,13 +207,17 @@ class DataEntryTapeViewModel: ViewModel() {
 
     }
 
-    fun openMenuFiles () {
+    fun openMenuFiles ( coroutineScope: CoroutineScope ) {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        coroutineScope.launch(Dispatchers.IO) {
 
             val fileProvider: FileProviderApi = KoinPlatform.getKoin().get()
 
-            fileProvider.pickVideo()
+            state = state.copy(
+
+                video = fileProvider.pickVideo()?:""
+
+            )
         }
 
     }

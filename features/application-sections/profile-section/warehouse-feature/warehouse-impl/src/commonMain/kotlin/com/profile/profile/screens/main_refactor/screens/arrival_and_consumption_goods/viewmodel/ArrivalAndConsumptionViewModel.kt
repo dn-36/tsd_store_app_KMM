@@ -148,12 +148,6 @@ class ArrivalAndConsumptionViewModel (
 
                         )
 
-                        withContext(Dispatchers.Main){
-
-                            println("UPDATE LIST SELECTED PROJECT ${state.listSelectedProducts}")
-
-                        }
-
                         setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                     }
@@ -569,6 +563,12 @@ class ArrivalAndConsumptionViewModel (
                 selectedProduct = ProductArrivalAndConsumption( product = selectedProduct, count = 0.0 )
 
             )
+
+        }
+
+        else {
+
+
 
         }
 

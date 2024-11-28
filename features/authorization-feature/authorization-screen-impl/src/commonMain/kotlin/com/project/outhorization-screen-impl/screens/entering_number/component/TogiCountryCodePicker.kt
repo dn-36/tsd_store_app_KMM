@@ -92,7 +92,7 @@ fun TogiCountryCodePicker(
                         Text(text = countryData.numberHint)},
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.NumberPassword,
-                        autoCorrect = true,
+                       // autoCorrect = true,
                     ),
                     keyboardActions = KeyboardActions(onDone = {
                         keyboardController?.hideSoftwareKeyboard()

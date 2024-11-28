@@ -66,6 +66,134 @@ class MainActivity : ComponentActivity() {
                 )*/
             App().AppContent()
 
+            /*package com
+
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.hardware.usb.UsbDevice
+import android.hardware.usb.UsbDeviceConnection
+import android.hardware.usb.UsbEndpoint
+import android.hardware.usb.UsbManager
+import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class TsdScannerManager(private val context: Context) {
+
+    // Константы
+    companion object {
+        private const val ACTION_USB_PERMISSION = "com.example.USB_PERMISSION"
+        private const val VENDOR_ID = 1234 // Укажите ваш Vendor ID
+        private const val PRODUCT_ID = 5678 // Укажите ваш Product ID
+    }
+
+    // Переменные для работы с USB
+    private val usbManager: UsbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
+    private var usbDevice: UsbDevice? = null
+    private var usbConnection: UsbDeviceConnection? = null
+    private var usbEndpointIn: UsbEndpoint? = null
+
+    // BroadcastReceiver для обработки разрешений
+    private val usbPermissionReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == ACTION_USB_PERMISSION) {
+                val granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)
+                usbDevice = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
+                if (granted && usbDevice != null) {
+                    setupUsbConnection(usbDevice!!)
+                } else {
+                    println("Доступ к USB-устройству отклонён")
+                }
+            }
+        }
+    }
+
+    init {
+        // Регистрируем BroadcastReceiver для обработки разрешений
+        val filter = IntentFilter(ACTION_USB_PERMISSION)
+        context.registerReceiver(usbPermissionReceiver, filter)
+    }
+
+    // Функция для проверки устройства и запроса разрешения
+    fun scanWithUsbScanner() {
+        val deviceList = usbManager.deviceList
+        usbDevice = deviceList.values.firstOrNull { it.vendorId == VENDOR_ID && it.productId == PRODUCT_ID }
+
+        if (usbDevice == null) {
+            println("USB No compatible USB device found")
+            println("Не найдено совместимых USB-устройств")
+            return
+        }
+
+        if (!usbManager.hasPermission(usbDevice)) {
+            val permissionIntent = PendingIntent.getBroadcast(
+                context, 0, Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_MUTABLE
+            )
+            usbManager.requestPermission(usbDevice, permissionIntent)
+        } else {
+            setupUsbConnection(usbDevice!!)
+        }
+    }
+
+    // Установка соединения с USB-устройством
+    private fun setupUsbConnection(device: UsbDevice) {
+        val usbInterface = device.getInterface(0) // Используем первый интерфейс
+        usbEndpointIn = usbInterface.getEndpoint(0) // Входящий поток данных
+
+        usbConnection = usbManager.openDevice(device)
+        usbConnection?.claimInterface(usbInterface, true)
+
+        if (usbConnection != null) {
+            println("USB device connected and ready for scanning")
+            readUsbData()
+        } else {
+            println("USB Failed to open USB device connection")
+            println("Не удалось подключиться к устройству")
+        }
+    }
+
+    // Чтение данных из USB-устройства
+    private fun readUsbData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val buffer = ByteArray(64) // Размер буфера
+                while (true) {
+                    val bytesRead = usbConnection?.bulkTransfer(usbEndpointIn, buffer, buffer.size, 1000)
+                    if (bytesRead != null && bytesRead > 0) {
+                        val scannedData = String(buffer, 0, bytesRead)
+                        println("USB Scanned data: $scannedData")
+                        showToastOnMainThread("Отсканировано: $scannedData")
+                    }
+                }
+            } catch (e: Exception) {
+                println("USB Error reading data: ${e.message}")
+                showToastOnMainThread("Ошибка при чтении данных")
+            }
+        }
+    }
+
+    // Отображение сообщений из потока в основной поток
+    private fun showToastOnMainThread(message: String) {
+        (context as? android.app.Activity)?.runOnUiThread {
+
+            println("ERROR ${message}")
+
+            //Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Освобождение ресурсов
+    fun closeConnection() {
+        usbConnection?.releaseInterface(usbDevice?.getInterface(0))
+        usbConnection?.close()
+        println("USB connection closed")
+    }
+}*/
+
 
         }
     }

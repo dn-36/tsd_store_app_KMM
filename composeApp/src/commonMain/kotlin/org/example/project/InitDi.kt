@@ -26,6 +26,7 @@ import crmModule
 import file_provider.fileProviderModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
+import tsdScannerModule
 import unitsMeasurementModule
 
 fun initKoin(config: KoinAppDeclaration? = null) {
@@ -57,7 +58,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             productsMenuModule,
             categoriesModule,
             unitsMeasurementModule,
-            fileProviderModule
+            fileProviderModule,
+            tsdScannerModule
 
         )
     }

@@ -1,33 +1,24 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component
+package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.scanner_component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,39 +30,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ClipboardManager
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import androidx.compose.material.Text
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import com.preat.peekaboo.image.picker.toImageBitmap
 import com.preat.peekaboo.ui.camera.PeekabooCamera
 import com.preat.peekaboo.ui.camera.rememberPeekabooCameraState
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import project.core.resources.Res
-import project.core.resources.add_photo
 import project.core.resources.back
-import project.core.resources.cancel
-import project.core.resources.ready
-import qrscanner.QrCodeScanner
-import qrscanner.QrScanner
 import qrscanner.scanImage
 
 
@@ -83,8 +53,10 @@ class ScannerComponent (
 
     ) {
 
+    val viewModel = ScannerViewModel()
+
     @Composable
-    fun QrScannerView() {
+    fun ScannerView() {
 
         var qrCodeURL by remember { mutableStateOf("") }
 
@@ -133,10 +105,10 @@ class ScannerComponent (
                 Box(
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .width(300.dp)
-                        .height(300.dp)
-                        .clipToBounds()
-                        .border(2.dp, Color.Gray, RoundedCornerShape(size = 0.dp)),
+                        .fillMaxWidth()
+                        .height(350.dp)
+                        .clipToBounds(),
+                       // .border(2.dp, Color.Gray, RoundedCornerShape(size = 0.dp)),
                     contentAlignment = Alignment.Center
                 ) {
 
@@ -164,7 +136,7 @@ class ScannerComponent (
 
                                         .clip(CircleShape)
 
-                                        .size(70.dp)
+                                        .size(50.dp)
 
                                         .border(width = 3.dp, color = Color.White, shape = CircleShape),
 
@@ -233,8 +205,13 @@ class ScannerComponent (
 
 
                         if ( qrCodeURL != "ошибка" ) {
+
                             Button(
-                                onClick = { onClickAdd( qrCodeURL ) },
+                                onClick = { //onClickAdd( qrCodeURL )
+
+                                          viewModel.processIntents(ScannerIntents.TsdScanner)
+
+                                          },
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(70.dp))
                                     .height(40.dp)

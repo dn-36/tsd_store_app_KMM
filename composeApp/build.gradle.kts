@@ -79,6 +79,7 @@ kotlin {
             implementation(project(":features:application-sections:profile-section:categories-feature:categories-impl"))
             implementation(project(":features:application-sections:profile-section:units-measurement-feature:units-measurement-impl"))
             implementation(project(":core:network"))
+            implementation(project(":common:scanner-tsd"))
             api(libs.koin.core)
             implementation(compose.runtime)
             implementation(compose.foundation)

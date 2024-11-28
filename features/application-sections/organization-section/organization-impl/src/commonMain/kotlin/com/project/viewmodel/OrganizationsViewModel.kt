@@ -40,30 +40,37 @@ class OrganizationsViewModel(
 
             is OrganizationsIntents.SetScreen -> {
 
-                if (state.isUsed.value) {
+                try {
+                    if (state.isUsed.value) {
 
-                    state.isUsed.value = false
+                        state.isUsed.value = false
 
-                    intent.coroutineScope.launch(Dispatchers.IO) {
+                        intent.coroutineScope.launch(Dispatchers.IO) {
 
-                        getOrganization.execute ( onGet = { listColor, listOrganization ->
+                            getOrganization.execute ( onGet = { listColor, listOrganization ->
 
-                            state = state.copy(
+                                state = state.copy(
 
-                                listOrganizations = listOrganization,
+                                    listOrganizations = listOrganization,
 
-                                listFilteredOrganizations = listOrganization,
+                                    listFilteredOrganizations = listOrganization,
 
-                                listColorActiveOrganizations = listColor
-                            )
+                                    listColorActiveOrganizations = listColor
+                                )
 
-                        })
+                            })
 
-                        setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
+                            setStatusNetworkScreen ( StatusNetworkScreen.SECCUESS )
+
+                        }
 
                     }
-
+                    // Код, вызывающий Composable
+                } catch (e: Exception) {
+                    println("Caught exception: ${e.message}")
                 }
+
+
 
             }
 

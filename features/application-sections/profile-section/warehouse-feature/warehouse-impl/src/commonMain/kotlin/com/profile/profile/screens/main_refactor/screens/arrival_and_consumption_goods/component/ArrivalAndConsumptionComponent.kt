@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.ui.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.scanner_component.ScannerComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.util.formatDateTime
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
@@ -355,9 +356,11 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( name ))
 
-            }, onClickCansel = { viewModel.processIntent(ArrivalAndConsumptionIntents.CanselScanner) } )
+            }, onClickCansel = { viewModel.processIntent(
 
-                .QrScannerView()
+                ArrivalAndConsumptionIntents.CanselScanner) } )
+
+                .ScannerView()
 
         }
 

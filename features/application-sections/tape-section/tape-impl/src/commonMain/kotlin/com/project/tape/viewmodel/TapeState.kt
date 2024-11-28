@@ -14,6 +14,10 @@ data class TapeState(
 
     val isUsed: Boolean = true,
 
-    val isVisibilityDataEntry: Boolean = false
+    val isVisibilityDataEntry: Boolean = false,
+
+    val isTape: Boolean = true,
+
+    val isArchive: Boolean = false
 
 )

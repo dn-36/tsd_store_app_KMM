@@ -2,6 +2,7 @@ package com.project.tape.component.data_entry.viewmodel
 
 import com.project.tape.model.ContragentsResponseModel
 import com.project.tape.model.ProjectResponseModel
+import kotlinx.coroutines.CoroutineScope
 
 sealed class DataEntryTapeIntents {
 
@@ -44,7 +45,7 @@ sealed class DataEntryTapeIntents {
 
     object MenuProjects: DataEntryTapeIntents()
 
-    object OpenMenuFiles: DataEntryTapeIntents()
+    data class OpenMenuFiles( val coroutineScope: CoroutineScope) : DataEntryTapeIntents()
 
     object DeleteSelectedPhoto: DataEntryTapeIntents()
 

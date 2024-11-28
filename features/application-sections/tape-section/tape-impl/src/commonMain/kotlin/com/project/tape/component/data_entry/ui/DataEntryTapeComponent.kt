@@ -24,13 +24,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +46,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.VideoPlayer
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import com.preat.peekaboo.image.picker.toImageBitmap
@@ -436,7 +441,7 @@ class DataEntryTapeComponent (
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
 
-                        { viewModel.processIntents(DataEntryTapeIntents.OpenMenuFiles) },
+                        { viewModel.processIntents(DataEntryTapeIntents.OpenMenuFiles(scope))},
 
                         textAlign = TextAlign.Center)
 
@@ -463,6 +468,37 @@ class DataEntryTapeComponent (
 
                         }
                     }
+
+                    else if ( viewModel.state.video.isNotBlank() ) {
+
+                        var shouldStop by remember { mutableStateOf(false) }
+                        var shouldGoBackToPortraitMode by remember { mutableStateOf(false) }
+                        var showLoading by remember { mutableStateOf(true) }
+
+                        Box(
+                            modifier = Modifier.fillMaxWidth().height(200.dp),
+
+                            contentAlignment = Alignment.Center
+                        ) {
+
+                            VideoPlayer(
+                                modifier = Modifier,
+                                url = viewModel.state.video,
+                                isLandscape = true,
+                                shouldStop = shouldStop,
+                                onMediaReadyToPlay = { showLoading = false }
+                            )
+                            if (showLoading) {
+
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(40.dp),
+                                    color = Color.White
+                                )
+                            }
+                        }
+
+                    }
+
                 }
 
                 Spacer(modifier = Modifier.height(30.dp))
