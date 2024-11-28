@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +49,8 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
         val scope = rememberCoroutineScope()
 
         viewModel.processIntent(ProfileIntents.SetScreen(scope))
+
+        val scroll = rememberScrollState()
 
         Box( modifier = Modifier.fillMaxSize().background(Color.LightGray) )  {
 
@@ -105,11 +109,16 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
                         .clip(RoundedCornerShape(15.dp)).background(Color.White)
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp).align(Alignment.TopCenter),
+                        modifier = Modifier.padding(16.dp).fillMaxHeight(0.8f)
+
+                            .align(Alignment.TopCenter)
+
+                            .verticalScroll(scroll),
 
                         horizontalAlignment = Alignment.CenterHorizontally
 
                     ) {
+
                         Row(modifier = Modifier.fillMaxWidth(0.9f).clickable(
 
                             indication = null, // Отключение эффекта затемнения

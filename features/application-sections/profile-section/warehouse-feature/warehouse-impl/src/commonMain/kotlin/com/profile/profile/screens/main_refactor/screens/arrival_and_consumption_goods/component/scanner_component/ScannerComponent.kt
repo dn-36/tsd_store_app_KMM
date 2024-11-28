@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -106,7 +107,7 @@ class ScannerComponent (
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxWidth()
-                        .height(350.dp)
+                        .width(350.dp)
                         .clipToBounds(),
                        // .border(2.dp, Color.Gray, RoundedCornerShape(size = 0.dp)),
                     contentAlignment = Alignment.Center
@@ -116,8 +117,8 @@ class ScannerComponent (
 
                         Box  {
                             PeekabooCamera(
-                                modifier = Modifier.width(300.dp)
-                                    .height(300.dp),
+                                modifier = Modifier.fillMaxWidth(0.8f)
+                                    .fillMaxHeight(0.35f),
                                 state = cameraState
                             )
                             IconButton(
@@ -207,9 +208,9 @@ class ScannerComponent (
                         if ( qrCodeURL != "ошибка" ) {
 
                             Button(
-                                onClick = { //onClickAdd( qrCodeURL )
+                                onClick = { onClickAdd( qrCodeURL )
 
-                                          viewModel.processIntents(ScannerIntents.TsdScanner)
+                                          //viewModel.processIntents(ScannerIntents.TsdScanner)
 
                                           },
                                 modifier = Modifier

@@ -75,7 +75,7 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
 
             Column(modifier = Modifier.fillMaxSize()
 
-                .padding(16.dp),) {
+                .padding(16.dp)) {
 
                 Text("Организации", color = Color.Black, fontSize = 20.sp)
 
@@ -244,40 +244,45 @@ class OrganizationComponent ( override val viewModel: OrganizationsViewModel ) :
 
             Column(horizontalAlignment = Alignment.End, modifier = Modifier.align(Alignment.BottomCenter)) {
 
+                if ( (viewModel.state.listAlphaTools.find { it == 1f }) ==  null ) {
 
-                Box( modifier = Modifier.padding(16.dp)
-                    .size(60.dp).clip(CircleShape).background(Color.White).border(
+                    Box(
+                        modifier = Modifier.padding(16.dp)
+                            .size(60.dp).clip(CircleShape).background(Color.White).border(
 
-                        width = 2.dp, color = Color.Black, shape = CircleShape
+                                width = 2.dp, color = Color.Black, shape = CircleShape
 
-                    )
-                    , contentAlignment = Alignment.Center) {
+                            ), contentAlignment = Alignment.Center
+                    ) {
 
-                    Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
-                        modifier = Modifier.size(60.dp)
-                            .clickable(
-                                indication = null, // Отключение эффекта затемнения
-                                interactionSource = remember { MutableInteractionSource() })
+                        Image(painter = painterResource(Res.drawable.plus),
+                            contentDescription = null,
+                            modifier = Modifier.size(60.dp)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
 
-                            {
-                                if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
+                                {
+                                    if (viewModel.state.isVisibilityDeleteComponent == 0f) {
 
-                                    viewModel.processIntent(OrganizationsIntents.OpenWindowAddOrganization)
+                                        viewModel.processIntent(OrganizationsIntents.OpenWindowAddOrganization)
 
-                                }
+                                    }
 
-                            })
+                                })
+                    }
                 }
 
-                Box(modifier = Modifier) {
-                    MenuBottomBar().init(
-                        menuCrmScreens.MenuCrm(),
-                        profileScreens.profile(),
-                        organizationScreens.organization(),
-                        chatsScreens.chatsScreen(),
-                        tapeScreens.tape(),
-                    ).Content(MenuBottomBarSection.ORGANIZATION)
-                }
+                    Box(modifier = Modifier) {
+
+                        MenuBottomBar().init(
+                            menuCrmScreens.MenuCrm(),
+                            profileScreens.profile(),
+                            organizationScreens.organization(),
+                            chatsScreens.chatsScreen(),
+                            tapeScreens.tape(),
+                        ).Content(MenuBottomBarSection.ORGANIZATION)
+                    }
             }
         }
 

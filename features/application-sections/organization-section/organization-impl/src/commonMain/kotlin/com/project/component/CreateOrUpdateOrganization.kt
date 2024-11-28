@@ -77,17 +77,19 @@ class CreateOrUpdateOrganization(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(30.dp))
-                    .fillMaxHeight(0.4f)
+                    //.fillMaxHeight(0.4f)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .background(Color.White)
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp).fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier.padding(16.dp)//.fillMaxHeight(),
+                   // verticalArrangement = Arrangement.SpaceBetween
                 ) {
 
                     Column {
+
+                        Spacer(modifier = Modifier.height(10.dp))
 
                         Row ( modifier = Modifier.fillMaxWidth(),
 
@@ -101,6 +103,7 @@ class CreateOrUpdateOrganization(
                                         interactionSource = remember { MutableInteractionSource() })
 
                                     { onClickCansel() })
+
 
                         }
 
@@ -145,6 +148,8 @@ class CreateOrUpdateOrganization(
                         )
                     }
 
+                    Spacer(modifier = Modifier.height(20.dp))
+
                     if (!isUpdate) {
 
                         Button(
@@ -171,12 +176,16 @@ class CreateOrUpdateOrganization(
                         }
 
                     }
+
+                    Spacer(modifier = Modifier.fillMaxHeight(0.07f))
+
                 }
+
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.03f)
+                    .fillMaxHeight(0.05f)
                     .background(Color.White)
                     .align(Alignment.BottomCenter)
             ) {

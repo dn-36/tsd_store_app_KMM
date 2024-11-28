@@ -26,6 +26,7 @@ peekaboo = "0.5.2"
 runtimeAndroid = "1.6.7"
 image_loader_version = "1.8.1"
 media-player-version = "1.0.26"
+sdp_ssp_version = "1.0.4"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -66,6 +67,8 @@ androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime
 
 image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image_loader_version" }
 media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "media-player-version" }
+
+sdp-ssp = { module = "network.chaintech:sdp-ssp-compose-multiplatform", version.ref = "sdp_ssp_version" }
 
 
 [plugins]

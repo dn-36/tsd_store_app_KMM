@@ -235,24 +235,34 @@ class WarehouseComponent ( override val viewModel: WarehouseViewModel ) : Networ
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
 
-                Box( modifier = Modifier.padding(16.dp)
-                    .size(60.dp).clip(CircleShape).background(Color.White).border(
+                if ( (viewModel.state.listAlphaTools.find { it == 1f }) == null ) {
 
-                        width = 2.dp, color = Color.Black, shape = CircleShape
+                    Box(
+                        modifier = Modifier.padding(16.dp)
+                            .size(60.dp).clip(CircleShape).background(Color.White).border(
 
-                    )
-                    , contentAlignment = Alignment.Center) {
-                    Image(painter = painterResource(Res.drawable.plus), contentDescription = null,
-                        modifier = Modifier.size(60.dp)
-                            .clickable(
-                                indication = null, // Отключение эффекта затемнения
-                                interactionSource = remember { MutableInteractionSource() })
-                            {
-                                if ( viewModel.state.isVisibilityDeleteComponent == 0f ) {
+                                width = 2.dp, color = Color.Black, shape = CircleShape
 
-                                viewModel.processIntents(WarehouseIntents.OpenWindowAddWarehouse(
+                            ), contentAlignment = Alignment.Center
+                    ) {
+                        Image(painter = painterResource(Res.drawable.plus),
+                            contentDescription = null,
+                            modifier = Modifier.size(60.dp)
+                                .clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+                                {
+                                    if (viewModel.state.isVisibilityDeleteComponent == 0f) {
 
-                                    scope)) }})
+                                        viewModel.processIntents(
+                                            WarehouseIntents.OpenWindowAddWarehouse(
+
+                                                scope
+                                            )
+                                        )
+                                    }
+                                })
+                    }
                 }
 
                 MenuBottomBarWarehouse().init(

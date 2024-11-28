@@ -104,7 +104,7 @@ class MenuBottomBar {
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.menuBottomBarState.section.OrganizationButtonCollor)
-                        .width(70.dp).height(40.dp).clickable {
+                        .width(50.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarIntents.Home(_homeScreen!!)
                             )
@@ -121,7 +121,7 @@ class MenuBottomBar {
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.menuBottomBarState.section.CrmButtonCollor)
-                        .width(70.dp).height(40.dp).clickable {
+                        .width(50.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarIntents.CRM(_crmScreen!!)
                             )
@@ -139,7 +139,7 @@ class MenuBottomBar {
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.menuBottomBarState.section.TapeButtonCollor)
-                        .width(70.dp).height(40.dp).clickable {
+                        .width(50.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarIntents.Tape(_tapeScreen!!)
                             )
@@ -158,7 +158,7 @@ class MenuBottomBar {
                         Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                         Box(modifier = Modifier.clip(RoundedCornerShape(20.dp))
                             .background(color = vm.menuBottomBarState.section.ChutsButtonCollor)
-                            .width(70.dp).height(40.dp).clickable {
+                            .width(50.dp).height(40.dp).clickable {
                                 vm.processIntent(
                                     MenuBottomBarIntents.Chats(_chatsScreen!!)
                                 )
@@ -200,7 +200,7 @@ class MenuBottomBar {
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.menuBottomBarState.section.ProfileButtonCollor)
-                        .width(70.dp).height(40.dp).clickable {
+                        .width(50.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarIntents.Profile(_profileScreen!!)
                             )

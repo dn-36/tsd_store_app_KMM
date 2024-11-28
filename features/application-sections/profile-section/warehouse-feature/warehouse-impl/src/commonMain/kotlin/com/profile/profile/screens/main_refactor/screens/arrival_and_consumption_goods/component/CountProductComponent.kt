@@ -94,15 +94,16 @@ class CountProductComponent (
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(30.dp))
-                    .fillMaxHeight(0.3f)
+                    //.fillMaxHeight(0.3f)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .background(Color.White)
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp).fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier.padding(16.dp)
                 ) {
+
+                    Spacer(modifier = Modifier.height(10.dp))
 
                         OutlinedTextField(
 
@@ -135,7 +136,9 @@ class CountProductComponent (
                                 .heightIn(min = 60.dp) // Стандартная высота TextField
                         )
 
-                        Button(
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Button(
                             onClick = { onClickReady( count ) },
                             modifier = Modifier
                                 .padding(bottom = 10.dp)
@@ -145,13 +148,16 @@ class CountProductComponent (
                         ) {
                             Text(text = "Готово")
                         }
+
+                    Spacer(modifier = Modifier.fillMaxHeight(0.07f))
+
                 }
             }
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.03f)
+                    .fillMaxHeight(0.05f)
                     .background(Color.White)
                     .align(Alignment.BottomCenter)
             ){

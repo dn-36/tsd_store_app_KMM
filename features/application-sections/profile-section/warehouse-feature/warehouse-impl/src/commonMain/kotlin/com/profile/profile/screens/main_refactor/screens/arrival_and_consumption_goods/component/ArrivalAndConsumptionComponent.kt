@@ -62,7 +62,9 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
         viewModel.processIntent(ArrivalAndConsumptionIntents.GetArrivalAndConsumptionGoods(scope))
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+
             Column(modifier = Modifier.padding(16.dp)) {
+
                 Text("Приход Расход", color = Color.Black, fontSize = 20.sp)
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -71,7 +73,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                     ArrivalAndConsumptionIntents.InputTextSearchComponent(text)) } ).Content()
 
-                LazyColumn (modifier = Modifier.fillMaxHeight(0.8f)) {
+                LazyColumn (modifier = Modifier.fillMaxHeight(0.75f)) {
 
                     itemsIndexed(viewModel.state.listFilteredArrivalOrConsumption)
 
@@ -136,7 +138,10 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                             }
 
-                            Text( formatDateTime(item.created_at!!), fontSize = 13.sp, modifier = Modifier.align(Alignment.BottomEnd))
+                            Text( formatDateTime(item.created_at!!), fontSize = 13.sp,
+
+                                modifier = Modifier.align(Alignment.BottomEnd)
+                                    .padding(bottom = 8.dp))
 
                             if (  viewModel.state.listAlphaTools.size > index &&
 

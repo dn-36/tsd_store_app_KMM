@@ -99,14 +99,15 @@ class CreateWarehouseComponent (
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(30.dp))
-                    .fillMaxHeight(0.7f)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .background(Color.White)
             ) {
-                Column(modifier = Modifier.padding(16.dp).fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+                Column(modifier = Modifier.padding(16.dp)) {
 
                     Column {
+
+                        Spacer(modifier = Modifier.height(10.dp))
 
                         Row ( modifier = Modifier.fillMaxWidth(),
 
@@ -168,14 +169,15 @@ class CreateWarehouseComponent (
                         )
                         if (expandedLocation) {
 
-                            Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.7f)) {
+                            Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f)) {
                                 Card(
                                     modifier = Modifier.fillMaxSize()
                                         .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
                                     backgroundColor = Color.White,
                                     shape = RoundedCornerShape(8.dp)
                                 ) {}
-                                LazyColumn {
+                                LazyColumn() {
+
                                     itemsIndexed(filter) { index, item ->
                                             Text(item.name!!,
                                             fontSize = 20.sp,
@@ -220,7 +222,7 @@ class CreateWarehouseComponent (
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     if(warehouse == null) {
 
@@ -269,12 +271,15 @@ class CreateWarehouseComponent (
                             Text(text = "Редактировать")
                         }
                     }
+
+                    Spacer(modifier = Modifier.fillMaxHeight(0.07f))
+
                 }
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.03f)
+                    .fillMaxHeight(0.05f)
                     .background(Color.White)
                     .align(Alignment.BottomCenter)
             ){
