@@ -26,7 +26,6 @@ data class EditNoteState(
     val openWindowUpdate:Boolean = false,
     val creator:Boolean = false,
     val categoryNow:Int = 5,
-    val heightBox : Float = 0.22f,
     val status:Int? = 1,
     val filteredUsers: List<User> = emptyList(),
     val listAllUsers:MutableList<User> = mutableListOf(),

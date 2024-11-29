@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -94,6 +96,8 @@ class DataEntrySpecificationComponent(
 
             selectedWarehouse = selectedWarehouse, selectedName = selectedName))
 
+        val scroll = rememberScrollState()
+
         Box(modifier = Modifier.fillMaxSize().background(Color.White).clickable(
             indication = null, // Отключение эффекта затемнения
             interactionSource = remember { MutableInteractionSource() })
@@ -101,7 +105,7 @@ class DataEntrySpecificationComponent(
         { })
 
         {
-            Column(modifier = Modifier.padding(16.dp),) {
+            Column(modifier = Modifier.padding(16.dp).verticalScroll(scroll)) {
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
 

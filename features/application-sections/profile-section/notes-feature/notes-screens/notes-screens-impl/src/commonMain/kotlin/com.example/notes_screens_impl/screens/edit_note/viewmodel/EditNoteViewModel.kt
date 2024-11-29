@@ -55,7 +55,6 @@ class EditNoteViewModel (
 
                     var creator = false
 
-                    var heightBox = 0.17f
 
                     intent.coroutineScope.launch (Dispatchers.IO) {
 
@@ -65,8 +64,6 @@ class EditNoteViewModel (
                             if(intent.note.creater == 1){
 
                                 creator = true
-
-                                heightBox = 0.22f
 
                             }
 
@@ -99,7 +96,6 @@ class EditNoteViewModel (
                                 updatedUser = updatedUsers,
                                 filteredUsers = editNoteState.listAllUsers,
                                 creator = creator,
-                                heightBox = heightBox
                             )
 
                         })

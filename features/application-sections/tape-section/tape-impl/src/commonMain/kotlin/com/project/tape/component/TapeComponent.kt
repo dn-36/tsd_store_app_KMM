@@ -80,7 +80,7 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Box(
-                            modifier = Modifier.height(1.dp).width(100.dp)
+                            modifier = Modifier.height(1.dp).width(90.dp)
 
                                 .background(
                                     if (viewModel.state.isTape) Color.Gray
@@ -105,7 +105,7 @@ class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Box(
-                            modifier = Modifier.height(1.dp).width(110.dp)
+                            modifier = Modifier.height(1.dp).width(90.dp)
 
                                 .background(
 

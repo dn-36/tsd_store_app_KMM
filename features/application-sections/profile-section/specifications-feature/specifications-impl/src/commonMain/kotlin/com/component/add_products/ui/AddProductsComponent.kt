@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -72,11 +74,13 @@ class AddProductsComponent (
 
             indexMainGroup, byCategory ) )
 
+        val scroll = rememberScrollState()
+
         Box(modifier = Modifier.fillMaxSize().background(Color.White))
 
         {
 
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(16.dp).verticalScroll(scroll)) {
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -205,9 +209,9 @@ class AddProductsComponent (
 
                 if ( viewModel.state.listElementSpecification.size != 0 ) {
 
-                    LazyColumn() {
+                    Column() {
 
-                        itemsIndexed(viewModel.state.listElementSpecification) {
+                        viewModel.state.listElementSpecification.forEachIndexed() {
 
                                 mainIndex, item ->
 
@@ -293,7 +297,7 @@ class AddProductsComponent (
 
                                             },
 
-                                            label = { Text("Кол-во", fontSize = 15.sp) },
+                                            label = { Text("К-во", fontSize = 15.sp) },
 
                                             keyboardOptions = KeyboardOptions(
 
@@ -303,7 +307,7 @@ class AddProductsComponent (
                                             textStyle = TextStyle(fontSize = 15.sp),
 
                                             modifier = Modifier
-                                                .width(90.dp)
+                                                .weight(1.1f)
                                                 .heightIn(min = 30.dp)
 
                                         )
@@ -337,7 +341,7 @@ class AddProductsComponent (
                                             textStyle = TextStyle(fontSize = 15.sp),
 
                                             modifier = Modifier
-                                                .width(90.dp)
+                                                .weight(1.3f)
                                                 .heightIn(min = 30.dp)
 
                                         )
@@ -361,7 +365,7 @@ class AddProductsComponent (
                                             textStyle = TextStyle(fontSize = 15.sp),
 
                                             modifier = Modifier
-                                                .width(80.dp)
+                                                .weight(1f)
                                                 .heightIn(min = 30.dp)
 
                                         )
@@ -395,7 +399,7 @@ class AddProductsComponent (
                                             textStyle = TextStyle(fontSize = 15.sp),
 
                                             modifier = Modifier
-                                                .width(80.dp)
+                                                .weight(1f)
                                                 .heightIn(min = 30.dp)
 
                                         )
@@ -429,29 +433,29 @@ class AddProductsComponent (
 
                                     )
 
+                                    if ( mainIndex == viewModel.state.listElementSpecification.lastIndex &&
+
+                                        index == item.product.lastIndex ) {
+
+                                        Spacer(modifier = Modifier.height(10.dp))
+
+                                        Button(
+                                            onClick = {
+
+                                                onClickSave(viewModel.state.listElementSpecification)
+                                            },
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(70.dp))
+                                                .height(40.dp)
+                                                .fillMaxWidth()
+                                        ) {
+                                            Text(text = "Сохранить", fontSize = 15.sp)
+                                        }
+                                    }
+
                                 }
                             }
-
                         }
-
-                        // Добавляем кнопку в самом конце LazyColumn
-                        item {
-                            Spacer(modifier = Modifier.height(10.dp))
-
-                            Button(
-                                onClick = {
-
-                                    onClickSave(viewModel.state.listElementSpecification)
-                                },
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(70.dp))
-                                    .height(40.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                Text(text = "Сохранить", fontSize = 15.sp)
-                            }
-                        }
-
                     }
                 }
                 else {

@@ -82,7 +82,7 @@ class NotesComponent ( override val viewModel: NotesViewModel ) :NetworkComponen
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
 
-                                Column() {
+                                Column( modifier = Modifier.weight(1f) ) {
 
                                         val oddIndexedNotes =
                                             viewModel.state.listFilteredNotes.filterIndexed { index, _ -> index % 2 == 0 }
@@ -100,7 +100,10 @@ class NotesComponent ( override val viewModel: NotesViewModel ) :NetworkComponen
                                         }
 
                                 }
-                                Column() {
+
+                                Spacer(modifier = Modifier.width(8.dp))
+
+                                Column( modifier = Modifier.weight(1f) ) {
 
                                         val oddIndexedNotes =
                                             viewModel.state.listFilteredNotes.filterIndexed { index, _ -> index % 2 != 0 }

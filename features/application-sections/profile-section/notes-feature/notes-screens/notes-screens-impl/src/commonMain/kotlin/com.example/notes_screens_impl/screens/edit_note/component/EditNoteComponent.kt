@@ -113,7 +113,8 @@ class EditNoteComponent(val noteResponse: NoteResponse, override val viewModel: 
             if(viewModel.editNoteState.expandedSettings) {
                 Box(modifier = Modifier.fillMaxWidth().padding(top = 50.dp,end = 16.dp)) {
                     Box(modifier = Modifier.align(Alignment.CenterEnd)
-                       .fillMaxWidth(0.55f).fillMaxHeight(viewModel.editNoteState.heightBox)
+                       .fillMaxWidth(0.55f).height( if(viewModel.editNoteState.creator) 180.dp else 130.dp )
+
                     ) {
                         Card(
                             modifier = Modifier.fillMaxSize()
@@ -121,10 +122,13 @@ class EditNoteComponent(val noteResponse: NoteResponse, override val viewModel: 
                             backgroundColor = Color.White,
                             shape = RoundedCornerShape(8.dp)
                         ) {}
-                        Column {
+                        Column ( modifier = Modifier.fillMaxSize().padding(10.dp),
+
+                            verticalArrangement = Arrangement.SpaceBetween ) {
+
                                 Text("смена статуса",
                                     fontSize = 15.sp,
-                                    modifier = Modifier.padding(10.dp)
+                                    modifier = Modifier//.padding(10.dp)
                                         .clickable(
                                             indication = null, // Отключение эффекта затемнения
                                             interactionSource = remember { MutableInteractionSource() })
@@ -138,7 +142,7 @@ class EditNoteComponent(val noteResponse: NoteResponse, override val viewModel: 
                             if(viewModel.editNoteState.creator) {
                                 Text("смена пользователей",
                                     fontSize = 15.sp,
-                                    modifier = Modifier.padding(10.dp)
+                                    modifier = Modifier//.padding(10.dp)
                                         .clickable(
                                             indication = null, // Отключение эффекта затемнения
                                             interactionSource = remember { MutableInteractionSource() })
@@ -156,7 +160,7 @@ class EditNoteComponent(val noteResponse: NoteResponse, override val viewModel: 
                             }
                             Text("смена названия",
                                 fontSize = 15.sp,
-                                modifier = Modifier.padding(10.dp)
+                                modifier = Modifier//.padding(10.dp)
                                     .clickable(
                                         indication = null, // Отключение эффекта затемнения
                                         interactionSource = remember { MutableInteractionSource() })
@@ -169,7 +173,7 @@ class EditNoteComponent(val noteResponse: NoteResponse, override val viewModel: 
                             )
                             Text("удалить заметку",
                                 fontSize = 15.sp,
-                                modifier = Modifier.padding(10.dp)
+                                modifier = Modifier//.padding(10.dp)
                                     .clickable(
                                         indication = null, // Отключение эффекта затемнения
                                         interactionSource = remember { MutableInteractionSource() })
@@ -185,13 +189,7 @@ class EditNoteComponent(val noteResponse: NoteResponse, override val viewModel: 
                 }
 
                 if (viewModel.editNoteState.openWindowUpdate) {
-                    println("проверка видимости")
-                    println("проверка видимости")
-                    println("проверка видимости")
-                    println("${viewModel.editNoteState.openWindowUpdate},${viewModel.editNoteState.statusTF}")
-                    println("проверка видимости")
-                    println("проверка видимости")
-                    println("проверка видимости")
+
                     when (viewModel.editNoteState.categoryNow) {
                         0 -> {
                            WindowUpdate(viewModel,noteResponse).Status()

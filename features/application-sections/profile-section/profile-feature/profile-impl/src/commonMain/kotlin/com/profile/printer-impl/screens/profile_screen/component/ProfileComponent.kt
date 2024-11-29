@@ -259,6 +259,10 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
                                 modifier = Modifier.size(20.dp).graphicsLayer(rotationZ = 270f)
                             )
                         }
+
+                        Spacer(modifier = Modifier.height(40.dp))
+
+
                     }
                 }
             }
@@ -270,6 +274,7 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
                 modifier = Modifier.align(Alignment.BottomCenter),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 Button(
                     onClick = { },
                     modifier = Modifier
@@ -279,6 +284,7 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
                 ) {
                     Text(text = "Выйти из профиля")
                 }
+
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Box() {

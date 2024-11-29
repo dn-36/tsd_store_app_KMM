@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,9 +34,9 @@ import project.core.resources.printing
 
 class MenuBottomBarTools {
 
-private val vm = MenuBottomBarToolsViewModel()
+    private val vm = MenuBottomBarToolsViewModel()
 
-    private companion object{
+    private companion object {
         var _printScreen: Screen? = null
     }
 
@@ -45,59 +46,71 @@ private val vm = MenuBottomBarToolsViewModel()
     ): MenuBottomBarTools {
 
         _printScreen = printScreen
-         return this
+        return this
     }
 
     @Composable
-     fun Content(section: MenuBottomBarToolsSection) {
+    fun Content(section: MenuBottomBarToolsSection) {
 
         vm.processIntent(MenuBottomBarToolsIntents.SetScreen(section))
 
         Box(
-                modifier = Modifier
-                    .height(100.dp)
-                    .fillMaxWidth()
-                    .background(Color.White)
+            modifier = Modifier
+                //.padding(bottom = 16.dp)
+                .fillMaxHeight(0.1f)
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+
+            Row(
+                modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(0.95f),
+
+                horizontalArrangement = Arrangement.SpaceAround,
+
+                verticalAlignment = Alignment.CenterVertically
+
             ) {
-            Box(modifier = Modifier.background(Color.Black) .height(50.dp).width(1.dp).align(Alignment.Center),)
-                Row(modifier = Modifier.align(Alignment.BottomCenter)
-                    .fillMaxWidth(0.95f), horizontalArrangement = Arrangement.SpaceBetween){
 
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(10.dp).weight(1F)
-                    ) {
-                        Box(modifier = Modifier.clip(
-                            RoundedCornerShape(10.dp))
-                            .background(color = vm.state.section.PrintButtonCollor)
-                            .width(100.dp).height(60.dp).clickable { vm.processIntent(
-                                MenuBottomBarToolsIntents.Print)
-                            }){
-                            Image(painter = painterResource(Res.drawable.printing),contentDescription = null,
-                                modifier =  Modifier.size(40.dp).align(Alignment.Center))
-                        }
-                        Text("Напечатать", color = Color.Black, fontSize = 12.sp)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
+                   // Spacer(modifier = Modifier.fillMaxHeight(0.15F))
+
+                    Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
+                        .background(color = vm.state.section.PrintButtonCollor)
+                        .width(70.dp).height(40.dp).clickable {
+                            vm.processIntent(
+                                MenuBottomBarToolsIntents.Print
+                            )
+                        }) {
+                        Image(
+                            painter = painterResource(Res.drawable.printing),
+                            contentDescription = null,
+                            modifier = Modifier.size(30.dp).align(Alignment.Center)
+                        )
                     }
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(10.dp).weight(1F)
-                        ) {
-                        Box(modifier = Modifier.clip(RoundedCornerShape(10.dp))
-                            .background(color = vm.state.section.ToolsButtonCollor)
-                            .width(100.dp).height(60.dp).clickable {
-                                vm.processIntent(
-                                MenuBottomBarToolsIntents.Tools
-                                )
-                            }){
-                            Image(painter = painterResource(Res.drawable.ip_camera),contentDescription = null,
-                                modifier =  Modifier.size(50.dp).align(Alignment.Center))
-                        }
-                        Text("видеонаблюдения", color = Color.Black, fontSize = 12.sp)
-
-                    }
+                    Text("Напечатать", color = Color.Black, fontSize = 12.sp)
 
                 }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                   // Spacer(modifier = Modifier.fillMaxHeight(0.15F))
+                    Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
+                        .background(color = vm.state.section.ToolsButtonCollor)
+                        .width(70.dp).height(40.dp).clickable {
+                            vm.processIntent(
+                                MenuBottomBarToolsIntents.Tools
+                            )
+                        }) {
+                        Image(
+                            painter = painterResource(Res.drawable.ip_camera),
+                            contentDescription = null,
+                            modifier = Modifier.size(30.dp).align(Alignment.Center)
+                        )
+                    }
+                    Text("Видеонаблюдение", color = Color.Black, fontSize = 12.sp)
+
+                }
+
             }
+        }
     }
 }

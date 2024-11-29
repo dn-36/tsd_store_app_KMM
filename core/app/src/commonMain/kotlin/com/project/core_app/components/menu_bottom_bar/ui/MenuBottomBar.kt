@@ -98,20 +98,23 @@ class MenuBottomBar {
         ) {
             Row(
                 modifier = Modifier.align(Alignment.BottomCenter)
-                    .fillMaxWidth(0.95f), horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxWidth(0.95f),
+
+                horizontalArrangement = Arrangement.SpaceBetween
+
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.menuBottomBarState.section.OrganizationButtonCollor)
-                        .width(50.dp).height(40.dp).clickable {
+                        .width(55.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarIntents.Home(_homeScreen!!)
                             )
                         }) {
                         Image(
                             painter = painterResource(Res.drawable.home), contentDescription = null,
-                            modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            modifier = Modifier.size(35.dp).align(Alignment.Center)
                         )
                     }
                     Text("Организа...", color = Color.Black, fontSize = 12.sp)
@@ -121,7 +124,7 @@ class MenuBottomBar {
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.menuBottomBarState.section.CrmButtonCollor)
-                        .width(50.dp).height(40.dp).clickable {
+                        .width(55.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarIntents.CRM(_crmScreen!!)
                             )
@@ -129,7 +132,7 @@ class MenuBottomBar {
                         Image(
                             painter = painterResource(Res.drawable.squares_stack),
                             contentDescription = null,
-                            modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            modifier = Modifier.size(35.dp).align(Alignment.Center)
                         )
                     }
                     Text("CRM", color = Color.Black, fontSize = 12.sp)
@@ -139,14 +142,14 @@ class MenuBottomBar {
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.menuBottomBarState.section.TapeButtonCollor)
-                        .width(50.dp).height(40.dp).clickable {
+                        .width(55.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarIntents.Tape(_tapeScreen!!)
                             )
                         }) {
                         Image(
                             painter = painterResource(Res.drawable.icon_youtub), contentDescription = null,
-                            modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            modifier = Modifier.size(35.dp).align(Alignment.Center)
                         )
                     }
                     Text("Лента", color = Color.Black, fontSize = 12.sp)
@@ -158,7 +161,7 @@ class MenuBottomBar {
                         Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                         Box(modifier = Modifier.clip(RoundedCornerShape(20.dp))
                             .background(color = vm.menuBottomBarState.section.ChutsButtonCollor)
-                            .width(50.dp).height(40.dp).clickable {
+                            .width(55.dp).height(40.dp).clickable {
                                 vm.processIntent(
                                     MenuBottomBarIntents.Chats(_chatsScreen!!)
                                 )
@@ -166,7 +169,7 @@ class MenuBottomBar {
                             Image(
                                 painter = painterResource(Res.drawable.messenger),
                                 contentDescription = null,
-                                modifier = Modifier.size(30.dp).align(Alignment.Center)
+                                modifier = Modifier.size(35.dp).align(Alignment.Center)
                             )
                         }
                         Text(
@@ -200,14 +203,14 @@ class MenuBottomBar {
                     Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.menuBottomBarState.section.ProfileButtonCollor)
-                        .width(50.dp).height(40.dp).clickable {
+                        .width(55.dp).height(40.dp).clickable {
                             vm.processIntent(
                                 MenuBottomBarIntents.Profile(_profileScreen!!)
                             )
                         }) {
                         Image(
                             painter = painterResource(Res.drawable.menu), contentDescription = null,
-                            modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            modifier = Modifier.size(35.dp).align(Alignment.Center)
                         )
 
                     }

@@ -36,9 +36,11 @@ object Notes {
     fun Content(title: String, description: String, onClick: () -> Unit, date: String) {
 
         Box(
-            modifier = Modifier.padding(bottom = 10.dp).defaultMinSize( minWidth = 170.dp,
+            modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth()
 
-                minHeight = 110.dp ).sizeIn(maxWidth = 170.dp, maxHeight = 230.dp)
+                .defaultMinSize( minHeight = 110.dp )
+
+                .sizeIn( maxHeight = 230.dp)
 
         ) {
 
@@ -91,7 +93,6 @@ object Notes {
                     }
 
                 }
-
             }
         }
     }

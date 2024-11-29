@@ -3,20 +3,16 @@ package org.example.project.presentation.crm_feature.create_notes_screen.viewmod
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import com.example.notes_screens_impl.screens.create_notes.domain.usecases.CreateNoteUseCase
 import com.example.notes_screens_impl.screens.create_notes.domain.usecases.GetUsersCreateUseCase
 import com.example.notes_screens_impl.screens.create_notes.viewmodel.CreateNotesState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import com.example.notes_screens_impl.screens.notes.screen.NotesScreen
-import com.project.core_app.ConstData
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.network.Navigation
-import com.project.network.notes_network.NotesClient
 import com.project.network.notes_network.model.Note
 import com.project.network.notes_network.model.User
 
@@ -28,7 +24,7 @@ class CreateNotesViewModel (
 
 ) : NetworkViewModel() {
 
-    var createNotesState by mutableStateOf(CreateNotesState())
+    var state by mutableStateOf(CreateNotesState())
 
     fun processIntent(intents: CreateNotesIntents){
 
@@ -36,7 +32,7 @@ class CreateNotesViewModel (
 
             is CreateNotesIntents.Next -> {
 
-                val statusInt = when(createNotesState.status){
+                val statusInt = when(state.status){
 
                     "Активна" -> { 1 }
 
@@ -47,7 +43,7 @@ class CreateNotesViewModel (
 
                 val idUsers = mutableListOf<Int?>()
 
-                createNotesState.usersNoteCreated.forEach { it ->
+                state.usersNoteCreated.forEach { it ->
                     idUsers.add(it.id)
                 }
 
@@ -56,8 +52,8 @@ class CreateNotesViewModel (
                 intents.coroutineScope.launch(Dispatchers.IO) {
 
                     val note = Note(
-                        name = createNotesState.name,
-                        text = createNotesState.description,
+                        name = state.name,
+                        text = state.description,
                         status = statusInt,
                         users = idUsers,
                         local_id = "9090")
@@ -66,7 +62,7 @@ class CreateNotesViewModel (
 
                     Navigation.navigator.push(NotesScreen())
 
-                    createNotesState = createNotesState.copy(
+                    state = state.copy(
                         name = "",
                         status = "",
                         users = "",
@@ -90,9 +86,9 @@ class CreateNotesViewModel (
 
             is CreateNotesIntents.GetAllUsersList -> {
 
-                if(createNotesState.isUsed.value) {
+                if(state.isUsed.value) {
 
-                    createNotesState.isUsed.value = false
+                    state.isUsed.value = false
 
                     setStatusNetworkScreen ( StatusNetworkScreen.LOADING )
 
@@ -100,7 +96,7 @@ class CreateNotesViewModel (
 
                         getUsersCreateUseCase.execute (onGet = { allUsers ->
 
-                            createNotesState = createNotesState.copy(
+                            state = state.copy(
                                 listAllUsers = allUsers,
                                 filteredUsers = allUsers
                             )
@@ -110,7 +106,7 @@ class CreateNotesViewModel (
 
                     }
 
-                    println("9:${createNotesState.listAllUsers}")
+                    println("9:${state.listAllUsers}")
 
                 }
                 //getAllUsersList(intents.coroutineScope)
@@ -121,7 +117,7 @@ class CreateNotesViewModel (
     fun cancel(){
         Navigation.navigator.push(NotesScreen())
 
-        createNotesState = createNotesState.copy(
+        state = state.copy(
             name = "",
             status = "",
             users = "",
@@ -137,7 +133,7 @@ class CreateNotesViewModel (
 
         Navigation.navigator.push(NotesScreen())
 
-        createNotesState = createNotesState.copy(
+        state = state.copy(
             name = "",
             status = "",
             users = "",
@@ -152,11 +148,11 @@ class CreateNotesViewModel (
 
     fun deleteUsersNote(user: User){
 
-        val newList = createNotesState.usersNoteCreated.toMutableList()
+        val newList = state.usersNoteCreated.toMutableList()
 
         newList.remove(user)
 
-        createNotesState = createNotesState.copy(
+        state = state.copy(
             usersNoteCreated = newList
         )
     }
