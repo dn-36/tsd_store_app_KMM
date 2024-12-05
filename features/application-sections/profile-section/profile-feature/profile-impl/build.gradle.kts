@@ -54,8 +54,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
              implementation(libs.koin.core)
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
-            implementation(libs.cafe.adriel.voyager.voyager.transitions)        }
+            implementation(libs.cafe.adriel.voyager.voyager.transitions)
 
+        }
     }
 }
 

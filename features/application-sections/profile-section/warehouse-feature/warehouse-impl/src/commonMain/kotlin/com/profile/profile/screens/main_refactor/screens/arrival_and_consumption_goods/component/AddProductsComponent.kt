@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -27,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,11 +35,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 import com.project.core_app.utils.convertDoubleToIntIfWhole
-import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
@@ -55,7 +51,9 @@ class AddProductsComponent(
 
     val listSelectedProducts: List<ProductArrivalAndConsumption>,
 
-    val onClickScanner: () -> Unit,
+    val onClickScannerCamera: () -> Unit,
+
+    val onClickScannerZebraUsb: () -> Unit,
 
     val onClickSelectFromList: () -> Unit,
 
@@ -163,11 +161,21 @@ class AddProductsComponent(
 
                             Box(modifier = Modifier.weight(0.5f)) {
 
-                            Text("Сканировать", fontSize = 15.sp, modifier = Modifier.clickable(
+                            Text("Сканировать камерой", fontSize = 15.sp, modifier = Modifier.clickable(
                                     indication = null, // Отключение эффекта затемнения
                                 interactionSource = remember { MutableInteractionSource() })
-                            { onClickScanner() })
+                            { onClickScannerCamera() })
                         }
+
+                            Spacer(modifier = Modifier.height(25.dp))
+
+                            Box(modifier = Modifier.weight(0.5f)) {
+
+                                Text("Сканировать сканером zebra", fontSize = 15.sp, modifier = Modifier.clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() })
+                                { onClickScannerZebraUsb() })
+                            }
 
                             Spacer(modifier = Modifier.height(25.dp))
 

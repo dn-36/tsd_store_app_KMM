@@ -33,9 +33,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.ScannerZebraUsbScreen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.ui.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.scanner_component.ScannerComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.scanner_camera_component.ScannerCameraComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.scanner_zebra_usb_component.ScannerZebraUsbComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.util.formatDateTime
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
@@ -329,15 +331,13 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 },
 
-                onClickBack = { viewModel.processIntent(ArrivalAndConsumptionIntents.BackFromAddProducts) },
+                onClickBack = { viewModel.processIntent(
 
-                onClickCreate = {
-                    viewModel.processIntent(
-                        ArrivalAndConsumptionIntents.CreateArrivalOrConsumption(
-                            scope
-                        )
-                    )
-                },
+                    ArrivalAndConsumptionIntents.BackFromAddProducts) },
+
+                onClickCreate = { viewModel.processIntent(
+
+                        ArrivalAndConsumptionIntents.CreateArrivalOrConsumption( scope) ) },
 
                 onClickUpdate = {
 
@@ -345,27 +345,37 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 },
 
-                onClickScanner = { viewModel.processIntent(ArrivalAndConsumptionIntents.Scanner) },
+                onClickScannerCamera = { viewModel.processIntent(
+
+                    ArrivalAndConsumptionIntents.ScannerCamera) },
+
+                onClickScannerZebraUsb = { viewModel.processIntent(
+
+                    ArrivalAndConsumptionIntents.ScannerZebraUsb) },
 
                 onClickCansel = { index ->
 
-                    viewModel.processIntent(ArrivalAndConsumptionIntents.CanselSelectedProduct( index )) }
+                    viewModel.processIntent(
 
-            ).Content()
+                        ArrivalAndConsumptionIntents.CanselSelectedProduct( index )) } ).Content()
 
         }
 
-        else if ( viewModel.state.isVisibilityScannerComponent == 1f ) {
+        else if ( viewModel.state.isVisibilityScannerCameraComponent == 1f ) {
 
-            ScannerComponent( onClickAdd = { name ->
+            ScannerCameraComponent( onClickAdd = { name ->
 
                 viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( name ))
 
             }, onClickCansel = { viewModel.processIntent(
 
-                ArrivalAndConsumptionIntents.CanselScanner) } )
+                ArrivalAndConsumptionIntents.CanselScanner) } ) .ScannerView()
 
-                .ScannerView()
+        }
+
+        else if ( viewModel.state.isVisibilityScannerZebraUsbComponent  ) {
+
+            ScannerZebraUsbScreen().Content()
 
         }
 

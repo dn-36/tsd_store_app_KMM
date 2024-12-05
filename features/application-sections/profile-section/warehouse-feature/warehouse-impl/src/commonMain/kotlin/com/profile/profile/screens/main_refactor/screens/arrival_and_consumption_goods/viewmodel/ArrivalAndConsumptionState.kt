@@ -1,7 +1,5 @@
 package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
@@ -37,7 +35,9 @@ data class ArrivalAndConsumptionState (
 
     val isVisibilityDataEntryComponent: Float = 0f,
 
-    val isVisibilityScannerComponent: Float = 0f,
+    val isVisibilityScannerCameraComponent: Float = 0f,
+
+    val isVisibilityScannerZebraUsbComponent: Boolean = false,
 
     val isVisibilityAddProductsComponent: Float = 0f,
 

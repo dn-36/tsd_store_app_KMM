@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         initKoin {
+
             androidContext(this@MainActivity.applicationContext)
         }
 
@@ -197,6 +198,7 @@ class TsdScannerManager(private val context: Context) {
 
         }
     }
+
 
 }
 val bitmap = mutableStateOf<Bitmap?>(null)

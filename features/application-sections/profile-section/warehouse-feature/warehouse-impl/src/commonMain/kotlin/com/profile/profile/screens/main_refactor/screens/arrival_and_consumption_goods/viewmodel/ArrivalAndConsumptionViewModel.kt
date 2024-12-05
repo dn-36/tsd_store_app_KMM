@@ -313,7 +313,9 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.SelectProducts ->  selectProduct( intent.selectedProducts )
 
-            is ArrivalAndConsumptionIntents.Scanner ->  scanner()
+            is ArrivalAndConsumptionIntents.ScannerCamera ->  scannerCamera()
+
+            is ArrivalAndConsumptionIntents.ScannerZebraUsb ->  scannerZebraUsb()
 
             is ArrivalAndConsumptionIntents.CanselScanner ->  canselScanner()
 
@@ -449,15 +451,27 @@ class ArrivalAndConsumptionViewModel (
 
     }
 
-    fun scanner() {
+    fun scannerCamera() {
 
     state = state.copy(
 
-        isVisibilityScannerComponent = 1f,
+        isVisibilityScannerCameraComponent = 1f,
 
         isVisibilityAddProductsComponent = 0f
 
     )
+
+    }
+
+    fun scannerZebraUsb() {
+
+        state = state.copy(
+
+            isVisibilityScannerZebraUsbComponent = true,
+
+            isVisibilityAddProductsComponent = 0f
+
+        )
 
     }
 
@@ -558,7 +572,7 @@ class ArrivalAndConsumptionViewModel (
 
                 isVisibilityCountProducts = 1f,
 
-                isVisibilityScannerComponent = 0f,
+                isVisibilityScannerCameraComponent = 0f,
 
                 selectedProduct = ProductArrivalAndConsumption( product = selectedProduct, count = 0.0 )
 
@@ -590,7 +604,7 @@ class ArrivalAndConsumptionViewModel (
 
         state = state.copy(
 
-            isVisibilityScannerComponent = 0f,
+            isVisibilityScannerCameraComponent = 0f,
 
             isVisibilityAddProductsComponent = 1f
 

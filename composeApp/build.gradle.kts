@@ -41,6 +41,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(files("libs/barcode_scanner_library_v2.6.23.0-release.aar"))
         }
         commonMain.dependencies {
             implementation(project(":common:ip-camera-udp-client"))
@@ -73,13 +74,12 @@ kotlin {
             implementation(project(":features:application-sections:profile-section:profile-feature:profile-impl"))
             implementation(project(":features:authorization-feature:authorization-screen-impl"))
             implementation(project(":features:application-sections:profile-section:printer-feature:printer-impl"))
-            implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-api"))
             implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-impl"))
             implementation(project(":features:application-sections:profile-section:products-menu-feature:products-menu-impl"))
             implementation(project(":features:application-sections:profile-section:categories-feature:categories-impl"))
             implementation(project(":features:application-sections:profile-section:units-measurement-feature:units-measurement-impl"))
             implementation(project(":core:network"))
-            implementation(project(":common:scanner-tsd"))
+            implementation(project(":common:scanner-usb-zebra"))
             api(libs.koin.core)
             implementation(compose.runtime)
             implementation(compose.foundation)

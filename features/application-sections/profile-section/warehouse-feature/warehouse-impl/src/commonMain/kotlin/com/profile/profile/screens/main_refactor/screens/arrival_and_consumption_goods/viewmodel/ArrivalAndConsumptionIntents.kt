@@ -64,7 +64,9 @@ sealed class ArrivalAndConsumptionIntents {
 
         ArrivalAndConsumptionIntents()
 
-    object Scanner : ArrivalAndConsumptionIntents()
+    object ScannerCamera : ArrivalAndConsumptionIntents()
+
+    object ScannerZebraUsb : ArrivalAndConsumptionIntents()
 
     data class CanselSelectedProduct ( val index: Int) : ArrivalAndConsumptionIntents()
 

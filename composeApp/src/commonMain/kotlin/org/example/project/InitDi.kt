@@ -5,6 +5,7 @@ import com.example.notes_screens_impl.notesModule
 import com.locationsModule
 import com.productsMenuModule
 import com.profile.`printer-impl`.profileScreensModule
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.scannerZebraUsbModule
 import com.profile.profile.toolsScreensModule
 import com.profile.profile.udpPlayer.printerPlatformModule
 import com.profile.profile.udpPlayer.printerScreenModule
@@ -26,7 +27,7 @@ import crmModule
 import file_provider.fileProviderModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
-import tsdScannerModule
+import usbScannerModule
 import unitsMeasurementModule
 
 fun initKoin(config: KoinAppDeclaration? = null) {
@@ -59,7 +60,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             categoriesModule,
             unitsMeasurementModule,
             fileProviderModule,
-            tsdScannerModule
+           scannerZebraUsbModule
 
         )
     }

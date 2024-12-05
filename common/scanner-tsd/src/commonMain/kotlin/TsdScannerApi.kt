@@ -1,5 +1,0 @@
-interface TsdScannerApi {
-
-     fun scanWithUsbScanner()
-
-}

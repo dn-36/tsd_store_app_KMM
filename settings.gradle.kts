@@ -53,7 +53,7 @@ include(":common:phone")
 include(":common:printer-barcode-vkp")
 include(":common:printer-barcode-tsc")
 include(":common:camera-provider")
-include(":common:scanner-tsd")
+include(":common:scanner-usb-zebra")
 
 
 /**application-sections**/
