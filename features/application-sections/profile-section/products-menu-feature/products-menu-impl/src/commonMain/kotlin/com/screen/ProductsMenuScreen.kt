@@ -41,6 +41,18 @@ class ProductsMenuScreen : Screen {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
+                    onClick = { viewModel.processIntents(ProductsMenuIntents.GoodsAndServices) },
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(50.dp))
+                        .height(40.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Товары и усуги")
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
                     onClick = { viewModel.processIntents(ProductsMenuIntents.Categories) },
                     modifier = Modifier
                         .clip(RoundedCornerShape(50.dp))
@@ -50,7 +62,9 @@ class ProductsMenuScreen : Screen {
                 ) {
                     Text(text = "Категории", modifier = Modifier)
                 }
+
                 Spacer(modifier = Modifier.height(20.dp))
+
                 Button(
                     onClick = { viewModel.processIntents(ProductsMenuIntents.UnitsMeasurement) },
                     modifier = Modifier

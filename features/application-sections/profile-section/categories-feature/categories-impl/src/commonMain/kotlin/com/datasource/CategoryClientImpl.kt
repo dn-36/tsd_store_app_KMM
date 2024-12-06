@@ -36,7 +36,7 @@ class CategoryClientImpl (
             updated_at = it.updated_at,
             url = it.url,
             ui = it.ui,
-            category_langs = it.category_langs.map {
+            category_langs = it.category_langs?.map {
 
                 CategoryLangModels(
 

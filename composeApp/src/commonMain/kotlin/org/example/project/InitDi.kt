@@ -5,11 +5,10 @@ import com.example.notes_screens_impl.notesModule
 import com.locationsModule
 import com.productsMenuModule
 import com.profile.`printer-impl`.profileScreensModule
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.scannerZebraUsbModule
+import com.arrival_and_consumption_goods.scannerZebraUsbModule
 import com.profile.profile.toolsScreensModule
 import com.profile.profile.udpPlayer.printerPlatformModule
 import com.profile.profile.udpPlayer.printerScreenModule
-import com.profile.profile.warehouseScreensModule
 import com.project.chats.core.chatsModule
 import com.project.core_app.components.menu_bottom_bar.menuBottomBarMudule
 import org.example.project.app.moduls_di.appModule
@@ -21,13 +20,14 @@ import com.project.`outhorization-screen-impl`.authorizationModule
 import com.project.project_conterol.projectControlModule
 import com.project.tape.tapeScreenModule
 import com.specificationsModule
+import com.warehouseScreensModule
 import contactProviderModule
 import contragentsModule
 import crmModule
 import file_provider.fileProviderModule
+import goodsAndServicesModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
-import usbScannerModule
 import unitsMeasurementModule
 
 fun initKoin(config: KoinAppDeclaration? = null) {
@@ -60,7 +60,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             categoriesModule,
             unitsMeasurementModule,
             fileProviderModule,
-           scannerZebraUsbModule
+            scannerZebraUsbModule,
+            goodsAndServicesModule
 
         )
     }

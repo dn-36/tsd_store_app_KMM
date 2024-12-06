@@ -50,6 +50,8 @@ data class Product(
     val min_count_store: Int?,
     val video: String?,
     val video_youtube: String?,
+    val video_mobile: String?,
+    val system_category_id: String?,
     val summ_stock: Double?,
     @Serializable(with = ProductApiClient.CountSerializer::class) val summ_reserve: Double?,
     @Serializable(with = ProductApiClient.CountSerializer::class) val summ_order: Double?,

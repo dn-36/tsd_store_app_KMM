@@ -41,13 +41,16 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
             implementation(libs.ktor.client.okhttp)
-            implementation(files("libs/barcode_scanner_library_v2.6.23.0-release.aar"))
         }
         commonMain.dependencies {
+
             implementation(project(":common:ip-camera-udp-client"))
+
             implementation(project(":features:application-sections:profile-section:specifications-feature:specifications-impl"))
 
             implementation(project(":features:application-sections:profile-section:locations-feature:locations-impl"))
+
+            implementation(project(":features:application-sections:profile-section:goods-and-services-feature:goods-and-services-impl"))
 
             implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-impl"))
 

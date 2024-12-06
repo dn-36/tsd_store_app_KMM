@@ -1,5 +1,6 @@
 package com.viewmodel
 
+import GoodsAndServicesScreenApi
 import UnitsMeasurementScreenApi
 import androidx.lifecycle.ViewModel
 import com.CategoriesScreenApi
@@ -15,6 +16,8 @@ class ProductsMenuViewModel: ViewModel() {
             is ProductsMenuIntents.Categories -> categories()
 
             is ProductsMenuIntents.UnitsMeasurement -> unitsMeasurement()
+
+            is ProductsMenuIntents.GoodsAndServices -> goodsAndServices()
 
         }
 
@@ -33,6 +36,14 @@ class ProductsMenuViewModel: ViewModel() {
         val unitsMeasurementScreen: UnitsMeasurementScreenApi = KoinPlatform.getKoin().get()
 
         Navigation.navigator.push(unitsMeasurementScreen.unitMeasurement())
+
+    }
+
+    fun goodsAndServices() {
+
+        val goodsAndServicesScreen: GoodsAndServicesScreenApi = KoinPlatform.getKoin().get()
+
+        Navigation.navigator.push(goodsAndServicesScreen.goodsAndServicesScreen())
 
     }
 

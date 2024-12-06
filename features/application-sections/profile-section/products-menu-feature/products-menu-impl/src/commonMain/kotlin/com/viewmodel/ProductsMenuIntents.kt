@@ -6,4 +6,6 @@ sealed class ProductsMenuIntents {
 
     object UnitsMeasurement: ProductsMenuIntents()
 
+    object GoodsAndServices: ProductsMenuIntents()
+
 }

@@ -152,6 +152,12 @@ include(":features:application-sections")
 /*----*/include(":features:application-sections:profile-section:printer-feature:printer-impl")
 /*----*/include(":features:application-sections:profile-section:printer-feature:printer-api")
 
+/** goods-and-services-feature **/
+/*--*/include(":features:application-sections:profile-section:goods-and-services-feature")
+/** api and impl **/
+/*----*/include(":features:application-sections:profile-section:goods-and-services-feature:goods-and-services-impl")
+/*----*/include(":features:application-sections:profile-section:goods-and-services-feature:goods-and-services-api")
+
 /**profile-feature**/
 /*--*/include(":features:application-sections:profile-section:products-menu-feature")
 /** api and impl **/

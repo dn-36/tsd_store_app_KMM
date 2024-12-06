@@ -104,7 +104,7 @@ class CategoriesViewModel (
 
                 intent.coroutineScope.launch(Dispatchers.IO) {
 
-                    deleteCategoryUseCase.execute(state.updateItem!!.id)
+                    deleteCategoryUseCase.execute(state.updateItem!!.id?:0)
 
                     val listCategories = getCategoriesUseCase.execute()
 
@@ -132,7 +132,7 @@ class CategoriesViewModel (
 
                 intent.coroutineScope.launch(Dispatchers.IO) {
 
-                    updateCategoryUseCase.execute( intent.name, state.updateItem!!.id )
+                    updateCategoryUseCase.execute( intent.name, state.updateItem!!.id?:0 )
 
                     val listCategories = getCategoriesUseCase.execute()
 
@@ -236,7 +236,9 @@ class CategoriesViewModel (
 
         val newList = state.listCategories.filter {
 
-            it.name.contains(text, ignoreCase = true)
+            val name = it.name.orEmpty()
+
+            name.contains(text, ignoreCase = true)
 
         }
 

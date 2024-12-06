@@ -1,6 +1,6 @@
-package com.model
+package model
 
-data class CategoryResponseModels(
+data class CategoryGoodsServicesModel(
     val id: Int?,
     val name: String?,
     val creater_id: Int?,
@@ -9,10 +9,10 @@ data class CategoryResponseModels(
     val updated_at: String,
     val url: String?,
     val ui: String?,
-    val category_langs: List<CategoryLangModels>?
+    val category_langs: List<CategoryLangGoodsServicesModel>?
 )
 
-data class CategoryLangModels(
+data class CategoryLangGoodsServicesModel(
     val id: Int?,
     val name: String?,
     val lang_id: Int?,
