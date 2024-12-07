@@ -22,15 +22,13 @@ val  ipCameraModule = module {
         StreamViewConentUseCase(get())
     }
     factory {
-        IpCameraViewModel(get(),get(),get(),get(),get())
+        IpCameraViewModel()
     }
-    single {
+    factory {
         RtspVideoStreamPlayerComponent()
     }
     factory {
-
         StopStreamUseCase(get())
-
     }
     factory {
         StopRecordStreamUseCase(get())

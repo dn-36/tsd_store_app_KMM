@@ -16,6 +16,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,12 +54,12 @@ class IpCameraScreen:Screen{
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)){
 
-                Text(
-                    "Видеонаблюдение",
-                    color = Color.Black,
-                    fontSize = 26.sp,
-                    modifier = Modifier.padding(16.dp)
-                    )
+           Text(
+           "Видеонаблюдение",
+            color = Color.Black,
+            fontSize = 26.sp,
+            modifier = Modifier.padding(16.dp)
+            )
 
             Image(
                 painter = painterResource(Res.drawable.settings),
@@ -73,8 +74,6 @@ class IpCameraScreen:Screen{
             )
 
               viewModel.IpCameraView()
-             //RtspVideoStreamPlayerComponent().Content("rtsp://192.168.1.150:2000/unicast")
-           // stream()
 
                 Image(
                     painter = painterResource(Res.drawable.back_white),
@@ -102,22 +101,23 @@ class IpCameraScreen:Screen{
             Row(modifier = Modifier
                 .padding(20.dp)
                 .align(Alignment.BottomEnd)
-                .height(40.dp).width(80.dp)
+                .height(40.dp)//.width(100.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color.Gray)
                 .clickable { viewModel.clickRecord(scope) },
                 horizontalArrangement = Arrangement.End
                 ){
                 Text(
-                    "Запись",
+                    "${if(viewModel.state.value.isRecorded) viewModel.state.value.stopwatch else ""} Запись",
                     color = Color.White,
                     fontSize = 10.sp,
                     modifier = Modifier
+                        .padding(10.dp)
                         .align(Alignment.CenterVertically)
                     )
                 Image(
                     painter = painterResource(
-                        if(!viewModel.isRecorded.value)
+                        if(!viewModel.state.value.isRecorded)
                         Res.drawable.record
                         else
                         Res.drawable.stop_record

@@ -3,13 +3,14 @@ package com.profile.profile.screens.ip_camera.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
+import com.profile.profile.screens.ip_camera.domain.InfrastructureIpCameraApi
 import com.profile.profile.screens.ip_camera.domain.StreamViewConentUseCase
 import com.profile.profile.screens.ip_camera.domain.StartRecordStreamUseCase
-import com.profile.profile.screens.ip_camera.domain.StartStreamtUseCase
 import com.profile.profile.screens.ip_camera.domain.StopRecordStreamUseCase
-import com.profile.profile.screens.ip_camera.domain.StopStreamUseCase
 import com.profile.profile.screens.settings.SettingsConnectIpCameraScreen
+import com.project.core_app.utils.Stopwatch
 import com.project.network.Navigation
 import com.project.`printer-api`.PrinterScreensApi
 import kotlinx.coroutines.CoroutineScope
@@ -18,23 +19,38 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import org.koin.mp.KoinPlatform.getKoin
 
-class IpCameraViewModel(
-    private val playStream:StreamViewConentUseCase,
-    private val startStreamUseCase: StartStreamtUseCase,
-    private val stopStream : StopStreamUseCase,
-    private val startRecordStream : StartRecordStreamUseCase,
-    private val stopRecordStream : StopRecordStreamUseCase
-) : ViewModel() {
+class IpCameraViewModel() : ViewModel() {
+    private val infrastructure: InfrastructureIpCameraApi = getKoin().get()
+    private val playStream:StreamViewConentUseCase = StreamViewConentUseCase(infrastructure)
+    private val startRecordStream : StartRecordStreamUseCase = StartRecordStreamUseCase(infrastructure)
+    private val stopRecordStream : StopRecordStreamUseCase = StopRecordStreamUseCase(infrastructure)
+    val state:MutableState<IpCameraState> = mutableStateOf(IpCameraState())
+    private val stopwatch: Stopwatch = Stopwatch()
     private var isSetedScreen = false
-    var isRecorded:MutableState<Boolean> = mutableStateOf(false)
+    private val URL_STREAM = "rtsp://192.168.1.150:2000/unicast"
+
+  /*  fun processIntent( ipCameraIntent:IpCameraIntent){
+        when(ipCameraIntent){
+           is IpCameraIntent.IpCameraView -> {
+                IpCameraView()
+            }
+        }
+
+    }*/
 
     @Composable
     fun IpCameraView() {
-
+    val scope = rememberCoroutineScope()
         if (!isSetedScreen) {
             isSetedScreen = true
+            scope.launch(Dispatchers.IO) {
+                stopwatch.timeFlow.collect{
+                    state.value = state.value.copy(it)
+                }
+            }
 
-            playStream.execute("rtsp://192.168.1.150:2000/unicast",)
+
+            playStream.execute(URL_STREAM)
         }
     }
 
@@ -57,16 +73,15 @@ class IpCameraViewModel(
     fun clickRecord(scope: CoroutineScope){
 
         scope.launch {
-       if(isRecorded.value){
-       //stopStream.execute()
-       //stopRecordStream.execute()
+       if(state.value.isRecorded){
+           stopwatch.reset()
            stopRecordStream.execute()
        }else{
-           startRecordStream.execute("rtsp://192.168.1.150:2000/unicast")
-      // stopRecordStream.execute()
-       //startStreamUseCase.execute("rtsp://192.168.1.150:2000/unicast")
+           stopwatch.start(scope)
+           startRecordStream.execute(URL_STREAM)
        }
-            isRecorded.value = !isRecorded.value
+            state.value = state.value.copy(isRecorded = !state.value.isRecorded)
+
     }
 }
     }

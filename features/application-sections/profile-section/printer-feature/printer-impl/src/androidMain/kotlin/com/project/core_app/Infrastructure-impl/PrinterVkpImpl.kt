@@ -27,9 +27,9 @@ class PrinterVkpImpl(
 
     }
 
-    override fun <T> getQRCode(content: String, heightMm: Float): T {
+    override fun <T> getQRCode(content: String, heightMm: Float,barWidthMultiplier: Float): T {
         return printer.generateBarcode(
-            content,heightMm
+            content,heightMm,barWidthMultiplier
         ) as T
     }
 

@@ -28,17 +28,18 @@ import org.example.project.presentation.feature.authorization.screens.entering_n
 import org.tsdstore.project.feature.authorization.presentation.screens.entering_number.viewmodel.EnteringNumberEvent
 import org.example.project.presentation.feature.authorization.screens.entering_number.viewmodel.EnteringNumberViewModel
 import org.koin.mp.KoinPlatform.getKoin
+import kotlin.jvm.Transient
 
- class EnteringAnumberScreen : Screen {
+class EnteringAnumberScreen : Screen {
 
-    private val viewModel by lazy {
-        EnteringNumberViewModel(getKoin().get())
-    }
+     @Transient
+     private val viewModel:EnteringNumberViewModel = EnteringNumberViewModel(getKoin().get())
+
 
 @Composable
 override fun Content() {
     Navigation.navigator = LocalNavigator.currentOrThrow
-       val state by viewModel.state.collectAsState()
+       val state by viewModel!!.state.collectAsState()
        val scope  = rememberCoroutineScope()
 
         Box(
@@ -78,15 +79,15 @@ override fun Content() {
                     shape = RoundedCornerShape(24.dp),
                     isOpenDialog = state.isOpenSelectionCodeCountryDialog,
                     isCorrectStatusDiolog = state.isCorrectNumberStatus,
-                    onCloseDialog = { viewModel.processIntent(EnteringNumberEvent.CloseDialog) },
+                    onCloseDialog = { viewModel?.processIntent(EnteringNumberEvent.CloseDialog) },
                     onClickCountryFlag = {
-                        viewModel.processIntent(
+                        viewModel?.processIntent(
                             EnteringNumberEvent
                                 .OpenSelectionCodeCountryDialog
                         )
                     },
                     selectCountry = { countryData ->
-                        viewModel.processIntent(EnteringNumberEvent.SelectCountry(countryData))
+                        viewModel?.processIntent(EnteringNumberEvent.SelectCountry(countryData))
                     }
                 )
 

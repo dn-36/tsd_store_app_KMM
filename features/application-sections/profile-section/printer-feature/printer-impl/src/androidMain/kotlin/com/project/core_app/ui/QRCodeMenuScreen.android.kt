@@ -49,7 +49,7 @@ import com.project.core_app.components.menu_bottom_tools.viewmodel.MenuBottomBar
 import com.project.core_app.ui.components.BarCodeVkpComponent
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.ListBluetoothDevicesComponent
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.QRcodeSizeComponent
-import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.SettingsTicketsTSCprinterComponent
+import com.project.core_app.ui.components.SettingsTicketsTSCprinterComponent
 import com.project.core_app.viewmodel.model.CategoryPrinter
 import com.project.core_app.viewmodel.QRcodeMenuIntent
 import com.project.core_app.viewmodel.QRcodeMenuViewModel
@@ -128,12 +128,11 @@ actual class QRCodeMenuScreen : Screen {
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(min = 40.dp) // Стандартная высота TextField
+                            .heightIn(min = 40.dp)
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Помогающий текст под полем ввода
                     Text(
                         text = "Введите штрих-код для генерации",
                         style = MaterialTheme.typography.body2,
@@ -155,13 +154,17 @@ actual class QRCodeMenuScreen : Screen {
                         SettingsTicketsTSCprinterComponent(
                             state.imgBitmap!!,
                             state.titleProductQRcodeBiteMap!!,
-                            { x: Int, y: Int, height: Int, weight: Int ->
+                            state.x,state.y,
+                            { x: Int, y : Int, height: Int, weight: Int ->
+
                                 viewModel.processIntent(
                                     QRcodeMenuIntent.ChangeSettingsTsc(
                                         x, y, height, weight
                                     )
                                 )
-                            })
+
+                            }
+                        )
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
@@ -286,7 +289,9 @@ Row {
                         state.titleProductQRcodeBiteMap!!,
                         state.heightQRcode,
                         state.fontSize,
+                        state.barCodeWidth,
                         state.categoryPrinter,
+
                         {
                             viewModel.processIntent(
                                 QRcodeMenuIntent.ChangeFontSize(
@@ -297,12 +302,15 @@ Row {
                         },
                         {
                             viewModel.processIntent(
-                                QRcodeMenuIntent.ChangeHeightQrCode(
+                                QRcodeMenuIntent.ChangeHightQrCode(
+                                    //it,
+                                    dataQRcode = product.qrCodeData ?: "",
                                     it,
-                                    product.qrCodeData ?: ""
+                                    //hightQRcode = viewModel.state.value.barCodeWidth
                                 )
                             )
                         },
+                        { viewModel.processIntent(QRcodeMenuIntent.ChangeWidthQrCode(it))},
                         { viewModel.processIntent(QRcodeMenuIntent.CloseSettingsVKP) },
                         { viewModel.processIntent(QRcodeMenuIntent.SavedSettings) },
                     )
@@ -353,24 +361,6 @@ Row {
             }
         }
     }
-/*
-                val context = LocalContext.current
-                SettingsTicketsTSCprinterComponent(
-                    state.imgBitmap!!,
-                    state.titleProductQRcodeBiteMap!!,
-                    { x, y, height, widht ->
-                        PrintOnTscUseCase<Bitmap>(getKoin().get()).execute(
-                            state.imgBitmap!!,
-                            VKPUtils.setSizeBitMap(
-                                state.titleProductQRcodeBiteMap!!,
-                                state.titleProductQRcodeBiteMap!!.width / 13,
-                                state.titleProductQRcodeBiteMap!!.height / 13,
-                                context
-                            )!!,
-                            height, widht, x, y
-                        )
-                    }
-                )
- */
+
 
 

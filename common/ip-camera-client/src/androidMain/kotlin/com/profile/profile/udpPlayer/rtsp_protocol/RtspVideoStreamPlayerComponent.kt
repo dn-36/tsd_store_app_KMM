@@ -20,97 +20,20 @@ import android.os.Environment
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.koin.mp.KoinPlatform.getKoin
 import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media
 import org.videolan.libvlc.MediaPlayer
 import java.io.File
 
-/*
-actual class RtspVideoStreamPlayerComponent {
 
-    private lateinit var libVLC:LibVLC
-    private lateinit var mediaPlayer: MediaPlayer
-    private var rtspUrl:String = ""
-
-    companion object {
-        lateinit var context: Context
-    }
-
-    actual fun init (
-        rtspUrl:String
-    ) {
-        this.rtspUrl = rtspUrl
-        context = getKoin().get()
-        libVLC = LibVLC(context, arrayListOf("--file-caching=2000", "--rtsp-tcp"))
-        mediaPlayer = MediaPlayer(libVLC)
-        try {
-            val media = Media(libVLC, Uri.parse(rtspUrl)).apply {
-                setHWDecoderEnabled(true, false)
-                addOption(":network-caching=10")
-                addOption(":clock-jitter=0")
-                addOption(":clock-synchro=0")
-                // addOption(":skip-frames")
-                //  addOption(":drop-late-frames")
-            }
-            mediaPlayer.media = media
-            media.release()
-            mediaPlayer.play()
-        } catch (e: Exception) {
-            Log.e("VideoPlayer", "Failed to start playback: ${e.localizedMessage}")
-        }
-    }
-
-
-
-    @Composable
-    actual fun Content(
-        modifier: Modifier
-    ) {
-
-        val isAttached = remember { mutableStateOf(false) }
-
-        // Освобождение ресурсов
-        DisposableEffect(true) {
-            onDispose {
-                mediaPlayer.stop()
-                mediaPlayer.detachViews()
-                mediaPlayer.release()
-                libVLC.release()
-            }
-        }
-
-        // Отображение видео с фоном
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(Color.White)
-        ) {
-            AndroidView(
-                factory = { context ->
-                    VLCVideoLayout(context).apply {
-                        post {
-                            if (!isAttached.value) {
-                                mediaPlayer.attachViews(this, null, false, false)
-                                isAttached.value = true
-                            }
-                        }
-                    }
-                },
-                update = { videoLayout ->
-                    if (!isAttached.value) {
-                        mediaPlayer.attachViews(videoLayout, null, false, false)
-                        isAttached.value = true
-                    }
-                }
-            )
-        }
-    }
-}
-*/
 
 
 actual class  RtspVideoStreamPlayerComponent {
@@ -118,9 +41,8 @@ actual class  RtspVideoStreamPlayerComponent {
         lateinit var context: Context
     }
 
-    val viewnodel by lazy {
-        RtspVideoStreamPlayerViewModel()
-    }
+    val viewnodel = RtspVideoStreamPlayerViewModel()
+
 
     init {
         viewnodel.initialize(getKoin().get())
@@ -134,12 +56,10 @@ actual class  RtspVideoStreamPlayerComponent {
         val scope = rememberCoroutineScope()
          context = LocalContext.current
 
-        LaunchedEffect(Unit) {
-           // viewnodel.initialize(context)
+        LaunchedEffect(true) {
             viewnodel.startStream("rtsp://192.168.1.150:2000/unicast")
             }
-          // viewnodel.startStream("rtsp://192.168.1.150:2000/unicast")
-       // }
+
 
         DisposableEffect(true) {
             onDispose {
@@ -156,27 +76,55 @@ actual class  RtspVideoStreamPlayerComponent {
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Color.Black)
         ) {
-            AndroidView(
-                factory = { context ->
-                    VLCVideoLayout(context).apply {
-                        post {
-                            if (!viewnodel.isAttached.value) {
-                                viewnodel.mediaPlayer?.attachViews(this, null, false, false)
-                                viewnodel.isAttached.value = true
+           // if(viewnodel.isSecuessConect.value) {
+                AndroidView(
+                    factory = { context ->
+                        VLCVideoLayout(context).apply {
+                            post {
+                                if (!viewnodel.isAttached.value) {
+                                    viewnodel.mediaPlayer?.attachViews(this, null, false, false)
+                                    viewnodel.isAttached.value = true
+
+
+                                }
                             }
                         }
+                    },
+                    update = { videoLayout ->
+                        if (!viewnodel.isAttached.value) {
+                            viewnodel.mediaPlayer?.attachViews(videoLayout, null, false, false)
+                            viewnodel.isAttached.value = true
+
+                        }
                     }
-                },
-                update = { videoLayout ->
-                    if (!viewnodel.isAttached.value) {
-                        viewnodel.mediaPlayer?.attachViews(videoLayout, null, false, false)
-                        viewnodel.isAttached.value = true
-                   }
-                }
-            )
+                )
+
+           // }else{
+           Column( modifier = Modifier
+               .alpha(if(viewnodel.isSecuessConect.value)0F else 1F)
+               .align(Alignment.Center)){
+               Text(
+                   "Cоединения...",
+                   modifier = Modifier
+                       .align(Alignment.CenterHorizontally),
+                   color = Color.White,
+                   fontSize = 25.sp
+               )
+               CircularProgressIndicator(
+                   modifier = Modifier
+                       .size(30.dp)
+                       .align(Alignment.CenterHorizontally),
+                   color = Color.Blue,
+
+               )
+           }
+
         }
+
+
+      //  }
     }
 
 
@@ -191,9 +139,6 @@ actual class  RtspVideoStreamPlayerComponent {
 
 
 }
-
-
-//////////////////______{{{{{{{{{{{{{{{{{{________}}}}}}}}}}}}}}}}}}}}}}______/////////////////////////
 
 
 

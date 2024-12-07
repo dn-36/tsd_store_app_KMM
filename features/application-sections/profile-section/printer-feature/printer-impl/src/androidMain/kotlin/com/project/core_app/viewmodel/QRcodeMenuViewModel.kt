@@ -1,6 +1,7 @@
 package com.project.core_app.viewmodel
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +40,9 @@ class QRcodeMenuViewModel(
     private var y: Int = 0
     private var height: Int = 40
     private var weight: Int = 40
-    private val CEF_FONT_SIZE: Int = 5
+    private val CEF_FONT_SIZE: Int = 10
+
+
     fun processIntent(intent: QRcodeMenuIntent) {
 
         when (intent) {
@@ -66,8 +69,10 @@ class QRcodeMenuViewModel(
                 val qrCodeBiteMap = getQRcodeBitmapUseCase
                     .execute(
                         qrCodeDataText,
-                        state.value.heightQRcode
+                        state.value.heightQRcode,
+                        state.value.barCodeWidth
                     )
+               // qrCodeBiteMap.width = qrCodeBiteMap.width * 1.3F
                 state.value = state.value.copy(imgBitmap = qrCodeBiteMap)
 
                 state.value = state.value.copy(
@@ -102,7 +107,7 @@ class QRcodeMenuViewModel(
                       val  title = getTitleProductUseCase
                             .execute(
                                 intent.product.title,
-                                intent.product.fontSize
+                                intent.product.fontSize*2
                             )
 
                         printOnTscUseCase.execute(
@@ -112,8 +117,7 @@ class QRcodeMenuViewModel(
                               title.width/13,
                                title.height/13,
                                 intent.context,
-                            )
-                            ,
+                            ),
                             height,weight,
                             x,y
                           )
@@ -153,36 +157,8 @@ class QRcodeMenuViewModel(
             }
 
              is QRcodeMenuIntent.OpenSettingsPrinter -> {
-  /*when(state.value.categoryPrinter){
-     CategoryPrinr.VKP ->{*/state.update { it.copy(isOpenedSettingsVKP = true) }/*}
-    CategoryPrinter.TSC ->{
-        state.update {
-            state.value.copy(
-            bluetoothDeviceList = listOf(),
-            isOpenedBluetoothSettingsTSC = true,
-            statusSearchBluetoothDevice = StatusBluetoothLoading.LOADING
-                )
-        }
-       intent.scope.launch {
-           getListDeviceBluetooth.execute({
-               val list = state.value.bluetoothDeviceList.toMutableList()
-               list.add(it)
-               state.update { state.value.copy(
-                   bluetoothDeviceList = list
-               ) }
-           },
-               {
-                   state.update { state.value.copy(
-                        statusSearchBluetoothDevice = StatusBluetoothLoading.SUCCSSFULL
-                   ) }
-               Log.d("tests_qqq","result")
-           })
-       }
-
-    }
-    CategoryPrinter.ZEBRA ->{}
- }*/
-
+                 state.update { it.copy(isOpenedSettingsVKP = true)
+                 }
 }
 
 is QRcodeMenuIntent.ChangeFontSize -> {
@@ -197,24 +173,53 @@ is QRcodeMenuIntent.ChangeFontSize -> {
  }
 }
 
-is QRcodeMenuIntent.ChangeHeightQrCode -> {
+is QRcodeMenuIntent.ChangeHightQrCode -> {
  state.update {
      it.copy(
      heightQRcode = intent.heightQRcode,
      imgBitmap = getQRcodeBitmapUseCase.execute(
          intent.dataQRcode ,
-         intent.heightQRcode
-     ))
+         intent.heightQRcode,
+         state.value.barCodeWidth
+     )
+     )
  }
  }
 is QRcodeMenuIntent.SavedSettings -> {
+    state.value.titleProductQRcodeBiteMap?.width
+    var _x = (state.value.weightTicketTsc * 2.25F) - ((state.value.imgBitmap?.width?:0 / 4))
+    var _y = ((state.value.heightTicketTsc * 2.25F) -
+            (state.value.imgBitmap?.height?:0 / 4 +
+            (state.value.titleProductQRcodeBiteMap?.width?:0 / 4))) + 30
+    _x = (_x*1.5).toInt().toFloat()
+    _y = (_y*1.5).toInt().toFloat()
+    x = _x.toInt()
+    y = _y.toInt()
  state.update {
-    it.copy(isOpenedSettingsVKP = false)
+    it.copy(
+        isOpenedSettingsVKP = false,
+        x = _x,
+        y = _y
+        )
 }
 }
 is QRcodeMenuIntent.CloseSettingsVKP -> {
+
+    state.value.titleProductQRcodeBiteMap?.width
+        var x = (state.value.weightTicketTsc * 2.25F) - ((state.value.imgBitmap?.width?:0 / 4))
+        var y = ((state.value.heightTicketTsc * 2.25F) -
+                (state.value.imgBitmap?.height?:0 / 4 +
+                (state.value.titleProductQRcodeBiteMap?.width?:0 / 4))) + 30
+    x = (x*1.5).toInt().toFloat()
+    y = (y*1.5).toInt().toFloat()
+
+
  state.update {
-     it.copy(isOpenedSettingsVKP = false)
+     it.copy(
+         isOpenedSettingsVKP = false,
+         x = x,
+         y = y
+     )
  }
 }
 is QRcodeMenuIntent.СhoicePrinter -> {
@@ -228,7 +233,8 @@ state.update {
 is QRcodeMenuIntent.SelectBluetoothDevice -> {
 
  intent.scope.launch(Dispatchers.IO) {
-     connectToBluetoothDeviceUseCase.execute(intent.device,{
+     connectToBluetoothDeviceUseCase.execute(
+         intent.device,{
          state.update {
              it.copy(
              isLoadingConnectionDevice = false,
@@ -296,8 +302,9 @@ is QRcodeMenuIntent.CloseSettingsBluetooth -> {
  }
 
             is QRcodeMenuIntent.ChangeSettingsTsc -> {
-                if(intent.x<0) x = 0 else x = (intent.x*1.25).toInt()
-                if(intent.y<0) y = 0 else y = (intent.y*1.25).toInt()
+
+               if(intent.x<0) x = 0 else x = (intent.x*1.1).toInt()
+               if(intent.y<0) y = 0 else y = (intent.y*1.1).toInt()
 
                 height = intent.height
                 weight = intent.weight
@@ -307,6 +314,51 @@ is QRcodeMenuIntent.CloseSettingsBluetooth -> {
                 it.copy(
                     qrCodeDataText = intent.text
                 )
+            }
+
+            is QRcodeMenuIntent.ChangeWidthQrCode -> {
+                when(intent.widthQRcode.toInt()) {
+
+                    1  -> {
+                        state.value = state.value.copy(barCodeWidth = 1F)
+                    }
+                    2  -> {
+
+                        state.value = state.value.copy(barCodeWidth = 1.6409042F)
+
+                    }
+                    3 -> {
+
+                        state.value = state.value.copy(barCodeWidth = 1.25F)
+
+                    }
+                    4 -> {
+                        state.value = state.value.copy(barCodeWidth = 1.94F)
+                    }
+                    else -> {
+
+                    }
+
+                }
+
+                val barCode = getQRcodeBitmapUseCase.execute(
+                    state.value.qrCodeDataText,
+                    state.value.heightQRcode,
+                    state.value.barCodeWidth
+                    //intent.widthQRcode
+                )
+                Log.d("test_1op",intent.widthQRcode.toString())
+                state.update {
+                   it.copy(
+                        imgBitmap = barCode,
+                        barCodeWidth =  if(intent.widthQRcode == 4F){
+                            3F
+                        }else{
+                            intent.widthQRcode
+                        }
+                    )
+                }
+
             }
         }
 }

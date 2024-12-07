@@ -38,31 +38,33 @@ object ProductSearchScreen : Screen {
         val state by viewModel.state.collectAsState()
         val scope = rememberCoroutineScope()
         viewModel.proccesIntent(ProductSearchIntent.SetScreen(scope))
-      //  viewModel.proccesIntent(ProductSearchIntent.Search)
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // 1. EditText с кнопкой "search"
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 TextField(
                     value = state.searchText,
-                    onValueChange = { viewModel.proccesIntent(ProductSearchIntent.EnterSearchProduct(it)) },
+                    onValueChange = {
+                        viewModel.proccesIntent(ProductSearchIntent.EnterSearchProduct(it))
+                                    },
                     label = { Text("Поиск") },
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(
-                    onClick = { }//viewModel.proccesIntent(ProductSearchIntent.Search) }
+                    onClick = { }
                 ) {
                     Icon(
                         painter = painterResource(Res.drawable.search),
                         contentDescription = "Search",
                         modifier = Modifier.size(30.dp).clickable {
-                         //   viewModel.proccesIntent(ProductSearchIntent.Search)
+
                         }
                     )
                 }

@@ -17,7 +17,8 @@ sealed class QRcodeMenuIntent {
      data class PrintQRcode(val product: ProductPresentationModel,val context: Context): QRcodeMenuIntent()
      data class OpenSettingsPrinter(val scope:CoroutineScope): QRcodeMenuIntent()
      data class ChangeFontSize(val fontSize:Float,val title:String): QRcodeMenuIntent()
-     data class ChangeHeightQrCode(val heightQRcode:Float,val dataQRcode:String): QRcodeMenuIntent()
+     data class ChangeHightQrCode(val dataQRcode:String, val heightQRcode:Float): QRcodeMenuIntent()
+     data class ChangeWidthQrCode(val widthQRcode:Float): QRcodeMenuIntent()
      object SavedSettings: QRcodeMenuIntent()
      data class SelectBluetoothDevice (val device: String, val scope:CoroutineScope):
          QRcodeMenuIntent()

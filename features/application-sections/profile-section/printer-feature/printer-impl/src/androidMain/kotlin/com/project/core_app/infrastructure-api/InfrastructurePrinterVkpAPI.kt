@@ -5,15 +5,17 @@ interface InfrastructurePrinterVkpAPI {
     fun printOnVKP(description: String?,
                    textBarcode: String,
                    heightQRCodeMM:Float,
-                   fontSize:Float)
+                   fontSize:Float,)
     fun connectUSB()
     fun <T>getQRCode(content: String,
-                     heightMm: Float
+                     heightMm: Float,
+                     barWidthMultiplier: Float
     ):T
 
     fun <T>getTitleProduct(
         content: String,
-        fontSize: Float
+        fontSize: Float,
+
     ):T
 
 

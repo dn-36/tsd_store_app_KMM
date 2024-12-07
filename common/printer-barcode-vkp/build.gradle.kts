@@ -38,6 +38,7 @@ android {
 
 dependencies{
     //implementation("org.jetbrains.skia:skia-jvm:0.92.0")
+    implementation(libs.koin.core)
     implementation("com.itextpdf:itextpdf:5.5.13.3")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("androidx.core:core-ktx:1.8.0")

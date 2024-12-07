@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Slider
@@ -45,9 +46,11 @@ object QRcodeSizeComponent {
         title:Bitmap,
         heightQrCode: Float,
         fontSize:Float,
+        widthBareCode:Float,
         category: CategoryPrinter,
         actionChangeFontSize:(Float)->Unit,
         actionChangeHeightQRcode:(Float)->Unit,
+        actionChangeWidthBareCode:(Float)->Unit,
         actionSavedSettings:()->Unit,
         actionCloseSettings:()->Unit,
 
@@ -100,11 +103,13 @@ object QRcodeSizeComponent {
                         contentDescription = null,
                         modifier = Modifier
                             .height((heightQrCode * 3.5F).dp)
-                            .width(150.dp)
+                            .fillMaxWidth()
+                            //.width(150.dp)
                     )
 
                     //Spacer(modifier = Modifier.height(32.dp))
                     Spacer(modifier = Modifier.height(10.dp))
+
 
                     Image(
                         bitmap = title.asImageBitmap(),
@@ -117,44 +122,32 @@ object QRcodeSizeComponent {
                     Spacer(modifier = Modifier.height(25.dp))
 
 
-                    Column {
 
-                        Text("Bысота QR code", color = Color.Black, fontSize = 20.sp)
+                        SettingsSliderComponent(
+                            "Bысота QR code",
+                            10f..50f,
+                            heightQrCode,
+                            {actionChangeHeightQRcode(it)}
+                        )
 
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("${(heightQrCode).toInt()}", color = Color.Black, fontSize = 20.sp)
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Slider(
-                                value = heightQrCode.toFloat(),
-                                onValueChange = { actionChangeHeightQRcode(it) },
-                                valueRange = 10f..50f,  // Диапазон изменения шрифта
-                                modifier = Modifier.fillMaxWidth()
-                            )
-
-                        }
-
+                    Spacer(modifier = Modifier.height(22.dp))
+                        SettingsSliderComponent(
+                            "Размер шрифта",
+                            5f..10f,
+                            fontSize,
+                            {actionChangeFontSize(it)}
+                        )
+                    Spacer(modifier = Modifier.height(22.dp))
+                   SettingsSliderComponent(
+                        "Щирина bar code",
+                        //1f..4f,
+                        1F..4F,
+                        widthBareCode.toInt().toFloat()
+                    ) {
+                        actionChangeWidthBareCode(it)
                     }
 
-                    Column {
 
-                        Text("Размер шрифта", color = Color.Black, fontSize = 20.sp)
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("${fontSize.toInt()}", color = Color.Black, fontSize = 20.sp)
-                            Spacer(modifier = Modifier.width(10.dp))
-
-                            Slider(
-                                value = fontSize,
-                                onValueChange = { actionChangeFontSize(it) },
-                                valueRange = 1f..9f,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
 
                     Spacer(modifier = Modifier.height(22.dp))
 
@@ -181,6 +174,40 @@ object QRcodeSizeComponent {
                     .fillMaxHeight(0.03f)
                     .background(Color.White)
                     .align(BottomCenter)
+            )
+
+        }
+    }
+}
+
+@Composable
+private fun SettingsSliderComponent(
+    title: String,
+    range:ClosedFloatingPointRange<Float>,
+    count: Float,
+    actionChange:(Float)->Unit  ) {
+    val countSlider = remember {
+        mutableStateOf(0F)
+    }
+
+    Column {
+
+        Text(title, color = Color.Black, fontSize = 20.sp)
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("${count.toInt()}", color = Color.Black, fontSize = 20.sp)
+            Spacer(modifier = Modifier.width(10.dp))
+
+            Slider(
+                value = countSlider.value,
+                onValueChange = {
+                    countSlider.value = it
+                    actionChange(it)
+                                },
+                valueRange = range,
+                modifier = Modifier.fillMaxWidth()
             )
 
         }

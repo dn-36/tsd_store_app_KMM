@@ -1,6 +1,7 @@
 package com.project.phone
 
 import android.Manifest
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
@@ -12,7 +13,10 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.scale
 import com.example.tscdll.TSCActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,7 +30,7 @@ import java.util.UUID
      private val deviceList = mutableListOf<BluetoothDevice>()
      private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     // private val foundDevices = mutableListOf<String>()
-     private var _actionSecuesfull: () -> Unit = {}
+     //private var _actionSecuesfull: () -> Unit = {}
      private var _actionAddDevice: (String) -> Unit = {}
 
      private val receiver = object : BroadcastReceiver() {
@@ -100,8 +104,8 @@ import java.util.UUID
              tscDll.setup(widthTicket, heightTicket, 4, 3, 0, 1, 0)
              tscDll.clearbuffer()
 
-             tscDll.sendbitmap(xQrCode,yQrCode,barCode)
-             tscDll.sendbitmap(xQrCode+6,yQrCode+10+barCode.height,title)
+             tscDll.sendbitmap(xQrCode,yQrCode,barCode)//.scale(barCode.width/2,barCode.height))
+             tscDll.sendbitmap(xQrCode+((barCode.width/2)-(title.width/2)),yQrCode+10+barCode.height,title)
              tscDll.printlabel(1, 1)
              tscDll.closeport(1000)
          } catch (e: Exception) {
@@ -173,12 +177,12 @@ import java.util.UUID
                      Manifest.permission.BLUETOOTH_CONNECT
                  ) != PackageManager.PERMISSION_GRANTED
              ) {
-                 withContext(Dispatchers.Main) {
+              /*   withContext(Dispatchers.Main) {
                      Toast.makeText(context,
                          "Нет нужных разрешений что бы использовать этот функционал!",
                          Toast.LENGTH_SHORT).show()
-                 }
-                 return null
+                 }*/
+             //    return null
              }
              Log.d("111qqq",deviceList.map { it.name }.toString())
              deviceList.forEach {

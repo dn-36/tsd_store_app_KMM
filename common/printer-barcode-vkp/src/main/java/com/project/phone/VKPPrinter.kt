@@ -2,10 +2,12 @@ package com.project.phone
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.widget.Toast
 import it.custom.printer.api.android.CustomAndroidAPI
 import it.custom.printer.api.android.CustomException
 import it.custom.printer.api.android.CustomPrinter
+import org.koin.mp.KoinPlatform.getKoin
 
 class VKPPrinter() {
     private var prnDevice: CustomPrinter? = null
@@ -48,7 +50,7 @@ class VKPPrinter() {
 
       //  val sizeQRCode = SharedPrefsSizeQRCode(requireContext()).getSizeQRCode()
         //Get Text
-        val image = generateBarcode(barcode, heightQRCodeMM)
+        val image = generateBarcode(barcode, heightQRCodeMM, 1F)
         if (image != null) {
             try {
                 //Print (Left Align and Fit to printer width)
@@ -82,8 +84,13 @@ class VKPPrinter() {
         }
     }
 
-    fun generateBarcode(content: String, heightMm: Float): Bitmap? {
-      return  VKPUtils.generateBarcode(content, heightMm)
+    fun generateBarcode(content: String, heightMm: Float,barWidthMultiplier: Float): Bitmap? {
+        val content:String = "123456"
+       val barCode =  VKPUtils.generateBarcode(/*content*/content, heightMm,barWidthMultiplier)
+
+        Log.d("barCode",barCode?.width.toString())
+        Log.d("barCode",getBitmapSizeInDp(barCode!!).toString())
+      return barCode //VKPUtils.generateBarcode(content, heightMm,barWidthMultiplier)
     }
     fun textToBitmap(
     text: String,
@@ -97,5 +104,21 @@ class VKPPrinter() {
             fontSize,
             isBold
         )
+    }
+
+
+    fun getBitmapSizeInDp(bitmap: Bitmap): Pair<Float, Float> {
+        val context:Context = getKoin().get()
+        val density = context.resources.displayMetrics.density
+
+        // Размеры в пикселях
+        val widthInPixels = bitmap.width
+        val heightInPixels = bitmap.height
+
+        // Преобразуем пиксели в dp
+        val widthInDp = widthInPixels / density
+        val heightInDp = heightInPixels / density
+
+        return Pair(widthInDp, heightInDp)
     }
 }

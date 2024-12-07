@@ -10,7 +10,7 @@ interface InfrastructurePrinterTscAPI {
                                actionSuccessfully: () -> Unit,
                                actionError: () -> Unit,)
 
-    fun <Bitmap>print(
+    fun <Bitmap> print(
         barCode: Bitmap,
         title: Bitmap,
         heightTicket:Int,
