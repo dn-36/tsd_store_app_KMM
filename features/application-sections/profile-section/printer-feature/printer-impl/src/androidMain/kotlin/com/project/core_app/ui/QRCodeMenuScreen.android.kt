@@ -47,9 +47,9 @@ import com.profile.profile.udpPlayer.core.ProductPresentationModel
 import com.project.core_app.components.menu_bottom_tools.ui.MenuBottomBarTools
 import com.project.core_app.components.menu_bottom_tools.viewmodel.MenuBottomBarToolsSection
 import com.project.core_app.ui.components.BarCodeVkpComponent
+import com.project.core_app.ui.components.settings_tickets.SettingsTicketsTSCprinter
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.ListBluetoothDevicesComponent
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.QRcodeSizeComponent
-import com.project.core_app.ui.components.SettingsTicketsTSCprinterComponent
 import com.project.core_app.viewmodel.model.CategoryPrinter
 import com.project.core_app.viewmodel.QRcodeMenuIntent
 import com.project.core_app.viewmodel.QRcodeMenuViewModel
@@ -63,7 +63,7 @@ import project.core.resources.settings
 
 actual class QRCodeMenuScreen : Screen {
     @Transient actual var product = ProductPresentationModel()
-
+    @Transient private val settingsTicketsTSCprinter =  SettingsTicketsTSCprinter()
     @Transient val viewModel =
         QRcodeMenuViewModel(
             getKoin().get(),
@@ -151,10 +151,11 @@ actual class QRCodeMenuScreen : Screen {
                     )
 
                     CategoryPrinter.TSC -> {
-                        SettingsTicketsTSCprinterComponent(
+                        settingsTicketsTSCprinter.Component(
                             state.imgBitmap!!,
                             state.titleProductQRcodeBiteMap!!,
-                            state.x,state.y,
+
+                            //state.heightTicketTsc,state.weightTicketTsc,
                             { x: Int, y : Int, height: Int, weight: Int ->
 
                                 viewModel.processIntent(

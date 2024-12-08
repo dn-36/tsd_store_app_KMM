@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.project.core_app.viewmodel.QRcodeMenuViewModel
 import com.project.core_app.viewmodel.model.CategoryPrinter
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
@@ -48,6 +49,7 @@ object QRcodeSizeComponent {
         fontSize:Float,
         widthBareCode:Float,
         category: CategoryPrinter,
+       // viewModel: QRcodeMenuViewModel,
         actionChangeFontSize:(Float)->Unit,
         actionChangeHeightQRcode:(Float)->Unit,
         actionChangeWidthBareCode:(Float)->Unit,
@@ -187,7 +189,7 @@ private fun SettingsSliderComponent(
     count: Float,
     actionChange:(Float)->Unit  ) {
     val countSlider = remember {
-        mutableStateOf(0F)
+        mutableStateOf(count)
     }
 
     Column {

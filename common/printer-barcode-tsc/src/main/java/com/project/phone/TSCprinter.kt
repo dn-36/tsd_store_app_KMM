@@ -88,7 +88,7 @@ import java.util.UUID
 
 
 
-         val countChars = ("barcode").chars().count().toInt()
+       //  val countChars = ("barcode").chars().count().toInt()
 
          try {
 

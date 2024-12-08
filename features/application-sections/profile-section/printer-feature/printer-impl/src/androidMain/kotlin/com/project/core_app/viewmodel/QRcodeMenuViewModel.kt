@@ -35,7 +35,6 @@ class QRcodeMenuViewModel(
 
     val state = MutableStateFlow(QRCodeMenuState())
     private var isSetedScreen = false
-
     private var x: Int = 0
     private var y: Int = 0
     private var height: Int = 40
@@ -187,19 +186,19 @@ is QRcodeMenuIntent.ChangeHightQrCode -> {
  }
 is QRcodeMenuIntent.SavedSettings -> {
     state.value.titleProductQRcodeBiteMap?.width
-    var _x = (state.value.weightTicketTsc * 2.25F) - ((state.value.imgBitmap?.width?:0 / 4))
-    var _y = ((state.value.heightTicketTsc * 2.25F) -
+    var _x = (state.value.weightTicketTsc ) - ((state.value.imgBitmap?.width?:0 / 4))
+    var _y = ((state.value.heightTicketTsc) -
             (state.value.imgBitmap?.height?:0 / 4 +
             (state.value.titleProductQRcodeBiteMap?.width?:0 / 4))) + 30
-    _x = (_x*1.5).toInt().toFloat()
-    _y = (_y*1.5).toInt().toFloat()
-    x = _x.toInt()
-    y = _y.toInt()
+    _x = (_x*1.5).toInt()
+    _y = (_y*1.5).toInt()
+    x = _x
+    y = _y
  state.update {
     it.copy(
         isOpenedSettingsVKP = false,
-        x = _x,
-        y = _y
+        x = _x.toFloat(),
+        y = _y.toFloat()
         )
 }
 }
@@ -324,17 +323,15 @@ is QRcodeMenuIntent.CloseSettingsBluetooth -> {
                     }
                     2  -> {
 
-                        state.value = state.value.copy(barCodeWidth = 1.6409042F)
+                        state.value = state.value.copy(barCodeWidth = 1.25F)
 
                     }
                     3 -> {
 
-                        state.value = state.value.copy(barCodeWidth = 1.25F)
+                        state.value = state.value.copy(barCodeWidth = 1.94F)
 
                     }
-                    4 -> {
-                        state.value = state.value.copy(barCodeWidth = 1.94F)
-                    }
+
                     else -> {
 
                     }
@@ -347,16 +344,14 @@ is QRcodeMenuIntent.CloseSettingsBluetooth -> {
                     state.value.barCodeWidth
                     //intent.widthQRcode
                 )
-                Log.d("test_1op",intent.widthQRcode.toString())
+                if(intent.widthQRcode.toInt() != 4){
                 state.update {
-                   it.copy(
+                    it.copy(
                         imgBitmap = barCode,
-                        barCodeWidth =  if(intent.widthQRcode == 4F){
-                            3F
-                        }else{
-                            intent.widthQRcode
-                        }
+                        barCodeWidth =
+                        intent.widthQRcode.toInt().toFloat()
                     )
+                }
                 }
 
             }

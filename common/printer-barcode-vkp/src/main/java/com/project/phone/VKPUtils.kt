@@ -128,10 +128,8 @@ object VKPUtils {
 
            val pixelsPerMm = 3.779528f
 
-            // Высота штрих-кода в пикселях
             val heightPx = (heightMm * pixelsPerMm).toInt()
 
-            // Ширина штрих-кода, учитывая множитель ширины баров
             val baseWidthMm = 75f // базовая ширина в мм (по умолчанию)
             val barcodeWidthPx = (baseWidthMm * pixelsPerMm * barWidthMultiplier).toInt()
 
