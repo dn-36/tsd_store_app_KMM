@@ -1,5 +1,6 @@
 package component.data_entry_goods_and_services.viewmodel
 
+import androidx.compose.ui.graphics.ImageBitmap
 import model.CategoryGoodsServicesModel
 import model.SystemCategoryGoodsServicesModel
 import model.UnitGoodsAndServicesModel
@@ -22,15 +23,7 @@ data class DataEntryGoodsAndServicesState (
 
     val uniMeasurement: String = "",
 
-    val forSale: String = "да",
-
-    val displayOnSite: String = "да",
-
-    val underOrder: String = "нет",
-
-    val stock: String = "да",
-
-    val displayStock: String = "да",
+    val descriptionImage: String = "",
 
 
 
@@ -58,6 +51,8 @@ data class DataEntryGoodsAndServicesState (
 
     val expendedDisplayStock: Boolean = false,
 
+    val expendedGoodOrService: Boolean = false,
+
 
 
     val selectedSystemCategory: SystemCategoryGoodsServicesModel? = null,
@@ -66,15 +61,20 @@ data class DataEntryGoodsAndServicesState (
 
     val selectedUnit: UnitGoodsAndServicesModel? = null,
 
-    val selectedForSale: Int = 1,
+    val selectedForSale: Pair<String,Int> = Pair("да",1),
 
-    val selectedDisplayOnSite: Int = 1,
+    val selectedDisplayOnSite: Pair<String,Int> = Pair("да",1),
 
-    val selectedUnderOrder: Int = 0,
+    val selectedUnderOrder: Pair<String,Int> = Pair("нет",0),
 
-    val selectedIsStock: Int = 1,
+    val selectedIsStock: Pair<String,Int> = Pair("да",1),
 
-    val selectedDisplayStock: Int = 1,
+    val selectedDisplayStock: Pair<String,Int> = Pair("да",1),
+
+    val selectedGoodOrService: Pair<String,Int> = Pair("Товар",1),
+
+
+    val image: ImageBitmap? = null,
 
 
     val isSet: Boolean = true

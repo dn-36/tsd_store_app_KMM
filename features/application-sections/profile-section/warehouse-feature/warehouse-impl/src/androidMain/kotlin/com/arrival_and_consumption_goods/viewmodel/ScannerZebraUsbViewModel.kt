@@ -1,5 +1,6 @@
 package com.arrival_and_consumption_goods.viewmodel
 
+import GoodsAndServicesScreenApi
 import android.content.Context
 import android.os.Handler
 import android.os.Message
@@ -10,6 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.arrival_and_consumption_goods.helpers.Barcode
 import com.arrival_and_consumption_goods.helpers.Constants
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
+import com.project.network.Navigation
 import com.zebra.barcode.sdk.sms.ConfigurationUpdateEvent
 import com.zebra.scannercontrol.DCSSDKDefs
 import com.zebra.scannercontrol.DCSScannerInfo
@@ -20,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.mp.KoinPlatform
 
 class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiDelegate {
 
@@ -33,7 +37,47 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
             is ScannerZebraUsbIntents.UpdateScanData -> updateScanData(intent.text)
 
+            is ScannerZebraUsbIntents.CheckSku -> checkSku( intent.sku, intent.listProducts
+            )
+
+            is ScannerZebraUsbIntents.NavigateToAddProduct -> navigateToAddProduct( intent.sku )
+
         }
+
+    }
+
+
+    fun checkSku( sku: String, listProducts: List<AllProductArrivalAndConsumption> ) {
+
+        val selectedProduct = listProducts.find { it.sku == sku }
+
+        if (selectedProduct != null) {
+
+            state = state.copy(
+
+                checkSku = true
+
+            )
+
+        } else {
+
+            state = state.copy(
+
+                checkSku = false,
+
+                textNewProduct = "Продукт в списке не обнаржуен \nВы хотите его добавить?"
+
+            )
+
+        }
+
+    }
+
+    fun navigateToAddProduct( sku: String ) {
+
+        val goodAndServiceScreen: GoodsAndServicesScreenApi = KoinPlatform.getKoin().get()
+
+        Navigation.navigator.push(goodAndServiceScreen.goodsAndServicesScreen( sku ))
 
     }
 
@@ -246,6 +290,7 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
     }
 
     override fun dcssdkEventCommunicationSessionTerminated(p0: Int) {
+
         TODO("Not yet implemented")
     }
 
@@ -257,6 +302,12 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
             p0 ?: ByteArray(0), // Защита от null: если p0 == null, создаем пустой массив
             p1,
             p2
+        )
+
+        state = state.copy(
+
+            scanData = ""
+
         )
 
         dataHandler.obtainMessage(Constants.BARCODE_RECEIVED, barcode). sendToTarget();

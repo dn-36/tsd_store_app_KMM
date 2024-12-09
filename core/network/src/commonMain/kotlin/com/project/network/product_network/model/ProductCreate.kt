@@ -1,0 +1,25 @@
+package com.project.network.product_network.model
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ProductCreate(
+    val name: String,
+    val video_youtube: String,
+    val ediz_id: Int?,
+    val category_id: Int?,
+    val is_product: Int,
+    val is_sale: Int,
+    val system_category_id: Int?,
+    val is_view_sale: Int,
+    val is_order: Int,
+    val is_store: Int,
+    val is_store_view: Int,
+    val sku: String,
+    val text_image: String,
+    val price: Float?,
+    val tags: List<String>,
+    val variantes: List<String>,
+    val divisions: String,
+    val image_upload: String?
+)

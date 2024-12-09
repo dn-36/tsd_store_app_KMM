@@ -1,4 +1,4 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.scanner_camera_component
+package com.arrival_and_consumption_goods.component.scanner_camera_component.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,25 +37,34 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import androidx.compose.material.Text
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.text.style.TextAlign
+import com.arrival_and_consumption_goods.component.scanner_camera_component.viewmodel.ScannerCameraIntents
+import com.arrival_and_consumption_goods.component.scanner_camera_component.viewmodel.ScannerCameraViewModel
 import com.preat.peekaboo.image.picker.toImageBitmap
 import com.preat.peekaboo.ui.camera.PeekabooCamera
 import com.preat.peekaboo.ui.camera.rememberPeekabooCameraState
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
 import qrscanner.scanImage
 
 
-class ScannerCameraComponent (
+ class ScannerCameraComponent (
 
-    val onClickAdd: ( name: String ) -> Unit,
+     val onClickAdd: (sku: String ) -> Unit,
 
-    val onClickCansel: ( ) -> Unit,
+     val onClickCansel: ( ) -> Unit,
+
+     val listProducts: List<AllProductArrivalAndConsumption>
 
     ) {
 
+    val viewModel = ScannerCameraViewModel()
+
     @Composable
-    fun ScannerView() {
+
+    fun ScannerView () {
 
         var qrCodeURL by remember { mutableStateOf("") }
 
@@ -158,14 +167,16 @@ class ScannerCameraComponent (
 
                     } else {
 
-                        if(ready.value) {
+                        if( ready.value ) {
 
                             showCamera = true
 
                             coroutineScope.launch {
 
                                 scanImage(
+
                                     images.value,
+
                                     onCompletion = { answer ->
 
                                         qrCodeURL = answer
@@ -200,17 +211,47 @@ class ScannerCameraComponent (
                             overflow = TextOverflow.Ellipsis
                         )
 
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Text( text = viewModel.state.textNewProduct, textAlign = TextAlign.Center)
+
                         Spacer(modifier = Modifier.height(25.dp))
 
-
-                        if ( qrCodeURL != "ошибка" ) {
+                        if (qrCodeURL != "ошибка") {
 
                             Button(
-                                onClick = { onClickAdd( qrCodeURL )
 
-                                          //viewModel.processIntents(ScannerIntents.TsdScanner)
+                                onClick = {
 
-                                          },
+                                        if (viewModel.state.checkSku == null ||
+
+                                            viewModel.state.checkSku!! == true
+                                        ) {
+
+                                            viewModel.processIntents(
+
+                                                ScannerCameraIntents.CheckSku(
+
+                                                    qrCodeURL, listProducts
+                                                )
+                                            )
+
+                                            if (viewModel.state.checkSku!!) {
+
+                                                onClickAdd(qrCodeURL)
+
+                                            }
+                                        } else if (!viewModel.state.checkSku!!) {
+
+                                            viewModel.processIntents(
+
+                                                ScannerCameraIntents.NavigateToAddProduct(qrCodeURL)
+                                            )
+
+                                        }
+
+                                },
+
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(70.dp))
                                     .height(40.dp)

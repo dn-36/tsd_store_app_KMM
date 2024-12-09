@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 
 
 class DataEntryViewModel: ViewModel() {
@@ -157,7 +157,7 @@ class DataEntryViewModel: ViewModel() {
 
     }
 
-    fun selectContragentParish ( item: ContragentResponseArrivalAndConsumption ) {
+    fun selectContragentParish ( item: ContragentResponseArrivalAndConsumption) {
 
         state = state.copy(
 
@@ -169,7 +169,7 @@ class DataEntryViewModel: ViewModel() {
 
     }
 
-    fun selectContragentExpense ( item: ContragentResponseArrivalAndConsumption ) {
+    fun selectContragentExpense ( item: ContragentResponseArrivalAndConsumption) {
 
         state = state.copy(
 
@@ -181,7 +181,7 @@ class DataEntryViewModel: ViewModel() {
 
     }
 
-    fun selectLegalEntityParish ( item: EntityArrivalAndConsumption ) {
+    fun selectLegalEntityParish ( item: EntityArrivalAndConsumption) {
 
         state = state.copy(
 
@@ -193,7 +193,7 @@ class DataEntryViewModel: ViewModel() {
 
     }
 
-    fun selectLegalEntityExpense( item: EntityArrivalAndConsumption ) {
+    fun selectLegalEntityExpense( item: EntityArrivalAndConsumption) {
 
         state = state.copy(
 
@@ -205,7 +205,7 @@ class DataEntryViewModel: ViewModel() {
 
     }
 
-    fun selectWarehouse ( item: WarehouseArrivalAndConsumption ) {
+    fun selectWarehouse ( item: WarehouseArrivalAndConsumption) {
 
         state = state.copy(
 

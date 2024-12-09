@@ -1,4 +1,4 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component
+package com.arrival_and_consumption_goods.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,10 +36,11 @@ import androidx.compose.ui.unit.sp
 import com.arrival_and_consumption_goods.ScannerZebraUsbScreen
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.ui.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.scanner_camera_component.ScannerCameraComponent
+import com.arrival_and_consumption_goods.component.scanner_camera_component.ui.ScannerCameraComponent
+import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.util.formatDateTime
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
+import com.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionIntents
+import com.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
 import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
@@ -362,19 +363,25 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
         else if ( viewModel.state.isVisibilityScannerCameraComponent == 1f ) {
 
-            ScannerCameraComponent( onClickAdd = { name ->
+            ScannerCameraComponent( onClickAdd = { sku ->
 
-                viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( name ))
+                viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( sku ))
 
             }, onClickCansel = { viewModel.processIntent(
 
-                ArrivalAndConsumptionIntents.CanselScanner) } ) .ScannerView()
+                ArrivalAndConsumptionIntents.CanselScanner) },
+
+                viewModel.state.listProducts ).ScannerView()
 
         }
 
         else if ( viewModel.state.isVisibilityScannerZebraUsbComponent  ) {
 
-            ScannerZebraUsbScreen().Content()
+            ScannerZebraUsbScreen().Content( viewModel.state.listProducts, onClickAdd = { sku ->
+
+                viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( sku ))
+
+            } )
 
         }
 

@@ -1,15 +1,16 @@
 package com
 
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.datasource.ArrivalAndConsumptionClientImpl
+import com.arrival_and_consumption_goods.datasource.ArrivalAndConsumptionClientImpl
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.repository.ArrivalAndConsumptionClientApi
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.DeleteArrivalOrConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetContagentsUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetProductsUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetWarehouseArrivalAndConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.UpdateArrivalOrConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
+import com.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.DeleteArrivalOrConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.GetCategoriesUseCase
+import com.arrival_and_consumption_goods.domain.usecases.GetContagentsUseCase
+import com.arrival_and_consumption_goods.domain.usecases.GetProductsUseCase
+import com.arrival_and_consumption_goods.domain.usecases.GetWarehouseArrivalAndConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.UpdateArrivalOrConsumptionUseCase
+import com.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewModel
 import com.profile.profile.screens.main_refactor.screens.warehouse.datasource.WarehouseClientImpl
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.repository.WarehouseClientApi
 import com.profile.profile.screens.main_refactor.screens.warehouse.domain.usecases.CreateWarehouseUseCase
@@ -21,6 +22,7 @@ import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.War
 import com.project.chats.WarehouseScreensApi
 import com.project.network.common.ConstData
 import com.project.network.arrival_goods.ArrivalGoodsClient
+import com.project.network.category_network.CategoryClient
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.locations_network.LocationsClient
 import com.project.network.warehouse_network.WarehouseClient
@@ -40,6 +42,8 @@ val warehouseScreensModule = module {
    factory { ProductApiClient(ConstData.TOKEN) }
 
    factory { LocationsClient() }
+
+   factory { CategoryClient() }
 
    factory { UpdateWarehouseUseCase( get()) }
 
@@ -65,12 +69,18 @@ val warehouseScreensModule = module {
 
    factory { UpdateArrivalOrConsumptionUseCase( get()) }
 
+   factory { GetCategoriesUseCase( get()) }
+
    factory { WarehouseViewModel( get(), get(), get(), get(), get()) }
 
-   factory { ArrivalAndConsumptionViewModel( get(), get(), get(), get(), get(), get(), get()) }
+   factory { ArrivalAndConsumptionViewModel( get(), get(), get(), get(), get(), get(), get(),
+
+      get()) }
 
     factory { WarehouseClientImpl(get(),get()) as WarehouseClientApi }
 
-    factory { ArrivalAndConsumptionClientImpl(get(),get(), get(), get()) as ArrivalAndConsumptionClientApi }
+    factory { ArrivalAndConsumptionClientImpl(get(),get(), get(), get(), get(),
+
+       get()) as ArrivalAndConsumptionClientApi }
 
 }

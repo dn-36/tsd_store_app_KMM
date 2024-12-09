@@ -4,6 +4,7 @@ import com.project.network.system_category_network.SystemCategoryClient
 import com.project.network.units_measurement_network.UnitsMeasurementClient
 import datasource.GoodsAndServicesClientImpl
 import domain.repository.GoodsAndServicesClientApi
+import domain.usecases.CreateGoodOrServiceUseCase
 import domain.usecases.GetCategoryUseCase
 import domain.usecases.GetGoodsAndServicesUseCase
 import domain.usecases.GetSystemCategoryUseCase
@@ -28,7 +29,9 @@ val goodsAndServicesModule = module {
 
     factory { GetUnitsGoodsAndServicesUseCase(get()) }
 
-    factory { GoodsAndServicesViewModel(get(), get(), get(), get()) }
+    factory { CreateGoodOrServiceUseCase(get()) }
+
+    factory { GoodsAndServicesViewModel( get(), get(), get(), get(), get()) }
 
     factory { ProductApiClient(ConstData.TOKEN) }
 

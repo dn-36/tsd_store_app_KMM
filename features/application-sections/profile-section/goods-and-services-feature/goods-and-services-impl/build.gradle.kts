@@ -47,6 +47,8 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
 
+            implementation(dependencyNotation = libs.peekaboo.ui)
+            implementation(dependencyNotation = libs.peekaboo.imagepicker)
 
         }
     }

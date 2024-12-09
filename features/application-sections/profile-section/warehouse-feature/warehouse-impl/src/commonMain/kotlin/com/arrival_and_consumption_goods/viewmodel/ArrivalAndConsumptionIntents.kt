@@ -1,16 +1,21 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel
+package com.arrival_and_consumption_goods.viewmodel
 
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
 import kotlinx.coroutines.CoroutineScope
 
 sealed class ArrivalAndConsumptionIntents {
 
-    data class ArrivalOrConsumption (val coroutineScope: CoroutineScope, val isPush: Int ) : ArrivalAndConsumptionIntents()
+    data class ArrivalOrConsumption ( val coroutineScope: CoroutineScope,
+
+                                      val isPush: Int ) : ArrivalAndConsumptionIntents()
+
     object BackFromDataEntry : ArrivalAndConsumptionIntents()
 
     object BackFromAddProducts : ArrivalAndConsumptionIntents()
+
     object NoDelete : ArrivalAndConsumptionIntents()
+
     data class OpenDeleteComponent ( val item: StoreResponseArrivalAndConsumption? )
 
         : ArrivalAndConsumptionIntents()
@@ -38,7 +43,9 @@ sealed class ArrivalAndConsumptionIntents {
         ArrivalAndConsumptionIntents()
 
     data class Ready( val count: String ) : ArrivalAndConsumptionIntents()
+
     object  CanselScanner : ArrivalAndConsumptionIntents()
+
     data class AddProductScanner( val name: String ) : ArrivalAndConsumptionIntents()
 
     data class OpenUpdateDataEntry(
@@ -54,6 +61,7 @@ sealed class ArrivalAndConsumptionIntents {
     object SelectFromList : ArrivalAndConsumptionIntents()
 
     data class CreateArrivalOrConsumption(val coroutineScope: CoroutineScope) :
+
         ArrivalAndConsumptionIntents()
 
     data class DeleteArrivalOrConsumption(val coroutineScope: CoroutineScope ) :
@@ -71,6 +79,7 @@ sealed class ArrivalAndConsumptionIntents {
     data class CanselSelectedProduct ( val index: Int) : ArrivalAndConsumptionIntents()
 
     data class LongPressItem( val index: Int ): ArrivalAndConsumptionIntents()
+
     object OnePressItem: ArrivalAndConsumptionIntents()
 
 

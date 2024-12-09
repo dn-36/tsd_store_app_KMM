@@ -185,4 +185,34 @@ class GoodsAndServicesClientImpl(
 
     }
 
+    override suspend fun createGoodOrService(
+        name: String,
+        video_youtube: String,
+        ediz_id: Int?,
+        category_id: Int?,
+        is_product: Int,
+        is_sale: Int,
+        system_category_id: Int?,
+        is_view_sale: Int,
+        is_order: Int,
+        is_store: Int,
+        is_store_view: Int,
+        sku: String,
+        text_image: String,
+        price: Float?,
+        tags: List<String>,
+        variantes: List<String>,
+        divisions: String,
+        image_upload: String?
+
+    ) {
+
+     productsClient.createGoodOrService(name, video_youtube, ediz_id, category_id, is_product,
+
+         is_sale, system_category_id, is_view_sale, is_order, is_store, is_store_view, sku,
+
+         text_image, price, tags, variantes, divisions, image_upload )
+
+    }
+
 }

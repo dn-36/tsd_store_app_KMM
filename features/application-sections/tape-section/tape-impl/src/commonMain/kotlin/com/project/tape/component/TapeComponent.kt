@@ -39,14 +39,15 @@ import com.project.tape.viewmodel.TapeIntents
 import com.project.tape.viewmodel.TapeViewModel
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
 
-class TapeComponent( override val viewModel: TapeViewModel): NetworkComponent {
+class TapeComponent( override val viewModel: TapeViewModel ): NetworkComponent {
 
     @Composable
+
     override fun Component() {
 
         val scope = rememberCoroutineScope()
 
-        viewModel.processIntents(TapeIntents.SetScreen(scope))
+        viewModel.processIntents( TapeIntents.SetScreen(scope) )
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)){
 

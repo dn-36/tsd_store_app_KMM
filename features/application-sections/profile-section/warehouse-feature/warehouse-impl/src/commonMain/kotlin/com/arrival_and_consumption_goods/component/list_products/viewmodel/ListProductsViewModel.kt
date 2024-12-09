@@ -3,8 +3,8 @@ package com.profile.profile.screens.main_refactor.screens.arrival_and_consumptio
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 
 class ListProductsViewModel {
 
@@ -52,7 +52,7 @@ class ListProductsViewModel {
 
     }
 
-    fun selectedProduct ( item: AllProductArrivalAndConsumption ) {
+    fun selectedProduct ( item: AllProductArrivalAndConsumption) {
 
         state = state.copy(
 

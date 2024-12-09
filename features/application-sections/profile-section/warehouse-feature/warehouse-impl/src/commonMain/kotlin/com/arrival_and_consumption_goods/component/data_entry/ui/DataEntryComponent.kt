@@ -43,10 +43,10 @@ import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.down_arrow
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.StoreArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 import com.project.core_app.utils.boxHeight
 
 
@@ -666,9 +666,11 @@ class DataEntryComponent(
 
                             itemsIndexed( if (vm.state.filteredWarehouse.size != 0) vm.state.filteredWarehouse
 
-                                else listOf ( WarehouseArrivalAndConsumption( stores = listOf(StoreArrivalAndConsumption( id = 0,
+                                else listOf ( WarehouseArrivalAndConsumption( stores = listOf(
+                                StoreArrivalAndConsumption( id = 0,
 
-                                name = "Склад не найден" , ui = null )), name = " " ) )
+                                name = "Склад не найден" , ui = null )
+                            ), name = " " ) )
 
                             ) { index, item ->
 

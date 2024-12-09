@@ -1,8 +1,8 @@
 package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.viewmodel
 
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 
 sealed class DataEntryIntents {
 
@@ -38,13 +38,13 @@ sealed class DataEntryIntents {
     object MenuWarehouse: DataEntryIntents()
 
 
-    data class SelectContragentParish ( val item: ContragentResponseArrivalAndConsumption ) : DataEntryIntents()
+    data class SelectContragentParish ( val item: ContragentResponseArrivalAndConsumption) : DataEntryIntents()
 
     data class SelectContragentExpense ( val item: ContragentResponseArrivalAndConsumption) : DataEntryIntents()
 
-    data class SelectLegalEntityParish ( val item: EntityArrivalAndConsumption ) : DataEntryIntents()
+    data class SelectLegalEntityParish ( val item: EntityArrivalAndConsumption) : DataEntryIntents()
 
-    data class SelectLegalEntityExpense ( val item: EntityArrivalAndConsumption ) : DataEntryIntents()
+    data class SelectLegalEntityExpense ( val item: EntityArrivalAndConsumption) : DataEntryIntents()
 
     data class SelectWarehouse ( val item: WarehouseArrivalAndConsumption) : DataEntryIntents()
 

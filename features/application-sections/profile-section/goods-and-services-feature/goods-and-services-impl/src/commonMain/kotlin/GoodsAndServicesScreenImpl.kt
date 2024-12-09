@@ -3,9 +3,9 @@ import screen.GoodsAndServicesScreen
 
 class GoodsAndServicesScreenImpl: GoodsAndServicesScreenApi {
 
-    override fun goodsAndServicesScreen(): Screen {
+    override fun goodsAndServicesScreen( sku: String ): Screen {
 
-        return GoodsAndServicesScreen()
+        return GoodsAndServicesScreen( sku )
 
     }
 

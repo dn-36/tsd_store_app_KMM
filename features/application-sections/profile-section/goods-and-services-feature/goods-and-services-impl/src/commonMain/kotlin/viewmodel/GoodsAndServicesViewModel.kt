@@ -6,7 +6,9 @@ import androidx.compose.runtime.setValue
 import com.ProductsMenuScreenApi
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
+import com.project.core_app.utils.imageBitmapToBase64
 import com.project.network.Navigation
+import domain.usecases.CreateGoodOrServiceUseCase
 import domain.usecases.GetCategoryUseCase
 import domain.usecases.GetGoodsAndServicesUseCase
 import domain.usecases.GetSystemCategoryUseCase
@@ -24,7 +26,9 @@ class GoodsAndServicesViewModel (
 
     val getCategoryUseCase: GetCategoryUseCase,
 
-    val getUnitsMeasurementUseCase: GetUnitsGoodsAndServicesUseCase
+    val getUnitsMeasurementUseCase: GetUnitsGoodsAndServicesUseCase,
+
+    val createGoodOrServiceUseCase: CreateGoodOrServiceUseCase
 
 ) : NetworkViewModel() {
 
@@ -34,21 +38,44 @@ class GoodsAndServicesViewModel (
 
         when ( intent ) {
 
-            is GoodsAndServicesIntents.GetGoodsAndServices -> {
+            is GoodsAndServicesIntents.SetScreen -> {
 
                 intent.coroutineScope.launch( Dispatchers.IO ) {
 
                     if ( state.isSet ) {
 
-                        val listProducts = getGoodsAndServicesUseCase.execute()
+                        if ( intent.sku.isBlank() ) {
 
-                        state = state.copy(
+                            val listProducts = getGoodsAndServicesUseCase.execute()
 
-                            listProducts = listProducts,
+                            state = state.copy(
 
-                            isSet = false
+                                listProducts = listProducts,
 
-                        )
+                                isSet = false
+
+                            )
+                        }
+
+                        else {
+
+                            state = state.copy(
+
+                                listSystemCategory = getSystemCategoryUseCase.execute(),
+
+                                listCategory = getCategoryUseCase.execute(),
+
+                                listUnitsMeasurement = getUnitsMeasurementUseCase.execute(),
+
+                                isVisibilityDataEntry = true,
+
+                                isSet = false
+
+                            )
+
+
+                        }
+
                     }
 
                     setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
@@ -76,6 +103,48 @@ class GoodsAndServicesViewModel (
                         listUnitsMeasurement = getUnitsMeasurementUseCase.execute(),
 
                         isVisibilityDataEntry = true
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is GoodsAndServicesIntents.CreateGoodOrService -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch(Dispatchers.IO) {
+
+                    val imageBase64 = if ( intent.image_upload != null ) imageBitmapToBase64(intent.image_upload) else null
+
+                    createGoodOrServiceUseCase.execute( name = intent.name,
+
+                        video_youtube = intent.video_youtube, ediz_id = intent.ediz_id,
+
+                        category_id = intent.category_id, is_product = intent.is_product,
+
+                        is_sale = intent.is_sale, system_category_id = intent.system_category_id,
+
+                        is_view_sale = intent.is_view_sale, is_order = intent.is_order,
+
+                        is_store = intent.is_store, is_store_view = intent.is_store_view,
+
+                        sku = intent.sku, text_image = intent.text_image,
+
+                        price = intent.price, tags = intent.tags,
+
+                        divisions = intent.divisions, variantes = intent.variantes,
+
+                        image_upload = imageBase64 )
+
+                    state = state.copy (
+
+                        isVisibilityDataEntry = false,
+
+                        listProducts = getGoodsAndServicesUseCase.execute()
 
                     )
 

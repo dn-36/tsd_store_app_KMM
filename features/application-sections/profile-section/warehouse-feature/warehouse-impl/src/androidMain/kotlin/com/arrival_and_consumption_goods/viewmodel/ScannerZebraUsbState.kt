@@ -1,11 +1,9 @@
 package com.arrival_and_consumption_goods.viewmodel
 
-import android.content.Context
-import androidx.compose.runtime.mutableStateOf
 import com.zebra.scannercontrol.DCSScannerInfo
 import com.zebra.scannercontrol.SDKHandler
 
-data class ScannerZebraUsbState(
+data class ScannerZebraUsbState (
 
     val scanData: String = "",
 
@@ -17,6 +15,10 @@ data class ScannerZebraUsbState(
 
     val isSet: Boolean = true,
 
-    var number: Int = 0
+    var number: Int = 0,
+
+    val checkSku: Boolean? = null,
+
+    val textNewProduct: String = ""
 
 )

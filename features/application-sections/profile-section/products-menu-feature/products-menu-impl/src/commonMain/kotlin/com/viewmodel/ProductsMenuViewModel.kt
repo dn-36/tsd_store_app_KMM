@@ -43,7 +43,7 @@ class ProductsMenuViewModel: ViewModel() {
 
         val goodsAndServicesScreen: GoodsAndServicesScreenApi = KoinPlatform.getKoin().get()
 
-        Navigation.navigator.push(goodsAndServicesScreen.goodsAndServicesScreen())
+        Navigation.navigator.push(goodsAndServicesScreen.goodsAndServicesScreen(""))
 
     }
 

@@ -10,7 +10,9 @@ sealed class DataEntryGoodsAndServicesIntents {
 
         val listSystemCategory: List<SystemCategoryGoodsServicesModel>,
 
-        val listUnitsMeasurement: List<UnitGoodsAndServicesModel>
+        val listUnitsMeasurement: List<UnitGoodsAndServicesModel>,
+
+        val sku: String
 
     ): DataEntryGoodsAndServicesIntents()
 
@@ -24,6 +26,8 @@ sealed class DataEntryGoodsAndServicesIntents {
     data class InputTextVideoYouTube( val text: String ): DataEntryGoodsAndServicesIntents()
 
     data class InputTextPrice( val text: String ): DataEntryGoodsAndServicesIntents()
+
+    data class InputTextDescriptionImage( val text: String ): DataEntryGoodsAndServicesIntents()
 
     data class InputTextCategory( val text: String,
 
@@ -63,6 +67,8 @@ sealed class DataEntryGoodsAndServicesIntents {
 
     data class SelectDisplayStock( val index: Int ): DataEntryGoodsAndServicesIntents()
 
+    data class SelectGoodOrService( val index: Int ): DataEntryGoodsAndServicesIntents()
+
 
 
     object DeleteSelectedCategory: DataEntryGoodsAndServicesIntents()
@@ -81,6 +87,10 @@ sealed class DataEntryGoodsAndServicesIntents {
 
     object DeleteSelectedDisplayStock: DataEntryGoodsAndServicesIntents()
 
+    object DeleteSelectedGoodOrService: DataEntryGoodsAndServicesIntents()
+
+    object DeleteSelectedPhoto: DataEntryGoodsAndServicesIntents()
+
 
 
     object MenuCategory: DataEntryGoodsAndServicesIntents()
@@ -98,5 +108,7 @@ sealed class DataEntryGoodsAndServicesIntents {
     object MenuIsStock: DataEntryGoodsAndServicesIntents()
 
     object MenuDisplayStock: DataEntryGoodsAndServicesIntents()
+
+    object MenuGoodOrService: DataEntryGoodsAndServicesIntents()
 
 }

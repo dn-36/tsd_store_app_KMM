@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Barcode : Parcelable {
+
     var barcodeData: ByteArray
     var barcodeType: Int
     var fromScannerID: Int

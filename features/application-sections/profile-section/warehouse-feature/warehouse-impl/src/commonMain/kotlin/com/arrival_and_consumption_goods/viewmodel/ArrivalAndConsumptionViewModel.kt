@@ -1,19 +1,20 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel
+package com.arrival_and_consumption_goods.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.DeleteArrivalOrConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetContagentsUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetProductsUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.GetWarehouseArrivalAndConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.usecases.UpdateArrivalOrConsumptionUseCase
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
+import com.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.DeleteArrivalOrConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.GetCategoriesUseCase
+import com.arrival_and_consumption_goods.domain.usecases.GetContagentsUseCase
+import com.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.domain.usecases.GetProductsUseCase
+import com.arrival_and_consumption_goods.domain.usecases.GetWarehouseArrivalAndConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.UpdateArrivalOrConsumptionUseCase
+import com.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import kotlinx.coroutines.Dispatchers
@@ -35,9 +36,11 @@ class ArrivalAndConsumptionViewModel (
 
     val createArrivalOrConsumptionUseCase: CreateArrivalOrConsumptionUseCase,
 
-    val updateArrivalOrConsumptionUseCase: UpdateArrivalOrConsumptionUseCase
+    val updateArrivalOrConsumptionUseCase: UpdateArrivalOrConsumptionUseCase,
 
-) : NetworkViewModel() {
+    val getCategoriesUseCase: GetCategoriesUseCase
+
+    ) : NetworkViewModel() {
 
     var state by mutableStateOf(ArrivalAndConsumptionState())
 
@@ -65,7 +68,9 @@ class ArrivalAndConsumptionViewModel (
 
                             isPush = intent.isPush,
 
-                            listProducts = getProductsUseCase.execute()
+                            listProducts = getProductsUseCase.execute(),
+
+                            listCategories = getCategoriesUseCase.execute()
 
                             )
 
@@ -188,9 +193,11 @@ class ArrivalAndConsumptionViewModel (
 
                                 if ( it!!.product_id == item.id ) {
 
-                                    newSelectedProduct.add(ProductArrivalAndConsumption(
+                                    newSelectedProduct.add(
+                                        ProductArrivalAndConsumption(
 
-                                        product = item, count = it.count!!))
+                                        product = item, count = it.count!!)
+                                    )
 
                                 }
 
@@ -311,7 +318,9 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.Ready ->  ready( intent.count )
 
-            is ArrivalAndConsumptionIntents.SelectProducts ->  selectProduct( intent.selectedProducts )
+            is ArrivalAndConsumptionIntents.SelectProducts ->  selectProduct(
+
+                intent.selectedProducts )
 
             is ArrivalAndConsumptionIntents.ScannerCamera ->  scannerCamera()
 
@@ -562,7 +571,7 @@ class ArrivalAndConsumptionViewModel (
 
     }
 
-    fun addProductScanner(sku: String ) {
+    fun addProductScanner( sku: String ) {
 
     val selectedProduct = state.listProducts.find { it.sku == sku }
 
@@ -624,7 +633,7 @@ class ArrivalAndConsumptionViewModel (
 
     }
 
-    fun openDeleteComponent ( item: StoreResponseArrivalAndConsumption ) {
+    fun openDeleteComponent ( item: StoreResponseArrivalAndConsumption) {
 
         state = state.copy(
 
@@ -638,7 +647,7 @@ class ArrivalAndConsumptionViewModel (
 
     fun longPressItem ( index: Int ) {
 
-        val newList = MutableList(state.listArrivalOrConsumption.size){0F}
+        val newList = MutableList(state.listArrivalOrConsumption.size){ 0F }
 
         newList[index] = 1f
 
@@ -652,7 +661,7 @@ class ArrivalAndConsumptionViewModel (
 
     fun onePressItem () {
 
-        val newList = MutableList(state.listArrivalOrConsumption.size){0F}
+        val newList = MutableList(state.listArrivalOrConsumption.size){ 0F }
 
         state = state.copy(
 
@@ -675,7 +684,5 @@ class ArrivalAndConsumptionViewModel (
             listFilteredArrivalOrConsumption = newList
 
         )
-
     }
-
 }

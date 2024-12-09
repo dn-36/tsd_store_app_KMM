@@ -1,4 +1,4 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component
+package com.arrival_and_consumption_goods.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 import com.project.core_app.utils.convertDoubleToIntIfWhole
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
@@ -75,7 +75,9 @@ class AddProductsComponent(
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
 
-            Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(modifier = Modifier.padding(16.dp),
+
+                horizontalAlignment = Alignment.CenterHorizontally) {
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Image(
@@ -148,7 +150,10 @@ class AddProductsComponent(
 
                 if ( expendedMenu ) {
 
-                    Box(modifier = Modifier.fillMaxWidth(0.5f).padding(end = 10.dp).height(100.dp)) {
+                    Box( modifier = Modifier.fillMaxWidth(0.5f).padding(end = 10.dp)
+
+                        .height(150.dp)) {
+
                         Card(
                             modifier = Modifier.fillMaxSize()
                                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
@@ -161,7 +166,9 @@ class AddProductsComponent(
 
                             Box(modifier = Modifier.weight(0.5f)) {
 
-                            Text("Сканировать камерой", fontSize = 15.sp, modifier = Modifier.clickable(
+                            Text("Сканировать камерой", fontSize = 15.sp,
+
+                                modifier = Modifier.clickable(
                                     indication = null, // Отключение эффекта затемнения
                                 interactionSource = remember { MutableInteractionSource() })
                             { onClickScannerCamera() })
@@ -171,7 +178,9 @@ class AddProductsComponent(
 
                             Box(modifier = Modifier.weight(0.5f)) {
 
-                                Text("Сканировать сканером zebra", fontSize = 15.sp, modifier = Modifier.clickable(
+                                Text("Сканировать сканером zebra", fontSize = 15.sp,
+
+                                    modifier = Modifier.clickable(
                                     indication = null, // Отключение эффекта затемнения
                                     interactionSource = remember { MutableInteractionSource() })
                                 { onClickScannerZebraUsb() })
@@ -212,9 +221,7 @@ class AddProductsComponent(
                             Text(text = "Создать")
                         }
 
-                    }
-
-                    else {
+                    } else {
 
                         Button(
                             onClick = { onClickUpdate() },
@@ -229,13 +236,14 @@ class AddProductsComponent(
                     }
 
 
-                    Box( modifier = Modifier.weight(1f).clickable(
+                    Box(
+                        modifier = Modifier.weight(1f).clickable(
 
-                        indication = null, // Отключение эффекта затемнения
+                            indication = null, // Отключение эффекта затемнения
 
-                        interactionSource = remember { MutableInteractionSource() })
+                            interactionSource = remember { MutableInteractionSource() })
 
-                    { expendedMenu = !expendedMenu }, contentAlignment = Alignment.Center
+                        { expendedMenu = !expendedMenu }, contentAlignment = Alignment.Center
 
                     ) {
                         Image(
@@ -249,9 +257,7 @@ class AddProductsComponent(
                 Spacer(modifier = Modifier.height(10.dp))
             }
         }
-
-        }
-
     }
+}
 
 

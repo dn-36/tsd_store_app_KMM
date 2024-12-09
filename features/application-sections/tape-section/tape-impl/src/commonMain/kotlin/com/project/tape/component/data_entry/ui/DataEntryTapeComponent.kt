@@ -80,7 +80,7 @@ class DataEntryTapeComponent (
 
     @Composable
 
-    fun Content(){
+    fun Content() {
 
         viewModel.processIntents(DataEntryTapeIntents.SetScreen( listProjects, listContragents))
 

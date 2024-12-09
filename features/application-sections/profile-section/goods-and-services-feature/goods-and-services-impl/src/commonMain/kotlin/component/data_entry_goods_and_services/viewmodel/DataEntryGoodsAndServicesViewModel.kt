@@ -18,7 +18,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
             is DataEntryGoodsAndServicesIntents.SetScreen -> setScreen( intent.lisCategory,
 
-                intent.listSystemCategory, intent.listUnitsMeasurement )
+                intent.listSystemCategory, intent.listUnitsMeasurement, intent.sku )
 
             is DataEntryGoodsAndServicesIntents.InputTextName -> inputTextName(intent.text)
 
@@ -33,6 +33,12 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
             is DataEntryGoodsAndServicesIntents.InputTextVideoYouTube -> {
 
                 inputTextVideoYouTube(intent.text)
+
+            }
+
+            is DataEntryGoodsAndServicesIntents.InputTextDescriptionImage -> {
+
+                inputTextDescriptionImage(intent.text)
 
             }
 
@@ -74,6 +80,8 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
             is DataEntryGoodsAndServicesIntents.MenuDisplayStock -> menuDisplayStock()
 
+            is DataEntryGoodsAndServicesIntents.MenuGoodOrService -> menuGoodOrService()
+
 
 
             is DataEntryGoodsAndServicesIntents.SelectCategory -> selectCategory(intent.item)
@@ -100,6 +108,12 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
             }
 
+            is DataEntryGoodsAndServicesIntents.SelectGoodOrService -> {
+
+                selectGoodOrService(intent.index)
+
+            }
+
 
             is DataEntryGoodsAndServicesIntents.DeleteSelectedCategory -> deleteSelectedCategory()
 
@@ -121,6 +135,10 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
             is DataEntryGoodsAndServicesIntents.DeleteSelectedDisplayStock -> deleteSelectedDisplayStock()
 
+            is DataEntryGoodsAndServicesIntents.DeleteSelectedGoodOrService -> deleteSelectedGoodOrService()
+
+            is DataEntryGoodsAndServicesIntents.DeleteSelectedPhoto -> deleteSelectedPhoto()
+
         }
 
     }
@@ -129,7 +147,9 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
                    listSystemCategory: List<SystemCategoryGoodsServicesModel>,
 
-                   listUnits: List<UnitGoodsAndServicesModel> ){
+                   listUnits: List<UnitGoodsAndServicesModel>,
+
+                   sku: String ){
 
         if ( state.isSet ) {
 
@@ -140,6 +160,8 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
                 listFilteredSystemCategory = listSystemCategory,
 
                 listFilteredUnits = listUnits ,
+
+                sku = sku,
 
                 isSet = false
 
@@ -193,6 +215,16 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
         state = state.copy(
 
             price = text
+
+        )
+
+    }
+
+    fun inputTextDescriptionImage( text: String ) {
+
+        state = state.copy(
+
+            descriptionImage = text
 
         )
 
@@ -348,6 +380,20 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
     }
 
+    fun menuGoodOrService(){
+
+        state = state.copy(
+
+            expendedGoodOrService = !state.expendedGoodOrService,
+
+            expendedCategory = false,
+
+            expendedSystemCategory = false,
+
+            )
+
+    }
+
 
 
     fun selectCategory( item: CategoryGoodsServicesModel ){
@@ -390,7 +436,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedForSale = index,
+            selectedForSale = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
 
             expendedForSale = false
 
@@ -402,7 +448,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedDisplayOnSite = index,
+            selectedDisplayOnSite = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
 
             expendedDisplayOnSite = false
 
@@ -414,7 +460,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedIsStock = index,
+            selectedIsStock = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
 
             expendedIsStock = false
 
@@ -426,7 +472,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedDisplayStock = index,
+            selectedDisplayStock = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
 
             expendedDisplayStock = false
 
@@ -438,9 +484,21 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedUnderOrder = index,
+            selectedUnderOrder = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
 
             expendedUnderOrder = false
+
+        )
+
+    }
+
+    fun selectGoodOrService( index: Int ) {
+
+        state = state.copy(
+
+            selectedGoodOrService =  if ( index == 1 ) Pair("Товар",1) else Pair("Услуга",0),
+
+            expendedGoodOrService = false
 
         )
 
@@ -483,7 +541,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedForSale = 1
+            selectedForSale = Pair("да",1)
 
         )
 
@@ -493,7 +551,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedDisplayOnSite = 1
+            selectedDisplayOnSite = Pair("да",1)
 
         )
 
@@ -503,7 +561,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedUnderOrder = 0
+            selectedUnderOrder = Pair("нет",0)
 
         )
 
@@ -513,7 +571,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedIsStock = 1
+            selectedIsStock = Pair("да",1)
 
         )
 
@@ -523,7 +581,27 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            selectedDisplayStock = 1
+            selectedDisplayStock = Pair("да",1)
+
+        )
+
+    }
+
+    fun deleteSelectedGoodOrService(){
+
+        state = state.copy(
+
+            selectedGoodOrService = Pair("Товар",1)
+
+        )
+
+    }
+
+    fun deleteSelectedPhoto(){
+
+        state = state.copy(
+
+            image = null
 
         )
 

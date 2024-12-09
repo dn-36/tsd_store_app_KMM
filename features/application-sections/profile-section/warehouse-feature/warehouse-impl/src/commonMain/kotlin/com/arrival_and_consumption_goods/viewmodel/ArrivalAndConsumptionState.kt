@@ -1,17 +1,20 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.viewmodel
+package com.arrival_and_consumption_goods.viewmodel
 
 import androidx.compose.ui.graphics.Color
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.CategoryModel
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 
 data class ArrivalAndConsumptionState (
 
     val listAllWarehouse: List<WarehouseArrivalAndConsumption> = emptyList(),
 
     val listAllContragent: List<ContragentResponseArrivalAndConsumption> = emptyList(),
+
+    val listCategories: List<CategoryModel> = emptyList(),
 
     val listAlphaTools: List<Float> = emptyList(),
 
@@ -38,6 +41,8 @@ data class ArrivalAndConsumptionState (
     val isVisibilityScannerCameraComponent: Float = 0f,
 
     val isVisibilityScannerZebraUsbComponent: Boolean = false,
+
+    val isVisibilityCreateGoodOrService: Boolean = false,
 
     val isVisibilityAddProductsComponent: Float = 0f,
 

@@ -1,19 +1,22 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.datasource
+package com.arrival_and_consumption_goods.datasource
 
+import com.arrival_and_consumption_goods.model.CategoryLangModel
+import com.arrival_and_consumption_goods.model.CategoryModel
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.repository.ArrivalAndConsumptionClientApi
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentInfoArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductDataArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreInfoArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ContragentInfoArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ContragentResponseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.EntityArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ProductDataArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.StoreArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.StoreInfoArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
+import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.arrival_goods.ArrivalGoodsClient
 import com.project.network.arrival_goods.model.CreateRequest
-import com.project.network.arrival_goods.model.Product
+import com.project.network.category_network.CategoryClient
 import com.project.network.contragent_network.ContragentClient
 import com.project.network.warehouse_network.WarehouseClient
 import product_network.ProductApiClient
@@ -26,7 +29,11 @@ class ArrivalAndConsumptionClientImpl (
 
     private val productsClient: ProductApiClient,
 
-    private val arrivalAndConsumptionClient: ArrivalGoodsClient
+    private val arrivalAndConsumptionClient: ArrivalGoodsClient,
+
+    private val categoryClient: CategoryClient,
+
+    private val sharedPrefsApi: SharedPrefsApi
 
 ) : ArrivalAndConsumptionClientApi {
 
@@ -304,6 +311,75 @@ class ArrivalAndConsumptionClientImpl (
             )
         )
         )
+
+    }
+
+    override suspend fun createGoodOrService(
+
+        name: String,
+        //video_youtube: String,
+        //ediz_id: Int?,
+        category_id: Int?,
+        is_product: Int,
+        //is_sale: Int,
+        //system_category_id: Int?,
+        //is_view_sale: Int,
+        //is_order: Int,
+        //is_store: Int,
+        //is_store_view: Int,
+        sku: String,
+        text_image: String,
+        price: Float?,
+        //tags: List<String>,
+        //variantes: List<String>,
+        //divisions: String,
+        image_upload: String?
+
+    ) {
+
+        productsClient.createGoodOrService(name, "", null, category_id, is_product,
+
+            1, null, 1, 0, 1, 1, sku,
+
+            text_image, price, listOf(), listOf(), "", image_upload )
+
+    }
+
+    override suspend fun getCategories(): List<CategoryModel> {
+
+        categoryClient.init(sharedPrefsApi.getToken()?:"")
+
+        return categoryClient.getCategories().map {
+
+            CategoryModel(
+
+                id = it.id,
+                name  = it.name,
+                creater_id = it.creater_id,
+                company_id = it.company_id,
+                created_at = it.created_at,
+                updated_at = it.updated_at,
+                url = it.url,
+                ui = it.ui,
+                category_langs = it.category_langs?.map {
+
+                    CategoryLangModel(
+
+                        id = it.id,
+                        name = it.name,
+                        lang_id = it.lang_id,
+                        created_at = it.created_at,
+                        updated_at = it.updated_at,
+                        category_id = it.category_id
+
+                    )
+
+                }
+
+            )
+
+        }
+
 
     }
 

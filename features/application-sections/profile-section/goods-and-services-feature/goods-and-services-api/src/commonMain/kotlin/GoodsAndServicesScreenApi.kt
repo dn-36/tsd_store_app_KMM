@@ -2,6 +2,6 @@ import cafe.adriel.voyager.core.screen.Screen
 
 interface GoodsAndServicesScreenApi {
 
-    fun goodsAndServicesScreen(): Screen
+    fun goodsAndServicesScreen( sku: String ): Screen
 
 }

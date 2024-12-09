@@ -1,11 +1,5 @@
 package com.arrival_and_consumption_goods
 
-import android.os.Handler
-import android.os.Message
-import android.os.Parcel
-import android.os.Parcelable
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,11 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,17 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arrival_and_consumption_goods.viewmodel.ScannerZebraUsbIntents
 import com.arrival_and_consumption_goods.viewmodel.ScannerZebraUsbViewModel
-import com.zebra.barcode.sdk.sms.ConfigurationUpdateEvent
-import com.zebra.scannercontrol.DCSSDKDefs
-import com.zebra.scannercontrol.DCSScannerInfo
-import com.zebra.scannercontrol.FirmwareUpdateEvent
-import com.zebra.scannercontrol.IDcsSdkApiDelegate
-import com.zebra.scannercontrol.SDKHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import org.koin.mp.KoinPlatform.getKoin
 
 
@@ -50,7 +31,9 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
 
     @Composable
 
-     actual fun Content() {
+     actual fun Content(listProducts: List<AllProductArrivalAndConsumption>,
+
+                        onClickAdd: (sku: String ) -> Unit, ) {
 
          //viewModel.processIntents(ScannerZebraUsbIntents.SetScreen)
 
@@ -66,7 +49,7 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
 
                 horizontalAlignment = Alignment.CenterHorizontally ) {
 
-                Text(
+                Text (
 
                     text = "Подсоедините кабель сканера к телефону и разрешите подключиться к нему нажав затем кнопку да",
 
@@ -79,6 +62,10 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
 
                 Text(text = viewModel.state.scanData, fontSize = 18.sp)
 
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text( text = viewModel.state.textNewProduct, textAlign = TextAlign.Center)
+
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
@@ -89,6 +76,63 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
                         .fillMaxWidth()
                 ) {
                     Text(text = "Подключиться")
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+
+                Button(
+
+                    onClick = {
+
+                        if ( viewModel.state.scanData.isNotBlank() ) {
+
+                            if (viewModel.state.checkSku == null ||
+
+                                viewModel.state.checkSku!! == true
+
+                            ) {
+
+                                viewModel.processIntents(
+
+                                    ScannerZebraUsbIntents.CheckSku(
+
+                                        viewModel.state.scanData, listProducts
+                                    )
+                                )
+
+                                if (viewModel.state.checkSku!!) {
+
+                                    onClickAdd(viewModel.state.scanData)
+
+                                }
+                            }
+                            else if (!viewModel.state.checkSku!!) {
+
+                                viewModel.processIntents(
+
+                                    ScannerZebraUsbIntents.NavigateToAddProduct(
+
+                                        viewModel.state.scanData
+                                    )
+
+                                )
+                            }
+                        }
+                    },
+
+                    modifier = Modifier
+
+                        .clip(RoundedCornerShape(70.dp))
+
+                        .height(40.dp)
+
+                        .fillMaxWidth()
+
+                ) {
+
+                    Text(text = "Добавить")
+
                 }
             }
         }

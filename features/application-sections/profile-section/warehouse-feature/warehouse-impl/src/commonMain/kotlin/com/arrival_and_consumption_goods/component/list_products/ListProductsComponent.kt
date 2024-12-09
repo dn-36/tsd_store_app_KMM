@@ -27,8 +27,8 @@ import androidx.compose.material.Text
 import androidx.compose.ui.unit.sp
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.viewmodel.ListProductsIntents
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.viewmodel.ListProductsViewModel
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
+import com.arrival_and_consumption_goods.model.ProductArrivalAndConsumption
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.core_app.components.PlusButton
 import com.project.core_app.network_base_screen.NetworkComponent
-import com.project.core_app.network_base_screen.NetworkViewModel
 import component.data_entry_goods_and_services.ui.DataEntryGodsAndServicesComponent
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
@@ -36,24 +34,29 @@ import project.core.resources.back
 import viewmodel.GoodsAndServicesIntents
 import viewmodel.GoodsAndServicesViewModel
 
-class GoodsAndServicesComponent(override val viewModel: GoodsAndServicesViewModel): NetworkComponent {
+class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsAndServicesViewModel): NetworkComponent {
 
     @Composable
     override fun Component() {
 
         val scope = rememberCoroutineScope()
 
-        viewModel.processIntents(GoodsAndServicesIntents.GetGoodsAndServices(scope))
+        viewModel.processIntents(GoodsAndServicesIntents.SetScreen( scope, sku ))
 
-        Box( modifier = Modifier.fillMaxSize().background(Color.White)) {
+        Box( modifier = Modifier.fillMaxSize().background(Color.White) ) {
 
             Column(modifier = Modifier.padding(16.dp)) {
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
+
                     Image(
+
                         painter = painterResource(Res.drawable.back), contentDescription = null,
+
                         modifier = Modifier.size(20.dp).clickable(
+
                             indication = null, // Отключение эффекта затемнения
+
                             interactionSource = remember { MutableInteractionSource() })
 
                         { viewModel.processIntents(GoodsAndServicesIntents.Back) }
@@ -92,11 +95,8 @@ class GoodsAndServicesComponent(override val viewModel: GoodsAndServicesViewMode
                                     .background(Color.LightGray)
                             )
                         }
-
                     }
-
                 }
-
             }
 
             Box(modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)) {
@@ -111,17 +111,44 @@ class GoodsAndServicesComponent(override val viewModel: GoodsAndServicesViewMode
 
         }
 
-        if ( viewModel.state.isVisibilityDataEntry ){
+        if ( viewModel.state.isVisibilityDataEntry ) {
 
             DataEntryGodsAndServicesComponent( onClickBack = {
 
             viewModel.processIntents(GoodsAndServicesIntents.BackFromDataEntry)} ,
 
+                onClickCreate = { name: String, video_youtube: String, ediz_id: Int?,
+
+                                  category_id: Int?, is_product: Int, is_sale: Int,
+
+                                  system_category_id: Int?, is_view_sale: Int, is_order: Int,
+
+                                  is_store: Int, is_store_view: Int, sku: String,
+
+                                  text_image, price: Float?, tags: List<String>,
+
+                                  variantes: List<String>, divisions: String, image ->
+
+                                viewModel.processIntents(
+
+                                    GoodsAndServicesIntents.CreateGoodOrService( scope, name,
+
+                                        video_youtube, ediz_id, category_id, is_product, is_sale,
+
+                                    system_category_id, is_view_sale, is_order, is_store,
+
+                                    is_store_view, sku, text_image, price, tags, variantes,
+
+                                        divisions, image ) )
+                },
+
                 listSystemCategory = viewModel.state.listSystemCategory,
 
                 listCategory = viewModel.state.listCategory,
 
-                listUnitsMeasurement = viewModel.state.listUnitsMeasurement ).Content()
+                listUnitsMeasurement = viewModel.state.listUnitsMeasurement,
+
+                sku = sku ).Content()
 
         }
 
