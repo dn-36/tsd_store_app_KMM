@@ -3,6 +3,7 @@ package component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,18 +24,26 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.core_app.components.PlusButton
+import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.network_base_screen.NetworkComponent
+import component.additional_information.AdditionalInformationComponent
 import component.data_entry_goods_and_services.ui.DataEntryGodsAndServicesComponent
+import component.disharge.ui.DischargeComponent
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
+import project.core.resources.cancel
+import project.core.resources.update_pencil
 import viewmodel.GoodsAndServicesIntents
 import viewmodel.GoodsAndServicesViewModel
 
-class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsAndServicesViewModel): NetworkComponent {
+class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsAndServicesViewModel
+
+    ): NetworkComponent {
 
     @Composable
     override fun Component() {
@@ -74,26 +83,95 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                     itemsIndexed(viewModel.state.listProducts){ index, it ->
 
-                        Column(modifier = Modifier.fillMaxWidth()) {
+                        Box(modifier = Modifier.pointerInput(true) {
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                            detectTapGestures(
 
-                            Text(
-                                text = "${index + 1}. ${it.name ?: "Имя не указано"}",
+                                onPress = {
 
-                                fontSize = 16.sp,
+                                    if (  viewModel.state.listAlphaTools.size > index &&
 
-                                modifier = Modifier.fillMaxWidth(0.85f)
+                                        viewModel.state.listAlphaTools[index] == 1f ) {
+
+                                        viewModel.processIntents(
+
+                                            GoodsAndServicesIntents.OnePressItem)
+                                    }
+                                },
+
+                                onLongPress = {
+
+                                    viewModel.processIntents(
+
+                                        GoodsAndServicesIntents.LongPressItem(index))
+
+                                },
                             )
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                        }) {
 
-                            Box(
+                                Column(modifier = Modifier.fillMaxWidth()) {
 
-                                modifier = Modifier.height(1.dp).fillMaxWidth()
+                                    Spacer(modifier = Modifier.height(10.dp))
 
-                                    .background(Color.LightGray)
-                            )
+                                    Text(
+                                        text = "${index + 1}. ${it.name ?: "Имя не указано"}",
+
+                                        fontSize = 16.sp,
+
+                                        modifier = Modifier.fillMaxWidth(0.85f)
+                                    )
+
+                                    Spacer(modifier = Modifier.height(10.dp))
+
+                                        Box(
+
+                                            modifier = Modifier.height(1.dp).fillMaxWidth()
+
+                                                .background(Color.LightGray)
+                                        )
+
+                                }
+                            if ( viewModel.state.listAlphaTools.size > index &&
+
+                                 viewModel.state.listAlphaTools[index] == 1f
+
+                            ) {
+
+                                Row(modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)) {
+
+                                    Image(painter = painterResource(Res.drawable.update_pencil),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(17.dp)
+                                            .clickable(
+                                                indication = null, // Отключение эффекта затемнения
+                                                interactionSource = remember {
+
+                                                    MutableInteractionSource() })
+                                            {
+
+
+                                            })
+
+                                    Spacer(modifier = Modifier.width(20.dp))
+
+                                    Image(painter = painterResource(Res.drawable.cancel),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(15.dp)
+                                            .clickable(
+                                                indication = null,
+                                                interactionSource = remember {
+
+                                                    MutableInteractionSource() })
+                                            {
+
+                                                viewModel.processIntents(
+
+                                                    GoodsAndServicesIntents.OpenDeleteComponent(it))
+
+                                            })
+                                }
+                            }
                         }
                     }
                 }
@@ -113,11 +191,13 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
         if ( viewModel.state.isVisibilityDataEntry ) {
 
+           // DischargeComponent().Content()
+
             DataEntryGodsAndServicesComponent( onClickBack = {
 
             viewModel.processIntents(GoodsAndServicesIntents.BackFromDataEntry)} ,
 
-                onClickCreate = { name: String, video_youtube: String, ediz_id: Int?,
+                onClickNext = { name: String, video_youtube: String, ediz_id: Int?,
 
                                   category_id: Int?, is_product: Int, is_sale: Int,
 
@@ -131,7 +211,7 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                                 viewModel.processIntents(
 
-                                    GoodsAndServicesIntents.CreateGoodOrService( scope, name,
+                                    GoodsAndServicesIntents.Next( name,
 
                                         video_youtube, ediz_id, category_id, is_product, is_sale,
 
@@ -149,6 +229,48 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
                 listUnitsMeasurement = viewModel.state.listUnitsMeasurement,
 
                 sku = sku ).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityDeleteComponent ) {
+
+            DeleteComponent(
+
+                name = "",
+
+                onClickDelete = { viewModel.processIntents(
+
+                    GoodsAndServicesIntents.DeleteGoodOrService(scope)) },
+
+                onClickNo = { viewModel.processIntents(GoodsAndServicesIntents.NoDelete) }
+
+            ).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityAdditionalInformationComponent ) {
+
+            AdditionalInformationComponent( onClickDischarge = {
+
+            viewModel.processIntents(GoodsAndServicesIntents.Discharge)},
+
+                onClickCreate = { viewModel.processIntents(
+
+                    GoodsAndServicesIntents.CreateGoodOrService(scope)) }).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityDischargeComponent ) {
+
+            DischargeComponent( onClickReady = { isBu, manufacturer, numberManufacturer,
+
+                                                 postavka ->
+
+                viewModel.processIntents(GoodsAndServicesIntents.ReadyDischarge( isBu, manufacturer,
+
+                    numberManufacturer, postavka ))
+
+            } ).Content()
 
         }
 

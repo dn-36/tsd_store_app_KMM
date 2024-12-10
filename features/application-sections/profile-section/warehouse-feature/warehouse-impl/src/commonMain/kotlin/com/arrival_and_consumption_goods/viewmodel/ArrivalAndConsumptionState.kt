@@ -48,7 +48,7 @@ data class ArrivalAndConsumptionState (
 
     val isVisibilityDeleteComponent: Float = 0f,
 
-    val listProducts:List<AllProductArrivalAndConsumption> = emptyList(),
+    val listProducts: List<AllProductArrivalAndConsumption> = emptyList(),
 
     val listArrivalOrConsumption: List<StoreResponseArrivalAndConsumption> = emptyList(),
 
@@ -58,7 +58,7 @@ data class ArrivalAndConsumptionState (
 
     val updatedItem: StoreResponseArrivalAndConsumption? = null,
 
-    val listSelectedProducts:List<ProductArrivalAndConsumption> = emptyList(),
+    val listSelectedProducts: List<ProductArrivalAndConsumption> = emptyList(),
 
     val updatedContragentExpense : ContragentResponseArrivalAndConsumption? = null,
 
@@ -74,6 +74,10 @@ data class ArrivalAndConsumptionState (
 
     val isSet: Boolean = true,
 
-    val colorBorderCountTF: Color = Color.LightGray
+    val sku: String = "",
+
+    val colorBorderCountTF: Color = Color.LightGray,
+
+    val lastScanner: String = ""
 
     )

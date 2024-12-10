@@ -60,7 +60,7 @@ class DataEntryGodsAndServicesComponent (
 
     val onClickBack:() -> Unit,
 
-    val onClickCreate:(
+    val onClickNext:(
 
         name: String,
         video_youtube: String,
@@ -255,13 +255,13 @@ class DataEntryGodsAndServicesComponent (
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    Box(
+                    Box (
                         modifier = Modifier.padding(vertical = 5.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .height(40.dp).fillMaxWidth().background(Color(0xFFA6D172))
                     ) {
 
-                        Text(
+                        Text (
                             text = viewModel.state.selectedCategory!!.name?:"Имя не указано",
                             color = Color.White,
                             fontSize = 15.sp,
@@ -274,7 +274,7 @@ class DataEntryGodsAndServicesComponent (
                             contentDescription = null,
                             modifier = Modifier.padding(8.dp).size(10.dp)
                                 .align(Alignment.TopEnd)
-                                .clickable(
+                                .clickable (
                                     indication = null, // Отключение эффекта затемнения
                                     interactionSource = remember { MutableInteractionSource() })
 
@@ -1230,9 +1230,11 @@ class DataEntryGodsAndServicesComponent (
 
                     onClick = {
 
-                        if ( viewModel.state.selectedCategory != null ) {
+                        if ( viewModel.state.selectedCategory != null &&
 
-                            onClickCreate (
+                            viewModel.state.name.isNotBlank() ) {
+
+                            onClickNext(
 
                                 viewModel.state.name,
 
@@ -1261,7 +1263,6 @@ class DataEntryGodsAndServicesComponent (
                                 viewModel.state.price.toFloatOrNull(),
 
                                 emptyList(), emptyList(), "", viewModel.state.image
-
                             )
                         }
                     },
@@ -1273,7 +1274,7 @@ class DataEntryGodsAndServicesComponent (
 
                 ) {
 
-                    Text(text = "Создать")
+                    Text(text = "Далее")
 
                 }
             }

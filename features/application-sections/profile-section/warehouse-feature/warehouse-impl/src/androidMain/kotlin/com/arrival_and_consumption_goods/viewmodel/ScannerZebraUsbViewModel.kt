@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.arrival_and_consumption_goods.helpers.Barcode
 import com.arrival_and_consumption_goods.helpers.Constants
 import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
@@ -33,19 +34,14 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
         when( intent ) {
 
-            is ScannerZebraUsbIntents.SetScreen -> setScreen()
-
             is ScannerZebraUsbIntents.UpdateScanData -> updateScanData(intent.text)
 
-            is ScannerZebraUsbIntents.CheckSku -> checkSku( intent.sku, intent.listProducts
-            )
+            is ScannerZebraUsbIntents.CheckSku -> checkSku( intent.sku, intent.listProducts )
 
-            is ScannerZebraUsbIntents.NavigateToAddProduct -> navigateToAddProduct( intent.sku )
 
         }
 
     }
-
 
     fun checkSku( sku: String, listProducts: List<AllProductArrivalAndConsumption> ) {
 
@@ -73,29 +69,6 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
     }
 
-    fun navigateToAddProduct( sku: String ) {
-
-        val goodAndServiceScreen: GoodsAndServicesScreenApi = KoinPlatform.getKoin().get()
-
-        Navigation.navigator.push(goodAndServiceScreen.goodsAndServicesScreen( sku ))
-
-    }
-
-    fun setScreen(){
-
-        if ( state.isSet ) {
-
-            state = state.copy(
-
-               // context = context,
-
-                isSet = false
-
-            )
-        }
-
-    }
-
     fun updateScanData(text: String){
 
         state = state.copy(
@@ -107,8 +80,6 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
     }
 
     fun customization() {
-
-        if ( state.number == 0 ) {
 
             state.sdkHandler = SDKHandler(context)
 
@@ -127,6 +98,7 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
 
             notifications_mask =
+
                 notifications_mask or (DCSSDKDefs.DCSSDK_EVENT.DCSSDK_EVENT_SESSION_ESTABLISHMENT.value or
 
                         DCSSDKDefs.DCSSDK_EVENT.DCSSDK_EVENT_SESSION_TERMINATION.value)
@@ -151,43 +123,49 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
                 state.sdkHandler?.dcssdkGetActiveScannersList(state.mScannerInfoList);
             }
 
-            state = state.copy(
-
-                number = 1
-
-            )
-
-        }
-
     }
 
-    fun scannersListHasBeenUpdated() {
+    fun scannersListHasBeenUpdated(): Boolean {
+
+        var result: Boolean = false
 
         state.mSNAPIList.clear()
 
         updateScannersList()
 
-        for (device in state.mScannerInfoList) {
-            if (device.connectionType == DCSSDKDefs.DCSSDK_CONN_TYPES.DCSSDK_CONNTYPE_USB_SNAPI) {
+        for ( device in state.mScannerInfoList ) {
+
+            if ( device.connectionType == DCSSDKDefs.DCSSDK_CONN_TYPES.DCSSDK_CONNTYPE_USB_SNAPI ) {
+
                 state.mSNAPIList.add(device)
             }
         }
-        if (state.mSNAPIList.size == 1) {
+
+        if ( state.mSNAPIList.size == 1 ) {
+
             // Only one SNAPI scanner available
             if (state.mSNAPIList[0].isActive) {
+
+                result = true
+
                 // Available scanner is active. Navigate to active scanner
             } else {
 
-                CoroutineScope(Dispatchers.IO).launch{
+                CoroutineScope(Dispatchers.IO).launch {
 
                     connectScanner( state.mSNAPIList[0])
 
-
                 }
+
+                result = false
 
             }
 
+
+
         }
+
+        return result
 
     }
 
@@ -312,6 +290,8 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
         dataHandler.obtainMessage(Constants.BARCODE_RECEIVED, barcode). sendToTarget();
 
+
+
     }
 
     private val dataHandler: Handler = object : Handler() {
@@ -334,10 +314,12 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
                     )
 
-                    println("///// handleMessage ${state.scanData}//////")
+                    //scannersListHasBeenUpdated()
+
+                    //println("///// handleMessage ${state.scanData}//////")
 
 
-                    Toast.makeText(context, "Данные ${String(barcode.barcodeData)}", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Данные ${String(barcode.barcodeData)}", Toast.LENGTH_SHORT).show();
 
                 }
             }

@@ -178,7 +178,7 @@ class SpecificationsComponent ( override val viewModel: SpecificationsViewModel)
 
                             }
 
-                            if (  viewModel.state.listAlphaTools.size > index &&
+                            if ( viewModel.state.listAlphaTools.size > index &&
 
                                 viewModel.state.listAlphaTools[index] == 1f ) {
 

@@ -7,8 +7,9 @@ import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 expect class ScannerZebraUsbScreen(){
 
     @Composable
-     fun Content(listProducts: List<AllProductArrivalAndConsumption>,
+     fun Content( listProducts: List<AllProductArrivalAndConsumption>,
 
-                 onClickAdd: (sku: String ) -> Unit )
+                 onClickAdd: (sku: String ) -> Unit, onClickNewProductAdd: (sku: String ) -> Unit
+    )
 
 }

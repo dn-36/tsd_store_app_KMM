@@ -15,10 +15,8 @@ data class ScannerZebraUsbState (
 
     val isSet: Boolean = true,
 
-    var number: Int = 0,
-
     val checkSku: Boolean? = null,
 
-    val textNewProduct: String = ""
+    val textNewProduct: String = "",
 
 )

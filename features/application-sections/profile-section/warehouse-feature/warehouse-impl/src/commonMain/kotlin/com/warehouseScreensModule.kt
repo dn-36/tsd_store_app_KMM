@@ -3,6 +3,7 @@ package com
 import com.arrival_and_consumption_goods.datasource.ArrivalAndConsumptionClientImpl
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.domain.repository.ArrivalAndConsumptionClientApi
 import com.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.CreateGoodOrServiceUseCase
 import com.arrival_and_consumption_goods.domain.usecases.DeleteArrivalOrConsumptionUseCase
 import com.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
 import com.arrival_and_consumption_goods.domain.usecases.GetCategoriesUseCase
@@ -61,6 +62,8 @@ val warehouseScreensModule = module {
 
    factory { GetContagentsUseCase( get()) }
 
+   factory { CreateGoodOrServiceUseCase( get()) }
+
    factory { GetWarehouseArrivalAndConsumptionUseCase( get()) }
 
    factory { GetLocationsUseCase( get()) }
@@ -75,7 +78,7 @@ val warehouseScreensModule = module {
 
    factory { ArrivalAndConsumptionViewModel( get(), get(), get(), get(), get(), get(), get(),
 
-      get()) }
+      get(), get()) }
 
     factory { WarehouseClientImpl(get(),get()) as WarehouseClientApi }
 

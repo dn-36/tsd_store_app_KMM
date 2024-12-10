@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arrival_and_consumption_goods.ScannerZebraUsbScreen
+import com.arrival_and_consumption_goods.component.create_good_or_service.ui.CreateGoodOrServiceComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.ui.DataEntryComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
 import com.arrival_and_consumption_goods.component.scanner_camera_component.ui.ScannerCameraComponent
@@ -367,7 +368,11 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( sku ))
 
-            }, onClickCansel = { viewModel.processIntent(
+            }, onClickNewProductAdd = { sku -> viewModel.processIntent(
+
+                ArrivalAndConsumptionIntents.AddNewGoodOrService(sku)) },
+
+                onClickCansel = { viewModel.processIntent(
 
                 ArrivalAndConsumptionIntents.CanselScanner) },
 
@@ -375,13 +380,15 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
         }
 
-        else if ( viewModel.state.isVisibilityScannerZebraUsbComponent  ) {
+        else if ( viewModel.state.isVisibilityScannerZebraUsbComponent ) {
 
             ScannerZebraUsbScreen().Content( viewModel.state.listProducts, onClickAdd = { sku ->
 
                 viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( sku ))
 
-            } )
+            }, onClickNewProductAdd = { sku -> viewModel.processIntent(
+
+                ArrivalAndConsumptionIntents.AddNewGoodOrService(sku)) } )
 
         }
 
@@ -398,6 +405,26 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                 onClickDelete = { viewModel.processIntent(
 
                     ArrivalAndConsumptionIntents.DeleteArrivalOrConsumption( scope )) }).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityCreateGoodOrService ) {
+
+            CreateGoodOrServiceComponent( listCategory = viewModel.state.listCategories,
+
+                onClickBack = { viewModel.processIntent(
+
+                    ArrivalAndConsumptionIntents.BackFromCreateGoodOrService(scope)) },
+
+                sku = viewModel.state.sku,
+
+                onClickCreate = { name, category_id, is_product, sku, text_image, price,
+
+                                  image_upload -> viewModel.processIntent(
+
+                    ArrivalAndConsumptionIntents.CreateGoodOrService ( scope, name, category_id,
+
+                        is_product, sku, text_image, price, image_upload ) ) } ).Content()
 
         }
 

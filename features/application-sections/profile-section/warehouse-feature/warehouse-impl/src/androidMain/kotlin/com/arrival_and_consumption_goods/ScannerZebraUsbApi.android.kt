@@ -1,5 +1,6 @@
 package com.arrival_and_consumption_goods
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +24,12 @@ import androidx.compose.ui.unit.sp
 import com.arrival_and_consumption_goods.viewmodel.ScannerZebraUsbIntents
 import com.arrival_and_consumption_goods.viewmodel.ScannerZebraUsbViewModel
 import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
+import com.zebra.scannercontrol.DCSSDKDefs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.mp.KoinPlatform.getKoin
 
 
@@ -31,17 +39,14 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
 
     @Composable
 
-     actual fun Content(listProducts: List<AllProductArrivalAndConsumption>,
+     actual fun Content ( listProducts: List<AllProductArrivalAndConsumption>,
 
-                        onClickAdd: (sku: String ) -> Unit, ) {
+                         onClickAdd: (sku: String ) -> Unit,
 
-         //viewModel.processIntents(ScannerZebraUsbIntents.SetScreen)
-
-       // val scope = rememberCoroutineScope()
+                         onClickNewProductAdd: (sku: String ) -> Unit,
+    ) {
 
         viewModel.customization()
-
-        println("///// Content() ${viewModel.state.scanData}//////")
 
         Box( modifier = Modifier.fillMaxSize().background(Color.White) ) {
 
@@ -51,22 +56,26 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
 
                 Text (
 
-                    text = "Подсоедините кабель сканера к телефону и разрешите подключиться к нему нажав затем кнопку да",
+                    text = "Подсоедините кабель сканера к телефону и разрешите подключиться к нему нажав кнопку 'да'",
 
                     modifier = Modifier.fillMaxWidth(0.9f), fontSize = 16.sp,
 
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer( modifier = Modifier.height(20.dp) )
 
-                Text(text = viewModel.state.scanData, fontSize = 18.sp)
+                Text( text = "Результат сканирования:", fontSize = 16.sp )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer( modifier = Modifier.height(10.dp) )
 
-                Text( text = viewModel.state.textNewProduct, textAlign = TextAlign.Center)
+                Text( text = viewModel.state.scanData, fontSize = 18.sp )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer( modifier = Modifier.height(10.dp) )
+
+                Text( text = viewModel.state.textNewProduct, textAlign = TextAlign.Center )
+
+                Spacer( modifier = Modifier.height(20.dp) )
 
                 Button(
                     onClick = { viewModel.scannersListHasBeenUpdated() },
@@ -75,11 +84,10 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
                         .height(40.dp)
                         .fillMaxWidth()
                 ) {
-                    Text(text = "Подключиться")
+                    Text( text = "Подключиться" )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
-
 
                 Button(
 
@@ -87,7 +95,7 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
 
                         if ( viewModel.state.scanData.isNotBlank() ) {
 
-                            if (viewModel.state.checkSku == null ||
+                            if ( viewModel.state.checkSku == null ||
 
                                 viewModel.state.checkSku!! == true
 
@@ -101,7 +109,7 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
                                     )
                                 )
 
-                                if (viewModel.state.checkSku!!) {
+                                if ( viewModel.state.checkSku!! ) {
 
                                     onClickAdd(viewModel.state.scanData)
 
@@ -109,14 +117,7 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
                             }
                             else if (!viewModel.state.checkSku!!) {
 
-                                viewModel.processIntents(
-
-                                    ScannerZebraUsbIntents.NavigateToAddProduct(
-
-                                        viewModel.state.scanData
-                                    )
-
-                                )
+                                onClickNewProductAdd(viewModel.state.scanData)
                             }
                         }
                     },

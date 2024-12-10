@@ -8,6 +8,4 @@ sealed class ScannerCameraIntents {
 
     ): ScannerCameraIntents()
 
-    data class NavigateToAddProduct( val sku: String ): ScannerCameraIntents()
-
 }

@@ -54,6 +54,8 @@ import qrscanner.scanImage
 
      val onClickAdd: (sku: String ) -> Unit,
 
+     val onClickNewProductAdd: (sku: String ) -> Unit,
+
      val onClickCansel: ( ) -> Unit,
 
      val listProducts: List<AllProductArrivalAndConsumption>
@@ -167,7 +169,7 @@ import qrscanner.scanImage
 
                     } else {
 
-                        if( ready.value ) {
+                        if (ready.value) {
 
                             showCamera = true
 
@@ -197,75 +199,71 @@ import qrscanner.scanImage
                     }
                 }
 
-                if (qrCodeURL.isNotEmpty()) {
+            if (qrCodeURL.isNotEmpty()) {
 
-                    Column ( modifier = Modifier.align(Alignment.BottomCenter)
-                        .padding( 16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally){
+                Column(
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                        Text(
-                            text = "Результат : ${qrCodeURL} ",
-                            fontSize = 20.sp,
-                            color = Color.Black,
-                            maxLines = 4,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                    Text(
+                        text = "Результат : ${qrCodeURL} ",
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        maxLines = 4,
+                        overflow = TextOverflow.Ellipsis
+                    )
 
-                        Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
-                        Text( text = viewModel.state.textNewProduct, textAlign = TextAlign.Center)
+                    Text(text = viewModel.state.textNewProduct, textAlign = TextAlign.Center)
 
-                        Spacer(modifier = Modifier.height(25.dp))
+                    Spacer(modifier = Modifier.height(25.dp))
 
-                        if (qrCodeURL != "ошибка") {
+                    if (qrCodeURL != "ошибка") {
 
-                            Button(
+                        Button(
 
-                                onClick = {
+                            onClick = {
 
-                                        if (viewModel.state.checkSku == null ||
+                                if (viewModel.state.checkSku == null ||
 
-                                            viewModel.state.checkSku!! == true
-                                        ) {
+                                    viewModel.state.checkSku!! == true
+                                ) {
 
-                                            viewModel.processIntents(
+                                    viewModel.processIntents(
 
-                                                ScannerCameraIntents.CheckSku(
+                                        ScannerCameraIntents.CheckSku(
 
-                                                    qrCodeURL, listProducts
-                                                )
-                                            )
+                                            qrCodeURL, listProducts
+                                        )
+                                    )
 
-                                            if (viewModel.state.checkSku!!) {
+                                    if (viewModel.state.checkSku!!) {
 
-                                                onClickAdd(qrCodeURL)
+                                        onClickAdd(qrCodeURL)
 
-                                            }
-                                        } else if (!viewModel.state.checkSku!!) {
+                                    }
+                                } else if (!viewModel.state.checkSku!!) {
 
-                                            viewModel.processIntents(
+                                    onClickNewProductAdd(qrCodeURL)
 
-                                                ScannerCameraIntents.NavigateToAddProduct(qrCodeURL)
-                                            )
+                                }
 
-                                        }
+                            },
 
-                                },
-
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(70.dp))
-                                    .height(40.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                Text(text = "Добавить")
-                            }
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(70.dp))
+                                .height(40.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(text = "Добавить")
                         }
-
                     }
-
                 }
-
+            }
         }
     }
-}
+ }
 

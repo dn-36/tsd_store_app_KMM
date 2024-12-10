@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
+import com.arrival_and_consumption_goods.domain.usecases.CreateGoodOrServiceUseCase
 import com.arrival_and_consumption_goods.domain.usecases.DeleteArrivalOrConsumptionUseCase
 import com.arrival_and_consumption_goods.domain.usecases.GetArrivalAndConsumptionUseCase
 import com.arrival_and_consumption_goods.domain.usecases.GetCategoriesUseCase
@@ -17,10 +18,10 @@ import com.arrival_and_consumption_goods.model.StoreResponseArrivalAndConsumptio
 import com.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
+import com.project.core_app.utils.imageBitmapToBase64
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ArrivalAndConsumptionViewModel (
 
@@ -38,7 +39,9 @@ class ArrivalAndConsumptionViewModel (
 
     val updateArrivalOrConsumptionUseCase: UpdateArrivalOrConsumptionUseCase,
 
-    val getCategoriesUseCase: GetCategoriesUseCase
+    val getCategoriesUseCase: GetCategoriesUseCase,
+
+    val createGoodOrServiceUseCase: CreateGoodOrServiceUseCase
 
     ) : NetworkViewModel() {
 
@@ -204,18 +207,26 @@ class ArrivalAndConsumptionViewModel (
                             }
                         }
 
-                        val newContragentExpense =  newListContragents.find { it.id == intent.item.contragent_id }
+                        val newContragentExpense =  newListContragents.find {
 
-                        val newContragentParish =  newListContragents.find { it.id == intent.item.contragent_push_id }
+                            it.id == intent.item.contragent_id }
+
+                        val newContragentParish =  newListContragents.find {
+
+                            it.id == intent.item.contragent_push_id }
 
                     val newEntityExpense = newListContragents.find { contragent ->
 
-                        contragent.entits?.any { entity -> entity.id == intent.item.entity_push_id } == true
+                        contragent.entits?.any {
+
+                            entity -> entity.id == intent.item.entity_push_id } == true
                     }
 
                     val newEntityParish = newListContragents.find { contragent ->
 
-                        contragent.entits?.any { entity -> entity.id == intent.item.entity_id } == true
+                        contragent.entits?.any {
+
+                            entity -> entity.id == intent.item.entity_id } == true
                     }
 
                     val newWarehouse = newListWarehouse.find { warehouse ->
@@ -301,12 +312,6 @@ class ArrivalAndConsumptionViewModel (
                             isSet = true,
 
                         )
-
-                        withContext(Dispatchers.Main){
-
-                            println("Create LIST SELECTED PROJECT ${state.listSelectedProducts}")
-
-                        }
 
                         setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
@@ -394,6 +399,93 @@ class ArrivalAndConsumptionViewModel (
 
             }
 
+            is ArrivalAndConsumptionIntents.AddNewGoodOrService -> {
+
+                addNewGoodOrService( intent.sku )
+
+            }
+
+            is ArrivalAndConsumptionIntents.BackFromCreateGoodOrService -> {
+
+                intent.coroutineScope.launch(Dispatchers.IO) {
+
+                    if ( state.lastScanner == "zebra usb" ) {
+
+                        state = state.copy(
+
+                            isVisibilityCreateGoodOrService = false,
+
+                            isVisibilityScannerZebraUsbComponent = true
+
+                            )
+                    }
+
+                    else if ( state.lastScanner == "camera" ) {
+
+                        state = state.copy(
+
+                            isVisibilityCreateGoodOrService = false,
+
+                            isVisibilityScannerCameraComponent = 1f
+
+                        )
+                    }
+                }
+            }
+
+            is ArrivalAndConsumptionIntents.CreateGoodOrService -> {
+
+                intent.coroutineScope.launch( Dispatchers.IO ) {
+
+                    val imageBase64 = if ( intent.image_upload != null ) imageBitmapToBase64(intent.image_upload) else null
+
+                    createGoodOrServiceUseCase.execute( name = intent.name,
+
+                        //video_youtube = intent.video_youtube, ediz_id = intent.ediz_id,
+
+                        category_id = intent.category_id, is_product = intent.is_product,
+
+                        //is_sale = intent.is_sale, system_category_id = intent.system_category_id,
+
+                        //is_view_sale = intent.is_view_sale, is_order = intent.is_order,
+
+                        // is_store = intent.is_store, is_store_view = intent.is_store_view,
+
+                        sku = intent.sku, text_image = intent.text_image,
+
+                        price = intent.price, //tags = intent.tags,
+
+                        //divisions = intent.divisions, variantes = intent.variantes,
+
+                        image_upload = imageBase64 )
+
+                    if ( state.lastScanner == "zebra usb" ) {
+
+                        state = state.copy(
+
+                            isVisibilityCreateGoodOrService = false,
+
+                            isVisibilityScannerZebraUsbComponent = true,
+
+                            listProducts = getProductsUseCase.execute()
+
+                        )
+                    }
+
+                    else if ( state.lastScanner == "camera" ) {
+
+                        state = state.copy (
+
+                            isVisibilityCreateGoodOrService = false,
+
+                            isVisibilityScannerCameraComponent = 1F,
+
+                            listProducts = getProductsUseCase.execute()
+
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -446,7 +538,7 @@ class ArrivalAndConsumptionViewModel (
 
     }
 
-    fun selectProduct(selectedProduct: ProductArrivalAndConsumption){
+    fun selectProduct( selectedProduct: ProductArrivalAndConsumption ){
 
         state = state.copy(
 
@@ -462,13 +554,13 @@ class ArrivalAndConsumptionViewModel (
 
     fun scannerCamera() {
 
-    state = state.copy(
+        state = state.copy(
 
-        isVisibilityScannerCameraComponent = 1f,
+            isVisibilityScannerCameraComponent = 1f,
 
-        isVisibilityAddProductsComponent = 0f
+            isVisibilityAddProductsComponent = 0f
 
-    )
+        )
 
     }
 
@@ -515,7 +607,7 @@ class ArrivalAndConsumptionViewModel (
 
         else {
 
-            state = state.copy(
+            state = state.copy (
 
                 colorBorderCountTF = Color.Red
 
@@ -679,10 +771,46 @@ class ArrivalAndConsumptionViewModel (
 
         }
 
-        state = state.copy(
+        state = state.copy (
 
             listFilteredArrivalOrConsumption = newList
 
         )
     }
+
+    fun addNewGoodOrService( sku: String ) {
+
+        if ( state.isVisibilityScannerZebraUsbComponent ) {
+
+            state = state.copy(
+
+                isVisibilityCreateGoodOrService = true,
+
+                isVisibilityScannerZebraUsbComponent = false,
+
+                lastScanner = "zebra usb",
+
+                sku = sku
+
+            )
+        }
+
+        else if ( state.isVisibilityScannerCameraComponent == 1F ) {
+
+            state = state.copy(
+
+                isVisibilityCreateGoodOrService = true,
+
+                isVisibilityScannerCameraComponent = 0F,
+
+                lastScanner = "camera",
+
+                sku = sku
+
+            )
+
+        }
+
+    }
+
 }

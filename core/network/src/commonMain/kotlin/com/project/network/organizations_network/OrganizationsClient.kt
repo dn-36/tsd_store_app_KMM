@@ -36,6 +36,7 @@ class  OrganizationsClient {
                 level = LogLevel.BODY // Включить логирование для отладки
             }
             defaultRequest {
+
                 header("Authorization", "Bearer ${ConstData.TOKEN}")
             }
         }
@@ -124,5 +125,4 @@ class  OrganizationsClient {
             throw e // Или обработайте ошибку по-другому
         }
     }
-
 }

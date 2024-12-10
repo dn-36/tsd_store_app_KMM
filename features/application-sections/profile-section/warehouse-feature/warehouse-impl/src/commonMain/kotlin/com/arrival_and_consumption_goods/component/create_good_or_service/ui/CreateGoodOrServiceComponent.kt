@@ -58,7 +58,7 @@ class CreateGoodOrServiceComponent (
 
     val onClickBack:() -> Unit,
 
-    val onClickCreate:(
+    val onClickCreate: (
 
             name: String,
             //video_youtube: String,
@@ -97,7 +97,6 @@ class CreateGoodOrServiceComponent (
 
         ) -> Unit,
 
-
     val listCategory: List<CategoryModel>,
 
     val sku: String
@@ -131,7 +130,11 @@ class CreateGoodOrServiceComponent (
 
                 listCategory, sku ))
 
-            Box( modifier = Modifier.fillMaxSize().background(Color.White)) {
+            Box( modifier = Modifier.fillMaxSize().background(Color.White).clickable(
+                indication = null, // Отключение эффекта затемнения
+                interactionSource = remember { MutableInteractionSource() })
+
+            {  }) {
 
                 Column(modifier = Modifier.padding(16.dp).verticalScroll(scroll)) {
 
@@ -392,7 +395,7 @@ class CreateGoodOrServiceComponent (
 
                     if ( viewModel.state.expendedGoodOrService ) {
 
-                        Box(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+                        Box( modifier = Modifier.fillMaxWidth().height(100.dp) ) {
 
                             Card(
                                 modifier = Modifier.fillMaxSize()

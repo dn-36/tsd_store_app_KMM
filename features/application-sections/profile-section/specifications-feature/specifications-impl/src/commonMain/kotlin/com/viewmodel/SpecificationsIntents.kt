@@ -45,9 +45,9 @@ sealed class SpecificationsIntents {
 
     object NoDelete: SpecificationsIntents()
 
-    data class SelectProduct ( val item: ProductResponseModel )  : SpecificationsIntents()
-
     data class DeleteSpecification ( val coroutineScope: CoroutineScope ) : SpecificationsIntents()
+
+    data class SelectProduct ( val item: ProductResponseModel )  : SpecificationsIntents()
 
     data class CreateSpecification ( val coroutineScope: CoroutineScope,
 

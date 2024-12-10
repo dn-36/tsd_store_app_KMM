@@ -19,8 +19,6 @@ class ScannerCameraViewModel: ViewModel() {
 
             is ScannerCameraIntents.CheckSku -> checkSku( intent.sku, intent.listProducts )
 
-            is ScannerCameraIntents.NavigateToAddProduct -> navigateToAddProduct( intent.sku )
-
         }
 
     }
@@ -50,14 +48,6 @@ class ScannerCameraViewModel: ViewModel() {
         )
 
         }
-
-    }
-
-    fun navigateToAddProduct( sku: String ) {
-
-        val goodAndServiceScreen: GoodsAndServicesScreenApi = KoinPlatform.getKoin().get()
-
-        Navigation.navigator.push(goodAndServiceScreen.goodsAndServicesScreen( sku ))
 
     }
 

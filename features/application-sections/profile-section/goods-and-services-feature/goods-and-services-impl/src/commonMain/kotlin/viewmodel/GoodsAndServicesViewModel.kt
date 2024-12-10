@@ -3,12 +3,14 @@ package viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 import com.ProductsMenuScreenApi
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.core_app.utils.imageBitmapToBase64
 import com.project.network.Navigation
 import domain.usecases.CreateGoodOrServiceUseCase
+import domain.usecases.DeleteGoodOrServiceUseCase
 import domain.usecases.GetCategoryUseCase
 import domain.usecases.GetGoodsAndServicesUseCase
 import domain.usecases.GetSystemCategoryUseCase
@@ -16,6 +18,7 @@ import domain.usecases.GetUnitsGoodsAndServicesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
+import model.ProductGoodsServicesModel
 import org.koin.mp.KoinPlatform
 
 class GoodsAndServicesViewModel (
@@ -28,9 +31,11 @@ class GoodsAndServicesViewModel (
 
     val getUnitsMeasurementUseCase: GetUnitsGoodsAndServicesUseCase,
 
-    val createGoodOrServiceUseCase: CreateGoodOrServiceUseCase
+    val createGoodOrServiceUseCase: CreateGoodOrServiceUseCase,
 
-) : NetworkViewModel() {
+    val deleteGoodOrServiceUseCase: DeleteGoodOrServiceUseCase
+
+    ) : NetworkViewModel() {
 
     var state by mutableStateOf(GoodsAndServicesState())
 
@@ -118,31 +123,33 @@ class GoodsAndServicesViewModel (
 
                 intent.coroutineScope.launch(Dispatchers.IO) {
 
-                    val imageBase64 = if ( intent.image_upload != null ) imageBitmapToBase64(intent.image_upload) else null
+                    val imageBase64 = if ( state.image_upload != null ) imageBitmapToBase64( state.image_upload!! ) else null
 
-                    createGoodOrServiceUseCase.execute( name = intent.name,
+                    createGoodOrServiceUseCase.execute( name = state.name,
 
-                        video_youtube = intent.video_youtube, ediz_id = intent.ediz_id,
+                        video_youtube = state.video_youtube, ediz_id = state.ediz_id,
 
-                        category_id = intent.category_id, is_product = intent.is_product,
+                        category_id = state.category_id, is_product = state.is_product,
 
-                        is_sale = intent.is_sale, system_category_id = intent.system_category_id,
+                        is_sale = state.is_sale, system_category_id = state.system_category_id,
 
-                        is_view_sale = intent.is_view_sale, is_order = intent.is_order,
+                        is_view_sale = state.is_view_sale, is_order = state.is_order,
 
-                        is_store = intent.is_store, is_store_view = intent.is_store_view,
+                        is_store = state.is_store, is_store_view = state.is_store_view,
 
-                        sku = intent.sku, text_image = intent.text_image,
+                        is_bu = state.isBu , sku = state.sku, text_image = state.text_image,
 
-                        price = intent.price, tags = intent.tags,
+                        creater = state.manufacturer, nomer_creater = state.numberManufacturer,
 
-                        divisions = intent.divisions, variantes = intent.variantes,
+                        postavka = state.postavka, price = state.price, tags = state.tags,
+
+                        divisions = state.divisions, variantes = state.variantes,
 
                         image_upload = imageBase64 )
 
                     state = state.copy (
 
-                        isVisibilityDataEntry = false,
+                        isVisibilityAdditionalInformationComponent = false,
 
                         listProducts = getGoodsAndServicesUseCase.execute()
 
@@ -153,6 +160,56 @@ class GoodsAndServicesViewModel (
                 }
 
             }
+
+            is GoodsAndServicesIntents.LongPressItem -> longPressItem( intent.index )
+
+            is GoodsAndServicesIntents.OnePressItem -> onePressItem()
+
+            is GoodsAndServicesIntents.NoDelete -> noDelete()
+
+            is GoodsAndServicesIntents.OpenDeleteComponent -> openDeleteComponent(intent.item)
+
+            is GoodsAndServicesIntents.DeleteGoodOrService -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch(Dispatchers.IO) {
+
+                    deleteGoodOrServiceUseCase.execute(state.updateItem!!.id?:0)
+
+                    state = state.copy (
+
+                        isVisibilityDeleteComponent = false,
+
+                        updateItem = null,
+
+                        listProducts = getGoodsAndServicesUseCase.execute(),
+
+                        listAlphaTools = emptyList()
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is GoodsAndServicesIntents.Next -> next( intent.name, intent.video_youtube, intent.ediz_id,
+
+                intent.category_id, intent.is_product, intent.is_sale, intent.system_category_id,
+
+                intent.is_view_sale, intent.is_order, intent.is_store, intent.is_store_view,
+
+                intent.sku, intent.text_image, intent.price, intent.tags, intent.variantes,
+
+                intent.divisions, intent.image_upload )
+
+            is GoodsAndServicesIntents.Discharge -> discharge()
+
+            is GoodsAndServicesIntents.ReadyDischarge -> readyDischarge( intent.isBu,
+
+                intent.manufacturer, intent.numberManufacturer, intent.postavka )
 
         }
 
@@ -171,6 +228,148 @@ class GoodsAndServicesViewModel (
         state = state.copy(
 
             isVisibilityDataEntry = false
+
+        )
+
+    }
+
+    fun longPressItem ( index: Int ) {
+
+        val newList = MutableList(state.listProducts.size){0F}
+
+        newList[index] = 1f
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+    }
+
+    fun onePressItem () {
+
+        val newList = MutableList(state.listProducts.size){0F}
+
+        state = state.copy(
+
+            listAlphaTools = newList
+
+        )
+
+    }
+
+    fun openDeleteComponent ( item: ProductGoodsServicesModel ) {
+
+        state = state.copy(
+
+            updateItem = item,
+
+            isVisibilityDeleteComponent = true
+
+        )
+
+    }
+
+    fun noDelete () {
+
+        state = state.copy(
+
+            isVisibilityDeleteComponent = false,
+
+            updateItem = null
+
+        )
+
+    }
+
+    fun next ( name: String, video_youtube: String, ediz_id: Int?,
+
+               category_id: Int?, is_product: Int, is_sale: Int,
+
+               system_category_id: Int?, is_view_sale: Int, is_order: Int,
+
+               is_store: Int, is_store_view: Int, sku: String,
+
+               text_image: String, price: Float?, tags: List<String>,
+
+               variantes: List<String>, divisions: String, image: ImageBitmap? ) {
+
+        state = state.copy(
+
+            isVisibilityDataEntry = false,
+
+            isVisibilityAdditionalInformationComponent = true,
+
+            name = name,
+
+            video_youtube = video_youtube,
+
+            ediz_id = ediz_id,
+
+            category_id = category_id,
+
+            is_product = is_product,
+
+            is_sale = is_sale,
+
+            system_category_id = system_category_id,
+
+            is_view_sale = is_view_sale,
+
+            is_order = is_order,
+
+            is_store = is_store,
+
+            is_store_view = is_store_view,
+
+            sku = sku,
+
+            text_image = text_image,
+
+            price = price,
+
+            tags = tags,
+
+            variantes = variantes,
+
+            divisions = divisions,
+
+            image_upload = image
+
+        )
+
+    }
+
+    fun discharge () {
+
+        state = state.copy(
+
+            isVisibilityAdditionalInformationComponent = false,
+
+            isVisibilityDischargeComponent = true
+
+        )
+
+    }
+
+    fun readyDischarge ( isBu: Int, manufacturer: String, numberManufacturer: String,
+
+                         postavka: String ) {
+
+        state = state.copy (
+
+            isBu = isBu,
+
+            manufacturer = manufacturer,
+
+            numberManufacturer = numberManufacturer,
+
+            postavka = postavka,
+
+            isVisibilityAdditionalInformationComponent = true,
+
+            isVisibilityDischargeComponent = false,
 
         )
 

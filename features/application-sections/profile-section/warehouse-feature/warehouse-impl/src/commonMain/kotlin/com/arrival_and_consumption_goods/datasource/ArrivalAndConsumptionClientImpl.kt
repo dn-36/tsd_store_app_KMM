@@ -339,9 +339,11 @@ class ArrivalAndConsumptionClientImpl (
 
         productsClient.createGoodOrService(name, "", null, category_id, is_product,
 
-            1, null, 1, 0, 1, 1, sku,
+            null, null, null, null, null,
 
-            text_image, price, listOf(), listOf(), "", image_upload )
+            null, is_bu = 0, sku, text_image, "", "", "",
+
+            price, listOf(), listOf(), "", image_upload )
 
     }
 
@@ -379,7 +381,6 @@ class ArrivalAndConsumptionClientImpl (
             )
 
         }
-
 
     }
 
