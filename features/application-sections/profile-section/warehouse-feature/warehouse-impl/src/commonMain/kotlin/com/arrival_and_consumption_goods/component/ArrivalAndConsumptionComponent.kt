@@ -247,6 +247,15 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                 }
             }
         }
+
+        /*ScannerZebraUsbScreen().Content( viewModel.state.listProducts, onClickAdd = { sku ->
+
+            viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( sku ))
+
+        }, onClickNewProductAdd = { sku -> viewModel.processIntent(
+
+            ArrivalAndConsumptionIntents.AddNewGoodOrService(sku)) } )*/
+
         if ( viewModel.state.isVisibilityDataEntryComponent == 1f) {
 
             DataEntryComponent(
@@ -418,13 +427,17 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 sku = viewModel.state.sku,
 
-                onClickCreate = { name, category_id, is_product, sku, text_image, price,
+                onClickCreate = { name, category_id, is_product, is_sale, is_view_sale,
+
+                                  is_order, is_store ,is_store_view ,sku, text_image, price,
 
                                   image_upload -> viewModel.processIntent(
 
                     ArrivalAndConsumptionIntents.CreateGoodOrService ( scope, name, category_id,
 
-                        is_product, sku, text_image, price, image_upload ) ) } ).Content()
+                        is_product, is_sale, is_view_sale, is_order, is_store, is_store_view,
+
+                        sku, text_image, price, image_upload ) ) } ).Content()
 
         }
 

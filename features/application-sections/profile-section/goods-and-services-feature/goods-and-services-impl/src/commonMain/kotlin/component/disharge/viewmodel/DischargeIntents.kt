@@ -1,6 +1,10 @@
 package component.disharge.viewmodel
 
+import model.ProductGoodsServicesModel
+
 sealed class DischargeIntents {
+
+    data class SetScreen( val updateItem: ProductGoodsServicesModel? ): DischargeIntents()
 
     data class InputTextManufacturer( val text: String ): DischargeIntents()
 

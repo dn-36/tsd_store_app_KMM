@@ -31,6 +31,16 @@ sealed class CreateGoodOrServiceIntents {
 
     data class SelectGoodOrService( val index: Int ): CreateGoodOrServiceIntents()
 
+    data class SelectForSale( val index: Int ): CreateGoodOrServiceIntents()
+
+    data class SelectUnderOrder( val index: Int ): CreateGoodOrServiceIntents()
+
+    data class SelectIsStock( val index: Int ): CreateGoodOrServiceIntents()
+
+    data class SelectDisplayStock( val index: Int ): CreateGoodOrServiceIntents()
+
+    data class SelectDisplayOnSite( val index: Int ): CreateGoodOrServiceIntents()
+
 
 
     object DeleteSelectedCategory: CreateGoodOrServiceIntents()
@@ -39,9 +49,29 @@ sealed class CreateGoodOrServiceIntents {
 
     object DeleteSelectedPhoto: CreateGoodOrServiceIntents()
 
+    object DeleteSelectedForSale: CreateGoodOrServiceIntents()
+
+    object DeleteSelectedUnderOrder: CreateGoodOrServiceIntents()
+
+    object DeleteSelectedIsStock: CreateGoodOrServiceIntents()
+
+    object DeleteSelectedDisplayStock: CreateGoodOrServiceIntents()
+
+    object DeleteSelectedDisplayOnSite: CreateGoodOrServiceIntents()
+
 
 
     object MenuCategory: CreateGoodOrServiceIntents()
+
+    object MenuForSale: CreateGoodOrServiceIntents()
+
+    object MenuDisplayOnSite: CreateGoodOrServiceIntents()
+
+    object MenuUnderOrder: CreateGoodOrServiceIntents()
+
+    object MenuIsStock: CreateGoodOrServiceIntents()
+
+    object MenuDisplayStock: CreateGoodOrServiceIntents()
 
     object MenuGoodOrService: CreateGoodOrServiceIntents()
 

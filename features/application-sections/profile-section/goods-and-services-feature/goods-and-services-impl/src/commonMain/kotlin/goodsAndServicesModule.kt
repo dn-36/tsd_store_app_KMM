@@ -10,6 +10,7 @@ import domain.usecases.GetCategoryUseCase
 import domain.usecases.GetGoodsAndServicesUseCase
 import domain.usecases.GetSystemCategoryUseCase
 import domain.usecases.GetUnitsGoodsAndServicesUseCase
+import domain.usecases.UpdateGoodOrServiceUseCase
 import org.koin.dsl.module
 import product_network.ProductApiClient
 import viewmodel.GoodsAndServicesViewModel
@@ -34,7 +35,9 @@ val goodsAndServicesModule = module {
 
     factory { DeleteGoodOrServiceUseCase(get()) }
 
-    factory { GoodsAndServicesViewModel( get(), get(), get(), get(), get(), get()) }
+    factory { UpdateGoodOrServiceUseCase(get()) }
+
+    factory { GoodsAndServicesViewModel( get(), get(), get(), get(), get(), get(), get()) }
 
     factory { ProductApiClient(ConstData.TOKEN) }
 

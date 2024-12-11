@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import component.disharge.viewmodel.DischargeIntents
 import component.disharge.viewmodel.DischargeViewModel
+import model.ProductGoodsServicesModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
@@ -38,9 +39,13 @@ import project.core.resources.ready
 
 class DischargeComponent (
 
+    val updateItem: ProductGoodsServicesModel?,
+
     val onClickReady:( isBu: Int, manufacturer: String, numberManufacturer: String,
 
-            postavka: String) -> Unit
+            postavka: String) -> Unit,
+
+    val onClickBack:() -> Unit
 
  ) {
 
@@ -51,6 +56,8 @@ class DischargeComponent (
      fun Content() {
 
         val scope = rememberCoroutineScope()
+
+        viewModel.processIntents(DischargeIntents.SetScreen(updateItem))
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
 
@@ -68,7 +75,7 @@ class DischargeComponent (
 
                             interactionSource = remember { MutableInteractionSource() })
 
-                        { }
+                        { onClickBack() }
                     )
 
                     Spacer(modifier = Modifier.width(10.dp))

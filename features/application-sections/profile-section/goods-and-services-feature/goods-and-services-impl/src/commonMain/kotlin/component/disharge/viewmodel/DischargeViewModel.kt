@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import model.ProductGoodsServicesModel
 
 class DischargeViewModel() : ViewModel() {
 
@@ -12,6 +13,8 @@ class DischargeViewModel() : ViewModel() {
     fun processIntents ( intent: DischargeIntents ) {
 
         when ( intent ) {
+
+            is DischargeIntents.SetScreen -> setScreen(intent.updateItem)
 
             is DischargeIntents.InputTextManufacturer -> inputTextManufacturer(intent.text)
 
@@ -24,6 +27,39 @@ class DischargeViewModel() : ViewModel() {
 
             is DischargeIntents.IsBu -> isBu()
 
+        }
+
+    }
+
+    fun setScreen( updateItem: ProductGoodsServicesModel? ){
+
+        if ( state.isSet ) {
+
+            var newIsBu = false
+
+            if ( updateItem != null ) {
+
+                if (  updateItem.is_bu != null ) {
+
+                    newIsBu = if (updateItem.is_bu == 0 ) false else true
+
+                }
+
+            }
+
+            state = state.copy(
+
+                manufacturer = if ( updateItem != null ) updateItem.creater?:"" else "",
+
+                numberManufacturer = if ( updateItem != null ) updateItem.nomer_creater?:"" else "",
+
+                postavka = if ( updateItem != null ) updateItem.postavka?:"" else "",
+
+                isBu = newIsBu,
+
+                isSet = false
+
+            )
         }
 
     }

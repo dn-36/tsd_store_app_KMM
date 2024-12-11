@@ -93,14 +93,14 @@ sealed class ArrivalAndConsumptionIntents {
         //val ediz_id: Int?,
                                     val category_id: Int?,
                                     val is_product: Int,
-        //val is_sale: Int,
+                                    val is_sale: Int,
         //min_count_store: 0 (int минимальный отстаток)
         //is_only_industry: 0/1 (только производство)
         //val system_category_id: Int?,
-        //val is_view_sale: Int,
-        //val is_order: Int,
-        //val is_store: Int,
-        //val is_store_view: Int,
+                                    val is_view_sale: Int,
+                                    val is_order: Int,
+                                    val is_store: Int,
+                                    val is_store_view: Int,
         //is_test: 0/1 (Можно взять на тест)
         //is_arenda: 0/1 (Можно взять в аренду)
         //is_zakaz: 0/1 (Можно заказать)

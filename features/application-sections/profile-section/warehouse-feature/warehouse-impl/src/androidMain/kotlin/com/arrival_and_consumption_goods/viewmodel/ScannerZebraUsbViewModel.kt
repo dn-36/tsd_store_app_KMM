@@ -1,6 +1,5 @@
 package com.arrival_and_consumption_goods.viewmodel
 
-import GoodsAndServicesScreenApi
 import android.content.Context
 import android.os.Handler
 import android.os.Message
@@ -9,11 +8,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.arrival_and_consumption_goods.helpers.Barcode
 import com.arrival_and_consumption_goods.helpers.Constants
 import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
-import com.project.network.Navigation
 import com.zebra.barcode.sdk.sms.ConfigurationUpdateEvent
 import com.zebra.scannercontrol.DCSSDKDefs
 import com.zebra.scannercontrol.DCSScannerInfo
@@ -24,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.mp.KoinPlatform
 
 class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiDelegate {
 
@@ -37,7 +33,6 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
             is ScannerZebraUsbIntents.UpdateScanData -> updateScanData(intent.text)
 
             is ScannerZebraUsbIntents.CheckSku -> checkSku( intent.sku, intent.listProducts )
-
 
         }
 
@@ -69,7 +64,7 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
     }
 
-    fun updateScanData(text: String){
+    fun updateScanData(text: String) {
 
         state = state.copy(
 
@@ -151,22 +146,23 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
                 // Available scanner is active. Navigate to active scanner
             } else {
 
+                state = state.copy(
+
+                    counter = 0
+
+                )
+
                 CoroutineScope(Dispatchers.IO).launch {
 
                     connectScanner( state.mSNAPIList[0])
 
                 }
 
-                result = false
-
             }
-
-
 
         }
 
         return result
-
     }
 
     fun updateScannersList() {
@@ -213,11 +209,17 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
         if (state.sdkHandler != null) { result = state.sdkHandler!!.dcssdkEstablishCommunicationSession(scanner.getScannerID())
 
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Подключение к сканеру установлено!", Toast.LENGTH_SHORT)
-                    .show();
+            //withContext(Dispatchers.Main) {
+            //    Toast.makeText(context, "Подключение к сканеру установлено!", Toast.LENGTH_SHORT)
+            //        .show();
+            //}
 
-            }
+            //state = state.copy(
+
+            //    counter = 1
+
+            //)
+
         }
 
         if (result == DCSSDKDefs.DCSSDK_RESULT.DCSSDK_RESULT_SUCCESS) {

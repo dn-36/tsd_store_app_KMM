@@ -44,9 +44,27 @@ class CreateGoodOrServiceViewModel(): ViewModel() {
 
             is CreateGoodOrServiceIntents.MenuGoodOrService -> menuGoodOrService()
 
+            is CreateGoodOrServiceIntents.MenuForSale -> menuForSale()
+
+            is CreateGoodOrServiceIntents.MenuDisplayOnSite -> menuDisplayOnSite()
+
+            is CreateGoodOrServiceIntents.MenuUnderOrder -> menuUnderOrder()
+
+            is CreateGoodOrServiceIntents.MenuIsStock -> menuIsStock()
+
+            is CreateGoodOrServiceIntents.MenuDisplayStock -> menuDisplayStock()
+
 
 
             is CreateGoodOrServiceIntents.SelectCategory -> selectCategory(intent.item)
+
+            is CreateGoodOrServiceIntents.SelectDisplayOnSite -> selectDisplayOnSite(intent.index)
+
+            is CreateGoodOrServiceIntents.SelectUnderOrder -> selectUnderOrder(intent.index)
+
+            is CreateGoodOrServiceIntents.SelectIsStock -> selectIsStock(intent.index)
+
+            is CreateGoodOrServiceIntents.SelectDisplayStock -> selectDisplayStock(intent.index)
 
             is CreateGoodOrServiceIntents.SelectGoodOrService -> {
 
@@ -54,10 +72,34 @@ class CreateGoodOrServiceViewModel(): ViewModel() {
 
             }
 
+            is CreateGoodOrServiceIntents.SelectForSale -> {
+
+                selectForSale(intent.index)
+
+            }
+
 
             is CreateGoodOrServiceIntents.DeleteSelectedCategory -> deleteSelectedCategory()
 
-            is CreateGoodOrServiceIntents.DeleteSelectedGoodOrService -> deleteSelectedGoodOrService()
+            is CreateGoodOrServiceIntents.DeleteSelectedUnderOrder -> deleteSelectedUnderOrder()
+
+            is CreateGoodOrServiceIntents.DeleteSelectedIsStock -> deleteSelectedIsStock()
+
+            is CreateGoodOrServiceIntents.DeleteSelectedDisplayStock -> deleteSelectedDisplayStock()
+
+            is CreateGoodOrServiceIntents.DeleteSelectedDisplayOnSite -> {
+
+                deleteSelectedDisplayOnSite()
+
+            }
+
+            is CreateGoodOrServiceIntents.DeleteSelectedGoodOrService -> {
+
+                deleteSelectedGoodOrService()
+
+            }
+
+            is CreateGoodOrServiceIntents.DeleteSelectedForSale -> deleteSelectedForSale()
 
             is CreateGoodOrServiceIntents.DeleteSelectedPhoto -> deleteSelectedPhoto()
 
@@ -163,6 +205,66 @@ class CreateGoodOrServiceViewModel(): ViewModel() {
 
     }
 
+    fun menuForSale(){
+
+        state = state.copy(
+
+            expendedForSale = !state.expendedForSale,
+
+            expendedCategory = false,
+
+            )
+
+    }
+
+    fun menuDisplayOnSite(){
+
+        state = state.copy(
+
+            expendedDisplayOnSite = !state.expendedDisplayOnSite,
+
+            expendedCategory = false,
+
+            )
+
+    }
+
+    fun menuUnderOrder(){
+
+        state = state.copy(
+
+            expendedUnderOrder = !state.expendedUnderOrder,
+
+            expendedCategory = false,
+
+            )
+
+    }
+
+    fun menuIsStock(){
+
+        state = state.copy(
+
+            expendedIsStock = !state.expendedIsStock,
+
+            expendedCategory = false,
+
+            )
+
+    }
+
+    fun menuDisplayStock(){
+
+        state = state.copy(
+
+            expendedDisplayStock = !state.expendedDisplayStock,
+
+            expendedCategory = false,
+
+            )
+
+    }
+
 
 
     fun selectCategory( item: CategoryModel){
@@ -189,6 +291,70 @@ class CreateGoodOrServiceViewModel(): ViewModel() {
 
     }
 
+    fun selectForSale( index: Int ) {
+
+        state = state.copy(
+
+            selectedForSale =  if ( index == 1 ) Pair("Да",1) else Pair("Нет",0),
+
+            expendedForSale = false
+
+        )
+
+    }
+
+    fun selectDisplayOnSite( index: Int ) {
+
+        state = state.copy(
+
+            selectedForSale =  if ( index == 1 ) Pair("Да",1) else Pair("Нет",0),
+
+            expendedForSale = false
+
+        )
+
+    }
+
+
+    fun selectIsStock( index: Int ){
+
+        state = state.copy(
+
+            selectedIsStock = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedIsStock = false
+
+        )
+
+    }
+
+    fun selectDisplayStock( index: Int ){
+
+        state = state.copy(
+
+            selectedDisplayStock = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedDisplayStock = false
+
+        )
+
+    }
+
+    fun selectUnderOrder( index: Int ){
+
+        state = state.copy(
+
+            selectedUnderOrder = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedUnderOrder = false
+
+        )
+
+    }
+
+
+
+
     fun deleteSelectedCategory(){
 
         state = state.copy(
@@ -207,6 +373,57 @@ class CreateGoodOrServiceViewModel(): ViewModel() {
         state = state.copy(
 
             selectedGoodOrService = Pair("Товар",1)
+
+        )
+
+    }
+
+    fun deleteSelectedForSale(){
+
+        state = state.copy(
+
+            selectedForSale = Pair("Да",1)
+
+        )
+
+    }
+
+    fun deleteSelectedDisplayOnSite(){
+
+        state = state.copy(
+
+            selectedForSale = Pair("Да",1)
+
+        )
+
+    }
+
+
+    fun deleteSelectedUnderOrder(){
+
+        state = state.copy(
+
+            selectedUnderOrder = Pair("Нет",0)
+
+        )
+
+    }
+
+    fun deleteSelectedIsStock(){
+
+        state = state.copy(
+
+            selectedIsStock = Pair("Да",1)
+
+        )
+
+    }
+
+    fun deleteSelectedDisplayStock(){
+
+        state = state.copy(
+
+            selectedDisplayStock = Pair("Да",1)
 
         )
 

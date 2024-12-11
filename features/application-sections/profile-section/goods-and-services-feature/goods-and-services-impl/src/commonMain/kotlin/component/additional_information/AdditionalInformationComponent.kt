@@ -32,11 +32,13 @@ import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
 
-class AdditionalInformationComponent(
+ class AdditionalInformationComponent(
 
     val onClickDischarge:() -> Unit,
 
-    val onClickCreate:() -> Unit,
+    val onClickCreateOrUpdate:() -> Unit,
+
+    val onClickBack:() -> Unit,
 
     ) {
 
@@ -57,7 +59,7 @@ class AdditionalInformationComponent(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
 
-                        { }
+                        { onClickBack() }
                     )
 
                     Spacer( modifier = Modifier.width(10.dp) )
@@ -82,7 +84,7 @@ class AdditionalInformationComponent(
 
                 Button (
 
-                    onClick = {  onClickCreate(  ) },
+                    onClick = {  onClickCreateOrUpdate(  ) },
 
                     modifier = Modifier
                         .clip(RoundedCornerShape(70.dp))
@@ -91,7 +93,7 @@ class AdditionalInformationComponent(
 
                 ) {
 
-                    Text(text = "Создать")
+                    Text(text = "Готово")
 
                 }
 

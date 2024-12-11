@@ -321,12 +321,12 @@ class ArrivalAndConsumptionClientImpl (
         //ediz_id: Int?,
         category_id: Int?,
         is_product: Int,
-        //is_sale: Int,
+        is_sale: Int,
         //system_category_id: Int?,
-        //is_view_sale: Int,
-        //is_order: Int,
-        //is_store: Int,
-        //is_store_view: Int,
+        is_view_sale: Int,
+        is_order: Int,
+        is_store: Int,
+        is_store_view: Int,
         sku: String,
         text_image: String,
         price: Float?,
@@ -339,9 +339,9 @@ class ArrivalAndConsumptionClientImpl (
 
         productsClient.createGoodOrService(name, "", null, category_id, is_product,
 
-            null, null, null, null, null,
+            is_sale, null, is_view_sale, is_order, is_store,
 
-            null, is_bu = 0, sku, text_image, "", "", "",
+            is_store_view, is_bu = 0, sku, text_image, "", "", "",
 
             price, listOf(), listOf(), "", image_upload )
 

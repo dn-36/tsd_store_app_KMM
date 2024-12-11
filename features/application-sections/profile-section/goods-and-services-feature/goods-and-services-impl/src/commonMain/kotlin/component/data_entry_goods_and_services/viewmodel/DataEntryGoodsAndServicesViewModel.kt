@@ -4,7 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.project.core_app.utils.base64ToImageBitmap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
 import model.CategoryGoodsServicesModel
+import model.ProductGoodsServicesModel
 import model.SystemCategoryGoodsServicesModel
 import model.UnitGoodsAndServicesModel
 
@@ -16,9 +22,11 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         when ( intent ) {
 
-            is DataEntryGoodsAndServicesIntents.SetScreen -> setScreen( intent.lisCategory,
+            is DataEntryGoodsAndServicesIntents.SetScreen -> setScreen( intent.coroutineScope,
 
-                intent.listSystemCategory, intent.listUnitsMeasurement, intent.sku )
+                intent.lisCategory, intent.listSystemCategory, intent.listUnitsMeasurement,
+
+                intent.sku, intent.updateItem )
 
             is DataEntryGoodsAndServicesIntents.InputTextName -> inputTextName(intent.text)
 
@@ -143,31 +151,127 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
     }
 
-    fun setScreen( listCategory: List<CategoryGoodsServicesModel>,
+    fun setScreen( coroutineScope: CoroutineScope,
+
+                   listCategory: List<CategoryGoodsServicesModel>,
 
                    listSystemCategory: List<SystemCategoryGoodsServicesModel>,
 
                    listUnits: List<UnitGoodsAndServicesModel>,
 
-                   sku: String ){
+                   sku: String, updateItem: ProductGoodsServicesModel? ) {
 
         if ( state.isSet ) {
 
-            state = state.copy(
+            var newIsSale = Pair("",0)
 
-                listFilteredCategory = listCategory,
+            var newIsSaleView = Pair("",0)
 
-                listFilteredSystemCategory = listSystemCategory,
+            var newZakaz = Pair("",0)
 
-                listFilteredUnits = listUnits ,
+            var newIsStore = Pair("",0)
 
-                sku = sku,
+            var newIsStoreView = Pair("",0)
 
-                isSet = false
+            var newIsProduct = Pair("",0)
 
-            )
+            if ( updateItem != null ) {
+
+                if ( updateItem.is_sale != null ) {
+
+                    newIsSale = if ( updateItem.is_sale == 0 ) Pair("Нет",0) else Pair("Да",1)
+
+                }
+
+                if ( updateItem.is_view_sale != null ) {
+
+                    newIsSaleView = if ( updateItem.is_view_sale == 0 ) Pair("Нет",0) else Pair("Да",1)
+
+                }
+
+                if ( updateItem.is_zakaz != null ) {
+
+                    newZakaz = if ( updateItem.is_zakaz == 0 ) Pair("Нет",0) else Pair("Да",1)
+
+                }
+
+                if ( updateItem.is_store != null ) {
+
+                    newIsStore = if ( updateItem.is_store == 0 ) Pair("Нет",0) else Pair("Да",1)
+
+                }
+
+                if ( updateItem.is_store_view != null ) {
+
+                    newIsStoreView = if ( updateItem.is_store_view == 0 ) Pair("Нет",0) else Pair("Да",1)
+
+                }
+
+                    if (updateItem.is_product != null) {
+
+                        newIsProduct =
+                            if (updateItem.is_product == 0) Pair("Услуга", 0) else Pair("Товар", 1)
+
+                    }
+
+            }
+
+            coroutineScope.launch( Dispatchers.Main ) {
+
+                val newImage = if (updateItem != null) base64ToImageBitmap(
+                    updateItem.image ?: ""
+                ) else null
+
+                state = state.copy(
+
+                    listFilteredCategory = listCategory,
+
+                    listFilteredSystemCategory = listSystemCategory,
+
+                    listFilteredUnits = listUnits,
+
+                    sku = if (updateItem == null) sku else updateItem.sku ?: "",
+
+                    name = if (updateItem != null) updateItem.name ?: "" else "",
+
+                    productLink = if (updateItem != null) updateItem.url ?: "" else "",
+
+                    videoYouTube = if (updateItem != null) updateItem.video_youtube ?: "" else "",
+
+                    price = if (updateItem != null) (updateItem.price ?: 0f).toString() else "",
+
+                    selectedForSale = newIsSale,
+
+                    selectedDisplayOnSite = newIsSaleView,
+
+                    selectedUnderOrder = newZakaz,
+
+                    selectedIsStock = newIsStore,
+
+                    selectedDisplayStock = newIsStoreView,
+
+                    selectedGoodOrService = newIsProduct,
+
+                    selectedCategory = listCategory.find { it.id == updateItem?.category_id },
+
+                    selectedSystemCategory = listSystemCategory.find { it.id == updateItem?.system_category_id?.toIntOrNull() },
+
+                    selectedUnit = listUnits.find { it.id == updateItem?.ediz_id },
+
+                    descriptionImage = if (updateItem != null) updateItem.text_image ?: "" else "",
+
+                    image = if (updateItem != null) base64ToImageBitmap(
+                        updateItem.image ?: ""
+                    ) else null,
+
+                    isSet = false
+
+                )
+            }
+
+           // println("NewImage ${state.image}")
+
         }
-
     }
 
     fun inputTextName( text: String ) {

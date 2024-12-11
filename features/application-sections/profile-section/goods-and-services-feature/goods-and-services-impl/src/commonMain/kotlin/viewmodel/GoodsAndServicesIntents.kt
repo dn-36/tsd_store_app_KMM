@@ -11,11 +11,25 @@ sealed class GoodsAndServicesIntents {
    data class SetScreen(val coroutineScope: CoroutineScope, val sku: String ): GoodsAndServicesIntents()
 
    data class OpenCreateDataEntry ( val coroutineScope: CoroutineScope ): GoodsAndServicesIntents()
+   data class OpenUpdateDataEntry ( val coroutineScope: CoroutineScope,
+
+                                    val item: ProductGoodsServicesModel
+
+   ): GoodsAndServicesIntents()
+
    data class CreateGoodOrService ( val coroutineScope: CoroutineScope
 
    ): GoodsAndServicesIntents()
 
+    data class UpdateGoodOrService ( val coroutineScope: CoroutineScope
+
+    ): GoodsAndServicesIntents()
+
    object BackFromDataEntry: GoodsAndServicesIntents()
+
+   object BackFromDischarge: GoodsAndServicesIntents()
+
+   object BackFromAdditionalInformation: GoodsAndServicesIntents()
 
     data class LongPressItem( val index: Int ): GoodsAndServicesIntents()
 

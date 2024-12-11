@@ -11,12 +11,14 @@ data class ScannerZebraUsbState (
 
     var mScannerInfoList: ArrayList<DCSScannerInfo>  = ArrayList(),
 
-    var  mSNAPIList: ArrayList<DCSScannerInfo> = ArrayList<DCSScannerInfo>(),
+    var mSNAPIList: ArrayList<DCSScannerInfo> = ArrayList<DCSScannerInfo>(),
 
     val isSet: Boolean = true,
 
     val checkSku: Boolean? = null,
 
     val textNewProduct: String = "",
+
+    val counter: Int? = null,
 
 )

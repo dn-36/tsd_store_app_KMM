@@ -150,6 +150,11 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
                                                     MutableInteractionSource() })
                                             {
 
+                                                viewModel.processIntents(
+
+                                                    GoodsAndServicesIntents.OpenUpdateDataEntry(
+
+                                                        scope, it))
 
                                             })
 
@@ -228,7 +233,7 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                 listUnitsMeasurement = viewModel.state.listUnitsMeasurement,
 
-                sku = sku ).Content()
+                sku = sku, updateItem = viewModel.state.updateItem ).Content()
 
         }
 
@@ -254,15 +259,27 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
             viewModel.processIntents(GoodsAndServicesIntents.Discharge)},
 
-                onClickCreate = { viewModel.processIntents(
+                onClickCreateOrUpdate = { if ( viewModel.state.updateItem == null )
 
-                    GoodsAndServicesIntents.CreateGoodOrService(scope)) }).Content()
+                    viewModel.processIntents(
+
+                    GoodsAndServicesIntents.CreateGoodOrService(scope)) else
+
+                        viewModel.processIntents(
+
+                            GoodsAndServicesIntents.UpdateGoodOrService(scope)) },
+
+                onClickBack = { viewModel.processIntents(
+
+                    GoodsAndServicesIntents.BackFromAdditionalInformation) }).Content()
 
         }
 
         else if ( viewModel.state.isVisibilityDischargeComponent ) {
 
-            DischargeComponent( onClickReady = { isBu, manufacturer, numberManufacturer,
+            DischargeComponent( updateItem = viewModel.state.updateItem,
+
+                onClickReady = { isBu, manufacturer, numberManufacturer,
 
                                                  postavka ->
 
@@ -270,7 +287,9 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                     numberManufacturer, postavka ))
 
-            } ).Content()
+            }, onClickBack = { viewModel.processIntents(
+
+                    GoodsAndServicesIntents.BackFromDischarge) } ).Content()
 
         }
 

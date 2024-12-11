@@ -44,6 +44,8 @@ class GoodsAndServicesClientImpl(
                 id = it.id,
                 name = it.name,
                 video_youtube = it.video_youtube,
+                category_id = it.category_id,
+                ediz_id = it.ediz_id,
                 ediz = if (it.ediz != null) EdizModel(
 
                     id = it.ediz!!.id,
@@ -54,6 +56,7 @@ class GoodsAndServicesClientImpl(
                     updated_at = it.ediz!!.updated_at
 
                 ) else null,
+                image = it.image,
                 is_product = it.is_product,
                 is_sale = it.is_sale,
                 min_count_store = it.min_count_store,
@@ -234,6 +237,42 @@ class GoodsAndServicesClientImpl(
     override suspend fun deleteGoodOrService(id: Int) {
 
         productsClient.deleteGoodOrService( id )
+
+    }
+
+    override suspend fun updateGoodOrService(
+        id: Int,
+        name: String,
+        video_youtube: String,
+        ediz_id: Int?,
+        category_id: Int?,
+        is_product: Int?,
+        is_sale: Int?,
+        system_category_id: Int?,
+        is_view_sale: Int?,
+        is_order: Int?,
+        is_store: Int?,
+        is_store_view: Int?,
+        is_bu: Int,
+        sku: String,
+        text_image: String,
+        creater: String,
+        nomer_creater: String,
+        postavka: String,
+        price: Float?,
+        tags: List<String>,
+        variantes: List<String>,
+        divisions: String,
+        image_upload: String?
+    ) {
+
+        productsClient.updateGoodOrService( id, name, video_youtube, ediz_id, category_id,
+
+            is_product, is_sale, system_category_id, is_view_sale, is_order, is_store,
+
+            is_store_view, is_bu, sku, text_image, creater, nomer_creater, postavka, price, tags,
+
+            variantes, divisions, image_upload )
 
     }
 

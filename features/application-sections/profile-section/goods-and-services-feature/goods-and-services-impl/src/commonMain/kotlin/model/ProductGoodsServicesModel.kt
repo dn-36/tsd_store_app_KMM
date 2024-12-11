@@ -50,14 +50,14 @@ data class ProductGoodsServicesModel(
     val name: String?, //
     //val text: String?, //
     val price: Float?, //
-    //val image: String?, //
-    //val category_id: Int?, //
+    val image: String?, //
+    val category_id: Int?, //
     //val creater_id: Int?, //
    // val company_id: Int?, //
    // val created_at: String?,
     //val updated_at: String?,
     //val active_pay_id: Int?,
-   // val ediz_id: Int?, //
+    val ediz_id: Int?, //
     val is_product: Int?,
     val is_sale: Int?, //
     val is_view_sale: Int?,

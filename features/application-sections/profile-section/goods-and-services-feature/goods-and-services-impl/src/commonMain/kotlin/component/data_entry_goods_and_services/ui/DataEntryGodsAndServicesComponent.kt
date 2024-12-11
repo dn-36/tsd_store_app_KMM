@@ -48,6 +48,7 @@ import com.project.core_app.utils.boxHeight
 import component.data_entry_goods_and_services.viewmodel.DataEntryGoodsAndServicesIntents
 import component.data_entry_goods_and_services.viewmodel.DataEntryGoodsAndServicesViewModel
 import model.CategoryGoodsServicesModel
+import model.ProductGoodsServicesModel
 import model.SystemCategoryGoodsServicesModel
 import model.UnitGoodsAndServicesModel
 import org.jetbrains.compose.resources.painterResource
@@ -105,7 +106,9 @@ class DataEntryGodsAndServicesComponent (
 
     val listUnitsMeasurement: List<UnitGoodsAndServicesModel>,
 
-    val sku: String
+    val sku: String,
+
+    val updateItem: ProductGoodsServicesModel?
 
     ) {
 
@@ -132,9 +135,9 @@ class DataEntryGodsAndServicesComponent (
             }
         )
 
-        viewModel.processIntents( DataEntryGoodsAndServicesIntents.SetScreen( listCategory,
+        viewModel.processIntents( DataEntryGoodsAndServicesIntents.SetScreen( scope, listCategory,
 
-            listSystemCategory, listUnitsMeasurement, sku ))
+            listSystemCategory, listUnitsMeasurement, sku, updateItem ))
 
         Box( modifier = Modifier.fillMaxSize().background(Color.White)) {
 
@@ -1234,7 +1237,7 @@ class DataEntryGodsAndServicesComponent (
 
                             viewModel.state.name.isNotBlank() ) {
 
-                            onClickNext(
+                            onClickNext (
 
                                 viewModel.state.name,
 

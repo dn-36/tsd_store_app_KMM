@@ -15,6 +15,7 @@ import domain.usecases.GetCategoryUseCase
 import domain.usecases.GetGoodsAndServicesUseCase
 import domain.usecases.GetSystemCategoryUseCase
 import domain.usecases.GetUnitsGoodsAndServicesUseCase
+import domain.usecases.UpdateGoodOrServiceUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -33,7 +34,9 @@ class GoodsAndServicesViewModel (
 
     val createGoodOrServiceUseCase: CreateGoodOrServiceUseCase,
 
-    val deleteGoodOrServiceUseCase: DeleteGoodOrServiceUseCase
+    val deleteGoodOrServiceUseCase: DeleteGoodOrServiceUseCase,
+
+    val updateGoodOrServiceUseCase: UpdateGoodOrServiceUseCase
 
     ) : NetworkViewModel() {
 
@@ -44,6 +47,8 @@ class GoodsAndServicesViewModel (
         when ( intent ) {
 
             is GoodsAndServicesIntents.SetScreen -> {
+
+                //println("Update: ${state.updateItem}")
 
                 intent.coroutineScope.launch( Dispatchers.IO ) {
 
@@ -93,6 +98,14 @@ class GoodsAndServicesViewModel (
 
             is GoodsAndServicesIntents.BackFromDataEntry -> backFromDataEntry()
 
+            is GoodsAndServicesIntents.BackFromAdditionalInformation -> {
+
+                backFromAdditionalInformation()
+
+            }
+
+            is GoodsAndServicesIntents.BackFromDischarge -> backFromDischarge()
+
             is GoodsAndServicesIntents.OpenCreateDataEntry -> {
 
                 setStatusNetworkScreen(StatusNetworkScreen.LOADING)
@@ -106,6 +119,32 @@ class GoodsAndServicesViewModel (
                         listCategory = getCategoryUseCase.execute(),
 
                         listUnitsMeasurement = getUnitsMeasurementUseCase.execute(),
+
+                        isVisibilityDataEntry = true
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is GoodsAndServicesIntents.OpenUpdateDataEntry -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch( Dispatchers.IO ) {
+
+                    state = state.copy(
+
+                        listSystemCategory = getSystemCategoryUseCase.execute(),
+
+                        listCategory = getCategoryUseCase.execute(),
+
+                        listUnitsMeasurement = getUnitsMeasurementUseCase.execute(),
+
+                        updateItem = intent.item,
 
                         isVisibilityDataEntry = true
 
@@ -152,6 +191,56 @@ class GoodsAndServicesViewModel (
                         isVisibilityAdditionalInformationComponent = false,
 
                         listProducts = getGoodsAndServicesUseCase.execute()
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is GoodsAndServicesIntents.UpdateGoodOrService -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch(Dispatchers.IO) {
+
+                    val imageBase64 = if ( state.image_upload != null ) imageBitmapToBase64( state.image_upload!! ) else null
+
+                    updateGoodOrServiceUseCase.execute( id = state.updateItem!!.id?:0,
+
+                        name = state.name, video_youtube = state.video_youtube,
+
+                        ediz_id = state.ediz_id,
+
+                        category_id = state.category_id, is_product = state.is_product,
+
+                        is_sale = state.is_sale, system_category_id = state.system_category_id,
+
+                        is_view_sale = state.is_view_sale, is_order = state.is_order,
+
+                        is_store = state.is_store, is_store_view = state.is_store_view,
+
+                        is_bu = state.isBu , sku = state.sku, text_image = state.text_image,
+
+                        creater = state.manufacturer, nomer_creater = state.numberManufacturer,
+
+                        postavka = state.postavka, price = state.price, tags = state.tags,
+
+                        divisions = state.divisions, variantes = state.variantes,
+
+                        image_upload = imageBase64 )
+
+                    state = state.copy (
+
+                        isVisibilityAdditionalInformationComponent = false,
+
+                        listProducts = getGoodsAndServicesUseCase.execute(),
+
+                        listAlphaTools = emptyList(),
+
+                        updateItem = null
 
                     )
 
@@ -227,7 +316,33 @@ class GoodsAndServicesViewModel (
 
         state = state.copy(
 
-            isVisibilityDataEntry = false
+            isVisibilityDataEntry = false,
+
+            updateItem = null
+
+        )
+
+    }
+
+    fun backFromAdditionalInformation() {
+
+        state = state.copy(
+
+            isVisibilityAdditionalInformationComponent = false,
+
+            isVisibilityDataEntry = true
+
+        )
+
+    }
+
+    fun backFromDischarge() {
+
+        state = state.copy(
+
+            isVisibilityDischargeComponent = false,
+
+            isVisibilityAdditionalInformationComponent = true
 
         )
 

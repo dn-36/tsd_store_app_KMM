@@ -8,6 +8,8 @@ data class DischargeState (
 
    val postavka: String = "",
 
-   val isBu: Boolean = false
+   val isBu: Boolean = false,
+
+   val isSet: Boolean = true
 
 )

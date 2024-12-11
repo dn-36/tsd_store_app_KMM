@@ -16,7 +16,6 @@ data class CreateGoodOrServiceState (
     val descriptionImage: String = "",
 
 
-
     val listFilteredCategory: List<CategoryModel> = emptyList(),
 
 
@@ -24,10 +23,30 @@ data class CreateGoodOrServiceState (
 
     val expendedGoodOrService: Boolean = false,
 
+    val expendedForSale: Boolean = false,
+
+    val expendedDisplayOnSite: Boolean = false,
+
+    val expendedUnderOrder: Boolean = false,
+
+    val expendedIsStock: Boolean = false,
+
+    val expendedDisplayStock: Boolean = false,
+
 
     val selectedCategory: CategoryModel? = null,
 
     val selectedGoodOrService: Pair<String,Int> = Pair("Товар",1),
+
+    val selectedForSale: Pair<String,Int> = Pair("Да",1),
+
+    val selectedDisplayOnSite: Pair<String,Int> = Pair("Да",1),
+
+    val selectedUnderOrder: Pair<String,Int> = Pair("нет",0),
+
+    val selectedIsStock: Pair<String,Int> = Pair("да",1),
+
+    val selectedDisplayStock: Pair<String,Int> = Pair("да",1),
 
 
     val image: ImageBitmap? = null,

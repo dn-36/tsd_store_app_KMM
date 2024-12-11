@@ -15,12 +15,12 @@ class CreateGoodOrServiceUseCase (
         //ediz_id: Int?,
         category_id: Int?,
         is_product: Int,
-        //is_sale: Int,
+        is_sale: Int,
         //system_category_id: Int?,
-        //is_view_sale: Int,
-        //is_order: Int,
-        //is_store: Int,
-        //is_store_view: Int,
+        is_view_sale: Int,
+        is_order: Int,
+        is_store: Int,
+        is_store_view: Int,
         sku: String,
         text_image: String,
         price: Float?,
@@ -33,7 +33,9 @@ class CreateGoodOrServiceUseCase (
 
         return client.createGoodOrService (
 
-            name, category_id, is_product, sku, text_image, price, image_upload
+            name, category_id, is_product, is_sale, is_view_sale, is_order, is_store,
+
+            is_store_view, sku, text_image, price, image_upload
 
         )
     }

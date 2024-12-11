@@ -51,6 +51,7 @@ kotlin {
             implementation("com.squareup.okio:okio:3.9.1")
             implementation(libs.kotlinx.io)
             implementation("io.ktor:ktor-utils:2.0.0")
+            implementation("io.ktor:ktor-client-cio:2.3.4")
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -65,7 +66,6 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.sdp.ssp)
         }
-
     }
 }
 

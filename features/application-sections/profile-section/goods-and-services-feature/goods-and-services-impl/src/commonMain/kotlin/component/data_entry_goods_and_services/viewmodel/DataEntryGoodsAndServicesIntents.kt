@@ -1,18 +1,22 @@
 package component.data_entry_goods_and_services.viewmodel
 
+import kotlinx.coroutines.CoroutineScope
 import model.CategoryGoodsServicesModel
+import model.ProductGoodsServicesModel
 import model.SystemCategoryGoodsServicesModel
 import model.UnitGoodsAndServicesModel
 
 sealed class DataEntryGoodsAndServicesIntents {
 
-    data class SetScreen( val lisCategory: List<CategoryGoodsServicesModel>,
+    data class SetScreen( val coroutineScope: CoroutineScope,
+
+        val lisCategory: List<CategoryGoodsServicesModel>,
 
         val listSystemCategory: List<SystemCategoryGoodsServicesModel>,
 
         val listUnitsMeasurement: List<UnitGoodsAndServicesModel>,
 
-        val sku: String
+        val sku: String, val updateItem: ProductGoodsServicesModel?
 
     ): DataEntryGoodsAndServicesIntents()
 

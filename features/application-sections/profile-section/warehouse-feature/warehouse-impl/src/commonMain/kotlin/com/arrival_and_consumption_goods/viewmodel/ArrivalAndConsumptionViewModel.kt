@@ -435,6 +435,8 @@ class ArrivalAndConsumptionViewModel (
 
             is ArrivalAndConsumptionIntents.CreateGoodOrService -> {
 
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
                 intent.coroutineScope.launch( Dispatchers.IO ) {
 
                     val imageBase64 = if ( intent.image_upload != null ) imageBitmapToBase64(intent.image_upload) else null
@@ -445,11 +447,11 @@ class ArrivalAndConsumptionViewModel (
 
                         category_id = intent.category_id, is_product = intent.is_product,
 
-                        //is_sale = intent.is_sale, system_category_id = intent.system_category_id,
+                        is_sale = intent.is_sale,// system_category_id = intent.system_category_id,
 
-                        //is_view_sale = intent.is_view_sale, is_order = intent.is_order,
+                        is_view_sale = intent.is_view_sale, is_order = intent.is_order,
 
-                        // is_store = intent.is_store, is_store_view = intent.is_store_view,
+                         is_store = intent.is_store, is_store_view = intent.is_store_view,
 
                         sku = intent.sku, text_image = intent.text_image,
 
@@ -484,6 +486,9 @@ class ArrivalAndConsumptionViewModel (
 
                         )
                     }
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
                 }
             }
         }

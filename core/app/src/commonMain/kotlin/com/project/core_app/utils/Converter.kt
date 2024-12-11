@@ -7,9 +7,6 @@ import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.build
 import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.writeFully
-import kotlin.math.sqrt
-
-
 
 
 expect fun ImageBitmap.encodeToByteArray(compressionQuality: Int = 100): ByteArray
