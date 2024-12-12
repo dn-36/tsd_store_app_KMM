@@ -64,12 +64,6 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
 
          val scope = rememberCoroutineScope()
 
-        scope.launch(Dispatchers.IO) {
-
-            viewModel.scannersListHasBeenUpdated()
-
-        }
-
         viewModel.customization()
 
         var counter by remember { mutableStateOf(0) }
@@ -109,8 +103,7 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
 
                 }
 
-                Text(text = "Счетчик: $counter", modifier = Modifier.alpha(0f)
-                ) // Используем состояние counter для UI
+                Text(text = "Счетчик: $counter", modifier = Modifier.alpha(0f)) // Используем состояние counter для UI
 
                // Spacer( modifier = Modifier.height(10.dp) )
 

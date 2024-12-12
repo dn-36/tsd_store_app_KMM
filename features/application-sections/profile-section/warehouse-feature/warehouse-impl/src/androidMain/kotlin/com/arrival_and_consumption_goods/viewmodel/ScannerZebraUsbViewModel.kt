@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.arrival_and_consumption_goods.helpers.Barcode
 import com.arrival_and_consumption_goods.helpers.Constants
 import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
@@ -18,6 +19,9 @@ import com.zebra.scannercontrol.FirmwareUpdateEvent
 import com.zebra.scannercontrol.IDcsSdkApiDelegate
 import com.zebra.scannercontrol.SDKHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiDelegate {
@@ -34,6 +38,24 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
         }
 
+    }
+
+    init {
+        // Запускаем корутину в фоновом потоке
+        viewModelScope.launch(Dispatchers.IO) {
+            // Этот код будет выполняться пока ViewModel существует
+            while (isActive) {
+                // Вызов вашей функции или операции, которая должна выполняться непрерывно
+                if ( state.sdkHandler != null ) {
+
+                scannersListHasBeenUpdated()
+
+                }
+
+                // При необходимости задержка перед повторным вызовом
+                delay(1000L)
+            }
+        }
     }
 
     fun checkSku( sku: String, listProducts: List<AllProductArrivalAndConsumption> ) {
@@ -118,9 +140,7 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
     }
 
-    suspend fun scannersListHasBeenUpdated(): Boolean {
-
-        var result: Boolean = false
+    suspend fun scannersListHasBeenUpdated() {
 
         state.mSNAPIList.clear()
 
@@ -139,18 +159,15 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
             // Only one SNAPI scanner available
             if (state.mSNAPIList[0].isActive) {
 
-                result = true
-
                 // Available scanner is active. Navigate to active scanner
             } else {
 
-                    connectScanner( state.mSNAPIList[0])
+             connectScanner( state.mSNAPIList[0])
 
             }
 
         }
 
-        return result
     }
 
     fun updateScannersList() {
@@ -195,8 +212,6 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
         var result = DCSSDKDefs.DCSSDK_RESULT.DCSSDK_RESULT_FAILURE
 
-        if (state.sdkHandler != null) {
-
             result = state.sdkHandler!!.dcssdkEstablishCommunicationSession(scanner.getScannerID())
 
             withContext(Dispatchers.Main) {
@@ -211,13 +226,6 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
             }
 
-            //state = state.copy(
-
-            //    counter = 1
-
-            //)
-
-        }
 
         if (result == DCSSDKDefs.DCSSDK_RESULT.DCSSDK_RESULT_SUCCESS) {
 
