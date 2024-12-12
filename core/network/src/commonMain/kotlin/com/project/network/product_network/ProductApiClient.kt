@@ -120,13 +120,13 @@ class ProductApiClient(private val token: String) {
                                       is_order: Int?,
                                       is_store: Int?,
                                       is_store_view: Int?,
-        //is_test: 0/1 (Можно взять на тест)
-        //is_arenda: 0/1 (Можно взять в аренду)
-        //is_zakaz: 0/1 (Можно заказать)
-        //is_ves: 0/1 (Весовой товар)
-        //is_serial_nomer: 0/1 (Учет по серийному номеру)
-        //is_date_fabrica: 0/1 (Учитывать дату производства)
-        //is_markirovka: 0/1 (Маркированный товар)
+                                      is_test: Int?,
+                                      is_arenda: Int?,
+                                      is_zakaz: Int?,
+                                      is_ves: Int?,
+                                      is_serial_nomer: Int?,
+                                      is_date_fabrica: Int?,
+                                      is_markirovka: Int?,
                                       is_bu: Int,
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
@@ -156,6 +156,13 @@ class ProductApiClient(private val token: String) {
             is_order = is_order,
             is_store = is_store,
             is_store_view = is_store_view,
+            is_test = 1,
+            is_arenda = 1,
+            is_zakaz = 1,
+            is_ves = 1,
+            is_serial_nomer = 0,
+            is_date_fabrica = 0,
+            is_markirovka = 0,
             is_bu = is_bu,
             sku = sku,
             text_image = text_image,
@@ -209,13 +216,13 @@ class ProductApiClient(private val token: String) {
                                       is_order: Int?,
                                       is_store: Int?,
                                       is_store_view: Int?,
-        //is_test: 0/1 (Можно взять на тест)
-        //is_arenda: 0/1 (Можно взять в аренду)
-        //is_zakaz: 0/1 (Можно заказать)
-        //is_ves: 0/1 (Весовой товар)
-        //is_serial_nomer: 0/1 (Учет по серийному номеру)
-        //is_date_fabrica: 0/1 (Учитывать дату производства)
-        //is_markirovka: 0/1 (Маркированный товар)
+                                      is_test: Int?,
+                                      is_arenda: Int?,
+                                      is_zakaz: Int?,
+                                      is_ves: Int?,
+                                      is_serial_nomer: Int?,
+                                      is_date_fabrica: Int?,
+                                      is_markirovka: Int?,
                                       is_bu: Int,
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
@@ -245,6 +252,13 @@ class ProductApiClient(private val token: String) {
             is_order = is_order,
             is_store = is_store,
             is_store_view = is_store_view,
+            is_test = is_test,
+            is_arenda = is_arenda,
+            is_zakaz = is_zakaz,
+            is_ves = is_ves,
+            is_serial_nomer = is_serial_nomer,
+            is_date_fabrica = is_date_fabrica,
+            is_markirovka = is_markirovka,
             is_bu = is_bu,
             sku = sku,
             text_image = text_image,

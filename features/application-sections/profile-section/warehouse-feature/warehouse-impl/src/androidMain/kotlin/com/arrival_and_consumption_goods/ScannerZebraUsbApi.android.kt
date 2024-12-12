@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -21,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,11 +37,14 @@ import com.arrival_and_consumption_goods.viewmodel.ScannerZebraUsbIntents
 import com.arrival_and_consumption_goods.viewmodel.ScannerZebraUsbViewModel
 import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseIntents
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.back
+import project.core.resources.cancel
 
 
 actual class ScannerZebraUsbScreen actual constructor( ) {
@@ -52,7 +58,17 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
                          onClickAdd: (sku: String ) -> Unit,
 
                          onClickNewProductAdd: (sku: String ) -> Unit,
+
+                          onClickBack:() -> Unit
     ) {
+
+         val scope = rememberCoroutineScope()
+
+        scope.launch(Dispatchers.IO) {
+
+            viewModel.scannersListHasBeenUpdated()
+
+        }
 
         viewModel.customization()
 
@@ -71,23 +87,26 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
             }
         }
 
-        viewModel.scannersListHasBeenUpdated()
-
         Box( modifier = Modifier.fillMaxSize().background(Color.White) ) {
 
             Column( modifier = Modifier.fillMaxSize().padding(16.dp),
 
                 horizontalAlignment = Alignment.CenterHorizontally ) {
 
-                Row( modifier = Modifier.fillMaxWidth() ) {
+                Row( modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(Res.drawable.back), contentDescription = null,
                         modifier = Modifier.size(20.dp).clickable(
                             indication = null, // Отключение эффекта затемнения
                             interactionSource = remember { MutableInteractionSource() })
-
-                        {  }
+                        { onClickBack() }
                     )
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    Text("Приход Расход", color = Color.Black, fontSize = 20.sp)
+
                 }
 
                 Text(text = "Счетчик: $counter", modifier = Modifier.alpha(0f)

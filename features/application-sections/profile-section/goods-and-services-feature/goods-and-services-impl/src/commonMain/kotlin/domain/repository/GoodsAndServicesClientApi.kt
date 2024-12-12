@@ -1,6 +1,7 @@
 package domain.repository
 
 import model.CategoryGoodsServicesModel
+import model.CharacteristicModel
 import model.ProductGoodsServicesModel
 import model.SystemCategoryGoodsServicesModel
 import model.UnitGoodsAndServicesModel
@@ -17,6 +18,8 @@ interface GoodsAndServicesClientApi {
 
     suspend fun getUnitsMeasurement(): List<UnitGoodsAndServicesModel>
 
+    suspend fun getCharacteristics(): List<CharacteristicModel>
+
     suspend fun createGoodOrService(
 
     name: String,
@@ -32,13 +35,13 @@ interface GoodsAndServicesClientApi {
     is_order: Int?,
     is_store: Int?,
     is_store_view: Int?,
-    //is_test: 0/1 (Можно взять на тест)
-    //is_arenda: 0/1 (Можно взять в аренду)
-    //is_zakaz: 0/1 (Можно заказать)
-    //is_ves: 0/1 (Весовой товар)
-    //is_serial_nomer: 0/1 (Учет по серийному номеру)
-    //is_date_fabrica: 0/1 (Учитывать дату производства)
-    //is_markirovka: 0/1 (Маркированный товар)
+    is_test: Int?,
+    is_arenda: Int?,
+    is_zakaz: Int?,
+    is_ves: Int?,
+    is_serial_nomer: Int?,
+    is_date_fabrica: Int?,
+    is_markirovka: Int?,
     is_bu: Int,
     //is_ob_zvonok: 0/1 (обратный звонок по товару)
     //metka_system: '' (Системная метка)
@@ -72,13 +75,13 @@ interface GoodsAndServicesClientApi {
         is_order: Int?,
         is_store: Int?,
         is_store_view: Int?,
-        //is_test: 0/1 (Можно взять на тест)
-        //is_arenda: 0/1 (Можно взять в аренду)
-        //is_zakaz: 0/1 (Можно заказать)
-        //is_ves: 0/1 (Весовой товар)
-        //is_serial_nomer: 0/1 (Учет по серийному номеру)
-        //is_date_fabrica: 0/1 (Учитывать дату производства)
-        //is_markirovka: 0/1 (Маркированный товар)
+        is_test: Int?,
+        is_arenda: Int?,
+        is_zakaz: Int?,
+        is_ves: Int?,
+        is_serial_nomer: Int?,
+        is_date_fabrica: Int?,
+        is_markirovka: Int?,
         is_bu: Int,
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)

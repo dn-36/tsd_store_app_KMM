@@ -21,4 +21,6 @@ data class ScannerZebraUsbState (
 
     val counter: Int? = null,
 
+    val connectedScannerId: Int? = null
+
 )

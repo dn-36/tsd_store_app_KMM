@@ -59,7 +59,11 @@ class DischargeComponent (
 
         viewModel.processIntents(DischargeIntents.SetScreen(updateItem))
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+        Box(modifier = Modifier.fillMaxSize().background(Color.White).clickable(
+            indication = null, // Отключение эффекта затемнения
+            interactionSource = remember { MutableInteractionSource() })
+
+        {  }) {
 
             Column(modifier = Modifier.padding(16.dp)) {
 

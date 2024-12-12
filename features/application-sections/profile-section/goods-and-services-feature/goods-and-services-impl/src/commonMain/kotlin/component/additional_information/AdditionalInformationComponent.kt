@@ -36,6 +36,8 @@ import project.core.resources.back
 
     val onClickDischarge:() -> Unit,
 
+    val onClickCharacteristics:() -> Unit,
+
     val onClickCreateOrUpdate:() -> Unit,
 
     val onClickBack:() -> Unit,
@@ -48,7 +50,11 @@ import project.core.resources.back
 
         val scroll = rememberScrollState()
 
-        Box( modifier = Modifier.fillMaxSize().background(Color.White) ) {
+        Box( modifier = Modifier.fillMaxSize().background(Color.White).clickable(
+            indication = null, // Отключение эффекта затемнения
+            interactionSource = remember { MutableInteractionSource() })
+
+        {  } ) {
 
             Column(modifier = Modifier.padding(16.dp).verticalScroll(scroll)) {
 
@@ -77,6 +83,18 @@ import project.core.resources.back
                     interactionSource = remember { MutableInteractionSource() })
 
                 { onClickDischarge() },
+
+                    textAlign = TextAlign.Center )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Text("Характеристики", fontSize = 17.sp, modifier = Modifier.fillMaxWidth()
+
+                    .clickable( indication = null, // Отключение эффекта затемнения
+
+                        interactionSource = remember { MutableInteractionSource() })
+
+                    { onClickCharacteristics() },
 
                     textAlign = TextAlign.Center )
 

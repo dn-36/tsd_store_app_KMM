@@ -27,6 +27,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -168,6 +169,12 @@ class CreateGoodOrServiceComponent (
 
                         label = { Text("Название", fontSize = 15.sp) },
 
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = viewModel.state.listColorBorderTF[0], // Цвет границы при фокусе
+                            unfocusedBorderColor = viewModel.state.listColorBorderTF[0], // Цвет границы в неактивном состоянии
+                            backgroundColor = viewModel.state.listColorBorderTF[0].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                        ),
+
                         textStyle = TextStyle(fontSize = 15.sp),
 
                         modifier = Modifier.fillMaxWidth().heightIn(min = 45.dp)
@@ -221,6 +228,12 @@ class CreateGoodOrServiceComponent (
                         },
 
                         label = { Text("Категория") },
+
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = viewModel.state.listColorBorderTF[1], // Цвет границы при фокусе
+                            unfocusedBorderColor = viewModel.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                            backgroundColor = viewModel.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                        ),
 
                         textStyle = TextStyle(fontSize = 17.sp),
 
@@ -915,7 +928,9 @@ class CreateGoodOrServiceComponent (
 
                         onClick = {
 
-                            if ( viewModel.state.selectedCategory != null ) {
+                            viewModel.processIntents(CreateGoodOrServiceIntents.CheckTF)
+
+                            if ( viewModel.state.onCheck ) {
 
                                 onClickCreate (
 

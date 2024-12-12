@@ -27,6 +27,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -76,13 +77,13 @@ class DataEntryGodsAndServicesComponent (
         is_order: Int,
         is_store: Int,
         is_store_view: Int,
-        //is_test: 0/1 (Можно взять на тест)
-        //is_arenda: 0/1 (Можно взять в аренду)
-        //is_zakaz: 0/1 (Можно заказать)
-        //is_ves: 0/1 (Весовой товар)
-        //is_serial_nomer: 0/1 (Учет по серийному номеру)
-        //is_date_fabrica: 0/1 (Учитывать дату производства)
-        //is_markirovka: 0/1 (Маркированный товар)
+        is_test: Int?,
+        is_arenda: Int?,
+        is_zakaz: Int?,
+        is_ves: Int?,
+        is_serial_nomer: Int?,
+        is_date_fabrica: Int?,
+        is_markirovka: Int?,
         //is_bu: 0/1 (Б/у или нет)
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
@@ -114,6 +115,12 @@ class DataEntryGodsAndServicesComponent (
 
     val viewModel = DataEntryGoodsAndServicesViewModel()
 
+    /*
+    is_test: 0/1 (Можно взять на тест)
+    is_arenda: 0/1 (Можно взять в аренду)
+    is_zakaz: 0/1 (Можно заказать)
+     */
+
     @Composable
 
     fun Content() {
@@ -139,7 +146,11 @@ class DataEntryGodsAndServicesComponent (
 
             listSystemCategory, listUnitsMeasurement, sku, updateItem ))
 
-        Box( modifier = Modifier.fillMaxSize().background(Color.White)) {
+        Box( modifier = Modifier.fillMaxSize().background(Color.White).clickable(
+            indication = null, // Отключение эффекта затемнения
+            interactionSource = remember { MutableInteractionSource() })
+
+        {  } ) {
 
             Column(modifier = Modifier.padding(16.dp).verticalScroll(scroll)) {
 
@@ -172,6 +183,12 @@ class DataEntryGodsAndServicesComponent (
                     },
 
                     label = { Text("Название", fontSize = 15.sp) },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = viewModel.state.listColorBorderTF[0], // Цвет границы при фокусе
+                        unfocusedBorderColor = viewModel.state.listColorBorderTF[0], // Цвет границы в неактивном состоянии
+                        backgroundColor = viewModel.state.listColorBorderTF[0].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                    ),
 
                     textStyle = TextStyle(fontSize = 15.sp),
 
@@ -226,6 +243,12 @@ class DataEntryGodsAndServicesComponent (
                     },
 
                     label = { Text("Категория") },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = viewModel.state.listColorBorderTF[1], // Цвет границы при фокусе
+                        unfocusedBorderColor = viewModel.state.listColorBorderTF[1], // Цвет границы в неактивном состоянии
+                        backgroundColor = viewModel.state.listColorBorderTF[1].copy(alpha = 0.1f) // Цвет фона с легкой прозрачностью
+                    ),
 
                     textStyle = TextStyle(fontSize = 17.sp),
 
@@ -476,7 +499,7 @@ class DataEntryGodsAndServicesComponent (
 
                 OutlinedTextField(
 
-                    value = viewModel.state.uniMeasurement,
+                    value = viewModel.state.unitMeasurement,
 
                     onValueChange = { inputText ->
 
@@ -1151,6 +1174,487 @@ class DataEntryGodsAndServicesComponent (
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                OutlinedTextField (
+
+                    value = viewModel.state.selectedIsTest.first,
+
+                    onValueChange = {  },
+
+                    label = { Text("Можно взять на тест") },
+
+                    textStyle = TextStyle(fontSize = 17.sp),
+
+                    trailingIcon = {
+
+                        IconButton(
+
+                            onClick = {
+
+                                viewModel.processIntents(
+
+                                    DataEntryGoodsAndServicesIntents.MenuIsTest)
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = "Поиск",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 45.dp)
+
+                )
+
+                if ( viewModel.state.expendedIsTest ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+
+                        Card(
+                            modifier = Modifier.fillMaxSize()
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {}
+                        LazyColumn {
+
+                            itemsIndexed(listOf("нет", "да"))
+
+                            { index, item ->
+
+                                Text( item,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.fillMaxWidth(0.9f)
+                                        .padding(16.dp)
+                                        .clickable(
+                                            indication = null, // Отключение затемнения
+                                            interactionSource = remember {
+
+                                                MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryGoodsAndServicesIntents.SelectIsTest(
+
+                                                    index
+                                                )
+                                            )
+
+                                        })
+
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField (
+
+                    value = viewModel.state.selectedIsSerialNomer.first,
+
+                    onValueChange = {  },
+
+                    label = { Text("Учет по серийному номеру") },
+
+                    textStyle = TextStyle(fontSize = 17.sp),
+
+                    trailingIcon = {
+
+                        IconButton(
+
+                            onClick = {
+
+                                viewModel.processIntents(
+
+                                    DataEntryGoodsAndServicesIntents.MenuIsSerialNomer)
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = "Поиск",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 45.dp)
+
+                )
+
+                if ( viewModel.state.expendedIsSerialNomer ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+
+                        Card(
+                            modifier = Modifier.fillMaxSize()
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {}
+                        LazyColumn {
+
+                            itemsIndexed(listOf("нет", "да"))
+
+                            { index, item ->
+
+                                Text( item,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.fillMaxWidth(0.9f)
+                                        .padding(16.dp)
+                                        .clickable(
+                                            indication = null, // Отключение затемнения
+                                            interactionSource = remember {
+
+                                                MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryGoodsAndServicesIntents.SelectIsSerialNomer(
+
+                                                    index
+                                                )
+                                            )
+
+                                        })
+
+                            }
+                        }
+                    }
+                }
+
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField (
+
+                    value = viewModel.state.selectedDateFabrica.first,
+
+                    onValueChange = {  },
+
+                    label = { Text("Учитывать дату производтсва") },
+
+                    textStyle = TextStyle(fontSize = 17.sp),
+
+                    trailingIcon = {
+
+                        IconButton(
+
+                            onClick = {
+
+                                viewModel.processIntents(
+
+                                    DataEntryGoodsAndServicesIntents.MenuDateFabrica)
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = "Поиск",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 45.dp)
+
+                )
+
+                if ( viewModel.state.expendedDateFabrica ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+
+                        Card(
+                            modifier = Modifier.fillMaxSize()
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {}
+                        LazyColumn {
+
+                            itemsIndexed(listOf("нет", "да"))
+
+                            { index, item ->
+
+                                Text( item,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.fillMaxWidth(0.9f)
+                                        .padding(16.dp)
+                                        .clickable(
+                                            indication = null, // Отключение затемнения
+                                            interactionSource = remember {
+
+                                                MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryGoodsAndServicesIntents.SelectDateFabrica(
+
+                                                    index
+                                                )
+                                            )
+
+                                        })
+
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField (
+
+                    value = viewModel.state.selectedMarkirovka.first,
+
+                    onValueChange = {  },
+
+                    label = { Text("Маркированный товар") },
+
+                    textStyle = TextStyle(fontSize = 17.sp),
+
+                    trailingIcon = {
+
+                        IconButton(
+
+                            onClick = {
+
+                                viewModel.processIntents(
+
+                                    DataEntryGoodsAndServicesIntents.MenuMarkirovka)
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = "Поиск",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 45.dp)
+
+                )
+
+                if ( viewModel.state.expendedMarkirovka ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+
+                        Card(
+                            modifier = Modifier.fillMaxSize()
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {}
+                        LazyColumn {
+
+                            itemsIndexed(listOf("нет", "да"))
+
+                            { index, item ->
+
+                                Text( item,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.fillMaxWidth(0.9f)
+                                        .padding(16.dp)
+                                        .clickable(
+                                            indication = null, // Отключение затемнения
+                                            interactionSource = remember {
+
+                                                MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryGoodsAndServicesIntents.SelectMarkirovka(
+
+                                                    index
+                                                )
+                                            )
+
+                                        })
+
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField (
+
+                    value = viewModel.state.selectedIsZakaz.first,
+
+                    onValueChange = {  },
+
+                    label = { Text("Можно заказать") },
+
+                    textStyle = TextStyle(fontSize = 17.sp),
+
+                    trailingIcon = {
+
+                        IconButton(
+
+                            onClick = {
+
+                                viewModel.processIntents(
+
+                                    DataEntryGoodsAndServicesIntents.MenuIsZakaz)
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = "Поиск",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 45.dp)
+
+                )
+
+                if ( viewModel.state.expendedIsZakaz ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+
+                        Card(
+                            modifier = Modifier.fillMaxSize()
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {}
+                        LazyColumn {
+
+                            itemsIndexed(listOf("нет", "да"))
+
+                            { index, item ->
+
+                                Text( item,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.fillMaxWidth(0.9f)
+                                        .padding(16.dp)
+                                        .clickable(
+                                            indication = null, // Отключение затемнения
+                                            interactionSource = remember {
+
+                                                MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryGoodsAndServicesIntents.SelectIsZakaz(
+
+                                                    index
+                                                )
+                                            )
+
+                                        })
+
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField (
+
+                    value = viewModel.state.selectedIsArenda.first,
+
+                    onValueChange = {  },
+
+                    label = { Text("Можно взять в аренду") },
+
+                    textStyle = TextStyle(fontSize = 17.sp),
+
+                    trailingIcon = {
+
+                        IconButton(
+
+                            onClick = {
+
+                                viewModel.processIntents(
+
+                                    DataEntryGoodsAndServicesIntents.MenuIsArenda)
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.down_arrow),
+                                contentDescription = "Поиск",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 45.dp)
+
+                )
+
+                if ( viewModel.state.expendedIsArenda ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+
+                        Card(
+                            modifier = Modifier.fillMaxSize()
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp)),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {}
+                        LazyColumn {
+
+                            itemsIndexed(listOf("нет", "да"))
+
+                            { index, item ->
+
+                                Text( item,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.fillMaxWidth(0.9f)
+                                        .padding(16.dp)
+                                        .clickable(
+                                            indication = null, // Отключение затемнения
+                                            interactionSource = remember {
+
+                                                MutableInteractionSource() })
+
+                                        {
+
+                                            viewModel.processIntents(
+
+                                                DataEntryGoodsAndServicesIntents.SelectIsArenda(
+
+                                                    index
+                                                )
+                                            )
+
+                                        })
+
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
                 Row( modifier = Modifier.fillMaxWidth(),
 
                     horizontalArrangement = Arrangement.Center ) {
@@ -1233,9 +1737,19 @@ class DataEntryGodsAndServicesComponent (
 
                     onClick = {
 
-                        if ( viewModel.state.selectedCategory != null &&
+                        viewModel.processIntents(DataEntryGoodsAndServicesIntents.CheckTF)
 
-                            viewModel.state.name.isNotBlank() ) {
+                        if ( viewModel.state.onCheck ) {
+
+                            /*
+                                    is_test: Int?,
+        is_arenda: Int?,
+        is_zakaz: Int?,
+        is_ves: Int?,
+        is_serial_nomer: Int?,
+        is_date_fabrica: Int?,
+        is_markirovka: Int?,
+                             */
 
                             onClickNext (
 
@@ -1260,6 +1774,20 @@ class DataEntryGodsAndServicesComponent (
                                 viewModel.state.selectedIsStock.second,
 
                                 viewModel.state.selectedDisplayStock.second,
+
+                                viewModel.state.selectedIsTest.second,
+
+                                viewModel.state.selectedIsArenda.second,
+
+                                viewModel.state.selectedIsZakaz.second,
+
+                                viewModel.state.selectedIsVes.second,
+
+                                viewModel.state.selectedIsSerialNomer.second,
+
+                                viewModel.state.selectedDateFabrica.second,
+
+                                viewModel.state.selectedMarkirovka.second,
 
                                 viewModel.state.sku, viewModel.state.descriptionImage,
 

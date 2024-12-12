@@ -2,6 +2,8 @@ package viewmodel
 
 import androidx.compose.ui.graphics.ImageBitmap
 import model.CategoryGoodsServicesModel
+import model.CharacteristicModel
+import model.ParameterModel
 import model.ProductGoodsServicesModel
 import model.SystemCategoryGoodsServicesModel
 import model.UnitGoodsAndServicesModel
@@ -12,11 +14,15 @@ data class GoodsAndServicesState(
 
     val listProducts: List<ProductGoodsServicesModel> = emptyList(),
 
+    val listFilteredProducts: List<ProductGoodsServicesModel> = emptyList(),
+
     val listSystemCategory: List<SystemCategoryGoodsServicesModel> = emptyList(),
 
     val listCategory: List<CategoryGoodsServicesModel> = emptyList(),
 
     val listUnitsMeasurement: List<UnitGoodsAndServicesModel> = emptyList(),
+
+    val listCharacteristics: List<CharacteristicModel> = emptyList(),
 
     val isVisibilityDataEntry: Boolean = false,
 
@@ -27,6 +33,8 @@ data class GoodsAndServicesState(
     val isVisibilityAdditionalInformationComponent: Boolean = false,
 
     val isVisibilityDischargeComponent: Boolean = false,
+
+    val isVisibilityCharacteristicsComponent: Boolean = false,
 
     val updateItem: ProductGoodsServicesModel? = null,
 
@@ -54,13 +62,13 @@ data class GoodsAndServicesState(
     val is_order: Int? = null,
     val is_store: Int? = null,
     val is_store_view: Int? = null,
-    //is_test: 0/1 (Можно взять на тест)
-    //is_arenda: 0/1 (Можно взять в аренду)
-    //is_zakaz: 0/1 (Можно заказать)
-    //is_ves: 0/1 (Весовой товар)
-    //is_serial_nomer: 0/1 (Учет по серийному номеру)
-    //is_date_fabrica: 0/1 (Учитывать дату производства)
-    //is_markirovka: 0/1 (Маркированный товар)
+    val is_test: Int? = null,
+    val is_arenda: Int? = null,
+    val is_zakaz: Int? = null,
+    val is_ves: Int? = null,
+    val is_serial_nomer: Int? = null,
+    val is_date_fabrica: Int? = null,
+    val is_markirovka: Int? = null,
     //is_ob_zvonok: 0/1 (обратный звонок по товару)
     //metka_system: '' (Системная метка)
     val sku: String = "",

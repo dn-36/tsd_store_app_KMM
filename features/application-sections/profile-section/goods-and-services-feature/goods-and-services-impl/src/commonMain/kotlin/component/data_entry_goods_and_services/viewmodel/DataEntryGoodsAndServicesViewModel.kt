@@ -3,11 +3,11 @@ package component.data_entry_goods_and_services.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.project.core_app.utils.base64ToImageBitmap
+import com.project.core_app.utils.urlImageToImageBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import model.CategoryGoodsServicesModel
 import model.ProductGoodsServicesModel
@@ -88,6 +88,20 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
             is DataEntryGoodsAndServicesIntents.MenuDisplayStock -> menuDisplayStock()
 
+            is DataEntryGoodsAndServicesIntents.MenuIsVes -> menuIsVes()
+
+            is DataEntryGoodsAndServicesIntents.MenuIsZakaz -> menuIsZakaz()
+
+            is DataEntryGoodsAndServicesIntents.MenuIsArenda -> menuIsArenda()
+
+            is DataEntryGoodsAndServicesIntents.MenuMarkirovka -> menuMarkirovka()
+
+            is DataEntryGoodsAndServicesIntents.MenuIsSerialNomer -> menuIsSerialNomer()
+
+            is DataEntryGoodsAndServicesIntents.MenuDateFabrica -> menuDateFabrica()
+
+            is DataEntryGoodsAndServicesIntents.MenuIsTest -> menuIsTest()
+
             is DataEntryGoodsAndServicesIntents.MenuGoodOrService -> menuGoodOrService()
 
 
@@ -103,6 +117,20 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
             is DataEntryGoodsAndServicesIntents.SelectIsStock -> selectIsStock(intent.index)
 
             is DataEntryGoodsAndServicesIntents.SelectDisplayStock -> selectDisplayStock(intent.index)
+
+            is DataEntryGoodsAndServicesIntents.SelectIsVes -> selectIsVes(intent.index)
+
+            is DataEntryGoodsAndServicesIntents.SelectIsZakaz -> selectIsZakaz(intent.index)
+
+            is DataEntryGoodsAndServicesIntents.SelectIsArenda -> selectIsArenda(intent.index)
+
+            is DataEntryGoodsAndServicesIntents.SelectIsTest -> selectIsTest(intent.index)
+
+            is DataEntryGoodsAndServicesIntents.SelectMarkirovka -> selectMarkirovka(intent.index)
+
+            is DataEntryGoodsAndServicesIntents.SelectDateFabrica -> selectDateFabrica(intent.index)
+
+            is DataEntryGoodsAndServicesIntents.SelectIsSerialNomer -> selectIsSerialNomer(intent.index)
 
             is DataEntryGoodsAndServicesIntents.SelectSystemCategory -> {
 
@@ -145,7 +173,24 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
             is DataEntryGoodsAndServicesIntents.DeleteSelectedGoodOrService -> deleteSelectedGoodOrService()
 
+            is DataEntryGoodsAndServicesIntents.DeleteSelectedIsTest -> deleteSelectedIsTest()
+
+            is DataEntryGoodsAndServicesIntents.DeleteSelectedIsZakaz -> deleteSelectedIsZakaz()
+
+            is DataEntryGoodsAndServicesIntents.DeleteSelectedIsArenda -> deleteSelectedIsArenda()
+
+            is DataEntryGoodsAndServicesIntents.DeleteSelectedIsVes -> deleteSelectedIsVes()
+
+            is DataEntryGoodsAndServicesIntents.DeleteSelectedMakirovka -> deleteSelectedMarkirovka()
+
+            is DataEntryGoodsAndServicesIntents.DeleteSelectedDateFabrica -> deleteSelectedDateFabrica()
+
+            is DataEntryGoodsAndServicesIntents.DeleteSelectedIsSerialNomer -> deleteSelectedIsSerialNomer()
+
             is DataEntryGoodsAndServicesIntents.DeleteSelectedPhoto -> deleteSelectedPhoto()
+
+
+            is DataEntryGoodsAndServicesIntents.CheckTF -> checkTF()
 
         }
 
@@ -163,17 +208,31 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         if ( state.isSet ) {
 
-            var newIsSale = Pair("",0)
+            var newIsSale = Pair("Да",1)
 
-            var newIsSaleView = Pair("",0)
+            var newIsSaleView = Pair("Да",1)
 
-            var newZakaz = Pair("",0)
+            var newOrder = Pair("Нет",0)
 
-            var newIsStore = Pair("",0)
+            var newIsStore = Pair("Да",1)
 
-            var newIsStoreView = Pair("",0)
+            var newIsStoreView = Pair("Да",1)
 
-            var newIsProduct = Pair("",0)
+            var newIsProduct = Pair("Товар",1)
+
+            var newIsTest = Pair("Да",1)
+
+            var newIsArenda= Pair("Да",1)
+
+            var newIsZakaz = Pair("Нет",0)
+
+            var newDateFabrica = Pair("Нет",0)
+
+            var newIsSerialNomer = Pair("Нет",0)
+
+            var newMarkirovka = Pair("Нет",0)
+
+            var newIsVes = Pair("Да",1)
 
             if ( updateItem != null ) {
 
@@ -191,7 +250,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
                 if ( updateItem.is_zakaz != null ) {
 
-                    newZakaz = if ( updateItem.is_zakaz == 0 ) Pair("Нет",0) else Pair("Да",1)
+                    newOrder = if ( updateItem.is_order == 0 ) Pair("Нет",0) else Pair("Да",1)
 
                 }
 
@@ -214,11 +273,60 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
                     }
 
+                if (updateItem.is_test != null) {
+
+                    newIsTest =
+                        if (updateItem.is_test == 0) Pair("Нет", 0) else Pair("Да", 1)
+
+                }
+
+                if (updateItem.is_ves != null) {
+
+                    newIsVes =
+                        if (updateItem.is_ves == 0) Pair("Нет", 0) else Pair("Да", 1)
+
+                }
+
+                if (updateItem.is_zakaz != null) {
+
+                    newIsZakaz =
+                        if (updateItem.is_zakaz == 0) Pair("Нет", 0) else Pair("Да", 1)
+
+                }
+
+                if (updateItem.is_arenda != null) {
+
+                    newIsArenda =
+                        if (updateItem.is_arenda == 0) Pair("Нет", 0) else Pair("Да", 1)
+
+                }
+
+                if (updateItem.is_markirovka != null) {
+
+                    newMarkirovka =
+                        if (updateItem.is_markirovka == 0) Pair("Нет", 0) else Pair("Да", 1)
+
+                }
+
+                if (updateItem.is_serial_nomer != null) {
+
+                    newIsSerialNomer =
+                        if (updateItem.is_serial_nomer == 0) Pair("Нет", 0) else Pair("Да", 1)
+
+                }
+
+                if (updateItem.is_date_fabrica != null) {
+
+                    newDateFabrica =
+                        if (updateItem.is_date_fabrica == 0) Pair("Нет", 0) else Pair("Да", 1)
+
+                }
+
             }
 
             coroutineScope.launch( Dispatchers.Main ) {
 
-                val newImage = if (updateItem != null) base64ToImageBitmap(
+                val newImage = if (updateItem != null) urlImageToImageBitmap(
                     updateItem.image ?: ""
                 ) else null
 
@@ -244,11 +352,25 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
                     selectedDisplayOnSite = newIsSaleView,
 
-                    selectedUnderOrder = newZakaz,
+                    selectedUnderOrder = newOrder,
 
                     selectedIsStock = newIsStore,
 
                     selectedDisplayStock = newIsStoreView,
+
+                    selectedIsVes = newIsVes,
+
+                    selectedIsZakaz = newIsZakaz,
+
+                    selectedIsArenda = newIsArenda,
+
+                    selectedIsTest = newIsTest,
+
+                    selectedDateFabrica = newDateFabrica,
+
+                    selectedIsSerialNomer = newIsSerialNomer,
+
+                    selectedMarkirovka = newMarkirovka,
 
                     selectedGoodOrService = newIsProduct,
 
@@ -260,7 +382,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
                     descriptionImage = if (updateItem != null) updateItem.text_image ?: "" else "",
 
-                    image = if (updateItem != null) base64ToImageBitmap(
+                    image = if (updateItem != null) urlImageToImageBitmap(
                         updateItem.image ?: ""
                     ) else null,
 
@@ -362,7 +484,7 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
         state = state.copy(
 
-            uniMeasurement = text,
+            unitMeasurement = text,
 
             listFilteredUnits = list
 
@@ -484,6 +606,105 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
     }
 
+    fun menuIsSerialNomer(){
+
+        state = state.copy(
+
+            expendedIsSerialNomer = !state.expendedIsSerialNomer,
+
+            expendedCategory = false,
+
+            expendedSystemCategory = false,
+
+            )
+
+    }
+
+    fun menuIsArenda(){
+
+        state = state.copy(
+
+            expendedIsArenda = !state.expendedIsArenda,
+
+            expendedCategory = false,
+
+            expendedSystemCategory = false,
+
+            )
+
+    }
+
+
+    fun menuIsTest(){
+
+        state = state.copy(
+
+            expendedIsTest = !state.expendedIsTest,
+
+            expendedCategory = false,
+
+            expendedSystemCategory = false,
+
+            )
+
+    }
+
+    fun menuIsZakaz(){
+
+        state = state.copy(
+
+            expendedIsZakaz = !state.expendedIsZakaz,
+
+            expendedCategory = false,
+
+            expendedSystemCategory = false,
+
+            )
+
+    }
+
+    fun menuIsVes(){
+
+        state = state.copy(
+
+            expendedIsVes = !state.expendedIsVes,
+
+            expendedCategory = false,
+
+            expendedSystemCategory = false,
+
+            )
+
+    }
+
+    fun menuDateFabrica(){
+
+        state = state.copy(
+
+            expendedDateFabrica = !state.expendedDateFabrica,
+
+            expendedCategory = false,
+
+            expendedSystemCategory = false,
+
+            )
+
+    }
+
+    fun menuMarkirovka(){
+
+        state = state.copy(
+
+            expendedMarkirovka = !state.expendedMarkirovka,
+
+            expendedCategory = false,
+
+            expendedSystemCategory = false,
+
+            )
+
+    }
+
     fun menuGoodOrService(){
 
         state = state.copy(
@@ -596,6 +817,90 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
     }
 
+    fun selectIsVes( index: Int ){
+
+        state = state.copy(
+
+            selectedIsVes = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedIsVes = false
+
+        )
+
+    }
+
+    fun selectIsTest( index: Int ){
+
+        state = state.copy(
+
+            selectedIsTest = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedIsTest = false
+
+        )
+
+    }
+
+    fun selectIsArenda( index: Int ){
+
+        state = state.copy(
+
+            selectedIsArenda = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedIsArenda = false
+
+        )
+
+    }
+
+    fun selectDateFabrica( index: Int ){
+
+        state = state.copy(
+
+            selectedDateFabrica = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedDateFabrica = false
+
+        )
+
+    }
+
+    fun selectIsSerialNomer( index: Int ){
+
+        state = state.copy(
+
+            selectedIsSerialNomer = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedIsSerialNomer = false
+
+        )
+
+    }
+
+    fun selectIsZakaz( index: Int ){
+
+        state = state.copy(
+
+            selectedIsZakaz = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedIsZakaz = false
+
+        )
+
+    }
+
+    fun selectMarkirovka( index: Int ){
+
+        state = state.copy(
+
+            selectedMarkirovka = if ( index == 1 ) Pair("да",1) else Pair("нет",0),
+
+            expendedMarkirovka = false
+
+        )
+
+    }
+
     fun selectGoodOrService( index: Int ) {
 
         state = state.copy(
@@ -691,6 +996,76 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
     }
 
+    fun deleteSelectedIsTest(){
+
+        state = state.copy(
+
+            selectedIsTest = Pair("да",1)
+
+        )
+
+    }
+
+    fun deleteSelectedIsArenda(){
+
+        state = state.copy(
+
+            selectedIsArenda = Pair("да",1)
+
+        )
+
+    }
+
+    fun deleteSelectedIsZakaz(){
+
+        state = state.copy(
+
+            selectedIsZakaz = Pair("да",1)
+
+        )
+
+    }
+
+    fun deleteSelectedDateFabrica(){
+
+        state = state.copy(
+
+            selectedDateFabrica = Pair("да",1)
+
+        )
+
+    }
+
+    fun deleteSelectedMarkirovka(){
+
+        state = state.copy(
+
+            selectedMarkirovka = Pair("да",1)
+
+        )
+
+    }
+
+    fun deleteSelectedIsSerialNomer(){
+
+        state = state.copy(
+
+            selectedIsSerialNomer = Pair("да",1)
+
+        )
+
+    }
+
+    fun deleteSelectedIsVes(){
+
+        state = state.copy(
+
+            selectedIsVes = Pair("да",1)
+
+        )
+
+    }
+
     fun deleteSelectedGoodOrService(){
 
         state = state.copy(
@@ -707,6 +1082,48 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
             image = null
 
+        )
+
+    }
+
+    fun checkTF () {
+
+        val newList = state.listColorBorderTF.toMutableList()
+
+        var hasNull = true
+
+        if ( state.name.isBlank() && state.selectedCategory == null ) {
+
+            newList[0] = Color.Red
+
+            newList[1] = Color.Red
+
+            hasNull = false
+
+        }
+
+        else if ( state.name.isBlank() ) {
+
+            newList[0] = Color.Red
+
+            hasNull = false
+
+        }
+        else if ( state.selectedCategory == null ) {
+
+            newList[1] = Color.Red
+
+            hasNull = false
+
+        }
+
+
+
+        // Обновляем состояние
+
+        state = state.copy(
+            listColorBorderTF = newList,
+            onCheck = hasNull
         )
 
     }

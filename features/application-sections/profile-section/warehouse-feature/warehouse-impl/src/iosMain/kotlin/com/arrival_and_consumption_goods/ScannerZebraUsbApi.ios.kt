@@ -7,17 +7,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material.Text
+import androidx.compose.ui.Alignment
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 
 
 actual class ScannerZebraUsbScreen actual constructor(){
 
     @Composable
 
-    actual fun Content(){
+    actual fun Content( listProducts: List<AllProductArrivalAndConsumption>,
 
-        Box (modifier = Modifier.fillMaxSize().background(Color.White)) {
+                       onClickAdd: (sku: String ) -> Unit,
 
-            Text("На доступна только на android")
+                       onClickNewProductAdd: (sku: String ) -> Unit,
+
+                       onClickBack:() -> Unit){
+
+        Box ( modifier = Modifier.fillMaxSize().background(Color.White),
+
+             contentAlignment = Alignment.Center) {
+
+            Text("Функция доступна только на android")
 
         }
 

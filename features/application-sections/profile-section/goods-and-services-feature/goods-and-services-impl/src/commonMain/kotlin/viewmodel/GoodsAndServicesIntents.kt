@@ -31,6 +31,8 @@ sealed class GoodsAndServicesIntents {
 
    object BackFromAdditionalInformation: GoodsAndServicesIntents()
 
+   object BackFromCharacteristics: GoodsAndServicesIntents()
+
     data class LongPressItem( val index: Int ): GoodsAndServicesIntents()
 
     object OnePressItem: GoodsAndServicesIntents()
@@ -54,13 +56,13 @@ sealed class GoodsAndServicesIntents {
                       val is_order: Int,
                       val is_store: Int,
                       val is_store_view: Int,
-        //is_test: 0/1 (Можно взять на тест)
-        //is_arenda: 0/1 (Можно взять в аренду)
-        //is_zakaz: 0/1 (Можно заказать)
-        //is_ves: 0/1 (Весовой товар)
-        //is_serial_nomer: 0/1 (Учет по серийному номеру)
-        //is_date_fabrica: 0/1 (Учитывать дату производства)
-        //is_markirovka: 0/1 (Маркированный товар)
+                      val is_test: Int?,
+                      val is_arenda: Int?,
+                      val is_zakaz: Int?,
+                      val is_ves: Int?,
+                      val is_serial_nomer: Int?,
+                      val is_date_fabrica: Int?,
+                      val is_markirovka: Int?,
         //is_bu: 0/1 (Б/у или нет)
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
@@ -80,6 +82,8 @@ sealed class GoodsAndServicesIntents {
 
     object Discharge: GoodsAndServicesIntents()
 
+    object Characteristics: GoodsAndServicesIntents()
+
     data class ReadyDischarge( val isBu: Int, val manufacturer: String,
 
                                val numberManufacturer: String, val postavka: String
@@ -89,5 +93,7 @@ sealed class GoodsAndServicesIntents {
     data class DeleteGoodOrService ( val coroutineScope: CoroutineScope
 
     ) : GoodsAndServicesIntents()
+
+    data class InputTextSearchComponent( val text: String ): GoodsAndServicesIntents()
 
 }

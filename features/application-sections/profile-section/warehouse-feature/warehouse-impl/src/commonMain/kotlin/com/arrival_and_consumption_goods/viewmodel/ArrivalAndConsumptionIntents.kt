@@ -45,7 +45,8 @@ sealed class ArrivalAndConsumptionIntents {
 
     data class Ready( val count: String ) : ArrivalAndConsumptionIntents()
 
-    object  CanselScanner : ArrivalAndConsumptionIntents()
+    object  CanselScannerCamera : ArrivalAndConsumptionIntents()
+    object  CanselScannerZebraUsb : ArrivalAndConsumptionIntents()
 
     data class AddProductScanner( val name: String ) : ArrivalAndConsumptionIntents()
 

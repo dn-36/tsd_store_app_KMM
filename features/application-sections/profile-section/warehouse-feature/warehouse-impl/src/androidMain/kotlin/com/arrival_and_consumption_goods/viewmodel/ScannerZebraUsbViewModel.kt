@@ -17,9 +17,7 @@ import com.zebra.scannercontrol.DCSScannerInfo
 import com.zebra.scannercontrol.FirmwareUpdateEvent
 import com.zebra.scannercontrol.IDcsSdkApiDelegate
 import com.zebra.scannercontrol.SDKHandler
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiDelegate {
@@ -120,7 +118,7 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
     }
 
-    fun scannersListHasBeenUpdated(): Boolean {
+    suspend fun scannersListHasBeenUpdated(): Boolean {
 
         var result: Boolean = false
 
@@ -146,17 +144,7 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
                 // Available scanner is active. Navigate to active scanner
             } else {
 
-                state = state.copy(
-
-                    counter = 0
-
-                )
-
-                CoroutineScope(Dispatchers.IO).launch {
-
                     connectScanner( state.mSNAPIList[0])
-
-                }
 
             }
 
@@ -207,12 +195,21 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
         var result = DCSSDKDefs.DCSSDK_RESULT.DCSSDK_RESULT_FAILURE
 
-        if (state.sdkHandler != null) { result = state.sdkHandler!!.dcssdkEstablishCommunicationSession(scanner.getScannerID())
+        if (state.sdkHandler != null) {
 
-            //withContext(Dispatchers.Main) {
-            //    Toast.makeText(context, "Подключение к сканеру установлено!", Toast.LENGTH_SHORT)
-            //        .show();
-            //}
+            result = state.sdkHandler!!.dcssdkEstablishCommunicationSession(scanner.getScannerID())
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "Подключение к сканеру установлено!", Toast.LENGTH_SHORT)
+                    .show();
+
+                state = state.copy(
+
+                    connectedScannerId = scanner.getScannerID()
+
+                )
+
+            }
 
             //state = state.copy(
 
@@ -246,6 +243,8 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
     override fun dcssdkEventScannerDisappeared(p0: Int) {
 
+        dataHandler.obtainMessage(Constants.SCANNER_DISAPPEARED, state.connectedScannerId).sendToTarget()
+
     }
 
     override fun dcssdkEventCommunicationSessionEstablished(p0: DCSScannerInfo?) {
@@ -271,7 +270,11 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
     override fun dcssdkEventCommunicationSessionTerminated(p0: Int) {
 
-        TODO("Not yet implemented")
+        dataHandler.obtainMessage(
+            Constants.SESSION_TERMINATED,
+            state.connectedScannerId
+        ).sendToTarget()
+
     }
 
 

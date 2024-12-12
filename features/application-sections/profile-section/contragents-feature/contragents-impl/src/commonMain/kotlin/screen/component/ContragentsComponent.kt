@@ -284,7 +284,7 @@ class ContragentsComponent ( override val viewModel: ContragentsViewModel) : Net
 
         else if ( viewModel.state.isVisibleDeleteComponent == 1f ) {
 
-            DeleteComponent(
+            DeleteComponent (
 
                 name = "контрагента",
 
@@ -297,8 +297,5 @@ class ContragentsComponent ( override val viewModel: ContragentsViewModel) : Net
             } ).Content()
 
         }
-
-
     }
-
 }

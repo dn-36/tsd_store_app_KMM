@@ -2,13 +2,16 @@ package datasource
 
 import com.project.`local-storage`.`profile-storage`.SharedPrefsApi
 import com.project.network.category_network.CategoryClient
+import com.project.network.characterisrics_products_network.CharacteristicsClient
 import com.project.network.system_category_network.SystemCategoryClient
 import com.project.network.units_measurement_network.UnitsMeasurementClient
 import domain.repository.GoodsAndServicesClientApi
 import model.CategoryGoodsServicesModel
 import model.CategoryLangGoodsServicesModel
 import model.CategoryModel
+import model.CharacteristicModel
 import model.EdizModel
+import model.LangModel
 import model.ParameterModel
 import model.ProductGoodsServicesModel
 import model.SystemCategoryGoodsServicesModel
@@ -25,7 +28,9 @@ class GoodsAndServicesClientImpl(
 
     val categoryClient: CategoryClient,
 
-    val unitsMeasurementClient: UnitsMeasurementClient
+    val unitsMeasurementClient: UnitsMeasurementClient,
+
+    val characteristicsClient: CharacteristicsClient
 
 ): GoodsAndServicesClientApi {
 
@@ -188,6 +193,39 @@ class GoodsAndServicesClientImpl(
 
     }
 
+    override suspend fun getCharacteristics(): List<CharacteristicModel> {
+
+        characteristicsClient.init(getToken())
+
+        return characteristicsClient.getCharacteristics().map {
+
+            CharacteristicModel(
+
+                id = it.id,
+                name = it.name,
+                created_at = it.created_at,
+                updated_at = it.updated_at,
+                langs = it.langs?.map {
+
+                    LangModel(
+
+                        id = it.id,
+                        name = it.name,
+                        parametrs_id = it.parametrs_id,
+                        lang_id = it.lang_id,
+                        created_at = it.created_at,
+                        updated_at = it.updated_at
+
+                    )
+
+                }
+
+            )
+
+        }
+
+    }
+
     override suspend fun createGoodOrService(
         name: String,
         video_youtube: String,
@@ -202,13 +240,13 @@ class GoodsAndServicesClientImpl(
         is_order: Int?,
         is_store: Int?,
         is_store_view: Int?,
-        //is_test: 0/1 (Можно взять на тест)
-        //is_arenda: 0/1 (Можно взять в аренду)
-        //is_zakaz: 0/1 (Можно заказать)
-        //is_ves: 0/1 (Весовой товар)
-        //is_serial_nomer: 0/1 (Учет по серийному номеру)
-        //is_date_fabrica: 0/1 (Учитывать дату производства)
-        //is_markirovka: 0/1 (Маркированный товар)
+        is_test: Int?,
+        is_arenda: Int?,
+        is_zakaz: Int?,
+        is_ves: Int?,
+        is_serial_nomer: Int?,
+        is_date_fabrica: Int?,
+        is_markirovka: Int?,
         is_bu: Int,
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
@@ -228,9 +266,13 @@ class GoodsAndServicesClientImpl(
 
      productsClient.createGoodOrService(name, video_youtube, ediz_id, category_id, is_product,
 
-         is_sale, system_category_id, is_view_sale, is_order, is_store, is_store_view, is_bu, sku,
+         is_sale, system_category_id, is_view_sale, is_order, is_store, is_store_view,
 
-         text_image, creater, nomer_creater, postavka, price, tags, variantes, divisions, image_upload )
+         is_test, is_arenda,is_zakaz, is_ves, is_serial_nomer,is_date_fabrica, is_markirovka,
+
+         is_bu, sku, text_image, creater, nomer_creater, postavka, price, tags, variantes,
+
+         divisions, image_upload )
 
     }
 
@@ -253,6 +295,13 @@ class GoodsAndServicesClientImpl(
         is_order: Int?,
         is_store: Int?,
         is_store_view: Int?,
+        is_test: Int?,
+        is_arenda: Int?,
+        is_zakaz: Int?,
+        is_ves: Int?,
+        is_serial_nomer: Int?,
+        is_date_fabrica: Int?,
+        is_markirovka: Int?,
         is_bu: Int,
         sku: String,
         text_image: String,
@@ -270,7 +319,9 @@ class GoodsAndServicesClientImpl(
 
             is_product, is_sale, system_category_id, is_view_sale, is_order, is_store,
 
-            is_store_view, is_bu, sku, text_image, creater, nomer_creater, postavka, price, tags,
+            is_store_view, is_test, is_arenda,is_zakaz, is_ves, is_serial_nomer,is_date_fabrica,
+
+            is_markirovka, is_bu, sku, text_image, creater, nomer_creater, postavka, price, tags,
 
             variantes, divisions, image_upload )
 

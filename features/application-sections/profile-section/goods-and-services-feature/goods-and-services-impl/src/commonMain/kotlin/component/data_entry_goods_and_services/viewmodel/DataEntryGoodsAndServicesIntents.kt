@@ -73,6 +73,20 @@ sealed class DataEntryGoodsAndServicesIntents {
 
     data class SelectGoodOrService( val index: Int ): DataEntryGoodsAndServicesIntents()
 
+    data class SelectIsTest( val index: Int ): DataEntryGoodsAndServicesIntents()
+
+    data class SelectIsZakaz( val index: Int ): DataEntryGoodsAndServicesIntents()
+
+    data class SelectIsArenda( val index: Int ): DataEntryGoodsAndServicesIntents()
+
+    data class SelectIsVes( val index: Int ): DataEntryGoodsAndServicesIntents()
+
+    data class SelectIsSerialNomer( val index: Int ): DataEntryGoodsAndServicesIntents()
+
+    data class SelectDateFabrica( val index: Int ): DataEntryGoodsAndServicesIntents()
+
+    data class SelectMarkirovka( val index: Int ): DataEntryGoodsAndServicesIntents()
+
 
 
     object DeleteSelectedCategory: DataEntryGoodsAndServicesIntents()
@@ -95,6 +109,20 @@ sealed class DataEntryGoodsAndServicesIntents {
 
     object DeleteSelectedPhoto: DataEntryGoodsAndServicesIntents()
 
+    object DeleteSelectedIsVes: DataEntryGoodsAndServicesIntents()
+
+    object DeleteSelectedIsZakaz: DataEntryGoodsAndServicesIntents()
+
+    object DeleteSelectedIsArenda: DataEntryGoodsAndServicesIntents()
+
+    object DeleteSelectedIsSerialNomer: DataEntryGoodsAndServicesIntents()
+
+    object DeleteSelectedMakirovka: DataEntryGoodsAndServicesIntents()
+
+    object DeleteSelectedDateFabrica: DataEntryGoodsAndServicesIntents()
+
+    object DeleteSelectedIsTest: DataEntryGoodsAndServicesIntents()
+
 
 
     object MenuCategory: DataEntryGoodsAndServicesIntents()
@@ -113,6 +141,23 @@ sealed class DataEntryGoodsAndServicesIntents {
 
     object MenuDisplayStock: DataEntryGoodsAndServicesIntents()
 
+    object MenuIsTest: DataEntryGoodsAndServicesIntents()
+
+    object MenuIsArenda: DataEntryGoodsAndServicesIntents()
+
+    object MenuIsZakaz: DataEntryGoodsAndServicesIntents()
+
+    object MenuIsVes: DataEntryGoodsAndServicesIntents()
+
+    object MenuIsSerialNomer: DataEntryGoodsAndServicesIntents()
+
+    object MenuDateFabrica: DataEntryGoodsAndServicesIntents()
+
+    object MenuMarkirovka: DataEntryGoodsAndServicesIntents()
+
     object MenuGoodOrService: DataEntryGoodsAndServicesIntents()
+
+
+    object CheckTF : DataEntryGoodsAndServicesIntents()
 
 }

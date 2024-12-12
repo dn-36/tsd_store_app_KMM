@@ -1,5 +1,6 @@
 package com.arrival_and_consumption_goods.component.create_good_or_service.viewmodel
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import com.arrival_and_consumption_goods.model.CategoryModel
 
@@ -52,6 +53,11 @@ data class CreateGoodOrServiceState (
     val image: ImageBitmap? = null,
 
 
-    val isSet: Boolean = true
+    val isSet: Boolean = true,
+
+
+    val listColorBorderTF : List <Color> = listOf ( Color.LightGray, Color.LightGray),
+
+    val onCheck: Boolean = false
 
 )

@@ -1,5 +1,6 @@
 package component.data_entry_goods_and_services.viewmodel
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import model.CategoryGoodsServicesModel
 import model.SystemCategoryGoodsServicesModel
@@ -21,7 +22,7 @@ data class DataEntryGoodsAndServicesState (
 
     val systemCategory: String = "",
 
-    val uniMeasurement: String = "",
+    val unitMeasurement: String = "",
 
     val descriptionImage: String = "",
 
@@ -53,6 +54,20 @@ data class DataEntryGoodsAndServicesState (
 
     val expendedGoodOrService: Boolean = false,
 
+    val expendedIsTest: Boolean = false,
+
+    val expendedIsArenda: Boolean = false,
+
+    val expendedIsZakaz: Boolean = false,
+
+    val expendedIsVes: Boolean = false,
+
+    val expendedIsSerialNomer: Boolean = false,
+
+    val expendedDateFabrica: Boolean = false,
+
+    val expendedMarkirovka: Boolean = false,
+
 
 
     val selectedSystemCategory: SystemCategoryGoodsServicesModel? = null,
@@ -73,10 +88,28 @@ data class DataEntryGoodsAndServicesState (
 
     val selectedGoodOrService: Pair<String,Int> = Pair("Товар",1),
 
+    val selectedIsTest: Pair<String,Int> = Pair("да",1),
+
+    val selectedIsArenda: Pair<String,Int> = Pair("да",1),
+
+    val selectedIsZakaz: Pair<String,Int> = Pair("да",1),
+
+    val selectedIsVes: Pair<String,Int> = Pair("нет",0),
+
+    val selectedIsSerialNomer: Pair<String,Int> = Pair("Нет",0),
+
+    val selectedDateFabrica: Pair<String,Int> = Pair("Нет",0),
+
+    val selectedMarkirovka: Pair<String,Int> = Pair("Нет",0),
+
 
     val image: ImageBitmap? = null,
 
 
-    val isSet: Boolean = true
+    val isSet: Boolean = true,
+
+    val listColorBorderTF : List <Color> = listOf ( Color.LightGray, Color.LightGray),
+
+    val onCheck: Boolean = false
 
     )

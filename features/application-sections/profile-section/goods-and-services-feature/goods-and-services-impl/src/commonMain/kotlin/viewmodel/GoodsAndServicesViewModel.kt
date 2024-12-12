@@ -12,6 +12,7 @@ import com.project.network.Navigation
 import domain.usecases.CreateGoodOrServiceUseCase
 import domain.usecases.DeleteGoodOrServiceUseCase
 import domain.usecases.GetCategoryUseCase
+import domain.usecases.GetCharacteristicsUseCase
 import domain.usecases.GetGoodsAndServicesUseCase
 import domain.usecases.GetSystemCategoryUseCase
 import domain.usecases.GetUnitsGoodsAndServicesUseCase
@@ -36,7 +37,9 @@ class GoodsAndServicesViewModel (
 
     val deleteGoodOrServiceUseCase: DeleteGoodOrServiceUseCase,
 
-    val updateGoodOrServiceUseCase: UpdateGoodOrServiceUseCase
+    val updateGoodOrServiceUseCase: UpdateGoodOrServiceUseCase,
+
+    val getCharacteristicsUseCase: GetCharacteristicsUseCase
 
     ) : NetworkViewModel() {
 
@@ -61,6 +64,8 @@ class GoodsAndServicesViewModel (
                             state = state.copy(
 
                                 listProducts = listProducts,
+
+                                listFilteredProducts = listProducts,
 
                                 isSet = false
 
@@ -94,6 +99,12 @@ class GoodsAndServicesViewModel (
 
             }
 
+            is GoodsAndServicesIntents.InputTextSearchComponent -> {
+
+                inputTextSearchComponent(intent.text)
+
+            }
+
             is GoodsAndServicesIntents.Back -> back()
 
             is GoodsAndServicesIntents.BackFromDataEntry -> backFromDataEntry()
@@ -103,6 +114,8 @@ class GoodsAndServicesViewModel (
                 backFromAdditionalInformation()
 
             }
+
+            is GoodsAndServicesIntents.BackFromCharacteristics -> backFromCharacteristics()
 
             is GoodsAndServicesIntents.BackFromDischarge -> backFromDischarge()
 
@@ -119,6 +132,8 @@ class GoodsAndServicesViewModel (
                         listCategory = getCategoryUseCase.execute(),
 
                         listUnitsMeasurement = getUnitsMeasurementUseCase.execute(),
+
+                        listCharacteristics = getCharacteristicsUseCase.execute(),
 
                         isVisibilityDataEntry = true
 
@@ -144,6 +159,8 @@ class GoodsAndServicesViewModel (
 
                         listUnitsMeasurement = getUnitsMeasurementUseCase.execute(),
 
+                        listCharacteristics = getCharacteristicsUseCase.execute(),
+
                         updateItem = intent.item,
 
                         isVisibilityDataEntry = true
@@ -162,7 +179,9 @@ class GoodsAndServicesViewModel (
 
                 intent.coroutineScope.launch(Dispatchers.IO) {
 
-                    val imageBase64 = if ( state.image_upload != null ) imageBitmapToBase64( state.image_upload!! ) else null
+                    val imageBase64 = if ( state.image_upload != null ) imageBitmapToBase64(
+
+                        state.image_upload!! ) else null
 
                     createGoodOrServiceUseCase.execute( name = state.name,
 
@@ -176,6 +195,16 @@ class GoodsAndServicesViewModel (
 
                         is_store = state.is_store, is_store_view = state.is_store_view,
 
+                        is_test = state.is_test, is_arenda = state.is_arenda,
+
+                        is_zakaz = state.is_zakaz, is_ves = state.is_ves,
+
+                        is_serial_nomer = state.is_serial_nomer,
+
+                        is_date_fabrica = state.is_date_fabrica,
+
+                        is_markirovka = state.is_markirovka,
+
                         is_bu = state.isBu , sku = state.sku, text_image = state.text_image,
 
                         creater = state.manufacturer, nomer_creater = state.numberManufacturer,
@@ -186,11 +215,15 @@ class GoodsAndServicesViewModel (
 
                         image_upload = imageBase64 )
 
+                    val listProducts = getGoodsAndServicesUseCase.execute()
+
                     state = state.copy (
 
                         isVisibilityAdditionalInformationComponent = false,
 
-                        listProducts = getGoodsAndServicesUseCase.execute()
+                        listProducts = listProducts,
+
+                        listFilteredProducts = listProducts,
 
                     )
 
@@ -222,6 +255,14 @@ class GoodsAndServicesViewModel (
 
                         is_store = state.is_store, is_store_view = state.is_store_view,
 
+                        is_test = state.is_test, is_arenda = state.is_arenda,
+
+                        is_zakaz = state.is_zakaz, is_ves = state.is_ves,
+
+                        is_serial_nomer = state.is_serial_nomer,
+
+                        is_date_fabrica = state.is_date_fabrica, is_markirovka = state.is_markirovka,
+
                         is_bu = state.isBu , sku = state.sku, text_image = state.text_image,
 
                         creater = state.manufacturer, nomer_creater = state.numberManufacturer,
@@ -232,11 +273,15 @@ class GoodsAndServicesViewModel (
 
                         image_upload = imageBase64 )
 
+                    val listProducts = getGoodsAndServicesUseCase.execute()
+
                     state = state.copy (
 
                         isVisibilityAdditionalInformationComponent = false,
 
-                        listProducts = getGoodsAndServicesUseCase.execute(),
+                        listProducts = listProducts,
+
+                        listFilteredProducts = listProducts,
 
                         listAlphaTools = emptyList(),
 
@@ -266,13 +311,17 @@ class GoodsAndServicesViewModel (
 
                     deleteGoodOrServiceUseCase.execute(state.updateItem!!.id?:0)
 
+                    val listProducts = getGoodsAndServicesUseCase.execute()
+
                     state = state.copy (
 
                         isVisibilityDeleteComponent = false,
 
                         updateItem = null,
 
-                        listProducts = getGoodsAndServicesUseCase.execute(),
+                        listProducts = listProducts,
+
+                        listFilteredProducts = listProducts,
 
                         listAlphaTools = emptyList()
 
@@ -290,11 +339,15 @@ class GoodsAndServicesViewModel (
 
                 intent.is_view_sale, intent.is_order, intent.is_store, intent.is_store_view,
 
-                intent.sku, intent.text_image, intent.price, intent.tags, intent.variantes,
+                intent.is_test, intent.is_arenda, intent.is_zakaz, intent.is_ves, intent.is_serial_nomer,
 
-                intent.divisions, intent.image_upload )
+                intent.is_date_fabrica, intent.is_markirovka, intent.sku, intent.text_image,
+
+                intent.price, intent.tags, intent.variantes, intent.divisions, intent.image_upload )
 
             is GoodsAndServicesIntents.Discharge -> discharge()
+
+            is GoodsAndServicesIntents.Characteristics -> characteristics()
 
             is GoodsAndServicesIntents.ReadyDischarge -> readyDischarge( intent.isBu,
 
@@ -341,6 +394,18 @@ class GoodsAndServicesViewModel (
         state = state.copy(
 
             isVisibilityDischargeComponent = false,
+
+            isVisibilityAdditionalInformationComponent = true
+
+        )
+
+    }
+
+    fun backFromCharacteristics() {
+
+        state = state.copy(
+
+            isVisibilityCharacteristicsComponent = false,
 
             isVisibilityAdditionalInformationComponent = true
 
@@ -404,11 +469,15 @@ class GoodsAndServicesViewModel (
 
                system_category_id: Int?, is_view_sale: Int, is_order: Int,
 
-               is_store: Int, is_store_view: Int, sku: String,
+               is_store: Int, is_store_view: Int, is_test: Int?, is_arenda: Int?, is_zakaz: Int?,
 
-               text_image: String, price: Float?, tags: List<String>,
+               is_ves: Int?, is_serial_nomer: Int?, is_date_fabrica: Int?,
 
-               variantes: List<String>, divisions: String, image: ImageBitmap? ) {
+               is_markirovka: Int?, sku: String, text_image: String, price: Float?,
+
+               tags: List<String>, variantes: List<String>, divisions: String,
+
+               image: ImageBitmap? ) {
 
         state = state.copy(
 
@@ -437,6 +506,20 @@ class GoodsAndServicesViewModel (
             is_store = is_store,
 
             is_store_view = is_store_view,
+
+            is_test = is_test,
+
+            is_arenda = is_arenda,
+
+            is_ves = is_ves,
+
+            is_zakaz = is_zakaz,
+
+            is_markirovka = is_markirovka,
+
+            is_serial_nomer = is_serial_nomer,
+
+            is_date_fabrica = is_date_fabrica,
 
             sku = sku,
 
@@ -468,6 +551,18 @@ class GoodsAndServicesViewModel (
 
     }
 
+    fun characteristics () {
+
+        state = state.copy(
+
+            isVisibilityAdditionalInformationComponent = false,
+
+            isVisibilityCharacteristicsComponent = true
+
+        )
+
+    }
+
     fun readyDischarge ( isBu: Int, manufacturer: String, numberManufacturer: String,
 
                          postavka: String ) {
@@ -488,6 +583,23 @@ class GoodsAndServicesViewModel (
 
         )
 
+    }
+
+    fun inputTextSearchComponent( text: String ) {
+
+        val newList = state.listProducts.filter {
+
+            val name = it.name.orEmpty()
+
+            name.contains(text, ignoreCase = true)
+
+        }
+
+        state = state.copy (
+
+            listFilteredProducts = newList
+
+        )
     }
 
 }

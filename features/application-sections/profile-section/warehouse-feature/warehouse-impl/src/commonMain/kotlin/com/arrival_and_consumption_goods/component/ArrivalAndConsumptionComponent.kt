@@ -383,7 +383,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 onClickCansel = { viewModel.processIntent(
 
-                ArrivalAndConsumptionIntents.CanselScanner) },
+                ArrivalAndConsumptionIntents.CanselScannerCamera) },
 
                 viewModel.state.listProducts ).ScannerView()
 
@@ -397,7 +397,11 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
             }, onClickNewProductAdd = { sku -> viewModel.processIntent(
 
-                ArrivalAndConsumptionIntents.AddNewGoodOrService(sku)) } )
+                ArrivalAndConsumptionIntents.AddNewGoodOrService(sku)) },
+
+                onClickBack = { viewModel.processIntent(
+
+                    ArrivalAndConsumptionIntents.CanselScannerZebraUsb) })
 
         }
 

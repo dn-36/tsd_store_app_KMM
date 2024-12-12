@@ -9,7 +9,11 @@ expect class ScannerZebraUsbScreen(){
     @Composable
      fun Content( listProducts: List<AllProductArrivalAndConsumption>,
 
-                 onClickAdd: (sku: String ) -> Unit, onClickNewProductAdd: (sku: String ) -> Unit
+                 onClickAdd: (sku: String ) -> Unit,
+
+                  onClickNewProductAdd: (sku: String) -> Unit,
+
+                  onClickBack:() -> Unit
     )
 
 }

@@ -49,7 +49,7 @@ class CreateAndUpdateComponent (
 
     val onClickCansel: () -> Unit
 
-) {
+    ) {
 
     val vm = CreateAndUpdateViewModel()
 
@@ -57,8 +57,6 @@ class CreateAndUpdateComponent (
      fun Content() {
 
          vm.processIntents(CreateAndUpdateIntents.SetScreen(item))
-
-        val scope = rememberCoroutineScope()
 
         Box(modifier = Modifier.fillMaxSize()) {
             Box(

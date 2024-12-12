@@ -108,7 +108,7 @@ import qrscanner.scanImage
 
                 Spacer(modifier = Modifier.width(10.dp))
 
-                Text("Приход", color = Color.Black, fontSize = 20.sp)
+                Text("Приход Расход", color = Color.Black, fontSize = 20.sp)
 
             }
 

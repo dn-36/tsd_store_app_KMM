@@ -75,4 +75,8 @@ sealed class CreateGoodOrServiceIntents {
 
     object MenuGoodOrService: CreateGoodOrServiceIntents()
 
+
+
+    object CheckTF: CreateGoodOrServiceIntents()
+
 }

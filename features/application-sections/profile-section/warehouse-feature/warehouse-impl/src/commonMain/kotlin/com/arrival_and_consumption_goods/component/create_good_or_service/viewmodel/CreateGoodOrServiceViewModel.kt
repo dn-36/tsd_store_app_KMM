@@ -3,6 +3,7 @@ package com.arrival_and_consumption_goods.component.create_good_or_service.viewm
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.arrival_and_consumption_goods.domain.usecases.GetCategoriesUseCase
 import com.arrival_and_consumption_goods.model.CategoryModel
@@ -102,6 +103,9 @@ class CreateGoodOrServiceViewModel(): ViewModel() {
             is CreateGoodOrServiceIntents.DeleteSelectedForSale -> deleteSelectedForSale()
 
             is CreateGoodOrServiceIntents.DeleteSelectedPhoto -> deleteSelectedPhoto()
+
+
+            is CreateGoodOrServiceIntents.CheckTF -> checkTF()
 
         }
 
@@ -435,6 +439,48 @@ class CreateGoodOrServiceViewModel(): ViewModel() {
 
             image = null
 
+        )
+
+    }
+
+    fun checkTF () {
+
+        val newList = state.listColorBorderTF.toMutableList()
+
+        var hasNull = true
+
+        if ( state.name.isBlank() && state.selectedCategory == null ) {
+
+            newList[0] = Color.Red
+
+            newList[1] = Color.Red
+
+            hasNull = false
+
+        }
+
+        else if ( state.name.isBlank() ) {
+
+            newList[0] = Color.Red
+
+            hasNull = false
+
+        }
+        else if ( state.selectedCategory == null ) {
+
+            newList[1] = Color.Red
+
+            hasNull = false
+
+        }
+
+
+
+        // Обновляем состояние
+
+        state = state.copy(
+            listColorBorderTF = newList,
+            onCheck = hasNull
         )
 
     }

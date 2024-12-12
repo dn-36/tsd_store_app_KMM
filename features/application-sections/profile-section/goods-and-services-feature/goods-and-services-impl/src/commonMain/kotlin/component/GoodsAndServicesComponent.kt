@@ -29,8 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.core_app.components.PlusButton
 import com.project.core_app.components.delete_component.DeleteComponent
+import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import component.additional_information.AdditionalInformationComponent
+import component.characteristic.ui.CharacteristicsComponent
 import component.data_entry_goods_and_services.ui.DataEntryGodsAndServicesComponent
 import component.disharge.ui.DischargeComponent
 import org.jetbrains.compose.resources.painterResource
@@ -79,9 +81,13 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                SearchComponent( onValueChange = { text -> viewModel.processIntents(
+
+                    GoodsAndServicesIntents.InputTextSearchComponent(text)) } ).Content()
+
                 LazyColumn(){
 
-                    itemsIndexed(viewModel.state.listProducts){ index, it ->
+                    itemsIndexed(viewModel.state.listFilteredProducts){ index, it ->
 
                         Box(modifier = Modifier.pointerInput(true) {
 
@@ -194,37 +200,47 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
         }
 
-        if ( viewModel.state.isVisibilityDataEntry ) {
+        if (viewModel.state.isVisibilityDataEntry) {
 
-           // DischargeComponent().Content()
+            // DischargeComponent().Content()
 
-            DataEntryGodsAndServicesComponent( onClickBack = {
+            DataEntryGodsAndServicesComponent(onClickBack = {
 
-            viewModel.processIntents(GoodsAndServicesIntents.BackFromDataEntry)} ,
+                viewModel.processIntents(GoodsAndServicesIntents.BackFromDataEntry)
+            },
 
                 onClickNext = { name: String, video_youtube: String, ediz_id: Int?,
 
-                                  category_id: Int?, is_product: Int, is_sale: Int,
+                                category_id: Int?, is_product: Int, is_sale: Int,
 
-                                  system_category_id: Int?, is_view_sale: Int, is_order: Int,
+                                system_category_id: Int?, is_view_sale: Int, is_order: Int,
 
-                                  is_store: Int, is_store_view: Int, sku: String,
+                                is_store: Int, is_store_view: Int, is_test: Int?, is_arenda: Int?,
 
-                                  text_image, price: Float?, tags: List<String>,
+                                is_zakaz: Int?, is_ves: Int?, is_serial_nomer: Int?,
 
-                                  variantes: List<String>, divisions: String, image ->
+                                is_date_fabrica: Int?, is_markirovka: Int?, sku: String,
 
-                                viewModel.processIntents(
+                                text_image, price: Float?, tags: List<String>,
 
-                                    GoodsAndServicesIntents.Next( name,
+                                variantes: List<String>, divisions: String, image ->
 
-                                        video_youtube, ediz_id, category_id, is_product, is_sale,
+                    viewModel.processIntents(
 
-                                    system_category_id, is_view_sale, is_order, is_store,
+                        GoodsAndServicesIntents.Next(
+                            name,
 
-                                    is_store_view, sku, text_image, price, tags, variantes,
+                            video_youtube, ediz_id, category_id, is_product, is_sale,
 
-                                        divisions, image ) )
+                            system_category_id, is_view_sale, is_order, is_store,
+
+                            is_store_view, is_test, is_arenda, is_zakaz, is_ves,
+
+                            is_serial_nomer, is_date_fabrica, is_markirovka,
+
+                            sku, text_image, price, tags, variantes, divisions, image
+                        )
+                    )
                 },
 
                 listSystemCategory = viewModel.state.listSystemCategory,
@@ -233,7 +249,8 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                 listUnitsMeasurement = viewModel.state.listUnitsMeasurement,
 
-                sku = sku, updateItem = viewModel.state.updateItem ).Content()
+                sku = sku, updateItem = viewModel.state.updateItem
+            ).Content()
 
         }
 
@@ -269,6 +286,10 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                             GoodsAndServicesIntents.UpdateGoodOrService(scope)) },
 
+                onClickCharacteristics = { viewModel.processIntents(
+
+                    GoodsAndServicesIntents.Characteristics) },
+
                 onClickBack = { viewModel.processIntents(
 
                     GoodsAndServicesIntents.BackFromAdditionalInformation) }).Content()
@@ -290,6 +311,16 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
             }, onClickBack = { viewModel.processIntents(
 
                     GoodsAndServicesIntents.BackFromDischarge) } ).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityCharacteristicsComponent ) {
+
+            CharacteristicsComponent( onClickBack = { viewModel.processIntents(
+
+                GoodsAndServicesIntents.BackFromCharacteristics) },
+
+                listCharacteristics = viewModel.state.listCharacteristics ).Content()
 
         }
 
