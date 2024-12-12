@@ -5,10 +5,12 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.profile.profile.udpPlayer.core.ProductPresentationModel
 import kotlinx.coroutines.CoroutineScope
 import com.project.core_app.viewmodel.model.CategoryPrinter
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.TypeQrCode
 
 
 sealed class QRcodeMenuIntent {
     data class SetScreen(
+      //  val typeQrCode: TypeQrCode = TypeQrCode.BAR_CODE,
         val product: ProductPresentationModel,
         val navigator: Navigator,
         val context:Context
@@ -19,9 +21,10 @@ sealed class QRcodeMenuIntent {
      data class ChangeFontSize(val fontSize:Float,val title:String): QRcodeMenuIntent()
      data class ChangeHightQrCode(val dataQRcode:String, val heightQRcode:Float): QRcodeMenuIntent()
      data class ChangeWidthQrCode(val widthQRcode:Float): QRcodeMenuIntent()
-     object SavedSettings: QRcodeMenuIntent()
-     data class SelectBluetoothDevice (val device: String, val scope:CoroutineScope):
-         QRcodeMenuIntent()
+     data class SelectTypeQRcode(val typeQRcode:TypeQrCode): QRcodeMenuIntent()
+
+    object SavedSettings: QRcodeMenuIntent()
+     data class SelectBluetoothDevice (val device: String, val scope:CoroutineScope): QRcodeMenuIntent()
      object CloseSettingsVKP: QRcodeMenuIntent()
      data class InputTextProduct(val text:String): QRcodeMenuIntent()
      data class SearchBluetoothDevice(val scope: CoroutineScope): QRcodeMenuIntent()

@@ -1,7 +1,6 @@
 package com.project.core_app.viewmodel
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +20,7 @@ import com.project.core_app.viewmodel.model.ConnectionDeviseStatus
 import com.project.core_app.viewmodel.model.StatusBluetoothLoading
 import com.project.network.Navigation
 import com.project.phone.VKPUtils
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.TypeQrCode
 
 class QRcodeMenuViewModel(
     private val conectUSBUseCase: ConectUSBUseCase,
@@ -34,7 +34,6 @@ class QRcodeMenuViewModel(
 ) : ViewModel() {
 
     val state = MutableStateFlow(QRCodeMenuState())
-    private var isSetedScreen = false
     private var x: Int = 0
     private var y: Int = 0
     private var height: Int = 40
@@ -46,8 +45,10 @@ class QRcodeMenuViewModel(
 
         when (intent) {
             is QRcodeMenuIntent.SetScreen -> {
-                if (isSetedScreen) return
-                isSetedScreen = true
+
+               // if ( ) return
+              //  isSetedScreen = true
+
                state.update {
                    it.copy(
                        qrCodeDataText = if(!intent.product.title.isNullOrBlank())
@@ -69,7 +70,10 @@ class QRcodeMenuViewModel(
                     .execute(
                         qrCodeDataText,
                         state.value.heightQRcode,
-                        state.value.barCodeWidth
+                        state.value.barCodeWidth,
+                        state.value.typeQrCode
+                       // intent.typeQrCode
+                       //state.value.typeQrCode
                     )
                // qrCodeBiteMap.width = qrCodeBiteMap.width * 1.3F
                 state.value = state.value.copy(imgBitmap = qrCodeBiteMap)
@@ -179,7 +183,8 @@ is QRcodeMenuIntent.ChangeHightQrCode -> {
      imgBitmap = getQRcodeBitmapUseCase.execute(
          intent.dataQRcode ,
          intent.heightQRcode,
-         state.value.barCodeWidth
+         state.value.barCodeWidth,
+         state.value.typeQrCode
      )
      )
  }
@@ -316,45 +321,63 @@ is QRcodeMenuIntent.CloseSettingsBluetooth -> {
             }
 
             is QRcodeMenuIntent.ChangeWidthQrCode -> {
-                when(intent.widthQRcode.toInt()) {
+                if(state.value.typeQrCode == TypeQrCode.BAR_CODE){
+             when(intent.widthQRcode.toInt()) {
 
-                    1  -> {
-                        state.value = state.value.copy(barCodeWidth = 1F)
-                    }
-                    2  -> {
+                 1 -> {
+                     state.value = state.value.copy(barCodeWidth = 1F)
+                 }
 
-                        state.value = state.value.copy(barCodeWidth = 1.25F)
+                 2 -> {
+                     state.value = state.value.copy(barCodeWidth = 1.25F)
+                 }
 
-                    }
-                    3 -> {
+                 3 -> {
+                     state.value = state.value.copy(barCodeWidth = 1.94F)
+                 }
 
-                        state.value = state.value.copy(barCodeWidth = 1.94F)
+                 else -> {
 
-                    }
-
-                    else -> {
-
-                    }
-
+                 }
+             }
+             }else{
+                    state.value = state.value.copy(barCodeWidth = intent.widthQRcode)
                 }
 
+             val barCode = getQRcodeBitmapUseCase.execute(
+                 state.value.qrCodeDataText,
+                 state.value.heightQRcode,
+                 state.value.barCodeWidth,
+                 state.value.typeQrCode,
+             )
+             if(intent.widthQRcode.toInt() != 4){
+             state.update {
+                 it.copy(
+                     imgBitmap = barCode,
+                     barCodeWidth =
+                     intent.widthQRcode.toInt().toFloat()
+                 )
+             }
+             }
+
+         }
+
+            is QRcodeMenuIntent.SelectTypeQRcode -> {
                 val barCode = getQRcodeBitmapUseCase.execute(
                     state.value.qrCodeDataText,
                     state.value.heightQRcode,
-                    state.value.barCodeWidth
-                    //intent.widthQRcode
+                    state.value.barCodeWidth,
+                    intent.typeQRcode
                 )
-                if(intent.widthQRcode.toInt() != 4){
-                state.update {
-                    it.copy(
-                        imgBitmap = barCode,
-                        barCodeWidth =
-                        intent.widthQRcode.toInt().toFloat()
-                    )
+                    state.update {
+                        it.copy(
+                            imgBitmap = barCode,
+                            typeQrCode = intent.typeQRcode
+                            //barCodeWidth =
+                          //  intent.widthQRcode.toInt().toFloat()
+                        )
+                    }
                 }
-                }
-
-            }
         }
 }
 }

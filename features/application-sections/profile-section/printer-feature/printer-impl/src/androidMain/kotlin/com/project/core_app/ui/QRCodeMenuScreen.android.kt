@@ -27,6 +27,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -88,15 +89,19 @@ actual class QRCodeMenuScreen : Screen {
         )
 
         val state by viewModel.state.collectAsState()
+       // val _state = remember { viewModel.state.value }
+       val navigator = LocalNavigator.currentOrThrow
+       val context = LocalContext.current
+       LaunchedEffect(true){
+           viewModel.processIntent(
+               QRcodeMenuIntent.SetScreen(
+                   product = product,
+                   navigator = navigator,
+                   context = context
+               )
+           )
+       }
 
-        viewModel.processIntent(
-            QRcodeMenuIntent.SetScreen(
-                product,
-                LocalNavigator.currentOrThrow,
-                LocalContext.current
-
-            )
-        )
 
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
@@ -154,8 +159,7 @@ actual class QRCodeMenuScreen : Screen {
                         settingsTicketsTSCprinter.Component(
                             state.imgBitmap!!,
                             state.titleProductQRcodeBiteMap!!,
-
-                            //state.heightTicketTsc,state.weightTicketTsc,
+                            state.heightQRcode.toInt(),
                             { x: Int, y : Int, height: Int, weight: Int ->
 
                                 viewModel.processIntent(
@@ -292,7 +296,7 @@ Row {
                         state.fontSize,
                         state.barCodeWidth,
                         state.categoryPrinter,
-
+                        state.typeQrCode,
                         {
                             viewModel.processIntent(
                                 QRcodeMenuIntent.ChangeFontSize(
@@ -314,6 +318,7 @@ Row {
                         { viewModel.processIntent(QRcodeMenuIntent.ChangeWidthQrCode(it))},
                         { viewModel.processIntent(QRcodeMenuIntent.CloseSettingsVKP) },
                         { viewModel.processIntent(QRcodeMenuIntent.SavedSettings) },
+                        { viewModel.processIntent(QRcodeMenuIntent.SelectTypeQRcode(it))}
                     )
                 } else {
                     Toast.makeText(LocalContext.current, "Выбирите продукт", Toast.LENGTH_SHORT).show()

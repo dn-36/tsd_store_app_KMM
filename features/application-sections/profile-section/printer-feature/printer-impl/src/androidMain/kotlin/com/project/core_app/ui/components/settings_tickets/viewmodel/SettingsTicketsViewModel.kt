@@ -1,6 +1,7 @@
 package com.project.core_app.ui.components.settings_tickets.viewmodel
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,7 +9,7 @@ import androidx.compose.ui.input.pointer.positionChange
 
 class SettingsTicketsViewModel(){
     var state by mutableStateOf(SettingsTicketsState())
-        private set
+    //    private set
 
     fun processIntent(intent:SettingsTicketsIntent){
        when(intent){
@@ -20,6 +21,7 @@ class SettingsTicketsViewModel(){
                  intent.widht,
                  intent.barcode,
                  intent.text,
+                 intent.heightQrCode,
                  intent.actioTscPrinter
              )
          }
@@ -36,6 +38,7 @@ class SettingsTicketsViewModel(){
         widht: Int,
         barcode: Bitmap,
         text: Bitmap,
+        heightQrCode:Int,
         actioTscPrinter: (x: Int, y: Int, height: Int, widht: Int) -> Unit
         ){
         state = state
@@ -47,9 +50,9 @@ class SettingsTicketsViewModel(){
                 .copy (x = ((state.widthTicketMM.toFloat() * 2.25F) -
                         ((barcode.width / 4))).toInt(),
                     y = (((state.heightTicketMM .toFloat() * 2.25F) -
-                            (barcode.height / 4 + (text.height / 4))) + 30).toInt()
+                            (heightQrCode + (text.height / 4))) + 30).toInt()
                 )
-
+                Log.d("qwert",heightQrCode.toString())
 
             actioTscPrinter(
                 (state.x * 1.5).toInt(),
@@ -123,9 +126,12 @@ sealed class SettingsTicketsIntent(){
         val text: Bitmap,
         val height:Int,
         val widht: Int,
+        val heightQrCode:Int,
         val actioTscPrinter: (x: Int, y: Int, height: Int, widht: Int) -> Unit
     ) : SettingsTicketsIntent()
-    data class ChangeCoordinatesQRcode(val x:Int,val y:Int) : SettingsTicketsIntent()
+
+    data class ChangeCoordinatesQRcode(val x:Int,val y:Int)
+        : SettingsTicketsIntent()
 }
 
 

@@ -47,7 +47,7 @@ include(":core:contact-provider")
 include(":common")
 include(":common:printer-impl")
 include(":common:ip-camera-client")
-
+include(":common:scaner-point-mobile")
 
 include(":core:recources")
 include(":common:phone")

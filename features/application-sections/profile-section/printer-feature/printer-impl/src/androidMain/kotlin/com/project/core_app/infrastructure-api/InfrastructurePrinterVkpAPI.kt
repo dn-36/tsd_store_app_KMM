@@ -1,5 +1,7 @@
 package org.example.project.presentation.feature.qr_code.screens.qr_code_screen.`infrastructure-api`
 
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.TypeQrCode
+
 
 interface InfrastructurePrinterVkpAPI {
     fun printOnVKP(description: String?,
@@ -9,7 +11,8 @@ interface InfrastructurePrinterVkpAPI {
     fun connectUSB()
     fun <T>getQRCode(content: String,
                      heightMm: Float,
-                     barWidthMultiplier: Float
+                     barWidthMultiplier: Float,
+                     typeQrCode: TypeQrCode
     ):T
 
     fun <T>getTitleProduct(

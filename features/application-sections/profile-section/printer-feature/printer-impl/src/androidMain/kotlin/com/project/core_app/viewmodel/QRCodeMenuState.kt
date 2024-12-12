@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import com.project.core_app.viewmodel.model.CategoryPrinter
 import com.project.core_app.viewmodel.model.ConnectionDeviseStatus
 import com.project.core_app.viewmodel.model.StatusBluetoothLoading
+import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.TypeQrCode
 
 data class QRCodeMenuState(
     val titleProductQRcodeBiteMap: Bitmap? = null,
@@ -25,5 +26,6 @@ data class QRCodeMenuState(
     val y: Float = 90F,
     val heightTicketTsc: Int = 60,
     val weightTicketTsc: Int = 60,
-    val qrCodeDataText:String = ""
+    val qrCodeDataText:String = "",
+    val typeQrCode: TypeQrCode = TypeQrCode.BAR_CODE
 )

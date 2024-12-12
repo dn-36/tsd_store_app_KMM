@@ -35,6 +35,7 @@ kotlin {
     sourceSets {
 
         androidMain.dependencies {
+            implementation(project(":common:scaner-point-mobile"))
             implementation(project(":common:phone"))
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -88,6 +89,8 @@ kotlin {
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
             implementation(libs.bundles.ktor)
             implementation(libs.kotlinx.datetime)
+            implementation("com.google.zxing:core:3.5.1") // Если нужно декодировать изображение
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
