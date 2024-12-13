@@ -1,4 +1,4 @@
-package com.arrival_and_consumption_goods.viewmodel
+package com.arrival_and_consumption_goods.viewmodel_zebra
 
 import com.zebra.scannercontrol.DCSScannerInfo
 import com.zebra.scannercontrol.SDKHandler
@@ -13,13 +13,9 @@ data class ScannerZebraUsbState (
 
     var mSNAPIList: ArrayList<DCSScannerInfo> = ArrayList<DCSScannerInfo>(),
 
-    val isSet: Boolean = true,
-
     val checkSku: Boolean? = null,
 
     val textNewProduct: String = "",
-
-    val counter: Int? = null,
 
     val connectedScannerId: Int? = null
 

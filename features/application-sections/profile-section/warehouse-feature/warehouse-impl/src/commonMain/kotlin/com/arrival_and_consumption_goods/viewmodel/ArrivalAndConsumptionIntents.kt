@@ -17,6 +17,12 @@ sealed class ArrivalAndConsumptionIntents {
 
     object NoDelete : ArrivalAndConsumptionIntents()
 
+    data class ClickItem( val id: Int ): ArrivalAndConsumptionIntents()
+
+    object BackFromListDevices: ArrivalAndConsumptionIntents()
+
+    object BackFromDetail: ArrivalAndConsumptionIntents()
+
     data class OpenDeleteComponent ( val item: StoreResponseArrivalAndConsumption? )
 
         : ArrivalAndConsumptionIntents()
@@ -39,7 +45,7 @@ sealed class ArrivalAndConsumptionIntents {
 
     object BackFromListProducts : ArrivalAndConsumptionIntents()
 
-    data class SelectProducts(val selectedProducts: ProductArrivalAndConsumption) :
+    data class SelectProducts( val selectedProducts: ProductArrivalAndConsumption) :
 
         ArrivalAndConsumptionIntents()
 
@@ -60,7 +66,9 @@ sealed class ArrivalAndConsumptionIntents {
 
     data class Update( val coroutineScope: CoroutineScope ) : ArrivalAndConsumptionIntents()
 
-    object SelectFromList : ArrivalAndConsumptionIntents()
+    object SelectFromList: ArrivalAndConsumptionIntents()
+
+    object ScannerBluetoothOrAdapter: ArrivalAndConsumptionIntents()
 
     data class CreateArrivalOrConsumption( val coroutineScope: CoroutineScope ) :
 

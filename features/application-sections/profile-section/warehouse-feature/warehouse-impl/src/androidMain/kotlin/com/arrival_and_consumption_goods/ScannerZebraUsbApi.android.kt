@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,26 +29,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.arrival_and_consumption_goods.viewmodel.ScannerZebraUsbIntents
-import com.arrival_and_consumption_goods.viewmodel.ScannerZebraUsbViewModel
 import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
-import com.profile.profile.screens.main_refactor.screens.warehouse.viewmodel.WarehouseIntents
+import com.arrival_and_consumption_goods.viewmodel_zebra.ScannerZebraUsbIntents
+import com.arrival_and_consumption_goods.viewmodel_zebra.ScannerZebraUsbViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import org.koin.mp.KoinPlatform.getKoin
 import project.core.resources.Res
 import project.core.resources.back
-import project.core.resources.cancel
 
 
 actual class ScannerZebraUsbScreen actual constructor( ) {
 
-    val viewModel = ScannerZebraUsbViewModel(getKoin().get())
+    val viewModel = ScannerZebraUsbViewModel()
 
     @Composable
 
@@ -62,9 +59,21 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
                           onClickBack:() -> Unit
     ) {
 
+         val context = LocalContext.current
+
          val scope = rememberCoroutineScope()
 
-        viewModel.customization()
+        if ( viewModel.state.sdkHandler != null ) {
+
+            scope.launch(Dispatchers.IO) {
+
+                viewModel.scannersListHasBeenUpdated( context )
+
+            }
+
+        }
+
+        viewModel.customization( context )
 
         var counter by remember { mutableStateOf(0) }
 
@@ -128,17 +137,7 @@ actual class ScannerZebraUsbScreen actual constructor( ) {
 
                 Text( text = viewModel.state.textNewProduct, textAlign = TextAlign.Center )
 
-                Spacer( modifier = Modifier.height(20.dp) )
-
-                    //if ( viewModel.state.counter == 0 ) {
-
-                    //CircularProgressIndicator()
-
-                    //Spacer( modifier = Modifier.height(10.dp) )
-
-                //}
-
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer( modifier = Modifier.height(30.dp) )
 
                 Button(
 

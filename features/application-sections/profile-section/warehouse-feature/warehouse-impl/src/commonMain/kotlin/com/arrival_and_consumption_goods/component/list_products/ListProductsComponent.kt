@@ -1,4 +1,4 @@
-package com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products
+package com.arrival_and_consumption_goods.component.list_products
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,12 +42,12 @@ class ListProductsComponent (
 
     val onClickProduct:( selectedProducts: ProductArrivalAndConsumption) -> Unit
 
-
-)  {
+  )  {
 
     val vm = ListProductsViewModel()
 
     @Composable
+
      fun Content() {
 
          vm.processIntents ( ListProductsIntents.SetScreen( listAllProducts ) )

@@ -55,6 +55,8 @@ class AddProductsComponent(
 
     val onClickScannerZebraUsb: () -> Unit,
 
+    val onClickScannerBluetoothOrAdapter: () -> Unit,
+
     val onClickSelectFromList: () -> Unit,
 
     val onClickCreate: () -> Unit,
@@ -146,13 +148,14 @@ class AddProductsComponent(
 
                 }
             }
+
             Column(modifier = Modifier.align(Alignment.BottomCenter), horizontalAlignment = Alignment.End) {
 
                 if ( expendedMenu ) {
 
                     Box( modifier = Modifier.fillMaxWidth(0.5f).padding(end = 10.dp)
 
-                        .height(150.dp)) {
+                        .height(210.dp) ) {
 
                         Card(
                             modifier = Modifier.fillMaxSize()
@@ -160,35 +163,53 @@ class AddProductsComponent(
                             backgroundColor = Color.White,
                             shape = RoundedCornerShape(8.dp)
                         ) {}
-                        Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+                        Column(modifier = Modifier.padding(10.dp).fillMaxSize()
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                            , verticalArrangement = Arrangement.SpaceBetween) {
 
-                            Box(modifier = Modifier.weight(0.5f)) {
+                            //Spacer(modifier = Modifier.height(10.dp))
+
+                           // Box(modifier = Modifier.weight(0.5f)) {
 
                             Text("Сканировать камерой", fontSize = 15.sp,
 
                                 modifier = Modifier.clickable(
                                     indication = null, // Отключение эффекта затемнения
                                 interactionSource = remember { MutableInteractionSource() })
+
                             { onClickScannerCamera() })
-                        }
+                       // }
 
-                            Spacer(modifier = Modifier.height(25.dp))
+                           // Spacer(modifier = Modifier.height(15.dp))
 
-                            Box(modifier = Modifier.weight(0.5f)) {
+                           // Box(modifier = Modifier.weight(0.5f)) {
 
                                 Text("Сканировать сканером zebra", fontSize = 15.sp,
 
                                     modifier = Modifier.clickable(
                                     indication = null, // Отключение эффекта затемнения
-                                    interactionSource = remember { MutableInteractionSource() })
+                                    interactionSource = remember { MutableInteractionSource() } )
                                 { onClickScannerZebraUsb() })
-                            }
+                          //  }
 
-                            Spacer(modifier = Modifier.height(25.dp))
+                           // Spacer(modifier = Modifier.height(15.dp))
 
-                            Box(modifier = Modifier.weight(1f)) {
+                           // Box(modifier = Modifier.weight(0.5f)) {
+
+                                Text("Сканировать сканером Bluetooth или через адаптер",
+
+                                    fontSize = 15.sp,
+
+                                    modifier = Modifier.clickable(
+                                    indication = null, // Отключение эффекта затемнения
+                                    interactionSource = remember { MutableInteractionSource() } )
+
+                                    { onClickScannerBluetoothOrAdapter() })
+                            //}
+
+                           // Spacer(modifier = Modifier.height(15.dp))
+
+                           // Box(modifier = Modifier.weight(1f)) {
 
                                 Text("Выбрать из списка",
                                     fontSize = 15.sp,
@@ -196,9 +217,9 @@ class AddProductsComponent(
                                         indication = null, // Отключение эффекта затемнения
                                         interactionSource = remember { MutableInteractionSource() })
                                     { onClickSelectFromList() })
-                            }
+                          //  }
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                         //   Spacer(modifier = Modifier.height(10.dp))
 
                         }
                     }

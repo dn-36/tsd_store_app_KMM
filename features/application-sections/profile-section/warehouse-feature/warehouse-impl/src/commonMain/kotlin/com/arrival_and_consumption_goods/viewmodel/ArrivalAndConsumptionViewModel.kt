@@ -493,6 +493,15 @@ class ArrivalAndConsumptionViewModel (
 
                 }
             }
+
+            is ArrivalAndConsumptionIntents.ClickItem -> clickItem( intent.id )
+
+            is ArrivalAndConsumptionIntents.BackFromDetail -> backFromDetail()
+
+            is ArrivalAndConsumptionIntents.BackFromListDevices -> backFromListDevices()
+
+            is ArrivalAndConsumptionIntents.ScannerBluetoothOrAdapter -> scannerBluetoothOrAdapter()
+
         }
     }
 
@@ -831,6 +840,58 @@ class ArrivalAndConsumptionViewModel (
             )
 
         }
+
+    }
+
+    fun clickItem( id: Int ) {
+
+        state = state.copy(
+
+            idSelectItem = id,
+
+            isVisibilityDetail = true,
+
+            isVisibilityListDevices = false
+
+        )
+
+    }
+
+    fun backFromDetail() {
+
+        state = state.copy(
+
+            idSelectItem = null,
+
+            isVisibilityDetail = false,
+
+            isVisibilityListDevices = true
+
+        )
+
+    }
+
+    fun backFromListDevices() {
+
+        state = state.copy(
+
+            isVisibilityListDevices = false,
+
+            isVisibilityAddProductsComponent = 1f
+
+        )
+
+    }
+
+    fun scannerBluetoothOrAdapter() {
+
+        state = state.copy(
+
+            isVisibilityListDevices = true,
+
+            isVisibilityAddProductsComponent = 0f
+
+        )
 
     }
 

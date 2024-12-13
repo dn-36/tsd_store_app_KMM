@@ -78,6 +78,12 @@ data class ArrivalAndConsumptionState (
 
     val colorBorderCountTF: Color = Color.LightGray,
 
-    val lastScanner: String = ""
+    val lastScanner: String = "",
+
+    val idSelectItem: Int? = null,
+
+    val isVisibilityDetail: Boolean = false,
+
+    val isVisibilityListDevices: Boolean = false,
 
     )

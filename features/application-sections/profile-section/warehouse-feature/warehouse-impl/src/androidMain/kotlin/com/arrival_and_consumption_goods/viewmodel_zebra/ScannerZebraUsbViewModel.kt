@@ -1,4 +1,4 @@
-package com.arrival_and_consumption_goods.viewmodel
+package com.arrival_and_consumption_goods.viewmodel_zebra
 
 import android.content.Context
 import android.os.Handler
@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arrival_and_consumption_goods.helpers.Barcode
@@ -24,7 +25,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiDelegate {
+class ScannerZebraUsbViewModel( ): ViewModel(), IDcsSdkApiDelegate {
 
     var state by mutableStateOf(ScannerZebraUsbState())
 
@@ -32,30 +33,12 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
         when( intent ) {
 
-            is ScannerZebraUsbIntents.UpdateScanData -> updateScanData(intent.text)
+            is ScannerZebraUsbIntents.UpdateScanData -> updateScanData( intent.text )
 
             is ScannerZebraUsbIntents.CheckSku -> checkSku( intent.sku, intent.listProducts )
 
         }
 
-    }
-
-    init {
-        // Запускаем корутину в фоновом потоке
-        viewModelScope.launch(Dispatchers.IO) {
-            // Этот код будет выполняться пока ViewModel существует
-            while (isActive) {
-                // Вызов вашей функции или операции, которая должна выполняться непрерывно
-                if ( state.sdkHandler != null ) {
-
-                scannersListHasBeenUpdated()
-
-                }
-
-                // При необходимости задержка перед повторным вызовом
-                delay(1000L)
-            }
-        }
     }
 
     fun checkSku( sku: String, listProducts: List<AllProductArrivalAndConsumption> ) {
@@ -94,7 +77,7 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
     }
 
-    fun customization() {
+    fun customization( context: Context ) {
 
             state.sdkHandler = SDKHandler(context)
 
@@ -140,7 +123,7 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
 
     }
 
-    suspend fun scannersListHasBeenUpdated() {
+    suspend fun scannersListHasBeenUpdated( context: Context ) {
 
         state.mSNAPIList.clear()
 
@@ -162,7 +145,7 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
                 // Available scanner is active. Navigate to active scanner
             } else {
 
-             connectScanner( state.mSNAPIList[0])
+             connectScanner( state.mSNAPIList[0], context)
 
             }
 
@@ -208,14 +191,14 @@ class ScannerZebraUsbViewModel( val context: Context ): ViewModel(), IDcsSdkApiD
         }
     }
 
-    suspend fun connectScanner( scanner: DCSScannerInfo ): Boolean {
+    suspend fun connectScanner( scanner: DCSScannerInfo, context: Context ): Boolean {
 
         var result = DCSSDKDefs.DCSSDK_RESULT.DCSSDK_RESULT_FAILURE
 
             result = state.sdkHandler!!.dcssdkEstablishCommunicationSession(scanner.getScannerID())
 
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Подключение к сканеру установлено!", Toast.LENGTH_SHORT)
+                Toast.makeText( context, "Подключение к сканеру установлено!", Toast.LENGTH_SHORT)
                     .show();
 
                 state = state.copy(

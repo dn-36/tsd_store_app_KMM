@@ -1,4 +1,4 @@
-package com.arrival_and_consumption_goods.viewmodel
+package com.arrival_and_consumption_goods.viewmodel_zebra
 
 import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 

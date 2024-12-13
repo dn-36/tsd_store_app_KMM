@@ -33,10 +33,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arrival_and_consumption_goods.DetailScreen
+import com.arrival_and_consumption_goods.ListDevicesScreen
 import com.arrival_and_consumption_goods.ScannerZebraUsbScreen
 import com.arrival_and_consumption_goods.component.create_good_or_service.ui.CreateGoodOrServiceComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.data_entry.ui.DataEntryComponent
-import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.list_products.ListProductsComponent
+import com.arrival_and_consumption_goods.component.list_products.ListProductsComponent
 import com.arrival_and_consumption_goods.component.scanner_camera_component.ui.ScannerCameraComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.component.CountProductComponent
 import com.profile.profile.screens.main_refactor.screens.arrival_and_consumption_goods.util.formatDateTime
@@ -363,6 +365,10 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                     ArrivalAndConsumptionIntents.ScannerZebraUsb) },
 
+                onClickScannerBluetoothOrAdapter =  {
+
+                viewModel.processIntent(ArrivalAndConsumptionIntents.ScannerBluetoothOrAdapter) },
+
                 onClickCansel = { index ->
 
                     viewModel.processIntent(
@@ -391,7 +397,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
         else if ( viewModel.state.isVisibilityScannerZebraUsbComponent ) {
 
-            ScannerZebraUsbScreen().Content( viewModel.state.listProducts, onClickAdd = { sku ->
+           ScannerZebraUsbScreen().Content( viewModel.state.listProducts, onClickAdd = { sku ->
 
                 viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( sku ))
 
@@ -442,6 +448,28 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                         is_product, is_sale, is_view_sale, is_order, is_store, is_store_view,
 
                         sku, text_image, price, image_upload ) ) } ).Content()
+
+        }
+
+        else if ( viewModel.state.isVisibilityDetail ) {
+
+            DetailScreen().Content( deviceId = viewModel.state.idSelectItem!!,
+
+                onBackPressed = { viewModel.processIntent(
+
+                    ArrivalAndConsumptionIntents.BackFromDetail) })
+
+        }
+
+        else if ( viewModel.state.isVisibilityListDevices ) {
+
+            ListDevicesScreen().Content( onClickItem = { id ->
+
+                viewModel.processIntent(ArrivalAndConsumptionIntents.ClickItem(id))
+
+            }, onClickBack = { viewModel.processIntent(
+
+                ArrivalAndConsumptionIntents.BackFromListDevices) } )
 
         }
 

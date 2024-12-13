@@ -5,7 +5,6 @@ import com.example.notes_screens_impl.notesModule
 import com.locationsModule
 import com.productsMenuModule
 import com.profile.`printer-impl`.profileScreensModule
-import com.arrival_and_consumption_goods.scannerZebraUsbModule
 import com.profile.profile.toolsScreensModule
 import com.profile.profile.udpPlayer.printerPlatformModule
 import com.profile.profile.udpPlayer.printerScreenModule
@@ -60,7 +59,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             categoriesModule,
             unitsMeasurementModule,
             fileProviderModule,
-            scannerZebraUsbModule,
+            //scannerZebraUsbModule,
             goodsAndServicesModule
 
         )
