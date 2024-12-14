@@ -314,7 +314,7 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                 onClickReady = { count ->
 
                     viewModel.processIntent(ArrivalAndConsumptionIntents.Ready(count))
-
+//
                 },
 
                 colorBorderCountTF = viewModel.state.colorBorderCountTF
