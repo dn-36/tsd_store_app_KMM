@@ -40,17 +40,18 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.style.TextAlign
 import com.arrival_and_consumption_goods.component.scanner_camera_component.viewmodel.ScannerCameraIntents
 import com.arrival_and_consumption_goods.component.scanner_camera_component.viewmodel.ScannerCameraViewModel
+
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import com.preat.peekaboo.image.picker.toImageBitmap
 import com.preat.peekaboo.ui.camera.PeekabooCamera
 import com.preat.peekaboo.ui.camera.rememberPeekabooCameraState
-import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
 import qrscanner.scanImage
 
 
- class ScannerCameraComponent (
+class ScannerCameraComponent (
 
      val onClickAdd: (sku: String ) -> Unit,
 

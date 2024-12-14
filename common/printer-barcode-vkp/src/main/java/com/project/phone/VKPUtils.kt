@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.DisplayMetrics
 import com.google.zxing.BarcodeFormat
+import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
 object VKPUtils {
@@ -108,41 +109,62 @@ object VKPUtils {
         return bitmap
     }
 
-    fun setSizeBitMap(
+   fun setSizeBitMap(
         originalBitmap: Bitmap,
         widthDp: Int,
         heightDp: Int,
         context: Context
     ): Bitmap {
-        val heightPx = (heightDp * context.resources.displayMetrics.density).toInt()
-        val widthPx = (widthDp * context.resources.displayMetrics.density).toInt()
-        return Bitmap.createScaledBitmap(originalBitmap, widthPx, heightPx, false)
-    }
+       val heightPx = (heightDp * context.resources.displayMetrics.density).toInt()
+       val widthPx = (widthDp * context.resources.displayMetrics.density).toInt()
+       return Bitmap.createScaledBitmap(originalBitmap, widthPx, heightPx, false)
+   }
 
-    fun generateBarcode(content: String, heightMm: Float): Bitmap? {
+
+    fun generateBarcode(content: String, heightMm: Float, width: Float = 1.0f, format:BarcodeFormat): Bitmap? {
         return try {
-            val pixelsPerMm = 3.779528
-            val widthPx = (75 * pixelsPerMm).toInt()
+
+           val pixelsPerMm = 3.779528f
+
             val heightPx = (heightMm * pixelsPerMm).toInt()
 
-            // Create a Bitmap to draw on
-            val bitmap = Bitmap.createBitmap(widthPx, heightPx, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
+            val baseWidthMm = 75f // базовая ширина в мм (по умолчанию)
+            val barcodeWidthPx = (baseWidthMm * pixelsPerMm * width).toInt()
 
+            // Генерация штрих-кода с использованием BarcodeEncoder
             val barcodeEncoder = BarcodeEncoder()
-            val barcodeBitmap =
-                barcodeEncoder.encodeBitmap(content, BarcodeFormat.CODE_128, widthPx, heightPx)
+            val barcodeBitmap = barcodeEncoder.encodeBitmap(
+                content,
+              //  BarcodeFormat.QR_CODE,
+                format,
+                //BarcodeFormat.CODE_128,
+                barcodeWidthPx,
+                heightPx
+            )
 
-            val left = (widthPx - barcodeBitmap.width) / 2
-            val top = (heightPx - barcodeBitmap.height) / 2
-
-            canvas.drawBitmap(barcodeBitmap, left.toFloat(), top.toFloat(), null)
-
-            return bitmap
-        } catch (e: Exception) {
+            // Удаление лишних отступов, если требуется
+           Bitmap.createBitmap(barcodeBitmap, 0, 0,
+                 barcodeWidthPx , heightPx)
+           // barcodeBitmap
+        } catch (e: WriterException) {
             e.printStackTrace()
             null
         }
     }
 
-}
+   /* fun generateStretchedBarcode(
+        content: String,
+        targetWidth: Int,
+        height: Int
+    ): Bitmap? {
+        return try {
+            // Генерация нового штрих-кода с заданной шириной
+            val barcodeEncoder = BarcodeEncoder()
+            barcodeEncoder.encodeBitmap(content, BarcodeFormat.CODE_128, targetWidth, height)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }*/
+    }
+

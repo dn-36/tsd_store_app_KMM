@@ -31,12 +31,13 @@ kotlin {
             implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-api"))
             implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-api"))
             implementation(project(":features:application-sections:profile-section:printer-feature:printer-api"))
-
+            implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-impl"))
             implementation(project(":core:app"))
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
             implementation(project(":core:network"))
-            implementation(project(":common:ip-camera-udp-client"))
+            implementation(project(":common:ip-camera-client"))
+
 
             implementation(compose.runtime)
             implementation(compose.foundation)

@@ -44,7 +44,7 @@ kotlin {
         }
         commonMain.dependencies {
 
-            implementation(project(":common:ip-camera-udp-client"))
+//            implementation(project(":common:ip-camera-udp-client"))
 
             implementation(project(":features:application-sections:profile-section:specifications-feature:specifications-impl"))
 

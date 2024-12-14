@@ -13,5 +13,6 @@ data class DialogState(
     val isVisibilitySelectFileComponent: Boolean = false,
     val replyMessage: ReplyMessage? = null,
     val positionItemChat:Int = 0,
-    val uiSelectedPhoto:String = ""
+    val uiSelectedPhoto:String = "",
+    val isDeleteForAll:Boolean = false
 )

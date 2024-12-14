@@ -17,6 +17,8 @@ sealed class ArrivalAndConsumptionIntents {
 
     object NoDelete : ArrivalAndConsumptionIntents()
 
+    data class OnClickPointMobile(val scanOn:(String)->Unit) : ArrivalAndConsumptionIntents()
+
     data class OpenDeleteComponent ( val item: StoreResponseArrivalAndConsumption? )
 
         : ArrivalAndConsumptionIntents()

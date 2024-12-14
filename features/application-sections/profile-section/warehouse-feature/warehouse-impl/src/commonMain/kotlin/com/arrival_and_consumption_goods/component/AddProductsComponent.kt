@@ -48,23 +48,15 @@ import project.core.resources.dots
 class AddProductsComponent(
 
     val isUpdate: Boolean,
-
     val listSelectedProducts: List<ProductArrivalAndConsumption>,
-
+    val onClickPointMobile: () -> Unit,
     val onClickScannerCamera: () -> Unit,
-
     val onClickScannerZebraUsb: () -> Unit,
-
     val onClickSelectFromList: () -> Unit,
-
     val onClickCreate: () -> Unit,
-
     val onClickBack: () -> Unit,
-
     val onClickUpdate: () -> Unit,
-
     val onClickCansel: ( index:Int ) -> Unit
-
 ) : Screen {
 
     var expendedMenu by mutableStateOf(false)
@@ -80,6 +72,7 @@ class AddProductsComponent(
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
                 Row(modifier = Modifier.fillMaxWidth()) {
+
                     Image(
                         painter = painterResource(Res.drawable.back), contentDescription = null,
                         modifier = Modifier.size(20.dp).clickable(
@@ -152,7 +145,7 @@ class AddProductsComponent(
 
                     Box( modifier = Modifier.fillMaxWidth(0.5f).padding(end = 10.dp)
 
-                        .height(150.dp)) {
+                        .height(180.dp)) {
 
                         Card(
                             modifier = Modifier.fillMaxSize()
@@ -173,6 +166,18 @@ class AddProductsComponent(
                                 interactionSource = remember { MutableInteractionSource() })
                             { onClickScannerCamera() })
                         }
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            Box(modifier = Modifier.weight(0.5f)) {
+
+                                Text("Point mobile", fontSize = 15.sp,
+
+                                    modifier = Modifier.clickable(
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() })
+                                    { onClickPointMobile() })
+                            }
+
 
                             Spacer(modifier = Modifier.height(25.dp))
 

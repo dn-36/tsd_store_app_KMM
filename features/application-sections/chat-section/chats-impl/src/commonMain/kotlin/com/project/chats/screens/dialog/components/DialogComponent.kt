@@ -23,13 +23,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -201,7 +203,7 @@ class DialogComponentScreen(
             }
             Column(modifier = Modifier.align(Alignment.BottomCenter)) {
                 LazyRow(modifier = Modifier.fillMaxWidth()) {
-                    items(viewModel.state.listImages ?: listOf()) { item ->
+                    items(viewModel.state.listImages) { item ->
 
                         Box(modifier = Modifier.size(95.dp)) {
                             Image(
@@ -327,8 +329,6 @@ class DialogComponentScreen(
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                             )
 
-
-                            // Spacer(modifier = Modifier.width(7.dp))
                             Image(
                                 painter = painterResource(Res.drawable.back),
                                 contentDescription = null,
@@ -381,11 +381,51 @@ class DialogComponentScreen(
                 "Вы уверены что хотите удалить сообщения?",
                 "Удалить",
                 "Отмена",
+                {ChoiceToDeleteYourselfOrForEveryone()},
                 { viewModel.onClickDeleteDialogAgree(scope) },
                 { viewModel.onClickDeleteDialogCancel() },
             )
 
         }
     }
-}
+                @Composable
+    private fun ChoiceToDeleteYourselfOrForEveryone(
+
+    ){
+
+        Row {
+
+            Text("Удалить свои сообщения у всех?    ",
+                fontSize = 12.sp,
+                modifier = Modifier.align(Alignment.CenterVertically))
+
+                Box(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .align(Alignment.CenterVertically)
+                        .background(
+                            color = Color.LightGray,
+                            shape = RoundedCornerShape(2.dp)
+                        )
+                        .clickable {
+                            viewModel.state = viewModel.state.copy(
+                                isDeleteForAll = !viewModel.state.isDeleteForAll
+                            )
+                                   },
+
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (viewModel.state.isDeleteForAll) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Checked",
+                            tint = Color.Black
+                        )
+                    }
+                }
+            }
+
+        }
+    }
+
 

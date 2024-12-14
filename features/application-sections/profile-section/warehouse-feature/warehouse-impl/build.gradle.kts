@@ -36,7 +36,9 @@ kotlin {
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
             implementation(project(":core:network"))
-
+            implementation(dependencyNotation = libs.peekaboo.ui)
+            implementation(dependencyNotation = libs.peekaboo.imagepicker)
+            implementation("network.chaintech:qr-kit:2.0.0")
             implementation(project(":common:scanner-usb-zebra"))
 
             implementation(compose.runtime)
@@ -54,13 +56,10 @@ kotlin {
 
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
-            implementation("network.chaintech:qr-kit:2.0.0")
 
-            implementation(dependencyNotation = libs.peekaboo.ui)
-            implementation(dependencyNotation = libs.peekaboo.imagepicker)
         }
         androidMain.dependencies {
-
+            implementation(project(":common:scaner-point-mobile"))
         implementation(files("libs/barcode_scanner_library_v2.6.23.0-release.aar"))
 
         }

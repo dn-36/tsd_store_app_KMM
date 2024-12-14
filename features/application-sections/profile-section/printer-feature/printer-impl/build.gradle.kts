@@ -32,6 +32,7 @@ kotlin {
             implementation(project(":core:recources"))
             implementation(project(":core:local-storage"))
             implementation(project(":core:network"))
+            implementation("com.journeyapps:zxing-android-embedded:4.3.0")
             implementation(project(":features:application-sections:profile-section:printer-feature:printer-api"))
             implementation(compose.runtime)
             implementation(compose.foundation)

@@ -27,6 +27,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,9 +48,9 @@ import com.profile.profile.udpPlayer.core.ProductPresentationModel
 import com.project.core_app.components.menu_bottom_tools.ui.MenuBottomBarTools
 import com.project.core_app.components.menu_bottom_tools.viewmodel.MenuBottomBarToolsSection
 import com.project.core_app.ui.components.BarCodeVkpComponent
+import com.project.core_app.ui.components.settings_tickets.SettingsTicketsTSCprinter
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.ListBluetoothDevicesComponent
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.QRcodeSizeComponent
-import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.components.SettingsTicketsTSCprinterComponent
 import com.project.core_app.viewmodel.model.CategoryPrinter
 import com.project.core_app.viewmodel.QRcodeMenuIntent
 import com.project.core_app.viewmodel.QRcodeMenuViewModel
@@ -60,10 +61,11 @@ import project.core.resources.bluetooth
 import project.core.resources.search
 import project.core.resources.settings
 
-actual class QRCodeMenuScreen : Screen {
-   actual var product = ProductPresentationModel()
 
-    val viewModel =
+actual class QRCodeMenuScreen : Screen {
+    @Transient actual var product = ProductPresentationModel()
+    @Transient private val settingsTicketsTSCprinter =  SettingsTicketsTSCprinter()
+    @Transient val viewModel =
         QRcodeMenuViewModel(
             getKoin().get(),
             getKoin().get(),
@@ -87,15 +89,19 @@ actual class QRCodeMenuScreen : Screen {
         )
 
         val state by viewModel.state.collectAsState()
+       // val _state = remember { viewModel.state.value }
+       val navigator = LocalNavigator.currentOrThrow
+       val context = LocalContext.current
+       LaunchedEffect(true){
+           viewModel.processIntent(
+               QRcodeMenuIntent.SetScreen(
+                   product = product,
+                   navigator = navigator,
+                   context = context
+               )
+           )
+       }
 
-        viewModel.processIntent(
-            QRcodeMenuIntent.SetScreen(
-                product,
-                LocalNavigator.currentOrThrow,
-                LocalContext.current
-
-            )
-        )
 
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
@@ -107,9 +113,9 @@ actual class QRCodeMenuScreen : Screen {
             ) {
                 Column {
                     OutlinedTextField(
-                        value = product.title,
+                        value = viewModel.state?.value?.qrCodeDataText?:"",
                         onValueChange = {
-
+                          viewModel.processIntent(QRcodeMenuIntent.InputTextProduct(it))
                         },
                         label = { Text("Штрих-код") },
                         trailingIcon = {
@@ -127,12 +133,11 @@ actual class QRCodeMenuScreen : Screen {
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(min = 40.dp) // Стандартная высота TextField
+                            .heightIn(min = 40.dp)
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Помогающий текст под полем ввода
                     Text(
                         text = "Введите штрих-код для генерации",
                         style = MaterialTheme.typography.body2,
@@ -151,16 +156,20 @@ actual class QRCodeMenuScreen : Screen {
                     )
 
                     CategoryPrinter.TSC -> {
-                        SettingsTicketsTSCprinterComponent(
+                        settingsTicketsTSCprinter.Component(
                             state.imgBitmap!!,
                             state.titleProductQRcodeBiteMap!!,
-                            { x: Int, y: Int, height: Int, weight: Int ->
+                            state.heightQRcode.toInt(),
+                            { x: Int, y : Int, height: Int, weight: Int ->
+
                                 viewModel.processIntent(
                                     QRcodeMenuIntent.ChangeSettingsTsc(
                                         x, y, height, weight
                                     )
                                 )
-                            })
+
+                            }
+                        )
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
@@ -285,7 +294,9 @@ Row {
                         state.titleProductQRcodeBiteMap!!,
                         state.heightQRcode,
                         state.fontSize,
+                        state.barCodeWidth,
                         state.categoryPrinter,
+                        state.typeQrCode,
                         {
                             viewModel.processIntent(
                                 QRcodeMenuIntent.ChangeFontSize(
@@ -296,14 +307,18 @@ Row {
                         },
                         {
                             viewModel.processIntent(
-                                QRcodeMenuIntent.ChangeHeightQrCode(
+                                QRcodeMenuIntent.ChangeHightQrCode(
+                                    //it,
+                                    dataQRcode = product.qrCodeData ?: "",
                                     it,
-                                    product.qrCodeData ?: ""
+                                    //hightQRcode = viewModel.state.value.barCodeWidth
                                 )
                             )
                         },
+                        { viewModel.processIntent(QRcodeMenuIntent.ChangeWidthQrCode(it))},
                         { viewModel.processIntent(QRcodeMenuIntent.CloseSettingsVKP) },
                         { viewModel.processIntent(QRcodeMenuIntent.SavedSettings) },
+                        { viewModel.processIntent(QRcodeMenuIntent.SelectTypeQRcode(it))}
                     )
                 } else {
                     Toast.makeText(LocalContext.current, "Выбирите продукт", Toast.LENGTH_SHORT).show()
@@ -352,24 +367,6 @@ Row {
             }
         }
     }
-/*
-                val context = LocalContext.current
-                SettingsTicketsTSCprinterComponent(
-                    state.imgBitmap!!,
-                    state.titleProductQRcodeBiteMap!!,
-                    { x, y, height, widht ->
-                        PrintOnTscUseCase<Bitmap>(getKoin().get()).execute(
-                            state.imgBitmap!!,
-                            VKPUtils.setSizeBitMap(
-                                state.titleProductQRcodeBiteMap!!,
-                                state.titleProductQRcodeBiteMap!!.width / 13,
-                                state.titleProductQRcodeBiteMap!!.height / 13,
-                                context
-                            )!!,
-                            height, widht, x, y
-                        )
-                    }
-                )
- */
+
 
 

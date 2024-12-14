@@ -100,22 +100,32 @@ class ChatsViewModel(
 
    private fun setScreen( scope: CoroutineScope) {
        if (!isSeted) {
-           scope.launch(Dispatchers.IO) {
-               while (true) {
+               scope.launch(Dispatchers.IO) {
+                   while (true) {
+                       try {
+                          val listChats =  getListChatsUseCase.execute()
+                           if(listChats.size == 0){
+                               continue
+                           }
+                           state.update {
+                               it.copy(
+                                   listchats = listChats
+                               )
+                           }
+                           if (!isSeted) {
+                               isSeted = true
+                               setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+                           }
+                       }catch (e:Exception){
 
-                   state.update {
-                       it.copy(
-                           listchats = getListChatsUseCase.execute()
-                       )
+                      }
+                       delay(1500L)
                    }
-                   if (!isSeted) {
-                       isSeted = true
-                       setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
-                   }
-                   delay(1500L)
+
                }
 
-           }
+
+
        }
    }
 

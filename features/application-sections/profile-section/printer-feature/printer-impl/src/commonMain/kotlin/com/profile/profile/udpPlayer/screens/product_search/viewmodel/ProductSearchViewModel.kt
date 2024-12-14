@@ -10,14 +10,16 @@ import com.profile.profile.udpPlayer.screens.product_search.domain.RepositoryPro
 import com.profile.profile.udpPlayer.screens.product_search.viewmodel.ProductSearchState
 import com.project.network.Navigation
 import org.example.project.presentation.feature.qr_code.screens.qr_code_screen.ui.QRCodeMenuScreen
+import kotlin.jvm.Transient
 
 class ProductSearchViewModel(
+
     private val repository: RepositoryProductAPI
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProductSearchState())
     val state: StateFlow<ProductSearchState> = _state
     private var isSetedScreen:Boolean = false
-
+   @Transient val screen = QRCodeMenuScreen()
     fun proccesIntent(intent: ProductSearchIntent) {
         when (intent) {
             is ProductSearchIntent.SetScreen -> {
@@ -35,7 +37,8 @@ class ProductSearchViewModel(
 
             is ProductSearchIntent.SelectProduct -> {
                 _state.update { it.copy(selectedItem = intent.item.title) }
-                val screen = QRCodeMenuScreen()
+
+
                 screen.product = intent.item
                 println(screen.product)
 

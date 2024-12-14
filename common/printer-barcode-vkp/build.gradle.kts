@@ -38,13 +38,13 @@ android {
 
 dependencies{
     //implementation("org.jetbrains.skia:skia-jvm:0.92.0")
+    implementation(libs.koin.core)
     implementation("com.itextpdf:itextpdf:5.5.13.3")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation(files("libs/customandroidapi.jar"))
-    implementation(files("libs/device.sdk.jar"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")

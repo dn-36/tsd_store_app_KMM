@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import cafe.adriel.voyager.core.screen.Screen
 import com.arrival_and_consumption_goods.domain.usecases.CreateArrivalOrConsumptionUseCase
 import com.arrival_and_consumption_goods.domain.usecases.CreateGoodOrServiceUseCase
 import com.arrival_and_consumption_goods.domain.usecases.DeleteArrivalOrConsumptionUseCase
@@ -19,6 +20,7 @@ import com.arrival_and_consumption_goods.model.WarehouseArrivalAndConsumption
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.core_app.utils.imageBitmapToBase64
+import com.project.network.Navigation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -493,8 +495,19 @@ class ArrivalAndConsumptionViewModel (
 
                 }
             }
+
+            is ArrivalAndConsumptionIntents.OnClickPointMobile -> {
+                onClickPointMobile(intent.scanOn)
+            }
+
         }
     }
+
+     fun onClickPointMobile( scanOn:(String)->Unit ){
+
+         goToPointMobile(scanOn)
+
+     }
 
     fun backFromAddProducts(){
 
@@ -690,11 +703,7 @@ class ArrivalAndConsumptionViewModel (
 
         }
 
-        else {
 
-
-
-        }
 
     }
 
@@ -835,3 +844,4 @@ class ArrivalAndConsumptionViewModel (
     }
 
 }
+expect val goToPointMobile:((String)->Unit)->Unit

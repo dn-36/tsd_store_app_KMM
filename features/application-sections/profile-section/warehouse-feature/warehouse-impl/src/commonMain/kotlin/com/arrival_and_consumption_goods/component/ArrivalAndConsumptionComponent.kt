@@ -45,6 +45,7 @@ import com.arrival_and_consumption_goods.viewmodel.ArrivalAndConsumptionViewMode
 import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
+import com.project.network.Navigation
 import org.example.project.core.menu_bottom_bar.ui.MenuBottomBarWarehouse
 import org.example.project.presentation.profile_feature.core.menu_bottom_bar_profile.viewmodel.MenuBottomBarWarehouseSection
 import org.jetbrains.compose.resources.painterResource
@@ -248,13 +249,6 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
             }
         }
 
-        /*ScannerZebraUsbScreen().Content( viewModel.state.listProducts, onClickAdd = { sku ->
-
-            viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( sku ))
-
-        }, onClickNewProductAdd = { sku -> viewModel.processIntent(
-
-            ArrivalAndConsumptionIntents.AddNewGoodOrService(sku)) } )*/
 
         if ( viewModel.state.isVisibilityDataEntryComponent == 1f) {
 
@@ -334,6 +328,14 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
                 isUpdate = viewModel.state.isUpdate,
 
                 viewModel.state.listSelectedProducts,
+
+                onClickPointMobile = {
+                 viewModel.processIntent(ArrivalAndConsumptionIntents.OnClickPointMobile({
+                     viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( it ))
+                    Navigation.navigator.pop()
+                     // viewModel.processIntent(ArrivalAndConsumptionIntents.SelectProducts())
+                 }))
+                },
 
                 onClickSelectFromList = {
 

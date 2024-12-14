@@ -16,7 +16,7 @@ data class ChatResponseMessages(
     val project_id: Int?,
     val messages:Messages?,
     val users: List<UserMessages>?,
-    val project: ProjectMessages?
+    val project: ProjectMessages?,
 )
 
 @Serializable

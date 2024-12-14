@@ -4,7 +4,14 @@ import android.Manifest
 import android.os.Build
 
 object PermissionsData {
-    val BLUETOOTH_PERMISSION = when {
+    val BLUETOOTH_PERMISSION =
+        listOf(
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        )
+        /*when {
         Build.VERSION.SDK_INT <= Build.VERSION_CODES.P -> {
             listOf(
                 Manifest.permission.BLUETOOTH,
@@ -17,7 +24,7 @@ object PermissionsData {
                 Manifest.permission.BLUETOOTH_ADMIN
             )
         }
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
             listOf(
                 Manifest.permission.BLUETOOTH,
                 Manifest.permission.BLUETOOTH_SCAN,
@@ -30,7 +37,7 @@ object PermissionsData {
                 Manifest.permission.BLUETOOTH
             )
         }
-    }
+    }*/
 
     val CAMERA_PERMISSION = when {
         Build.VERSION.SDK_INT <= Build.VERSION_CODES.P -> {

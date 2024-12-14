@@ -54,9 +54,9 @@ class DialogViewModel(
             is DialogIntents.HistoryFiles -> historyFiles(intent.dialogComponentScreen)
             is DialogIntents.SetScreen -> {
                 if (isSeted) return
-                this@DialogViewModel.uiChats = intent.uiChats
-                this@DialogViewModel.scope = intent.scope
-                setScreen()
+                uiChats = intent.uiChats
+                scope = intent.scope
+                setScreen(intent.scope)
             }
             is DialogIntents.OpenSelectFileComponent -> { openSelectFileComponent() }
 
@@ -88,7 +88,7 @@ class DialogViewModel(
 
     }
 
-    private fun setScreen() {
+    private fun setScreen(scope: CoroutineScope) {
         try {
             jobUpdate?.cancel() // Отменяем предыдущее обновление, если есть
             jobUpdate = updateDate()
@@ -102,8 +102,9 @@ class DialogViewModel(
         try {
             while (isActive) {
 
-                readMessageUseCase.execute(uiChats)
+
                 val listDate = mutableSetOf<String>()
+
                 val listMessages = getListMessagesUseCase.execute(uiChats) ?: emptyList()
 
                 listMessages.fastForEachIndexed { i, message ->
@@ -142,6 +143,7 @@ class DialogViewModel(
                 if (!isSeted) {
                     delay(200L)
                     setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+                    readMessageUseCase.execute(uiChats)
                     isSeted = true
                 }
 
@@ -278,7 +280,7 @@ class DialogViewModel(
         state = state.copy(isShowDeleteDialog = true)
     }
 
-    fun onClickDeleteDialogAgree(scope:CoroutineScope) {
+    fun onClickDeleteDialogAgree(scope:CoroutineScope, ) {
         var list = state.listMessage.toMutableList()
         var minusSize = 0
         state.listMessage.forEachIndexed { indexMessage, message ->
@@ -308,9 +310,12 @@ class DialogViewModel(
          jobUpdate?.cancel()
          //println("println(ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL))")
          //println(
-             ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL)
+             ChatsApi().deleteMessage(selectedMessage!!,
+                 if(state.isDeleteForAll)
+                 DELETE_FOR_ALL else DELETE_FOR_SOMESELVE)
          //)
          //println("println(ChatsApi().deleteMessage(selectedMessage!!,DELETE_FOR_ALL))")
+            selectedMessage = listOf()
          jobUpdate = updateDate()
         }
 
