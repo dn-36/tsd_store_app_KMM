@@ -55,14 +55,13 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
         Box( modifier = Modifier.fillMaxSize().background(Color.LightGray) )  {
 
             Box( modifier = Modifier.fillMaxWidth()
-
-                    .fillMaxHeight(0.2f).background(Color.White) )
+                .fillMaxHeight(0.2f)
+                .background(Color.White) )
 
             Column {
 
                 Box(
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(0.45f)
-
                         .clip(RoundedCornerShape(15.dp)).background(Color.White)
 
                 ) {
@@ -104,15 +103,13 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Box(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.95f)
-
-                        .clip(RoundedCornerShape(15.dp)).background(Color.White)
+                    modifier = Modifier.fillMaxWidth()
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(Color.White)
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp).fillMaxHeight(0.8f)
-
+                        modifier = Modifier.padding(16.dp)
                             .align(Alignment.TopCenter)
-
                             .verticalScroll(scroll),
 
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -262,35 +259,28 @@ class ProfileComponent(override val viewModel: ProfileViewModel) : NetworkCompon
 
                         Spacer(modifier = Modifier.height(40.dp))
 
+                        Button(
+                            onClick = { },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50.dp))
+                                .height(40.dp)
+                                .fillMaxWidth(0.9f)
+                        ) {
+                            Text(text = "Выйти из профиля")
+                        }
+                        Spacer(modifier = Modifier.height(100.dp))
 
                     }
                 }
             }
             Box(
                 modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
-                    .fillMaxHeight(0.2f).background(Color.White)
-            )
-            Column(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
 
-                Button(
-                    onClick = { },
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(50.dp))
-                        .height(40.dp)
-                        .fillMaxWidth(0.9f)
-                ) {
-                    Text(text = "Выйти из профиля")
-                }
+            ){
 
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Box() {
                     MenuBottomBar().Content(MenuBottomBarSection.PROFILE)
-                }
-            }
+
+          }
 
         }
     }

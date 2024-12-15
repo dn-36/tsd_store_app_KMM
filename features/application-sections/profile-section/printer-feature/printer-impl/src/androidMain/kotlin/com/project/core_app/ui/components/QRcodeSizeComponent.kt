@@ -62,8 +62,8 @@ object QRcodeSizeComponent {
         actionSavedSettings:()->Unit,
         actionCloseSettings:()->Unit,
         actionSelectTypeQrCode:(TypeQrCode)->Unit
-
-        ) {
+        )
+    {
 
         var isClicked =  remember { mutableStateOf(false) }
 
@@ -103,7 +103,7 @@ object QRcodeSizeComponent {
                     horizontalAlignment = CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-  //val categories = listOf("bar code","qr code")
+
     var expanded by remember { mutableStateOf(false) }
  Row(
  ) {
@@ -162,7 +162,7 @@ object QRcodeSizeComponent {
       modifier = Modifier
           .height((heightQrCode * 3.5F).dp)
           .fillMaxWidth()
-          //.width(150.dp)
+
   )
 
   //Spacer(modifier = Modifier.height(32.dp))

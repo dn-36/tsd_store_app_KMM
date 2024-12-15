@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,21 +32,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.project.core_app.components.menu_bottom_bar.viewmodel.MenuBottomBarIntents
 import com.project.core_app.components.menu_bottom_bar.viewmodel.MenuBottomBarViewModel
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
-import io.ktor.client.plugins.websocket.WebSockets
-import io.ktor.client.plugins.websocket.webSocketSession
-import io.ktor.websocket.Frame
-import io.ktor.websocket.close
-import io.ktor.websocket.readText
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.launch
 import org.example.project.core.menu_bottom_bar.viewmodel.MenuBottomBarSection
+import org.jetbrains.compose.resources.DrawableResource
 
 
 import org.jetbrains.compose.resources.painterResource
@@ -53,9 +43,7 @@ import project.core.resources.home
 import project.core.resources.icon_youtub
 import project.core.resources.menu
 import project.core.resources.messenger
-import project.core.resources.play_video
 import project.core.resources.squares_stack
-import project.core.resources.user
 
 class MenuBottomBar {
     val vm = MenuBottomBarViewModel(getKoin().get())
@@ -88,136 +76,113 @@ class MenuBottomBar {
     @Composable
     fun Content(section: MenuBottomBarSection) {
         val scope = rememberCoroutineScope()
-        vm.processIntent(MenuBottomBarIntents.SetScreen(section,scope))
-        Box(
+        vm.processIntent(MenuBottomBarIntents.SetScreen(section, scope))
+
+        Column(
             modifier = Modifier
-                .padding(bottom = 16.dp)
-                .fillMaxHeight(0.1f)
+           //     .padding(bottom = 16.dp)
                 .fillMaxWidth()
                 .background(Color.White)
         ) {
+           // Spacer(Modifier.fillMaxHeight(0.03F))
             Row(
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.95f),
-
                 horizontalArrangement = Arrangement.SpaceBetween
-
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Spacer(modifier = Modifier.fillMaxHeight(0.15F))
-                    Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
-                        .background(color = vm.menuBottomBarState.section.OrganizationButtonCollor)
-                        .width(55.dp).height(40.dp).clickable {
-                            vm.processIntent(
-                                MenuBottomBarIntents.Home(_homeScreen!!)
-                            )
-                        }) {
-                        Image(
-                            painter = painterResource(Res.drawable.home), contentDescription = null,
-                            modifier = Modifier.size(35.dp).align(Alignment.Center)
-                        )
-                    }
-                    Text("Организа...", color = Color.Black, fontSize = 12.sp)
-
+                // Элементы нижней панели
+                MenuButton(
+                    color = vm.menuBottomBarState.section.OrganizationButtonCollor,
+                    text = "Организа...",
+                    iconRes = Res.drawable.home
+                ) {
+                    vm.processIntent(MenuBottomBarIntents.Home(_homeScreen!!))
                 }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Spacer(modifier = Modifier.fillMaxHeight(0.15F))
-                    Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
-                        .background(color = vm.menuBottomBarState.section.CrmButtonCollor)
-                        .width(55.dp).height(40.dp).clickable {
-                            vm.processIntent(
-                                MenuBottomBarIntents.CRM(_crmScreen!!)
-                            )
-                        }) {
-                        Image(
-                            painter = painterResource(Res.drawable.squares_stack),
-                            contentDescription = null,
-                            modifier = Modifier.size(35.dp).align(Alignment.Center)
-                        )
-                    }
-                    Text("CRM", color = Color.Black, fontSize = 12.sp)
-
+                MenuButton(
+                    color = vm.menuBottomBarState.section.CrmButtonCollor,
+                    text = "CRM",
+                    iconRes = Res.drawable.squares_stack
+                ) {
+                    vm.processIntent(MenuBottomBarIntents.CRM(_crmScreen!!))
                 }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Spacer(modifier = Modifier.fillMaxHeight(0.15F))
-                    Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
-                        .background(color = vm.menuBottomBarState.section.TapeButtonCollor)
-                        .width(55.dp).height(40.dp).clickable {
-                            vm.processIntent(
-                                MenuBottomBarIntents.Tape(_tapeScreen!!)
-                            )
-                        }) {
-                        Image(
-                            painter = painterResource(Res.drawable.icon_youtub), contentDescription = null,
-                            modifier = Modifier.size(35.dp).align(Alignment.Center)
-                        )
-                    }
-                    Text("Лента", color = Color.Black, fontSize = 12.sp)
-
+                MenuButton(
+                    color = vm.menuBottomBarState.section.TapeButtonCollor,
+                    text = "Лента",
+                    iconRes = Res.drawable.icon_youtub
+                ) {
+                    vm.processIntent(MenuBottomBarIntents.Tape(_tapeScreen!!))
                 }
                 Box {
-
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Spacer(modifier = Modifier.fillMaxHeight(0.15F))
-                        Box(modifier = Modifier.clip(RoundedCornerShape(20.dp))
-                            .background(color = vm.menuBottomBarState.section.ChutsButtonCollor)
-                            .width(55.dp).height(40.dp).clickable {
-                                vm.processIntent(
-                                    MenuBottomBarIntents.Chats(_chatsScreen!!)
-                                )
-                            }) {
-                            Image(
-                                painter = painterResource(Res.drawable.messenger),
-                                contentDescription = null,
-                                modifier = Modifier.size(35.dp).align(Alignment.Center)
-                            )
-                        }
-                        Text(
-                            "Чаты", color = Color.Black, fontSize = 12.sp,
-                            //    modifier = Modifier.padding(bottom = 50.dp))
-                        )
-
+                    MenuButton(
+                        color = vm.menuBottomBarState.section.ChutsButtonCollor,
+                        text = "Чаты",
+                        iconRes = Res.drawable.messenger
+                    ) {
+                        vm.processIntent(MenuBottomBarIntents.Chats(_chatsScreen!!))
                     }
                     if (vm.menuBottomBarState.countNewMessage != 0) {
+                        // Индикатор новых сообщений
                         Box(
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
-                                .padding(top = 9.dp, end = 9.dp)
-                                .background(
-                                    Color.Blue,
-                                    shape = RoundedCornerShape(50.dp)
-                                )
+                                .padding(top = 5.dp, end = 5.dp)
+                                .size(20.dp)
+                                .background(Color.Blue, shape = RoundedCornerShape(50.dp))
                         ) {
                             Text(
-                                vm.menuBottomBarState.countNewMessage.toString(),
+                                text = vm.menuBottomBarState.countNewMessage.toString(),
                                 fontSize = 10.sp,
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .align(Alignment.Center),
-                                color = Color.White
+                                color = Color.White,
+                                modifier = Modifier.align(Alignment.Center)
                             )
                         }
                     }
                 }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Spacer(modifier = Modifier.fillMaxHeight(0.15F))
-                    Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
-                        .background(color = vm.menuBottomBarState.section.ProfileButtonCollor)
-                        .width(55.dp).height(40.dp).clickable {
-                            vm.processIntent(
-                                MenuBottomBarIntents.Profile(_profileScreen!!)
-                            )
-                        }) {
-                        Image(
-                            painter = painterResource(Res.drawable.menu), contentDescription = null,
-                            modifier = Modifier.size(35.dp).align(Alignment.Center)
-                        )
-
-                    }
-                    Text("еще", color = Color.Black, fontSize = 12.sp)
-
+                MenuButton(
+                    color = vm.menuBottomBarState.section.ProfileButtonCollor,
+                    text = "еще",
+                    iconRes = Res.drawable.menu
+                ) {
+                    vm.processIntent(MenuBottomBarIntents.Profile(_profileScreen!!))
                 }
             }
+            Spacer(Modifier.fillMaxHeight(0.03F))
+        }
+    }
+
+    @Composable
+    fun MenuButton(
+        color: Color,
+        text: String,
+        iconRes: DrawableResource,
+        onClick: () -> Unit
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            // Пропорциональное расстояние между кнопками
+         //   Spacer(modifier = Modifier.fillMaxHeight(0.1f))
+            Box(
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .clip(RoundedCornerShape(50.dp))
+                    .background(color)
+                    .size(56.dp) // Пропорциональный размер кнопки
+                    .clickable { onClick() }
+            ) {
+                Image(
+                    painter = painterResource(iconRes),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize(0.6f) // Размер иконки пропорционален размеру кнопки
+                        .align(Alignment.Center)
+                )
+            }
+            Text(
+                text = text,
+                color = Color.Black,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(top = 4.dp)
+            )
         }
     }
 }

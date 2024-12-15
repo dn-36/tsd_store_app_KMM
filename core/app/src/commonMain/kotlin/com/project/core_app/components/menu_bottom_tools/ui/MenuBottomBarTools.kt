@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -57,7 +58,7 @@ class MenuBottomBarTools {
         Box(
             modifier = Modifier
                 //.padding(bottom = 16.dp)
-                .fillMaxHeight(0.1f)
+                .fillMaxHeight(0.15f)
                 .fillMaxWidth()
                 .background(Color.White)
         ) {
@@ -77,7 +78,9 @@ class MenuBottomBarTools {
 
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.state.section.PrintButtonCollor)
-                        .width(70.dp).height(40.dp).clickable {
+                        .fillMaxHeight(0.5F)
+                        .fillMaxWidth(0.2F)
+                        .clickable {
                             vm.processIntent(
                                 MenuBottomBarToolsIntents.Print
                             )
@@ -85,17 +88,20 @@ class MenuBottomBarTools {
                         Image(
                             painter = painterResource(Res.drawable.printing),
                             contentDescription = null,
-                            modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            modifier = Modifier.fillMaxSize(0.8F).align(Alignment.Center)
                         )
                     }
                     Text("Напечатать", color = Color.Black, fontSize = 12.sp)
+                    Spacer(Modifier.fillMaxHeight(0.2F))
 
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                    // Spacer(modifier = Modifier.fillMaxHeight(0.15F))
                     Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
                         .background(color = vm.state.section.ToolsButtonCollor)
-                        .width(70.dp).height(40.dp).clickable {
+                        .fillMaxHeight (0.5F)
+                        .fillMaxWidth(0.3F)
+                        .clickable {
                             vm.processIntent(
                                 MenuBottomBarToolsIntents.Tools
                             )
@@ -103,11 +109,11 @@ class MenuBottomBarTools {
                         Image(
                             painter = painterResource(Res.drawable.ip_camera),
                             contentDescription = null,
-                            modifier = Modifier.size(30.dp).align(Alignment.Center)
+                            modifier = Modifier.fillMaxSize(0.8F).align(Alignment.Center)
                         )
                     }
                     Text("Видеонаблюдение", color = Color.Black, fontSize = 12.sp)
-
+                    Spacer(Modifier.fillMaxHeight(0.2F))
                 }
 
             }

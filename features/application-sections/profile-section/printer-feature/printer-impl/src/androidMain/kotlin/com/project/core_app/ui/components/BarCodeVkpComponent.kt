@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -39,17 +40,16 @@ fun BarCodeVkpComponent(
             Image(
                 bitmap = barCode!!.asImageBitmap(),
                 modifier = Modifier
-                    .width(300.dp)
-                    .height(
-                        (heightQRcode * 5).dp
-                    ),
+                    .fillMaxWidth(0.95F)
+                    .fillMaxHeight(heightQRcode * 0.01F)
+                    ,
                 contentDescription = "qrCode"
             )
-            Spacer(modifier = Modifier.height(22.dp))
+            Spacer(modifier = Modifier.fillMaxHeight(0.05F))
             Image(
                 bitmap = title!!.asImageBitmap(),
                 modifier = Modifier
-                    .width(350.dp)
+                    .fillMaxWidth(0.95F)
                     .wrapContentHeight(),
                 contentDescription = "qrCode"
             )

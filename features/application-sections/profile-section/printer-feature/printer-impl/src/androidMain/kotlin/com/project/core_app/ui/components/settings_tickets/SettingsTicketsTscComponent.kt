@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -50,277 +52,7 @@ import project.core.resources.Res
 import project.core.resources.down_arrow
 import project.core.resources.error
 import project.core.resources.right_arrow
-/*
-class SettingsTicketsTSCprinter(
-   private val  viewModel:SettingsTicketsViewModel = SettingsTicketsViewModel()
-) {
 
-    @Composable
-    fun Component(
-        barcode: Bitmap,
-        text: Bitmap,
-
-
-       // height: Int,
-       // widht: Int,
-        actioTscPrinter: (x: Int, y: Int, height: Int, widht: Int) -> Unit
-    ) {
-
-
-        /* var x by remember { mutableStateOf(init_x) }
-        var y by remember { mutableStateOf(init_y) }
-
-        var heightTicketMM by remember { mutableStateOf(50) }
-        var widthTicketMM by remember { mutableStateOf(50) }*/
-
-        LaunchedEffect(barcode.width+barcode.height+text.width) {
-            viewModel.processIntent(
-                SettingsTicketsIntent.SetCoordinatesQRcode(
-                    viewModel.state.x,
-                    viewModel.state.y,
-                    barcode,
-                    text,
-                    viewModel.state.heightTicketMM,
-                    viewModel.state.widthTicketMM,
-                    actioTscPrinter = actioTscPrinter
-                )
-            )
-
-        /*            val initX:Int,
-                val initY:Int,
-            val barcode:Bitmap,
-            val text: Bitmap,
-            val height:Int,
-            val widht: Int,
-            val actioTscPrinter: (x: Int, y: Int, height: Int, widht: Int) -> Unit*/
-           // )
-        }
-
-        Column(
-            modifier = Modifier
-
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-
-            Column {
-                    Box( modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        ) {
-                        Image(
-                            painter = painterResource(Res.drawable.down_arrow),
-                            modifier = Modifier.size(50.dp)
-                                .align(Alignment.BottomCenter)
-                                .pointerInput(Unit) {
-                                    detectDragGestures { change, dragAmount ->
-                                        change.consume()
-                                        viewModel.state = viewModel.state.copy(
-                                            heightTicketMM = (viewModel.state.heightTicketMM + (dragAmount.y/8)).toInt()
-                                        )
-                                        //  = (squareWidth + dragAmount.x).coerceIn(50f, 300f)
-                                    }
-                                },
-                            contentDescription = null
-                        )
-                        Image(
-                            painter = painterResource(Res.drawable.right_arrow),
-                            modifier = Modifier
-                                .size(50.dp)
-                                .align(Alignment.CenterEnd)
-                                .pointerInput(Unit) {
-                                    detectDragGestures { change, dragAmount ->
-                                        change.consume()
-                                        viewModel.state = viewModel.state.copy(
-                                            widthTicketMM = viewModel.state.widthTicketMM  + (dragAmount.x/4.5).toInt()
-                                        )
-                                    }
-                                },
-                            contentDescription = null
-                        )
-
-                        Box(
-                            modifier = Modifier
-                                .padding(50.dp)
-                                .align(Alignment.Center)
-                                .clipToBounds()
-                                .width(
-                                    if (viewModel.state.widthTicketMM > 10) {
-                                        (viewModel.state.widthTicketMM * 4.5).dp
-                                    } else {
-                                        25.dp
-                                    }
-                                )
-                                .height(
-                                    if (viewModel.state.heightTicketMM > 10) (viewModel.state.heightTicketMM * 4.5).dp else {
-                                        25.dp
-                                    }
-                                )
-                                .border(
-                                    width = 1.dp, color = Color.Black, RoundedCornerShape(15.dp)
-                                ).pointerInput(this@Column) {
-
-                                    awaitPointerEventScope {
-                                        while (isActive) {
-                                            val event = awaitPointerEvent()
-                                            event.changes.forEach { change ->
-                                                viewModel.processIntent(
-                                                    SettingsTicketsIntent.ChangeCoordinatesQRcode(
-                                                        change.positionChange().x.toInt(),
-                                                        change.positionChange().y.toInt()
-                                                    )
-                                                )
-                                            }
-                                            actioTscPrinter(
-                                                viewModel.state.x,
-                                                viewModel.state.y,
-                                                viewModel.state.heightTicketMM,
-                                                viewModel.state.widthTicketMM
-                                            )
-                                        }
-                                    }
-                                }, contentAlignment = Alignment.TopStart
-                        ) {
-                            if ((viewModel.state.widthTicketMM * 9.15) > barcode.width &&
-                                (viewModel.state.heightTicketMM * 9.15) > barcode.height
-                            ) {
-                                Column(
-                                    modifier = Modifier.offset(
-                                        viewModel.state.x.dp,
-                                        viewModel.state.y.dp
-                                    )
-                                        .align(Alignment.TopStart),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-
-                                    Image(
-                                        bitmap = barcode.asImageBitmap(),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .width((barcode.width / 2).dp)
-                                            .height((barcode.height / 2).dp)
-                                    )
-
-
-
-
-                                    Image(
-                                        bitmap = text.asImageBitmap(),//painter = painterResource(Res.drawable.bluetooth),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .width((text.width / 10).dp)
-                                            .height((text.height / 4).dp)
-                                    )
-
-                                }
-
-                            } else {
-                                Column {
-                                    Image(
-                                        painter = painterResource(Res.drawable.error),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .width(150.dp)
-                                            .height(150.dp)
-                                    )
-
-                                    Spacer(Modifier.size(30.dp))
-                                    Text(
-                                        "Штрих код больше чем итекетка",
-                                        Modifier.align(Alignment.CenterHorizontally),
-                                        fontSize = 12.sp
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-            }
-
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-
-            Row(
-                modifier = Modifier.fillMaxWidth(0.75f),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Ширина", fontSize = 12.sp)
-                    Spacer(modifier = Modifier.height(1.dp))
-                    OutlinedTextField(
-                        value = if (viewModel.state.widthTicketMM == -1) {
-                            ""
-                        } else {
-                            viewModel.state.widthTicketMM.toString()
-                        },
-                        onValueChange = {
-
-                            viewModel.processIntent(
-                                SettingsTicketsIntent.SetCoordinatesQRcode(
-                                    widht = it.toInt(),
-                                    barcode = barcode,
-                                    text = text,
-                                    height = viewModel.state.heightTicketMM,
-                                   // widht = viewModel.state.widthTicketMM,
-                                    actioTscPrinter = actioTscPrinter
-                                ))
-
-                        },
-                        label = { },
-                        textStyle = TextStyle(fontSize = 12.sp),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number // Установка клавиатуры на числовую
-                        ),
-                        modifier = Modifier
-                            .width(70.dp)
-                            .height(55.dp)
-                            .clickable(
-                                indication = null, // Отключение эффекта затемнения
-                                interactionSource = remember { MutableInteractionSource() })
-                            { }// Стандартная высота TextField
-                    )
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Высота", fontSize = 12.sp)
-                    Spacer(modifier = Modifier.height(1.dp))
-                    OutlinedTextField(
-                        value = if (viewModel.state.heightTicketMM == -1) {
-                            ""
-                        } else {
-                            viewModel.state.heightTicketMM.toString()
-                        },
-                        onValueChange = {
-                            viewModel.processIntent(
-                                SettingsTicketsIntent.SetCoordinatesQRcode(
-                                    height = it.toInt(),
-                                    barcode = barcode,
-                                    text = text,
-                                   // height = it.toInt(),
-                                    widht = viewModel.state.widthTicketMM,
-                                    actioTscPrinter = actioTscPrinter
-                                ))
-                        },
-                        textStyle = TextStyle(fontSize = 12.sp),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number // Установка клавиатуры на числовую
-                        ),
-                        label = { },
-                        modifier = Modifier
-                            .width(70.dp)
-                            .height(55.dp)
-                            .clickable(
-                                indication = null, // Отключение эффекта затемнения
-                                interactionSource = remember { MutableInteractionSource() })
-                            { }
-                    )
-                }
-            }
-        }
-    }
-}
-*/
 
 
 
@@ -359,7 +91,7 @@ class SettingsTicketsTSCprinter(
         }
 
         Column(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(0.95F).fillMaxHeight(0.5F),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -370,7 +102,7 @@ class SettingsTicketsTSCprinter(
                         ) {
                         Image(
                             painter = painterResource(Res.drawable.down_arrow),
-                            modifier = Modifier.size(50.dp)
+                            modifier = Modifier.fillMaxSize(0.1F)
                                 .align(Alignment.BottomCenter)
                                 .pointerInput(Unit) {
                                     detectDragGestures { change, dragAmount ->
@@ -402,7 +134,7 @@ class SettingsTicketsTSCprinter(
                         Image(
                             painter = painterResource(Res.drawable.right_arrow),
                             modifier = Modifier
-                                .size(50.dp)
+                                .fillMaxSize(0.1F)
                                 .align(Alignment.CenterEnd)
                                 .pointerInput(Unit) {
                                     detectDragGestures { change, dragAmount ->

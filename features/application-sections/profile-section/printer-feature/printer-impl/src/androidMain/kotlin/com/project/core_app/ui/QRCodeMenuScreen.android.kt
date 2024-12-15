@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -106,7 +107,9 @@ actual class QRCodeMenuScreen : Screen {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .align(Alignment.Center)
+                    .fillMaxWidth(0.95F)
+                    .fillMaxHeight(0.95F)
                     .alpha(if (state.isLoadingDataOnScreen) 0F else 1F)
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
