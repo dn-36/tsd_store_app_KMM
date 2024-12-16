@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import model.CharacteristicModel
+import model.ProductGoodsServicesModel
 
 class CharacteristicsViewModel: ViewModel() {
 
@@ -14,7 +15,9 @@ class CharacteristicsViewModel: ViewModel() {
 
         when ( intent ) {
 
-            is CharacteristicsIntents.SetScreen -> setScreen(intent.listCharacteristics)
+            is CharacteristicsIntents.SetScreen -> setScreen( intent.listCharacteristics,
+
+                intent.updateItem)
 
             is CharacteristicsIntents.InputTextMeaning -> inputTextMeaning(intent.text)
 
@@ -32,7 +35,9 @@ class CharacteristicsViewModel: ViewModel() {
 
     }
 
-    fun setScreen( listCharacteristics: List<CharacteristicModel> ) {
+    fun setScreen( listCharacteristics: List<CharacteristicModel>,
+
+                   updateItem: ProductGoodsServicesModel? ) {
 
         if ( state.isSet ) {
 

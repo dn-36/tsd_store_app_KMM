@@ -62,3 +62,35 @@ data class Product(
     val category: Category?,
     val connections: List<Connection>?
 )
+
+@Serializable
+data class Parametr(
+    val id: Int,
+    val parametrs_id: Int,
+    val product_id: Int,
+    val created_at: String,
+    val updated_at: String,
+    val name: String?,
+    val parametr: ParametrDetails
+)
+
+@Serializable
+data class ParametrDetails(
+    val id: Int,
+    val name: String,
+    val created_at: String,
+    val updated_at: String,
+    val unit_id: Int?,
+    val langs: List<Lang>,
+    val unit: String?
+)
+
+@Serializable
+data class Lang(
+    val id: Int,
+    val name: String?,
+    val parametrs_id: Int,
+    val lang_id: Int,
+    val created_at: String,
+    val updated_at: String
+)

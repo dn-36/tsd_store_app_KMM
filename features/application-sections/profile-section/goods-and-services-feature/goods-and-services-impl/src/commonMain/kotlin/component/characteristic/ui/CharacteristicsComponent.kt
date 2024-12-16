@@ -39,6 +39,7 @@ import com.project.core_app.utils.boxHeight
 import component.characteristic.viewmodel.CharacteristicsIntents
 import component.characteristic.viewmodel.CharacteristicsViewModel
 import model.CharacteristicModel
+import model.ProductGoodsServicesModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
@@ -49,7 +50,9 @@ class CharacteristicsComponent (
 
     val onClickBack:() -> Unit,
 
-    val listCharacteristics: List<CharacteristicModel>
+    val listCharacteristics: List<CharacteristicModel>,
+
+    val updateIetem: ProductGoodsServicesModel?
 
 ) {
 
@@ -59,7 +62,7 @@ class CharacteristicsComponent (
 
     fun Content() {
 
-        viewModel.processIntents(CharacteristicsIntents.SetScreen(listCharacteristics))
+        viewModel.processIntents(CharacteristicsIntents.SetScreen(listCharacteristics, updateIetem))
 
         Box(modifier = Modifier.fillMaxSize().background(Color.White).clickable(
             indication = null, // Отключение эффекта затемнения

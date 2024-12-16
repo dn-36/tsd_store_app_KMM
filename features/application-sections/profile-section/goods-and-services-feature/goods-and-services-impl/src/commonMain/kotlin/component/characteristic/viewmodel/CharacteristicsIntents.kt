@@ -1,10 +1,13 @@
 package component.characteristic.viewmodel
 
 import model.CharacteristicModel
+import model.ProductGoodsServicesModel
 
 sealed class CharacteristicsIntents {
 
-    data class SetScreen( val listCharacteristics: List<CharacteristicModel>
+    data class SetScreen( val listCharacteristics: List<CharacteristicModel>,
+
+                          val updateItem: ProductGoodsServicesModel?
 
     ): CharacteristicsIntents()
 

@@ -457,7 +457,15 @@ class ArrivalAndConsumptionComponent ( override val viewModel: ArrivalAndConsump
 
                 onBackPressed = { viewModel.processIntent(
 
-                    ArrivalAndConsumptionIntents.BackFromDetail) })
+                    ArrivalAndConsumptionIntents.BackFromDetail) },
+
+                listProducts = viewModel.state.listProducts, onClickAdd = { sku ->
+
+                    viewModel.processIntent(ArrivalAndConsumptionIntents.AddProductScanner( sku ))
+
+                }, onClickNewProductAdd = { sku -> viewModel.processIntent(
+
+                    ArrivalAndConsumptionIntents.AddNewGoodOrService(sku)) },)
 
         }
 

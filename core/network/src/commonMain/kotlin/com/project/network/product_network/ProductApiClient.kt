@@ -93,15 +93,15 @@ class ProductApiClient(private val token: String) {
         }
     }
 
-    // получение всех продуктов и услуг
+    // получение инфо. по конкретному товару или услуге
 
-    suspend fun getAllProducts(): List<Product> {
+    suspend fun getSpecificProduct ( ui: String ): List<Product> {
 
-        val response = client.get("https://delta.online/api/product") {
+        val response = client.get("https://delta.online/api/product/${ui}") {
 
         }
         println(" ////////////////////++++++++++")
-        println("получение всех продуктов и услуг:  ${response}")
+        println("получение конкретной услги или товара:  ${response}")
         println(" ////////////////////++++++++++")
         return response.body<List<Product>>()
     }

@@ -432,6 +432,17 @@ class ArrivalAndConsumptionViewModel (
 
                         )
                     }
+
+                    else if ( state.lastScanner == "bluetooth or adapter" ) {
+
+                        state = state.copy(
+
+                            isVisibilityCreateGoodOrService = false,
+
+                            isVisibilityListDevices = true
+
+                        )
+                    }
                 }
             }
 
@@ -483,6 +494,19 @@ class ArrivalAndConsumptionViewModel (
                             isVisibilityCreateGoodOrService = false,
 
                             isVisibilityScannerCameraComponent = 1F,
+
+                            listProducts = getProductsUseCase.execute()
+
+                        )
+                    }
+
+                    else if ( state.lastScanner == "bluetooth or adapter" ) {
+
+                        state = state.copy (
+
+                            isVisibilityCreateGoodOrService = false,
+
+                            isVisibilityListDevices = true,
 
                             listProducts = getProductsUseCase.execute()
 
@@ -693,6 +717,8 @@ class ArrivalAndConsumptionViewModel (
 
                 isVisibilityScannerZebraUsbComponent = false,
 
+                isVisibilityDetail = false,
+
                 selectedProduct = ProductArrivalAndConsumption( product = selectedProduct, count = 0.0 )
 
             )
@@ -834,6 +860,22 @@ class ArrivalAndConsumptionViewModel (
                 isVisibilityScannerCameraComponent = 0F,
 
                 lastScanner = "camera",
+
+                sku = sku
+
+            )
+
+        }
+
+        else if ( state.isVisibilityDetail == true ) {
+
+            state = state.copy(
+
+                isVisibilityCreateGoodOrService = true,
+
+                isVisibilityDetail = false,
+
+                lastScanner = "bluetooth or adapter",
 
                 sku = sku
 

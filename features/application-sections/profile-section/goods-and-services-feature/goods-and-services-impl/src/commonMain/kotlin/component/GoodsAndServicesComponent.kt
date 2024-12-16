@@ -48,7 +48,7 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
     ): NetworkComponent {
 
     @Composable
-    override fun Component() {
+    override fun Component () {
 
         val scope = rememberCoroutineScope()
 
@@ -249,8 +249,11 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                 listUnitsMeasurement = viewModel.state.listUnitsMeasurement,
 
-                sku = sku, updateItem = viewModel.state.updateItem
-            ).Content()
+                sku = sku, updateItem = viewModel.state.updateItem,
+
+                create = { viewModel.processIntents(
+
+                    GoodsAndServicesIntents.CreateGoodOrService(scope)) } ).Content()
 
         }
 
@@ -320,7 +323,9 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                 GoodsAndServicesIntents.BackFromCharacteristics) },
 
-                listCharacteristics = viewModel.state.listCharacteristics ).Content()
+                listCharacteristics = viewModel.state.listCharacteristics,
+
+                updateIetem = viewModel.state.updateItem ).Content()
 
         }
 

@@ -101,6 +101,8 @@ class DataEntryGodsAndServicesComponent (
 
             ) -> Unit,
 
+    val create:()-> Unit,
+
     val listSystemCategory: List<SystemCategoryGoodsServicesModel>,
 
     val listCategory: List<CategoryGoodsServicesModel>,
@@ -1741,16 +1743,6 @@ class DataEntryGodsAndServicesComponent (
 
                         if ( viewModel.state.onCheck ) {
 
-                            /*
-                                    is_test: Int?,
-        is_arenda: Int?,
-        is_zakaz: Int?,
-        is_ves: Int?,
-        is_serial_nomer: Int?,
-        is_date_fabrica: Int?,
-        is_markirovka: Int?,
-                             */
-
                             onClickNext (
 
                                 viewModel.state.name,
@@ -1795,6 +1787,13 @@ class DataEntryGodsAndServicesComponent (
 
                                 emptyList(), emptyList(), "", viewModel.state.image
                             )
+
+                            if ( updateItem == null ) {
+
+                                create()
+
+                            }
+
                         }
                     },
 
@@ -1805,7 +1804,7 @@ class DataEntryGodsAndServicesComponent (
 
                 ) {
 
-                    Text(text = "Далее")
+                    Text( text = if ( updateItem != null ) "Далее" else "Создать" )
 
                 }
             }

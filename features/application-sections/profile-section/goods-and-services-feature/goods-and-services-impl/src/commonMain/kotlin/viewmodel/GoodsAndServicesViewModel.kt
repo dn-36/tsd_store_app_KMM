@@ -483,7 +483,7 @@ class GoodsAndServicesViewModel (
 
             isVisibilityDataEntry = false,
 
-            isVisibilityAdditionalInformationComponent = true,
+            isVisibilityAdditionalInformationComponent = if ( state.updateItem != null ) true else false,
 
             name = name,
 

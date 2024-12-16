@@ -35,10 +35,13 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arrival_and_consumption_goods.model.AllProductArrivalAndConsumption
 import com.arrival_and_consumption_goods.viewmodel_bluetooth_or_adapter.ScannerBluetoothOrAdapterIntents
 import com.arrival_and_consumption_goods.viewmodel_bluetooth_or_adapter.ScannerBluetoothOrAdapterViewModel
+import com.arrival_and_consumption_goods.viewmodel_zebra.ScannerZebraUsbIntents
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
@@ -49,7 +52,13 @@ actual class DetailScreen actual constructor() {
 
     @Composable
 
-    actual fun Content( deviceId: Int, onBackPressed:() -> Unit ) {
+    actual fun Content(deviceId: Int, onBackPressed:() -> Unit,
+
+                       listProducts: List<AllProductArrivalAndConsumption>,
+
+                       onClickAdd: (sku: String ) -> Unit,
+
+                       onClickNewProductAdd: (sku: String ) -> Unit ) {
 
         val barcodeBuffer = remember { StringBuilder() }
 
@@ -132,11 +141,46 @@ actual class DetailScreen actual constructor() {
                         }*/
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer( modifier = Modifier.height(10.dp) )
+
+                Text( text = viewModel.state.textNewProduct, textAlign = TextAlign.Center )
+
+                Spacer(modifier = Modifier.height(30.dp))
 
                 Button(
 
-                    onClick = {  },
+                    onClick = {
+
+
+                        if ( viewModel.state.scanData.isNotBlank() ) {
+
+                            if ( viewModel.state.checkSku == null ||
+
+                                viewModel.state.checkSku!! == true
+
+                            ) {
+
+                                viewModel.processIntents(
+
+                                    ScannerBluetoothOrAdapterIntents.CheckSku(
+
+                                        viewModel.state.scanData, listProducts
+                                    )
+                                )
+
+                                if ( viewModel.state.checkSku!! ) {
+
+                                    onClickAdd(viewModel.state.scanData)
+
+                                }
+                            }
+                            else if (!viewModel.state.checkSku!!) {
+
+                                onClickNewProductAdd(viewModel.state.scanData)
+                            }
+                        }
+
+                    },
 
                     modifier = Modifier
 
