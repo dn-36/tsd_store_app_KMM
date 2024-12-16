@@ -10,9 +10,14 @@ import model.CategoryGoodsServicesModel
 import model.CategoryLangGoodsServicesModel
 import model.CategoryModel
 import model.CharacteristicModel
+import model.ConnectionModel
+import model.DivisionModel
 import model.EdizModel
 import model.LangModel
+import model.LangModelProduct
 import model.ParameterModel
+import model.ParametrDetailsModel
+import model.ParametrModel
 import model.ProductGoodsServicesModel
 import model.SystemCategoryGoodsServicesModel
 import model.UnitGoodsAndServicesModel
@@ -74,6 +79,7 @@ class GoodsAndServicesClientImpl(
                 is_arenda = it.is_arenda,
                 is_zakaz = it.is_zakaz,
                 is_ves = it.is_ves,
+                ui = it.ui,
                 is_serial_nomer = it.is_serial_nomer,
                 is_date_fabrica = it.is_date_fabrica,
                 is_markirovka = it.is_markirovka,
@@ -97,7 +103,85 @@ class GoodsAndServicesClientImpl(
                     created_at = it.category!!.created_at,
                     updated_at = it.category!!.updated_at
 
-                ) else null
+                ) else null,
+
+                connections = it.connections?.map {
+
+                    ConnectionModel( id = it.id )
+
+                },
+
+                pays = it.pays,
+
+                prices = it.prices,
+
+                tags = it.tags,
+
+                components = it.components,
+
+                completes = it.completes,
+
+                divisions = it.divisions.map {
+
+                    DivisionModel(
+
+                        id = it.id,
+                        company_id = it.company_id,
+                        name = it.name,
+                        ui = it.ui,
+                        created_at = it.created_at,
+                        updated_at = it.updated_at,
+                        local_id = it.local_id,
+                        store_id = it.store_id,
+                        laravel_through_key = it.laravel_through_key
+
+                    )
+
+                },
+
+                videos = it.videos,
+
+                parametrs = it.parametrs.map{
+
+                    ParametrModel(
+
+                        id = it.id,
+                        parametrs_id = it.parametrs_id,
+                        product_id = it.product_id,
+                        created_at = it.created_at,
+                        updated_at = it.updated_at,
+                        name = it.name,
+                        parametr = if ( it.parametr != null ) ParametrDetailsModel(
+
+                            id = it.parametr!!.id,
+                            unit = it.parametr!!.unit,
+                            name = it.parametr!!.name,
+                            created_at = it.parametr!!.created_at,
+                            updated_at = it.parametr!!.updated_at,
+                            unit_id = it.parametr!!.unit_id,
+                            langs = it.parametr!!.langs?.map {
+
+                                LangModelProduct(
+
+                                    id = it.id,
+                                    name = it.name,
+                                    parametrs_id = it.parametrs_id,
+                                    created_at = it.created_at,
+                                    updated_at = it.updated_at,
+                                    lang_id = it.lang_id
+
+                                )
+
+                            }
+                        ) else null
+
+                    )
+
+                },
+
+                images = it.images,
+
+                files = it.files
             )
         }
     }
@@ -324,6 +408,157 @@ class GoodsAndServicesClientImpl(
             is_markirovka, is_bu, sku, text_image, creater, nomer_creater, postavka, price, tags,
 
             variantes, divisions, image_upload )
+
+    }
+
+    override suspend fun getSpecificGoodOrService( ui: String ): ProductGoodsServicesModel {
+
+        val specificProduct = productsClient.getSpecificProduct( ui )
+
+        return ProductGoodsServicesModel (
+
+            id = specificProduct.id,
+            name = specificProduct.name,
+            video_youtube = specificProduct.video_youtube,
+            category_id = specificProduct.category_id,
+            ediz_id = specificProduct.ediz_id,
+            ediz = if (specificProduct.ediz != null) EdizModel(
+
+                id = specificProduct.ediz!!.id,
+                company_id = specificProduct.ediz!!.company_id,
+                name = specificProduct.ediz!!.name,
+                ui = specificProduct.ediz!!.ui,
+                created_at = specificProduct.ediz!!.created_at,
+                updated_at = specificProduct.ediz!!.updated_at
+
+            ) else null,
+            image = specificProduct.image,
+            is_product = specificProduct.is_product,
+            is_sale = specificProduct.is_sale,
+            min_count_store = specificProduct.min_count_store,
+            is_only_industry = specificProduct.is_only_industry,
+            is_view_sale = specificProduct.is_view_sale,
+            is_order = specificProduct.is_order,
+            is_store = specificProduct.is_store,
+            is_store_view = specificProduct.is_store_view,
+            is_test = specificProduct.is_test,
+            is_arenda = specificProduct.is_arenda,
+            is_zakaz = specificProduct.is_zakaz,
+            is_ves = specificProduct.is_ves,
+            ui = specificProduct.ui,
+            is_serial_nomer = specificProduct.is_serial_nomer,
+            is_date_fabrica = specificProduct.is_date_fabrica,
+            is_markirovka = specificProduct.is_markirovka,
+            is_bu = specificProduct.is_bu,
+            is_ob_zvonok = specificProduct.is_ob_zvonok,
+            metka_system = specificProduct.metka_system,
+            sku = specificProduct.sku,
+            text_image = specificProduct.text_image,
+            creater = specificProduct.creater,
+            nomer_creater = specificProduct.nomer_creater,
+            postavka = specificProduct.postavka,
+            url = specificProduct.url,
+            price = specificProduct.price,
+            system_category_id = specificProduct.system_category_id,
+            category = if (specificProduct.category != null) CategoryModel(
+
+                id = specificProduct.category!!.id,
+                name = specificProduct.category!!.name,
+                creater_id = specificProduct.category!!.creater_id,
+                company_id = specificProduct.category!!.company_id,
+                created_at = specificProduct.category!!.created_at,
+                updated_at = specificProduct.category!!.updated_at
+
+            ) else null,
+
+            connections = specificProduct.connections?.map {
+
+                ConnectionModel( id = it.id )
+
+            },
+
+            pays = specificProduct.pays,
+
+            prices = specificProduct.prices,
+
+            tags = specificProduct.tags,
+
+            components = specificProduct.components,
+
+            completes = specificProduct.completes,
+
+            divisions = specificProduct.divisions.map {
+
+            DivisionModel(
+
+                id = it.id,
+                company_id = it.company_id,
+                name = it.name,
+                ui = it.ui,
+                created_at = it.created_at,
+                updated_at = it.updated_at,
+                local_id = it.local_id,
+                store_id = it.store_id,
+                laravel_through_key = it.laravel_through_key
+
+            )
+
+            },
+
+            videos = specificProduct.videos,
+
+            parametrs = specificProduct.parametrs.map{
+
+                ParametrModel(
+
+                    id = it.id,
+                    parametrs_id = it.parametrs_id,
+                    product_id = it.product_id,
+                    created_at = it.created_at,
+                    updated_at = it.updated_at,
+                    name = it.name,
+                    parametr = if ( it.parametr != null ) ParametrDetailsModel(
+
+                        id = it.parametr!!.id,
+                        unit = it.parametr!!.unit,
+                        name = it.parametr!!.name,
+                        created_at = it.parametr!!.created_at,
+                        updated_at = it.parametr!!.updated_at,
+                        unit_id = it.parametr!!.unit_id,
+                        langs = it.parametr!!.langs?.map {
+
+                            LangModelProduct(
+
+                                id = it.id,
+                                name = it.name,
+                                parametrs_id = it.parametrs_id,
+                                created_at = it.created_at,
+                                updated_at = it.updated_at,
+                                lang_id = it.lang_id
+
+                            )
+
+                        }
+
+                    ) else null
+
+                )
+
+            },
+
+            images = specificProduct.images,
+
+            files = specificProduct.files
+
+        )
+
+    }
+
+    override suspend fun createCharacteristic( name: String, parametr_id: Int, product_id: Int ) {
+
+        characteristicsClient.init(getToken())
+
+        characteristicsClient.createCharacteristic( name, parametr_id, product_id )
 
     }
 

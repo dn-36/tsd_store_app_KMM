@@ -3,13 +3,16 @@ import com.project.network.characterisrics_products_network.CharacteristicsClien
 import com.project.network.common.ConstData
 import com.project.network.system_category_network.SystemCategoryClient
 import com.project.network.units_measurement_network.UnitsMeasurementClient
+import component.characteristic.viewmodel.CharacteristicsViewModel
 import datasource.GoodsAndServicesClientImpl
 import domain.repository.GoodsAndServicesClientApi
+import domain.usecases.CreateCharacteristicUseCase
 import domain.usecases.CreateGoodOrServiceUseCase
 import domain.usecases.DeleteGoodOrServiceUseCase
 import domain.usecases.GetCategoryUseCase
 import domain.usecases.GetCharacteristicsUseCase
 import domain.usecases.GetGoodsAndServicesUseCase
+import domain.usecases.GetSpecificGoodOrServiceUseCase
 import domain.usecases.GetSystemCategoryUseCase
 import domain.usecases.GetUnitsGoodsAndServicesUseCase
 import domain.usecases.UpdateGoodOrServiceUseCase
@@ -41,7 +44,13 @@ val goodsAndServicesModule = module {
 
     factory { GetCharacteristicsUseCase(get()) }
 
+    factory { GetSpecificGoodOrServiceUseCase(get()) }
+
+    factory { CreateCharacteristicUseCase(get()) }
+
     factory { GoodsAndServicesViewModel( get(), get(), get(), get(), get(), get(), get(), get()) }
+
+    factory { CharacteristicsViewModel( get(), get(), get()) }
 
     factory { ProductApiClient(ConstData.TOKEN) }
 

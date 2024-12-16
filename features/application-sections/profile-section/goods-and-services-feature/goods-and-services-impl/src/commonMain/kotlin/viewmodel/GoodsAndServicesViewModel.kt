@@ -4,16 +4,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.lifecycle.viewModelScope
 import com.ProductsMenuScreenApi
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.core_app.utils.imageBitmapToBase64
 import com.project.network.Navigation
+import domain.usecases.CreateCharacteristicUseCase
 import domain.usecases.CreateGoodOrServiceUseCase
 import domain.usecases.DeleteGoodOrServiceUseCase
 import domain.usecases.GetCategoryUseCase
 import domain.usecases.GetCharacteristicsUseCase
 import domain.usecases.GetGoodsAndServicesUseCase
+import domain.usecases.GetSpecificGoodOrServiceUseCase
 import domain.usecases.GetSystemCategoryUseCase
 import domain.usecases.GetUnitsGoodsAndServicesUseCase
 import domain.usecases.UpdateGoodOrServiceUseCase
@@ -39,7 +42,7 @@ class GoodsAndServicesViewModel (
 
     val updateGoodOrServiceUseCase: UpdateGoodOrServiceUseCase,
 
-    val getCharacteristicsUseCase: GetCharacteristicsUseCase
+    val getSpecificGoodOrServiceUseCase: GetSpecificGoodOrServiceUseCase,
 
     ) : NetworkViewModel() {
 
@@ -133,8 +136,6 @@ class GoodsAndServicesViewModel (
 
                         listUnitsMeasurement = getUnitsMeasurementUseCase.execute(),
 
-                        listCharacteristics = getCharacteristicsUseCase.execute(),
-
                         isVisibilityDataEntry = true
 
                     )
@@ -159,9 +160,7 @@ class GoodsAndServicesViewModel (
 
                         listUnitsMeasurement = getUnitsMeasurementUseCase.execute(),
 
-                        listCharacteristics = getCharacteristicsUseCase.execute(),
-
-                        updateItem = intent.item,
+                        updateItem = getSpecificGoodOrServiceUseCase.execute(intent.item.ui?:""),
 
                         isVisibilityDataEntry = true
 
@@ -352,6 +351,7 @@ class GoodsAndServicesViewModel (
             is GoodsAndServicesIntents.ReadyDischarge -> readyDischarge( intent.isBu,
 
                 intent.manufacturer, intent.numberManufacturer, intent.postavka )
+
 
         }
 
@@ -601,5 +601,4 @@ class GoodsAndServicesViewModel (
 
         )
     }
-
 }

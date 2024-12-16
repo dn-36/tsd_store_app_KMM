@@ -20,6 +20,8 @@ interface GoodsAndServicesClientApi {
 
     suspend fun getCharacteristics(): List<CharacteristicModel>
 
+    suspend fun getSpecificGoodOrService( ui: String ): ProductGoodsServicesModel
+
     suspend fun createGoodOrService(
 
     name: String,
@@ -100,5 +102,7 @@ interface GoodsAndServicesClientApi {
     )
 
     suspend fun deleteGoodOrService( id: Int )
+
+    suspend fun createCharacteristic( name: String, parametr_id: Int, product_id: Int )
 
 }

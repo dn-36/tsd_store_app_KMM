@@ -3,7 +3,9 @@ package component.characteristic.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,39 +34,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.core_app.utils.boxHeight
 import component.characteristic.viewmodel.CharacteristicsIntents
 import component.characteristic.viewmodel.CharacteristicsViewModel
-import model.CharacteristicModel
 import model.ProductGoodsServicesModel
 import org.jetbrains.compose.resources.painterResource
 import project.core.resources.Res
 import project.core.resources.back
 import project.core.resources.cancel
 import project.core.resources.down_arrow
+import org.koin.mp.KoinPlatform.getKoin
+import project.core.resources.update_pencil
 
 class CharacteristicsComponent (
 
     val onClickBack:() -> Unit,
 
-    val listCharacteristics: List<CharacteristicModel>,
+    val updateIetem: ProductGoodsServicesModel
 
-    val updateIetem: ProductGoodsServicesModel?
+ ) {
 
-) {
-
-    val viewModel = CharacteristicsViewModel()
+    val viewModel = CharacteristicsViewModel( getKoin().get(), getKoin().get(), getKoin().get() )
 
     @Composable
 
     fun Content() {
 
-        viewModel.processIntents(CharacteristicsIntents.SetScreen(listCharacteristics, updateIetem))
+        val scope = rememberCoroutineScope()
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.White).clickable(
+        viewModel.processIntents( CharacteristicsIntents.SetScreen( scope, updateIetem ))
+
+        Box( modifier = Modifier.fillMaxSize().background(Color.White).clickable(
             indication = null, // Отключение эффекта затемнения
             interactionSource = remember { MutableInteractionSource() })
 
@@ -105,7 +110,7 @@ class CharacteristicsComponent (
 
                             CharacteristicsIntents.InputTextCharacteristic(inputText,
 
-                                listCharacteristics.filter {
+                                viewModel.state.listCharacteristics.filter {
 
                                     val name = it.name.orEmpty()
 
@@ -193,6 +198,7 @@ class CharacteristicsComponent (
                             shape = RoundedCornerShape(8.dp)
                         ) {}
                         LazyColumn {
+
                             itemsIndexed(viewModel.state.listFilteredCharacteristics)
 
                             { index, item ->
@@ -247,11 +253,16 @@ class CharacteristicsComponent (
 
                 )
 
-                Spacer ( modifier = Modifier.height(30.dp) )
+                Spacer ( modifier = Modifier.height(15.dp) )
 
                 Button (
 
-                    onClick = {  },
+                    onClick = {
+
+                              viewModel.processIntents(
+
+                                  CharacteristicsIntents.CreateCharacteristic( scope ))
+                    },
 
                     modifier = Modifier
                         .clip(RoundedCornerShape(70.dp))
@@ -260,8 +271,127 @@ class CharacteristicsComponent (
 
                 ) {
 
-                    Text(text = "Готово")
+                    Text(text = "Добавить")
 
+                }
+
+                Spacer ( modifier = Modifier.height(20.dp) )
+
+                Row( modifier = Modifier.fillMaxWidth(),
+
+                    horizontalArrangement = Arrangement.SpaceAround ) {
+
+                    Text(text = "Параметр", fontSize = 17.sp, fontWeight = FontWeight.Bold )
+
+                    Text(text = "Значение", fontSize = 17.sp, fontWeight = FontWeight.Bold )
+
+                }
+
+                Spacer ( modifier = Modifier.height(15.dp) )
+
+                LazyColumn {
+
+                    itemsIndexed( viewModel.state.listCreatedParametrs )
+
+                    { index, it ->
+
+                        Box(modifier = Modifier.pointerInput(true) {
+
+                            detectTapGestures(
+
+                                onPress = {
+                                    if (  viewModel.state.listAlphaTools.size > index &&
+
+                                        viewModel.state.listAlphaTools[index] == 1f ) {
+
+                                        viewModel.processIntents(
+
+                                            CharacteristicsIntents.OnePressItem )
+                                    }
+                                },
+
+                                onLongPress = {
+
+                                    viewModel.processIntents(
+
+                                        CharacteristicsIntents.LongPressItem(index))
+
+                                },
+                            )
+
+                        }) {
+
+                            Column {
+
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+
+                                    horizontalArrangement = Arrangement.SpaceBetween
+
+                                ) {
+
+                                    Text(it.parametr?.name ?: "0", fontSize = 16.sp)
+
+                                    Row( verticalAlignment = Alignment.CenterVertically ) {
+
+                                        Text(it.name ?: "0", fontSize = 16.sp)
+
+                                        if (viewModel.state.listAlphaTools.size > index &&
+
+                                            viewModel.state.listAlphaTools[index] == 1f
+                                        ) {
+
+                                            Spacer(modifier = Modifier.width(5.dp))
+
+                                            Image(painter = painterResource(
+
+                                                Res.drawable.update_pencil),
+
+                                                contentDescription = null,
+
+                                                modifier = Modifier.size(12.dp)
+
+                                                    .clickable(
+                                                        indication = null, // Отключение затемнения
+                                                        interactionSource = remember {
+
+                                                            MutableInteractionSource() })
+                                                    {
+
+
+                                                    })
+
+                                            Spacer(modifier = Modifier.width(20.dp))
+
+                                            Image(painter = painterResource(Res.drawable.cancel),
+                                                contentDescription = null,
+                                                modifier = Modifier.size(10.dp)
+                                                    .clickable(
+                                                        indication = null,
+                                                        interactionSource = remember {
+
+                                                            MutableInteractionSource() })
+                                                    {
+
+                                                    })
+                                        }
+                                    }
+
+                                }
+
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                Box(
+                                    modifier = Modifier.height(1.dp).background(Color.LightGray)
+
+                                        .fillMaxWidth()
+                                )
+
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                            }
+                        }
+                    }
                 }
             }
         }

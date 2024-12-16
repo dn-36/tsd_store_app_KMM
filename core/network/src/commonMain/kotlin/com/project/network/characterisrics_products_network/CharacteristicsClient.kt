@@ -1,6 +1,7 @@
 package com.project.network.characterisrics_products_network
 
 import com.project.network.characterisrics_products_network.model.Characteristic
+import com.project.network.characterisrics_products_network.model.CreateCharacteristic
 import com.project.network.common.httpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -56,6 +57,36 @@ class CharacteristicsClient {
         println(" ////////////////////++++++++++")
 
         return response.body<List<Characteristic>>()
+    }
+
+    // Создание новой характеристики
+    suspend fun createCharacteristic ( name: String, parametrs_id: Int, product_id: Int
+
+    ): HttpResponse {
+
+        val requestBody = CreateCharacteristic(
+
+            name = name,
+
+            parametrs_id = parametrs_id,
+
+            product_id = product_id
+
+        )
+        return try {
+
+            val response = client.post("https://delta.online/api/parametrs-products") {
+
+                contentType(ContentType.Application.Json)
+
+                setBody(requestBody)
+            }
+            println("Создание характеристики: ${response.toString()}")
+            response
+        } catch (e: Exception) {
+            println("Ошибка создания характеристики: Error - ${e.message}")
+            throw e
+        }
     }
 
 }

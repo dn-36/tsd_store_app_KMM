@@ -1,12 +1,5 @@
 package model
 
-import kotlinx.serialization.Serializable
-import product_network.ProductApiClient
-import product_network.model.Category
-import product_network.model.Connection
-import product_network.model.Ediz
-import product_network.model.LocalStore
-import product_network.model.Seo
 
 /*
 name*: 'ewgweg'
@@ -81,7 +74,7 @@ data class ProductGoodsServicesModel(
     val postavka: String?,
     val url: String?,
     val is_bu: Int?,
-    //val ui: String?,
+    val ui: String?,
     val is_only_industry: Int?,
     val min_count_store: Int?,  //
     //val video: String?,  //
@@ -91,6 +84,18 @@ data class ProductGoodsServicesModel(
     //val seo: Seo?,
     val ediz: EdizModel?,
     val category: CategoryModel?,  //
+    val connections: List<ConnectionModel>?,
+    val pays: List<String> = emptyList(),
+    val prices: List<String> = emptyList(),
+    val tags: List<String> = emptyList(),
+    val components: List<String> = emptyList(),
+    val completes: List<String> = emptyList(),
+    //val variantes: List<Variant> = emptyList(),
+    val divisions: List<DivisionModel> = emptyList(),
+    val videos: List<String> = emptyList(),
+    val parametrs: List<ParametrModel> = emptyList(),
+    val images: List<String> = emptyList(),
+    val files: List<String> = emptyList()
 
 )
 
@@ -110,4 +115,49 @@ data class CategoryModel(
     val company_id: Int?,
     val created_at: String?,
     val updated_at: String?
+)
+
+data class LangModelProduct(
+    val id: Int,
+    val name: String?,
+    val parametrs_id: Int?,
+    val lang_id: Int?,
+    val created_at: String,
+    val updated_at: String
+)
+
+data class ParametrModel(
+    val id: Int?,
+    val parametrs_id: Int?,
+    val product_id: Int?,
+    val created_at: String,
+    val updated_at: String,
+    val name: String?,
+    val parametr: ParametrDetailsModel?
+)
+
+data class ParametrDetailsModel(
+    val id: Int?,
+    val name: String?,
+    val created_at: String,
+    val updated_at: String,
+    val unit_id: Int?,
+    val langs: List<LangModelProduct>?,
+    val unit: String?
+)
+
+data class DivisionModel(
+    val id: Int,
+    val company_id: Int,
+    val name: String,
+    val ui: String,
+    val created_at: String,
+    val updated_at: String,
+    val local_id: Int,
+    val store_id: Int?,
+    val laravel_through_key: Int
+)
+
+data class ConnectionModel(
+    val id: Int? = null
 )

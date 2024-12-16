@@ -1,5 +1,6 @@
 package product_network.model
 
+import com.project.network.product_network.model.Product
 import kotlinx.serialization.Serializable
 
 @Serializable

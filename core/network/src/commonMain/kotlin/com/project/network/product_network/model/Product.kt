@@ -1,9 +1,14 @@
-package product_network.model
+package com.project.network.product_network.model
 
-import com.project.network.arrival_goods.ArrivalGoodsClient
 import kotlinx.serialization.Serializable
 import product_network.ProductApiClient
+import product_network.model.Category
+import product_network.model.Connection
+import product_network.model.Ediz
+import product_network.model.LocalStore
+import product_network.model.Seo
 
+//summ_stock, summ_reserve, summ_order, codes, local_store
 
 @Serializable
 data class Product(
@@ -52,45 +57,25 @@ data class Product(
     val video_youtube: String?,
     val video_mobile: String?,
     val system_category_id: String?,
-    val summ_stock: Double?,
-    @Serializable(with = ProductApiClient.CountSerializer::class) val summ_reserve: Double?,
-    @Serializable(with = ProductApiClient.CountSerializer::class) val summ_order: Double?,
-    val codes: List<String>?,
+    val summ_stock: Double? = null,
+    @Serializable(with = ProductApiClient.CountSerializer::class) val summ_reserve: Double? = null,
+    @Serializable(with = ProductApiClient.CountSerializer::class) val summ_order: Double? = null,
+    val codes: List<String>? = emptyList(),
     val seo: Seo?,
     val ediz: Ediz?,
-    val local_store: List<LocalStore>?,
+    val local_store: List<LocalStore>? = emptyList(),
     val category: Category?,
-    val connections: List<Connection>?
+    val connections: List<Connection>?,
+    val pays: List<String> = emptyList(),
+    val prices: List<String> = emptyList(),
+    val tags: List<String> = emptyList(),
+    val components: List<String> = emptyList(),
+    val completes: List<String> = emptyList(),
+    val variantes: List<Variant> = emptyList(),
+    val divisions: List<Division> = emptyList(),
+    val videos: List<String> = emptyList(),
+    val parametrs: List<Parametr> = emptyList(),
+    val images: List<String> = emptyList(),
+    val files: List<String> = emptyList()
 )
 
-@Serializable
-data class Parametr(
-    val id: Int,
-    val parametrs_id: Int,
-    val product_id: Int,
-    val created_at: String,
-    val updated_at: String,
-    val name: String?,
-    val parametr: ParametrDetails
-)
-
-@Serializable
-data class ParametrDetails(
-    val id: Int,
-    val name: String,
-    val created_at: String,
-    val updated_at: String,
-    val unit_id: Int?,
-    val langs: List<Lang>,
-    val unit: String?
-)
-
-@Serializable
-data class Lang(
-    val id: Int,
-    val name: String?,
-    val parametrs_id: Int,
-    val lang_id: Int,
-    val created_at: String,
-    val updated_at: String
-)

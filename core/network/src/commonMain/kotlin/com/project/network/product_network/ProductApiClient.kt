@@ -1,7 +1,6 @@
 package product_network
 
 import com.project.network.product_network.model.ProductCreate
-import com.project.network.projects_control_network.model.ProjectControlResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
@@ -21,7 +20,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -31,7 +29,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonPrimitive
 import product_network.model.ApiResponse
-import product_network.model.Product
+import com.project.network.product_network.model.Product
 
 
 // Определяем общий клиент для мультиплатформенного проекта
@@ -95,7 +93,7 @@ class ProductApiClient(private val token: String) {
 
     // получение инфо. по конкретному товару или услуге
 
-    suspend fun getSpecificProduct ( ui: String ): List<Product> {
+    suspend fun getSpecificProduct ( ui: String ): Product {
 
         val response = client.get("https://delta.online/api/product/${ui}") {
 
@@ -103,7 +101,7 @@ class ProductApiClient(private val token: String) {
         println(" ////////////////////++++++++++")
         println("получение конкретной услги или товара:  ${response}")
         println(" ////////////////////++++++++++")
-        return response.body<List<Product>>()
+        return response.body<Product>()
     }
 
     // Создание нового товара или услуга

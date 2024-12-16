@@ -303,9 +303,7 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
             DischargeComponent( updateItem = viewModel.state.updateItem,
 
-                onClickReady = { isBu, manufacturer, numberManufacturer,
-
-                                                 postavka ->
+                onClickReady = { isBu, manufacturer, numberManufacturer, postavka ->
 
                 viewModel.processIntents(GoodsAndServicesIntents.ReadyDischarge( isBu, manufacturer,
 
@@ -323,9 +321,7 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                 GoodsAndServicesIntents.BackFromCharacteristics) },
 
-                listCharacteristics = viewModel.state.listCharacteristics,
-
-                updateIetem = viewModel.state.updateItem ).Content()
+                updateIetem = viewModel.state.updateItem!! ).Content()
 
         }
 
