@@ -119,7 +119,7 @@ class GoodsAndServicesClientImpl(
 
                 components = it.components,
 
-                completes = it.completes,
+                //completes = it.completes,
 
                 divisions = it.divisions.map {
 
@@ -485,7 +485,7 @@ class GoodsAndServicesClientImpl(
 
             components = specificProduct.components,
 
-            completes = specificProduct.completes,
+            //completes = specificProduct.completes,
 
             divisions = specificProduct.divisions.map {
 
@@ -559,6 +559,24 @@ class GoodsAndServicesClientImpl(
         characteristicsClient.init(getToken())
 
         characteristicsClient.createCharacteristic( name, parametr_id, product_id )
+
+    }
+
+    override suspend fun updateCharacteristic( name: String, parametr_id: Int, product_id: Int,
+
+                                               id:Int ) {
+
+        characteristicsClient.init(getToken())
+
+        characteristicsClient.updateCharacteristic( name, parametr_id, product_id, id )
+
+    }
+
+    override suspend fun deleteCharacteristic(id: Int) {
+
+        characteristicsClient.init(getToken())
+
+        characteristicsClient.deleteCharacteristic(id)
 
     }
 

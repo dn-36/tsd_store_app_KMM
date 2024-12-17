@@ -20,13 +20,6 @@ actual class DetailScreen actual constructor() {
 
                        onClickNewProductAdd: (sku: String ) -> Unit ) {
 
-        Box ( modifier = Modifier.fillMaxSize().background(Color.White),
-
-            contentAlignment = Alignment.Center) {
-
-            Text("Функция доступна только на android")
-
-        }
 
     }
 

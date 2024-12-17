@@ -1,19 +1,18 @@
-package component.characteristic.viewmodel
+package screens.characteristic.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import domain.usecases.CreateCharacteristicUseCase
+import domain.usecases.DeleteCharacteristicUseCase
 import domain.usecases.GetCharacteristicsUseCase
-import domain.usecases.GetGoodsAndServicesUseCase
 import domain.usecases.GetSpecificGoodOrServiceUseCase
+import domain.usecases.UpdateCharacteristicUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import model.CharacteristicModel
 
 class CharacteristicsViewModel (
@@ -22,13 +21,17 @@ class CharacteristicsViewModel (
 
     val getCharacteristicsUseCase: GetCharacteristicsUseCase,
 
-    val createCharacteristicUseCase: CreateCharacteristicUseCase
+    val createCharacteristicUseCase: CreateCharacteristicUseCase,
 
- ): ViewModel() {
+    val deleteCharacteristicUseCase: DeleteCharacteristicUseCase,
+
+    val updateCharacteristicUseCase: UpdateCharacteristicUseCase
+
+ ): NetworkViewModel() {
 
     var state by mutableStateOf(CharacteristicsState())
 
-    fun processIntents( intent: CharacteristicsIntents ) {
+    fun processIntents( intent: CharacteristicsIntents) {
 
         when ( intent ) {
 
@@ -56,19 +59,17 @@ class CharacteristicsViewModel (
 
                         )
 
-                        withContext(Dispatchers.IO){
-
-                            println("Прверка: ${ state.updateItem }")
-
-                        }
-
                     }
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
 
                 }
 
             }
 
             is CharacteristicsIntents.CreateCharacteristic -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
 
                 intent.coroutineScope.launch( Dispatchers.IO ) {
 
@@ -98,6 +99,50 @@ class CharacteristicsViewModel (
 
                     )
 
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is CharacteristicsIntents.UpdateCharacteristic -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch( Dispatchers.IO ) {
+
+                    updateCharacteristicUseCase.execute( state.meaning,
+
+                        state.selectedCharacteristic!!.id?:0,
+
+                        state.updateItem!!.id?:0, state.id )
+
+                    val updateItem = getSpecificGoodOrServiceUseCase.execute(
+
+                        state.updateItem!!.ui?:"")
+
+                    state = state.copy(
+
+                        listCreatedParametrs = updateItem.parametrs,
+
+                        updateItem = updateItem,
+
+                        meaning = "",
+
+                        characteristic = "",
+
+                        listFilteredCharacteristics = getCharacteristicsUseCase.execute(),
+
+                        selectedCharacteristic = null,
+
+                        isUpdate = false,
+
+                        listAlphaTools = emptyList()
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
                 }
 
             }
@@ -117,6 +162,36 @@ class CharacteristicsViewModel (
             is CharacteristicsIntents.LongPressItem -> longPressItem( intent.index )
 
             is CharacteristicsIntents.OnePressItem -> onePressItem()
+
+            is CharacteristicsIntents.DeleteCharacteristic -> {
+
+                setStatusNetworkScreen(StatusNetworkScreen.LOADING)
+
+                intent.coroutineScope.launch( Dispatchers.IO ) {
+
+                    deleteCharacteristicUseCase.execute( intent.id )
+
+                    val updateItem = getSpecificGoodOrServiceUseCase.execute(
+
+                        state.updateItem!!.ui?:"")
+
+                    state = state.copy(
+
+                        listCreatedParametrs = updateItem.parametrs,
+
+                        updateItem = updateItem,
+
+                        listAlphaTools = emptyList()
+
+                    )
+
+                    setStatusNetworkScreen(StatusNetworkScreen.SECCUESS)
+
+                }
+
+            }
+
+            is CharacteristicsIntents.ClickUpdateCharacteristic -> clickUpdateCharacteristic(intent.index)
 
         }
 
@@ -197,6 +272,24 @@ class CharacteristicsViewModel (
         state = state.copy(
 
             listAlphaTools = newList
+
+        )
+
+    }
+
+    fun clickUpdateCharacteristic( index: Int ) {
+
+        state = state.copy(
+
+            meaning = state.listCreatedParametrs[index].name ?:"0",
+
+            selectedCharacteristic = state.listCharacteristics.find{
+
+                it.id == state.listCreatedParametrs[index].parametr?.id },
+
+            isUpdate = true,
+
+            id = state.listCreatedParametrs[index].id?:0
 
         )
 

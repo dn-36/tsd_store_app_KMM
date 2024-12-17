@@ -34,8 +34,6 @@ data class GoodsAndServicesState(
 
     val isVisibilityDischargeComponent: Boolean = false,
 
-    val isVisibilityCharacteristicsComponent: Boolean = false,
-
     val updateItem: ProductGoodsServicesModel? = null,
 
     val manufacturer: String = "",

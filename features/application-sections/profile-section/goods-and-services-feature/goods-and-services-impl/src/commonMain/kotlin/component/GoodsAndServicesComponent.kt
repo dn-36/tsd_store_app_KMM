@@ -32,7 +32,6 @@ import com.project.core_app.components.delete_component.DeleteComponent
 import com.project.core_app.components.search_component.ui.SearchComponent
 import com.project.core_app.network_base_screen.NetworkComponent
 import component.additional_information.AdditionalInformationComponent
-import component.characteristic.ui.CharacteristicsComponent
 import component.data_entry_goods_and_services.ui.DataEntryGodsAndServicesComponent
 import component.disharge.ui.DischargeComponent
 import org.jetbrains.compose.resources.painterResource
@@ -43,7 +42,7 @@ import project.core.resources.update_pencil
 import viewmodel.GoodsAndServicesIntents
 import viewmodel.GoodsAndServicesViewModel
 
-class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsAndServicesViewModel
+class GoodsAndServicesComponent( override val viewModel: GoodsAndServicesViewModel
 
     ): NetworkComponent {
 
@@ -52,7 +51,7 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
         val scope = rememberCoroutineScope()
 
-        viewModel.processIntents(GoodsAndServicesIntents.SetScreen( scope, sku ))
+        viewModel.processIntents(GoodsAndServicesIntents.SetScreen( scope ))
 
         Box( modifier = Modifier.fillMaxSize().background(Color.White) ) {
 
@@ -249,7 +248,7 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
 
                 listUnitsMeasurement = viewModel.state.listUnitsMeasurement,
 
-                sku = sku, updateItem = viewModel.state.updateItem,
+                sku = viewModel.state.sku, updateItem = viewModel.state.updateItem,
 
                 create = { viewModel.processIntents(
 
@@ -312,16 +311,6 @@ class GoodsAndServicesComponent( val sku: String, override val viewModel: GoodsA
             }, onClickBack = { viewModel.processIntents(
 
                     GoodsAndServicesIntents.BackFromDischarge) } ).Content()
-
-        }
-
-        else if ( viewModel.state.isVisibilityCharacteristicsComponent ) {
-
-            CharacteristicsComponent( onClickBack = { viewModel.processIntents(
-
-                GoodsAndServicesIntents.BackFromCharacteristics) },
-
-                updateIetem = viewModel.state.updateItem!! ).Content()
 
         }
 

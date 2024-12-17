@@ -160,4 +160,8 @@ sealed class DataEntryGoodsAndServicesIntents {
 
     object CheckTF : DataEntryGoodsAndServicesIntents()
 
+
+    object ViewingPhoto : DataEntryGoodsAndServicesIntents()
+    object CanselViewingPhoto : DataEntryGoodsAndServicesIntents()
+
 }

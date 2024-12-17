@@ -8,9 +8,10 @@ sealed class GoodsAndServicesIntents {
 
    object Back: GoodsAndServicesIntents()
 
-   data class SetScreen(val coroutineScope: CoroutineScope, val sku: String ): GoodsAndServicesIntents()
+   data class SetScreen( val coroutineScope: CoroutineScope ): GoodsAndServicesIntents()
 
    data class OpenCreateDataEntry ( val coroutineScope: CoroutineScope ): GoodsAndServicesIntents()
+
    data class OpenUpdateDataEntry ( val coroutineScope: CoroutineScope,
 
                                     val item: ProductGoodsServicesModel

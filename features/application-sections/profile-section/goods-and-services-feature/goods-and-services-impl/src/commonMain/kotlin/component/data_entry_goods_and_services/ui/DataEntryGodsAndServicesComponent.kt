@@ -46,6 +46,7 @@ import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import com.preat.peekaboo.image.picker.toImageBitmap
 import com.project.core_app.utils.boxHeight
+import screens.characteristic.viewmodel.CharacteristicsIntents
 import component.data_entry_goods_and_services.viewmodel.DataEntryGoodsAndServicesIntents
 import component.data_entry_goods_and_services.viewmodel.DataEntryGoodsAndServicesViewModel
 import model.CategoryGoodsServicesModel
@@ -1700,7 +1701,14 @@ class DataEntryGodsAndServicesComponent (
 
                         Image(
 
-                            modifier = Modifier.height(250.dp).fillMaxWidth(0.7f),
+                            modifier = Modifier.height(250.dp).fillMaxWidth(0.7f)
+                                .clickable(
+                                indication = null, // Отключение эффекта затемнения
+                                interactionSource = remember { MutableInteractionSource() })
+
+                            { viewModel.processIntents(
+
+                                DataEntryGoodsAndServicesIntents.ViewingPhoto) },
 
                             bitmap = viewModel.state.image!!, contentDescription = null,
 
@@ -1809,5 +1817,37 @@ class DataEntryGodsAndServicesComponent (
                 }
             }
         }
+
+        if ( viewModel.state.image != null && viewModel.state.viewingPhoto ) {
+
+            Box(modifier = Modifier.fillMaxSize().background(Color.LightGray).clickable(
+                indication = null, // Отключение эффекта затемнения
+                interactionSource = remember { MutableInteractionSource() })
+
+            {}) {
+
+                Image(
+
+                    modifier = Modifier.align(Alignment.Center),
+
+                    bitmap = viewModel.state.image!!, contentDescription = null,
+
+                   // contentScale = ContentScale.Crop
+                )
+
+                Image(painterResource(Res.drawable.cancel), contentDescription = null,
+
+                    modifier = Modifier.padding(8.dp).size(15.dp).align(Alignment.TopEnd)
+                        .clickable(
+                        indication = null, // Отключение эффекта затемнения
+                        interactionSource = remember { MutableInteractionSource() })
+
+                    { viewModel.processIntents(
+
+                        DataEntryGoodsAndServicesIntents.CanselViewingPhoto) })
+
+            }
+        }
+
     }
 }

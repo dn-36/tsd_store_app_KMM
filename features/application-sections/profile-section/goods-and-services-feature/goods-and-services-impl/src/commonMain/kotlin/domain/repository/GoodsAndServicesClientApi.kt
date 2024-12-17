@@ -103,6 +103,10 @@ interface GoodsAndServicesClientApi {
 
     suspend fun deleteGoodOrService( id: Int )
 
+    suspend fun deleteCharacteristic( id: Int )
+
     suspend fun createCharacteristic( name: String, parametr_id: Int, product_id: Int )
+
+    suspend fun updateCharacteristic( name: String, parametr_id: Int, product_id: Int, id:Int )
 
 }

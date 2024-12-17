@@ -110,6 +110,9 @@ data class DataEntryGoodsAndServicesState (
 
     val listColorBorderTF : List <Color> = listOf ( Color.LightGray, Color.LightGray),
 
-    val onCheck: Boolean = false
+    val onCheck: Boolean = false,
+
+
+    val viewingPhoto: Boolean = false
 
     )

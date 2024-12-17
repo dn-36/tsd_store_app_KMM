@@ -67,15 +67,19 @@ class CRMViewModel (
 
                     intent.coroutineScope.launch(Dispatchers.IO) {
 
+                        val listIncomingCRM = getIncomingCRMUseCase.execute()
+
+                        val listOutgoingCRM = getOutgoingCRMUseCase.execute()
+
                         state = state.copy(
 
-                            listIncomingCRM = getIncomingCRMUseCase.execute(),
+                            listIncomingCRM = listIncomingCRM,
 
-                            listFilteredIncomingCRM = getIncomingCRMUseCase.execute(),
+                            listFilteredIncomingCRM = listIncomingCRM,
 
-                            listOutgoingCRM = getOutgoingCRMUseCase.execute(),
+                            listOutgoingCRM = listOutgoingCRM,
 
-                            listFilteredOutgoingCRM = getOutgoingCRMUseCase.execute(),
+                            listFilteredOutgoingCRM = listOutgoingCRM,
 
                             isSet = false
 
@@ -192,13 +196,15 @@ class CRMViewModel (
 
                     text = intent.text, statusId = intent.statusId, items = intent.items )
 
+                    val listOutgoingCRM = getOutgoingCRMUseCase.execute()
+
                 state = state.copy(
 
                     isVisibilityDataEntryComponent = 0f,
 
-                    listOutgoingCRM = getOutgoingCRMUseCase.execute(),
+                    listOutgoingCRM = listOutgoingCRM,
 
-                    listFilteredOutgoingCRM = getOutgoingCRMUseCase.execute()
+                    listFilteredOutgoingCRM = listOutgoingCRM
 
                 )
 
@@ -230,15 +236,17 @@ class CRMViewModel (
 
                         text = intent.text, statusId = intent.statusId, items = intent.items )
 
+                    val listOutgoingCRM = getOutgoingCRMUseCase.execute()
+
                     state = state.copy(
 
                         isVisibilityDataEntryComponent = 0f,
 
                         updateItem = null,
 
-                        listOutgoingCRM = getOutgoingCRMUseCase.execute(),
+                        listOutgoingCRM = listOutgoingCRM,
 
-                        listFilteredOutgoingCRM = getOutgoingCRMUseCase.execute()
+                        listFilteredOutgoingCRM = listOutgoingCRM
 
                     )
 
@@ -259,27 +267,6 @@ class CRMViewModel (
     }
 
     fun back () {
-
-         println(" CHECK CRM: ${state.listIncomingCRM} ")
-
-         println(" CHECK OUTGOING CRM: ${state.listOutgoingCRM} ")
-
-         println(" CHECK SPECIFICATIONS: ${state.listSpecifications} ")
-
-         println(" CHECK SERVICES: ${state.listServices} ")
-
-         println(" CHECK PRODUCTS: ${state.listProducts} ")
-
-         println(" CHECK PROJECTS: ${state.listProjects} ")
-
-         println(" CHECK CONTRGENTS: ${state.listContragents} ")
-
-         println(" CHECK EMPLOYEE: ${state.listEmployee} ")
-
-         println(" CHECK CARGO: ${state.listCargo} ")
-
-         println(" CHECK GROUP ENTITY: ${state.listGroupEntity} ")
-
 
         val menuScreen: MenuCrmScreenApi = KoinPlatform.getKoin().get()
 

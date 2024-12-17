@@ -1,11 +1,11 @@
 import cafe.adriel.voyager.core.screen.Screen
-import screen.GoodsAndServicesScreen
+import screens.GoodsAndServicesScreen
 
 class GoodsAndServicesScreenImpl: GoodsAndServicesScreenApi {
 
-    override fun goodsAndServicesScreen( sku: String ): Screen {
+    override fun goodsAndServicesScreen(): Screen {
 
-        return GoodsAndServicesScreen( sku )
+        return GoodsAndServicesScreen()
 
     }
 

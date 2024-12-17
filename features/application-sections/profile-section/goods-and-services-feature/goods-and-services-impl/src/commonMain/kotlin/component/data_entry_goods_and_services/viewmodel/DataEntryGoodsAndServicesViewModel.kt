@@ -192,6 +192,11 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
             is DataEntryGoodsAndServicesIntents.CheckTF -> checkTF()
 
+
+            is DataEntryGoodsAndServicesIntents.ViewingPhoto -> viewingPhoto()
+
+            is DataEntryGoodsAndServicesIntents.CanselViewingPhoto -> canselViewingPhoto()
+
         }
 
     }
@@ -390,9 +395,6 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
                 )
             }
-
-           // println("NewImage ${state.image}")
-
         }
     }
 
@@ -1122,8 +1124,30 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
         // Обновляем состояние
 
         state = state.copy(
+
             listColorBorderTF = newList,
+
             onCheck = hasNull
+        )
+
+    }
+
+    fun viewingPhoto(){
+
+        state = state.copy(
+
+        viewingPhoto = true
+
+        )
+
+    }
+
+    fun canselViewingPhoto(){
+
+        state = state.copy(
+
+            viewingPhoto = false
+
         )
 
     }

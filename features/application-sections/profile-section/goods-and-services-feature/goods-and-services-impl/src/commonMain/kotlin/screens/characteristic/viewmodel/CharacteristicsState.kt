@@ -1,4 +1,4 @@
-package component.characteristic.viewmodel
+package screens.characteristic.viewmodel
 
 import model.CharacteristicModel
 import model.ParametrModel
@@ -24,6 +24,10 @@ data class CharacteristicsState(
 
     val isSet: Boolean = true,
 
-    val listAlphaTools: List<Float> = emptyList()
+    val listAlphaTools: List<Float> = emptyList(),
+
+    val isUpdate: Boolean = false,
+
+    val id: Int = 0
 
 )

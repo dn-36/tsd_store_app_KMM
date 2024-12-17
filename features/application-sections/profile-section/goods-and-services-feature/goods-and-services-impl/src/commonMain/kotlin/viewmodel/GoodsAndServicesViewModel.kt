@@ -4,17 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.lifecycle.viewModelScope
 import com.ProductsMenuScreenApi
 import com.project.core_app.network_base_screen.NetworkViewModel
 import com.project.core_app.network_base_screen.StatusNetworkScreen
 import com.project.core_app.utils.imageBitmapToBase64
 import com.project.network.Navigation
-import domain.usecases.CreateCharacteristicUseCase
 import domain.usecases.CreateGoodOrServiceUseCase
 import domain.usecases.DeleteGoodOrServiceUseCase
 import domain.usecases.GetCategoryUseCase
-import domain.usecases.GetCharacteristicsUseCase
 import domain.usecases.GetGoodsAndServicesUseCase
 import domain.usecases.GetSpecificGoodOrServiceUseCase
 import domain.usecases.GetSystemCategoryUseCase
@@ -25,6 +22,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import model.ProductGoodsServicesModel
 import org.koin.mp.KoinPlatform
+import screens.characteristic.screen.CharacteristicsScreen
 
 class GoodsAndServicesViewModel (
 
@@ -54,13 +52,9 @@ class GoodsAndServicesViewModel (
 
             is GoodsAndServicesIntents.SetScreen -> {
 
-                //println("Update: ${state.updateItem}")
-
                 intent.coroutineScope.launch( Dispatchers.IO ) {
 
                     if ( state.isSet ) {
-
-                        if ( intent.sku.isBlank() ) {
 
                             val listProducts = getGoodsAndServicesUseCase.execute()
 
@@ -73,26 +67,6 @@ class GoodsAndServicesViewModel (
                                 isSet = false
 
                             )
-                        }
-
-                        else {
-
-                            state = state.copy(
-
-                                listSystemCategory = getSystemCategoryUseCase.execute(),
-
-                                listCategory = getCategoryUseCase.execute(),
-
-                                listUnitsMeasurement = getUnitsMeasurementUseCase.execute(),
-
-                                isVisibilityDataEntry = true,
-
-                                isSet = false
-
-                            )
-
-
-                        }
 
                     }
 
@@ -371,7 +345,9 @@ class GoodsAndServicesViewModel (
 
             isVisibilityDataEntry = false,
 
-            updateItem = null
+            updateItem = null,
+
+            listAlphaTools = emptyList()
 
         )
 
@@ -403,13 +379,7 @@ class GoodsAndServicesViewModel (
 
     fun backFromCharacteristics() {
 
-        state = state.copy(
-
-            isVisibilityCharacteristicsComponent = false,
-
-            isVisibilityAdditionalInformationComponent = true
-
-        )
+        Navigation.navigator.pop()
 
     }
 
@@ -553,12 +523,12 @@ class GoodsAndServicesViewModel (
 
     fun characteristics () {
 
-        state = state.copy(
+        Navigation.navigator.push(
+            CharacteristicsScreen( onClickBack = { processIntents(
 
-            isVisibilityAdditionalInformationComponent = false,
+            GoodsAndServicesIntents.BackFromCharacteristics) },
 
-            isVisibilityCharacteristicsComponent = true
-
+            updateIetem = state.updateItem!!  )
         )
 
     }

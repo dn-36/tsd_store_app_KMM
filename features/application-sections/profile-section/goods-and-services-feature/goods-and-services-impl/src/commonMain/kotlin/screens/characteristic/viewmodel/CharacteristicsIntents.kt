@@ -1,9 +1,8 @@
-package component.characteristic.viewmodel
+package screens.characteristic.viewmodel
 
 import kotlinx.coroutines.CoroutineScope
 import model.CharacteristicModel
 import model.ProductGoodsServicesModel
-import viewmodel.GoodsAndServicesIntents
 
 sealed class CharacteristicsIntents {
 
@@ -27,8 +26,16 @@ sealed class CharacteristicsIntents {
 
     data class CreateCharacteristic( val coroutineScope: CoroutineScope): CharacteristicsIntents()
 
+    data class UpdateCharacteristic( val coroutineScope: CoroutineScope ): CharacteristicsIntents()
+
+    data class ClickUpdateCharacteristic( val index: Int ): CharacteristicsIntents()
+
     data class LongPressItem( val index: Int ): CharacteristicsIntents()
 
     object OnePressItem: CharacteristicsIntents()
+
+    data class DeleteCharacteristic( val coroutineScope: CoroutineScope, val id: Int
+
+    ): CharacteristicsIntents()
 
 }

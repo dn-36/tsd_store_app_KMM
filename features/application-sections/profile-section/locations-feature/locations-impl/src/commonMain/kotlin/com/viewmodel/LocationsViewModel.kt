@@ -46,11 +46,13 @@ class LocationsViewModel (
 
                     if (state.isSet) {
 
+                        val listLocations = getLocationsUseCase.execute()
+
                         state = state.copy(
 
-                            listLocations = getLocationsUseCase.execute(),
+                            listLocations = listLocations,
 
-                            listFilteredLocations = getLocationsUseCase.execute(),
+                            listFilteredLocations = listLocations,
 
                             isSet = false
 
@@ -72,15 +74,17 @@ class LocationsViewModel (
 
                     deleteLocationUseCase.execute(state.updateLocation!!.id?:0)
 
+                    val listLocations = getLocationsUseCase.execute()
+
                     state = state.copy(
 
                         isVisibilityDeleteComponent = false,
 
                         updateLocation = null,
 
-                        listLocations = getLocationsUseCase.execute(),
+                        listLocations = listLocations,
 
-                        listFilteredLocations = getLocationsUseCase.execute(),
+                        listFilteredLocations = listLocations,
 
                     )
 
@@ -150,13 +154,15 @@ class LocationsViewModel (
 
                     intent.entity_id, intent.workers, intent.langs)
 
+                    val listLocations = getLocationsUseCase.execute()
+
                     state = state.copy(
 
                         isVisibilityDataEntry = false,
 
-                        listLocations = getLocationsUseCase.execute(),
+                        listLocations = listLocations,
 
-                        listFilteredLocations = getLocationsUseCase.execute(),
+                        listFilteredLocations = listLocations,
 
                     )
 
@@ -182,15 +188,17 @@ class LocationsViewModel (
 
                         intent.entity_id, intent.workers, intent.langs)
 
+                    val listLocations = getLocationsUseCase.execute()
+
                     state = state.copy(
 
                         isVisibilityDataEntry = false,
 
                         updateLocation = null,
 
-                        listLocations = getLocationsUseCase.execute(),
+                        listLocations = listLocations,
 
-                        listFilteredLocations = getLocationsUseCase.execute(),
+                        listFilteredLocations = listLocations,
 
                     )
 

@@ -70,7 +70,7 @@ data class Product(
     val prices: List<String> = emptyList(),
     val tags: List<String> = emptyList(),
     val components: List<String> = emptyList(),
-    val completes: List<String> = emptyList(),
+   // val completes: List<String> = emptyList(),
     val variantes: List<Variant> = emptyList(),
     val divisions: List<Division> = emptyList(),
     val videos: List<String> = emptyList(),
