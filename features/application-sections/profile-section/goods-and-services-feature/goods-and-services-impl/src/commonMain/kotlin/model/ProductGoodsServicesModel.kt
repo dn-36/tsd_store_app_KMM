@@ -77,9 +77,9 @@ data class ProductGoodsServicesModel(
     val ui: String?,
     val is_only_industry: Int?,
     val min_count_store: Int?,  //
-    //val video: String?,  //
+    val video: String?,  //
     val video_youtube: String?, //
-    //val video_mobile: String?,  //
+    val video_mobile: String?,  //
     val system_category_id: String?, //
     //val seo: Seo?,
     val ediz: EdizModel?,

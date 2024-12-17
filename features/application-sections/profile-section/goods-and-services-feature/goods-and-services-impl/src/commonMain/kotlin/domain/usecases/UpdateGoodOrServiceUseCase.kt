@@ -28,7 +28,8 @@ class UpdateGoodOrServiceUseCase (
                          is_serial_nomer: Int?,
                          is_date_fabrica: Int?,
                          is_markirovka: Int?,
-                        is_bu: Int,
+                         is_bu: Int,
+                         video_mobile: String,
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
                         sku: String,
@@ -51,8 +52,8 @@ class UpdateGoodOrServiceUseCase (
 
             is_test, is_arenda,is_zakaz, is_ves, is_serial_nomer,is_date_fabrica, is_markirovka,
 
-            is_bu, sku, text_image, creater, nomer_creater, postavka, price, tags, variantes,
+            is_bu, video_mobile, sku, text_image, creater, nomer_creater, postavka, price, tags,
 
-            divisions, image_upload )
+            variantes, divisions, image_upload )
     }
 }

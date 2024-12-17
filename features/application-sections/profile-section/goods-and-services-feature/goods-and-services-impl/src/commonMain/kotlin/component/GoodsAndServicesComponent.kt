@@ -218,26 +218,25 @@ class GoodsAndServicesComponent( override val viewModel: GoodsAndServicesViewMod
 
                                 is_zakaz: Int?, is_ves: Int?, is_serial_nomer: Int?,
 
-                                is_date_fabrica: Int?, is_markirovka: Int?, sku: String,
+                                is_date_fabrica: Int?, is_markirovka: Int?, video_mobile: String,
 
-                                text_image, price: Float?, tags: List<String>,
+                                sku: String, text_image, price: Float?, tags: List<String>,
 
                                 variantes: List<String>, divisions: String, image ->
 
                     viewModel.processIntents(
 
                         GoodsAndServicesIntents.Next(
-                            name,
 
-                            video_youtube, ediz_id, category_id, is_product, is_sale,
+                            name, video_youtube, ediz_id, category_id, is_product, is_sale,
 
-                            system_category_id, is_view_sale, is_order, is_store,
+                            system_category_id, is_view_sale, is_order, is_store, is_store_view,
 
-                            is_store_view, is_test, is_arenda, is_zakaz, is_ves,
+                            is_test, is_arenda, is_zakaz, is_ves, is_serial_nomer, is_date_fabrica,
 
-                            is_serial_nomer, is_date_fabrica, is_markirovka,
+                            is_markirovka, video_mobile, sku, text_image, price, tags, variantes,
 
-                            sku, text_image, price, tags, variantes, divisions, image
+                            divisions, image
                         )
                     )
                 },

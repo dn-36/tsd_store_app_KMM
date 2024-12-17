@@ -78,6 +78,8 @@ class GoodsAndServicesClientImpl(
                 is_test = it.is_test,
                 is_arenda = it.is_arenda,
                 is_zakaz = it.is_zakaz,
+                video = it.video,
+                video_mobile = it.video_mobile,
                 is_ves = it.is_ves,
                 ui = it.ui,
                 is_serial_nomer = it.is_serial_nomer,
@@ -332,6 +334,7 @@ class GoodsAndServicesClientImpl(
         is_date_fabrica: Int?,
         is_markirovka: Int?,
         is_bu: Int,
+        video_mobile: String,
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
         sku: String,
@@ -348,13 +351,13 @@ class GoodsAndServicesClientImpl(
 
     ) {
 
-     productsClient.createGoodOrService(name, video_youtube, ediz_id, category_id, is_product,
+     productsClient.createGoodOrService( name, video_youtube, ediz_id, category_id, is_product,
 
          is_sale, system_category_id, is_view_sale, is_order, is_store, is_store_view,
 
          is_test, is_arenda,is_zakaz, is_ves, is_serial_nomer,is_date_fabrica, is_markirovka,
 
-         is_bu, sku, text_image, creater, nomer_creater, postavka, price, tags, variantes,
+         is_bu, video_mobile, sku, text_image, creater, nomer_creater, postavka, price, tags, variantes,
 
          divisions, image_upload )
 
@@ -387,6 +390,7 @@ class GoodsAndServicesClientImpl(
         is_date_fabrica: Int?,
         is_markirovka: Int?,
         is_bu: Int,
+        video_mobile: String,
         sku: String,
         text_image: String,
         creater: String,
@@ -397,6 +401,7 @@ class GoodsAndServicesClientImpl(
         variantes: List<String>,
         divisions: String,
         image_upload: String?
+
     ) {
 
         productsClient.updateGoodOrService( id, name, video_youtube, ediz_id, category_id,
@@ -405,7 +410,7 @@ class GoodsAndServicesClientImpl(
 
             is_store_view, is_test, is_arenda,is_zakaz, is_ves, is_serial_nomer,is_date_fabrica,
 
-            is_markirovka, is_bu, sku, text_image, creater, nomer_creater, postavka, price, tags,
+            is_markirovka, is_bu, video_mobile, sku, text_image, creater, nomer_creater, postavka, price, tags,
 
             variantes, divisions, image_upload )
 
@@ -435,6 +440,8 @@ class GoodsAndServicesClientImpl(
             image = specificProduct.image,
             is_product = specificProduct.is_product,
             is_sale = specificProduct.is_sale,
+            video = specificProduct.video,
+            video_mobile = specificProduct.video_mobile,
             min_count_store = specificProduct.min_count_store,
             is_only_industry = specificProduct.is_only_industry,
             is_view_sale = specificProduct.is_view_sale,

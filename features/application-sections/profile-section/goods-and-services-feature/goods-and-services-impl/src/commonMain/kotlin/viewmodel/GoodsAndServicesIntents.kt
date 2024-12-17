@@ -67,6 +67,7 @@ sealed class GoodsAndServicesIntents {
         //is_bu: 0/1 (Б/у или нет)
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
+                      val video_mobile: String,
                       val sku: String,
                       val text_image: String,
         //creater: '' (Производитель)

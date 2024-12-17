@@ -197,6 +197,9 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
 
             is DataEntryGoodsAndServicesIntents.CanselViewingPhoto -> canselViewingPhoto()
 
+
+            is DataEntryGoodsAndServicesIntents.DeleteVideoMobile -> deleteVideoMobile()
+
         }
 
     }
@@ -388,8 +391,10 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
                     descriptionImage = if (updateItem != null) updateItem.text_image ?: "" else "",
 
                     image = if (updateItem != null) urlImageToImageBitmap(
-                        updateItem.image ?: ""
-                    ) else null,
+
+                        updateItem.image ?: "" ) else null,
+
+                    videoMobile = if ( updateItem != null ) updateItem.video_mobile?:"" else "",
 
                     isSet = false
 
@@ -1147,6 +1152,16 @@ class DataEntryGoodsAndServicesViewModel: ViewModel() {
         state = state.copy(
 
             viewingPhoto = false
+
+        )
+
+    }
+
+    fun deleteVideoMobile(){
+
+        state = state.copy(
+
+            videoMobile = ""
 
         )
 

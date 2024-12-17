@@ -3,6 +3,7 @@ package product_network.model
 import kotlinx.serialization.Serializable
 import product_network.ProductApiClient
 
+
 @Serializable
 data class LocalStore(
     val id: Int?,

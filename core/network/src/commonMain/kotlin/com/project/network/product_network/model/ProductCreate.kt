@@ -23,6 +23,7 @@ data class ProductCreate(
     val is_date_fabrica: Int?,
     val is_markirovka: Int?,
     val is_bu: Int,
+    val video_mobile: String,
     val sku: String,
     val text_image: String,
     val creater: String,

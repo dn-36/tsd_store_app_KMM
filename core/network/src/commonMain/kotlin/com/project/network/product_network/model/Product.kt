@@ -8,8 +8,6 @@ import product_network.model.Ediz
 import product_network.model.LocalStore
 import product_network.model.Seo
 
-//summ_stock, summ_reserve, summ_order, codes, local_store
-
 @Serializable
 data class Product(
     val id: Int?,

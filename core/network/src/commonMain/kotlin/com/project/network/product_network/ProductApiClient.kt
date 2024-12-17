@@ -54,7 +54,9 @@ class ProductApiClient(private val token: String) {
 
     // Функция для выполнения GET запроса с заданными параметрами и извлечения полей name
     suspend fun getProductNames(): List<Product> {
+
         val url = "https://delta.online/api/products-filter"
+
         val products: ApiResponse = client.get(url) {
             parameter("cat", "0")
             parameter("active", "0")
@@ -126,6 +128,7 @@ class ProductApiClient(private val token: String) {
                                       is_date_fabrica: Int?,
                                       is_markirovka: Int?,
                                       is_bu: Int,
+                                      video_mobile: String,
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
                                       sku: String,
@@ -162,6 +165,7 @@ class ProductApiClient(private val token: String) {
             is_date_fabrica = 0,
             is_markirovka = 0,
             is_bu = is_bu,
+            video_mobile = video_mobile,
             sku = sku,
             text_image = text_image,
             creater = creater,
@@ -222,6 +226,7 @@ class ProductApiClient(private val token: String) {
                                       is_date_fabrica: Int?,
                                       is_markirovka: Int?,
                                       is_bu: Int,
+                                      video_mobile: String,
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
                                       sku: String,
@@ -258,6 +263,7 @@ class ProductApiClient(private val token: String) {
             is_date_fabrica = is_date_fabrica,
             is_markirovka = is_markirovka,
             is_bu = is_bu,
+            video_mobile = video_mobile,
             sku = sku,
             text_image = text_image,
             creater = creater,
@@ -279,9 +285,15 @@ class ProductApiClient(private val token: String) {
                 setBody(requestBody)
             }
             println("Обновление товара или услуги: ${response.toString()}")
+
+            println("Тело запроса обновление товара или услуги: ${requestBody}")
+
             response
+
         } catch (e: Exception) {
+
             println("ошибка обновление товара или услуги: Error - ${e.message}")
+
             throw e
         }
     }

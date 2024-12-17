@@ -178,15 +178,15 @@ class GoodsAndServicesViewModel (
 
                         is_markirovka = state.is_markirovka,
 
-                        is_bu = state.isBu , sku = state.sku, text_image = state.text_image,
+                        is_bu = state.isBu , video_mobile = state.video_mobile, sku = state.sku,
 
-                        creater = state.manufacturer, nomer_creater = state.numberManufacturer,
+                        text_image = state.text_image, creater = state.manufacturer,
 
-                        postavka = state.postavka, price = state.price, tags = state.tags,
+                        nomer_creater = state.numberManufacturer, postavka = state.postavka,
 
-                        divisions = state.divisions, variantes = state.variantes,
+                        price = state.price, tags = state.tags, divisions = state.divisions,
 
-                        image_upload = imageBase64 )
+                        variantes = state.variantes, image_upload = imageBase64 )
 
                     val listProducts = getGoodsAndServicesUseCase.execute()
 
@@ -236,7 +236,9 @@ class GoodsAndServicesViewModel (
 
                         is_date_fabrica = state.is_date_fabrica, is_markirovka = state.is_markirovka,
 
-                        is_bu = state.isBu , sku = state.sku, text_image = state.text_image,
+                        is_bu = state.isBu, video_mobile = state.video_mobile, sku = state.sku,
+
+                        text_image = state.text_image,
 
                         creater = state.manufacturer, nomer_creater = state.numberManufacturer,
 
@@ -314,9 +316,11 @@ class GoodsAndServicesViewModel (
 
                 intent.is_test, intent.is_arenda, intent.is_zakaz, intent.is_ves, intent.is_serial_nomer,
 
-                intent.is_date_fabrica, intent.is_markirovka, intent.sku, intent.text_image,
+                intent.is_date_fabrica, intent.is_markirovka, intent.video_mobile, intent.sku,
 
-                intent.price, intent.tags, intent.variantes, intent.divisions, intent.image_upload )
+                intent.text_image, intent.price, intent.tags, intent.variantes, intent.divisions,
+
+                intent.image_upload )
 
             is GoodsAndServicesIntents.Discharge -> discharge()
 
@@ -443,7 +447,7 @@ class GoodsAndServicesViewModel (
 
                is_ves: Int?, is_serial_nomer: Int?, is_date_fabrica: Int?,
 
-               is_markirovka: Int?, sku: String, text_image: String, price: Float?,
+               is_markirovka: Int?, video_mobile: String, sku: String, text_image: String, price: Float?,
 
                tags: List<String>, variantes: List<String>, divisions: String,
 
@@ -503,7 +507,9 @@ class GoodsAndServicesViewModel (
 
             divisions = divisions,
 
-            image_upload = image
+            image_upload = image,
+
+            video_mobile = video_mobile
 
         )
 

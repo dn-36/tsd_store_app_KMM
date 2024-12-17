@@ -105,6 +105,8 @@ data class DataEntryGoodsAndServicesState (
 
     val image: ImageBitmap? = null,
 
+    val videoMobile: String = "",
+
 
     val isSet: Boolean = true,
 

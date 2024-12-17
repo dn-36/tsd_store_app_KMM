@@ -343,7 +343,7 @@ class ArrivalAndConsumptionClientImpl (
 
             is_store_view, null, null, null, null, null,
 
-            null, null, is_bu = 0, sku, text_image, "",
+            null, null, is_bu = 0, "", sku, text_image, "",
 
             "", "", price, listOf(), listOf(), "", image_upload )
 

@@ -69,6 +69,7 @@ data class GoodsAndServicesState(
     val is_markirovka: Int? = null,
     //is_ob_zvonok: 0/1 (обратный звонок по товару)
     //metka_system: '' (Системная метка)
+    val video_mobile: String = "",
     val sku: String = "",
     val text_image: String = "",
     val postavka: String = "",

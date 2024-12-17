@@ -162,6 +162,11 @@ sealed class DataEntryGoodsAndServicesIntents {
 
 
     object ViewingPhoto : DataEntryGoodsAndServicesIntents()
+
     object CanselViewingPhoto : DataEntryGoodsAndServicesIntents()
+
+
+
+    object DeleteVideoMobile : DataEntryGoodsAndServicesIntents()
 
 }

@@ -45,6 +45,7 @@ interface GoodsAndServicesClientApi {
     is_date_fabrica: Int?,
     is_markirovka: Int?,
     is_bu: Int,
+    video_mobile: String,
     //is_ob_zvonok: 0/1 (обратный звонок по товару)
     //metka_system: '' (Системная метка)
     sku: String,
@@ -85,6 +86,7 @@ interface GoodsAndServicesClientApi {
         is_date_fabrica: Int?,
         is_markirovka: Int?,
         is_bu: Int,
+        video_mobile: String,
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
         sku: String,

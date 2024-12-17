@@ -32,6 +32,7 @@ kotlin {
             implementation(project(":core:recources"))
             implementation(project(":core:network"))
             implementation(project(":core:local-storage"))
+            implementation(project(":common:video-player"))
             implementation(project( ":features:application-sections:profile-section:goods-and-services-feature:goods-and-services-api"))
             implementation(project( ":features:application-sections:profile-section:products-menu-feature:products-menu-api"))
             implementation(compose.runtime)

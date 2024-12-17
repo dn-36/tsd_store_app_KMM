@@ -23,14 +23,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +46,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.VideoPlayer
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import com.preat.peekaboo.image.picker.toImageBitmap
@@ -85,6 +90,7 @@ class DataEntryGodsAndServicesComponent (
         is_serial_nomer: Int?,
         is_date_fabrica: Int?,
         is_markirovka: Int?,
+        video_mobile: String,
         //is_bu: 0/1 (Б/у или нет)
         //is_ob_zvonok: 0/1 (обратный звонок по товару)
         //metka_system: '' (Системная метка)
@@ -144,6 +150,10 @@ class DataEntryGodsAndServicesComponent (
                 )
             }
         )
+
+        var shouldStop by remember { mutableStateOf(false) }
+
+        var showLoading by remember { mutableStateOf(true) }
 
         viewModel.processIntents( DataEntryGoodsAndServicesIntents.SetScreen( scope, listCategory,
 
@@ -1717,6 +1727,67 @@ class DataEntryGodsAndServicesComponent (
                     }
                 }
 
+                if ( viewModel.state.videoMobile.isNotBlank() ) {
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row( modifier = Modifier.fillMaxWidth(),
+
+                        horizontalArrangement = Arrangement.Center ) {
+
+                        Text(text = "Видео", fontSize = 18.sp,
+
+                            modifier = Modifier.clickable(
+                                indication = null, // Отключение эффекта затемнения
+                                interactionSource = remember { MutableInteractionSource() })
+
+                            { }, textAlign = TextAlign.Center
+                        )
+
+                        if ( viewModel.state.videoMobile.isNotBlank() ) {
+
+                            Spacer(modifier = Modifier.width(10.dp))
+
+                            Image(painterResource(Res.drawable.cancel), contentDescription = null,
+
+                                modifier = Modifier.size(15.dp).clickable(
+
+                                    indication = null, // Отключение эффекта затемнения
+
+                                    interactionSource = remember { MutableInteractionSource() })
+
+                                { viewModel.processIntents(
+
+                                    DataEntryGoodsAndServicesIntents.DeleteVideoMobile)
+
+                                })
+
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Box( modifier = Modifier.fillMaxWidth().height(250.dp),
+
+                        contentAlignment = Alignment.Center ) {
+
+                        VideoPlayer(
+                            modifier = Modifier,
+                            url = "https://delta.online/storage/${viewModel.state.videoMobile}",
+                            isLandscape = true,
+                            shouldStop = shouldStop,
+                            onMediaReadyToPlay = { showLoading = false }
+                        )
+                        if (showLoading) {
+
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(40.dp),
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(10.dp))
 
                 OutlinedTextField (
@@ -1789,6 +1860,8 @@ class DataEntryGodsAndServicesComponent (
 
                                 viewModel.state.selectedMarkirovka.second,
 
+                                viewModel.state.videoMobile,
+
                                 viewModel.state.sku, viewModel.state.descriptionImage,
 
                                 viewModel.state.price.toFloatOrNull(),
@@ -1835,7 +1908,7 @@ class DataEntryGodsAndServicesComponent (
                    // contentScale = ContentScale.Crop
                 )
 
-                Image(painterResource(Res.drawable.cancel), contentDescription = null,
+                Image( painterResource(Res.drawable.cancel), contentDescription = null,
 
                     modifier = Modifier.padding(8.dp).size(15.dp).align(Alignment.TopEnd)
                         .clickable(
@@ -1848,6 +1921,5 @@ class DataEntryGodsAndServicesComponent (
 
             }
         }
-
     }
 }
