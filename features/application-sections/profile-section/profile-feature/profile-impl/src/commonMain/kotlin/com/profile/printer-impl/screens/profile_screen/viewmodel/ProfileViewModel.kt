@@ -4,6 +4,7 @@ import ContragentsScreensApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.ProductCategoriesScreenApi
 import com.SpecificationsScreenApi
 import com.example.`notes-screens-api`.NotesScreensApi
 import com.project.chats.WarehouseScreensApi
@@ -40,7 +41,9 @@ class ProfileViewModel : NetworkViewModel() {
 
             is ProfileIntents.SetScreen -> setScreen(intents.coroutineScope)
 
-            ProfileIntents.Tools -> {tools()}
+            is ProfileIntents.Tools -> tools()
+
+            is ProfileIntents.ProductCategories -> productCategories()
         }
     }
     fun tools(){
@@ -88,6 +91,14 @@ class ProfileViewModel : NetworkViewModel() {
         val specificationsScreen: SpecificationsScreenApi = getKoin().get()
 
         Navigation.navigator.push(specificationsScreen.specifications())
+
+    }
+
+    fun productCategories(){
+
+        val productCategoriesScreen: ProductCategoriesScreenApi = getKoin().get()
+
+        Navigation.navigator.push(productCategoriesScreen.productCategories())
 
     }
 

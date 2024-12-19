@@ -56,6 +56,10 @@ kotlin {
 
             implementation(project(":features:application-sections:profile-section:project-control-feature:project-control-impl"))
 
+            implementation(project(":features:application-sections:profile-section:product-categories-feature:product-categories-impl"))
+
+            implementation(project(":features:application-sections:profile-section:catalog-products-feature:catalog-products-impl"))
+
             implementation(project(":core:app"))
             implementation(project(":core:local-storage"))
             implementation(project(":common:camera-provider"))

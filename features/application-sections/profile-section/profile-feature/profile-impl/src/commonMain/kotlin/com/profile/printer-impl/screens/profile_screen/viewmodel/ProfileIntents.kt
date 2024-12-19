@@ -16,5 +16,7 @@ sealed class ProfileIntents {
 
     object Tools: ProfileIntents()
 
+    object ProductCategories: ProfileIntents()
+
     data class SetScreen(val coroutineScope: CoroutineScope): ProfileIntents()
 }

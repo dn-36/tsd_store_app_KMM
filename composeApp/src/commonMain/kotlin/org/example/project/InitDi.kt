@@ -1,8 +1,10 @@
 package org.example.project
 
+import com.catalogProductsModule
 import com.categoriesModule
 import com.example.notes_screens_impl.notesModule
 import com.locationsModule
+import com.productCategoriesModule
 import com.productsMenuModule
 import com.profile.`printer-impl`.profileScreensModule
 import com.profile.profile.toolsScreensModule
@@ -60,7 +62,9 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             unitsMeasurementModule,
             fileProviderModule,
             //scannerZebraUsbModule,
-            goodsAndServicesModule
+            goodsAndServicesModule,
+            productCategoriesModule,
+            catalogProductsModule
 
         )
     }

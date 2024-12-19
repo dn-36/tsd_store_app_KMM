@@ -170,6 +170,16 @@ include(":features:application-sections")
 /*----*/include(":features:application-sections:profile-section:categories-feature:categories-impl")
 /*----*/include(":features:application-sections:profile-section:categories-feature:categories-api")
 
+/*--*/include(":features:application-sections:profile-section:product-categories-feature")
+/** api and impl **/
+/*----*/include(":features:application-sections:profile-section:product-categories-feature:product-categories-impl")
+/*----*/include(":features:application-sections:profile-section:product-categories-feature:product-categories-api")
+
+/*--*/include(":features:application-sections:profile-section:catalog-products-feature")
+/** api and impl **/
+/*----*/include(":features:application-sections:profile-section:catalog-products-feature:catalog-products-impl")
+/*----*/include(":features:application-sections:profile-section:catalog-products-feature:catalog-products-api")
+
 /**profile-section**/
 /*--*/include(":features:application-sections:tape-section")
 /** api and impl **/

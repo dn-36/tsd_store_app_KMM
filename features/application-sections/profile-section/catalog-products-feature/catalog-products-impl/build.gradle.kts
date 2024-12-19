@@ -28,17 +28,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":features:application-sections:profile-section:profile-feature:profile-api"))
-            implementation(project(":features:application-sections:profile-section:printer-feature:printer-api"))
-            implementation(project(":features:application-sections:profile-section:warehouse-feature:warehouse-api"))
-            implementation(project(":features:application-sections:profile-section:notes-feature:notes-screens:notes-screens-api"))
-            implementation(project(":features:application-sections:profile-section:project-control-feature:project-control-api"))
-            implementation(project(":features:application-sections:profile-section:contragents-feature:contragents-api"))
-            implementation(project(":features:application-sections:profile-section:specifications-feature:specifications-api"))
-            implementation(project(":features:application-sections:profile-section:product-categories-feature:product-categories-api"))
-            implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-api"))
-            implementation(project(":features:application-sections:profile-section:ip-camera-feature:ip-camera-impl"))
 
+            implementation(project(":features:application-sections:profile-section:catalog-products-feature:catalog-products-api"))
+            implementation(project(":features:application-sections:profile-section:product-categories-feature:product-categories-api"))
 
             implementation(project(":core:app"))
             implementation(project(":core:recources"))
@@ -53,11 +45,12 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-             implementation(libs.koin.core)
+            implementation(libs.koin.core)
+            implementation(libs.bundles.ktor)
             implementation(libs.cafe.adriel.voyager.voyager.navigator)
             implementation(libs.cafe.adriel.voyager.voyager.transitions)
-
         }
+
     }
 }
 
